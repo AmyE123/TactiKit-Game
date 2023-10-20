@@ -4,44 +4,137 @@ namespace CT6GAMAI
 
     public class NodeState : MonoBehaviour
     {
+        public enum State { Default, Selector, ConfirmedSelected, Selected, Pathway }
+
         public NodeData VisualData;
         public SpriteRenderer SpriteRenderer;
 
-        bool isEnabled;
+        public State CurrentState = default;
+        public bool IsSelected = false;
+        public bool IsLocked = false;
 
+        RaycastHit nodeHit;
+
+        public NodeState ForwardNode;
+        public NodeState LeftNode;
+        public NodeState RightNode;
+        public NodeState BackwardNode;
+
+        private void Start()
+        {
+            ForwardNode = CheckForNeighbourNode(-transform.forward);
+            LeftNode = CheckForNeighbourNode(transform.right);
+            BackwardNode = CheckForNeighbourNode(transform.forward);
+            RightNode = CheckForNeighbourNode(-transform.right);
+        }
 
         void Update()
         {
-            if(Input.GetKeyDown(KeyCode.Space))
+            if (IsSelected)
             {
-                isEnabled = true;
+                CurrentState = State.Selector;
+            }
+            if (IsLocked)
+            {
+                CurrentState = State.ConfirmedSelected;
+            }
+            if(!IsSelected && !IsLocked)
+            {
+                CurrentState = State.Default;
             }
 
-            if (isEnabled)
+            CheckState();
+        }
+
+
+        NodeState CheckForNeighbourNode(Vector3 Direction)
+        {
+            if (Physics.Raycast(transform.position, Direction, out nodeHit, 1))
             {
-                if (Input.GetKeyDown(KeyCode.O))
+                if (nodeHit.transform.gameObject.tag == Constants.NODE_TAG_REFERENCE)
+                {                    
+                    var NS = nodeHit.transform.parent.GetComponent<NodeState>();
+
+                    Debug.Log("SUCCESS: Found NodeState");
+
+                    return NS;
+                }
+                else
                 {
-                    ChangeMode1();
+                    Debug.Log("ERROR: Cast hit non-node object");
+                    return null;
                 }
-                if(Input.GetKeyDown(KeyCode.S))
-                { 
-                    ChangeMode2(); 
-                }
+            }
+            else
+            {
+                Debug.Log("ERROR: Cast hit nothing");
+                return null;
             }
         }
 
-        void ChangeMode1()
+        void CheckState()
+        {
+            switch (CurrentState)
+            {
+                case State.Default:
+                    ChangeToDefault();
+                    break;
+
+                case State.Selector:
+                    ChangeToSelector();
+                    break;
+
+                case State.ConfirmedSelected:
+                    ChangeToConfirmedSelected();
+                    break;
+
+                case State.Selected:
+                    ChangeToSelected();
+                    break;
+
+                case State.Pathway:
+                    ChangeToPathway();
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        void ChangeToDefault()
+        {
+            SpriteRenderer.material = VisualData.DefaultMaterial;
+            SpriteRenderer.color = VisualData.DefaultColor;
+            SpriteRenderer.sprite = VisualData.DefaultSprite;
+        }
+
+        void ChangeToSelected()
         {
             SpriteRenderer.material = VisualData.SelectedMaterial;
             SpriteRenderer.color = VisualData.SelectedColor;
             SpriteRenderer.sprite = VisualData.SelectedSprite;
         }
 
-        void ChangeMode2()
+        void ChangeToConfirmedSelected()
+        {
+            SpriteRenderer.material = VisualData.ConfirmedSelectedMaterial;
+            SpriteRenderer.color = VisualData.ConfirmedSelectedColor;
+            SpriteRenderer.sprite = VisualData.ConfirmedSelectedSprite;
+        }
+
+
+        void ChangeToSelector()
         {
             SpriteRenderer.material = VisualData.SelectorMaterial;
             SpriteRenderer.color = VisualData.SelectorColor;
             SpriteRenderer.sprite = VisualData.SelectorSprite;
+        }
+
+        void ChangeToPathway()
+        {
+            SpriteRenderer.material = VisualData.PathwayMaterial;
+            SpriteRenderer.color = VisualData.PathwayColor;
+            SpriteRenderer.sprite = VisualData.PathwaySprite;
         }
     }
 }
