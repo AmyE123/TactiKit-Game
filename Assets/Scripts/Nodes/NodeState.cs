@@ -21,6 +21,7 @@ namespace CT6GAMAI
         public State CurrentState = default;
         public bool IsSelected = false;
         public bool IsLocked = false;
+        public bool IsHighlighted = false;
 
         void Update()
         {
@@ -37,7 +38,7 @@ namespace CT6GAMAI
 
                 PointerCanvas.SetActive(false);
             }
-            if(!IsSelected && !IsLocked)
+            if (!IsSelected && !IsLocked && !IsHighlighted)
             {
                 CurrentState = State.Default;
                 Selector.SetActive(false);
@@ -45,32 +46,6 @@ namespace CT6GAMAI
             }
 
             CheckState();
-        }
-
-
-        NodeState CheckForNeighbourNode(Vector3 Direction)
-        {
-            if (Physics.Raycast(transform.position, Direction, out nodeHit, 1))
-            {
-                if (nodeHit.transform.gameObject.tag == Constants.NODE_TAG_REFERENCE)
-                {                    
-                    var NS = nodeHit.transform.parent.GetComponent<NodeState>();
-
-                    Debug.Log("SUCCESS: Found NodeState");
-
-                    return NS;
-                }
-                else
-                {
-                    Debug.Log("ERROR: Cast hit non-node object");
-                    return null;
-                }
-            }
-            else
-            {
-                Debug.Log("ERROR: Cast hit nothing");
-                return null;
-            }
         }
 
         void CheckState()

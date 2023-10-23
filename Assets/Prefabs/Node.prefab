@@ -136,6 +136,10 @@ MonoBehaviour:
   _eastNode: {fileID: 0}
   _southNode: {fileID: 0}
   _westNode: {fileID: 0}
+  _northEastNode: {fileID: 0}
+  _northWestNode: {fileID: 0}
+  _southEastNode: {fileID: 0}
+  _southWestNode: {fileID: 0}
   StoodUnit: {fileID: 0}
 --- !u!114 &593979796380849875
 MonoBehaviour:
@@ -171,6 +175,7 @@ MonoBehaviour:
   CurrentState: 0
   IsSelected: 0
   IsLocked: 0
+  IsHighlighted: 0
 --- !u!1 &4085781567587022053
 GameObject:
   m_ObjectHideFlags: 0
@@ -277,7 +282,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 0.9, y: 0.9, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5342038288916271231
 GameObject:
@@ -453,7 +458,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

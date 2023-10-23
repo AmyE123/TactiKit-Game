@@ -14,6 +14,7 @@ namespace CT6GAMAI
 
         private void Start()
         {
+            // TODO: Once player can move, update this every movement
             StoodNode = DetectStoodNode();
             StoodNode.StoodUnit = this;
         }
@@ -25,9 +26,6 @@ namespace CT6GAMAI
                 if (raycastHit.transform.gameObject.tag == Constants.NODE_TAG_REFERENCE)
                 {
                     var NodeManager = raycastHit.transform.parent.GetComponent<NodeManager>();
-
-                    Debug.Log("SUCCESS: Found NodeManager");
-
                     return NodeManager;
                 }
                 else

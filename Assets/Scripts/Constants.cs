@@ -4,6 +4,7 @@ namespace CT6GAMAI
     {
         #region Nodes
         public enum State { Default, HoveredBlue, HoveredRed, HoveredGreen, SelectedBlue, SelectedRed, SelectedGreen, AllEnemyRange, SingularEnemyRange, PointOfInterest }
+        public enum Direction { North, NorthEast, East, SouthEast, South, SouthWest, West, NorthWest }
         public enum Terrain { Default, Forest, River, Fort }
 
         public const string NODE_TAG_REFERENCE = "Node";

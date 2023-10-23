@@ -21,7 +21,24 @@ namespace CT6GAMAI
                         SelectedNodeState = SelectedNode.NodeState;
                     }
                 }
-            }           
+            }
+
+            if (SelectedNode.StoodUnit != null)
+            {
+                SelectedNode.HighlightRangeArea(SelectedNode.StoodUnit);
+            }
+            else
+            {              
+                for (int i = 0; i < Nodes.Length; i++)
+                {
+                    if (Nodes[i].NodeState.IsHighlighted)
+                    {
+                        Nodes[i].NodeState.IsHighlighted = false;
+                    }
+                }
+
+                SelectedNodeState.CurrentState = Constants.State.Default;
+            }
 
             // Moving forward
             if (Input.GetKeyDown(KeyCode.W))
