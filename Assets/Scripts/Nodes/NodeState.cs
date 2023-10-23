@@ -9,9 +9,14 @@ namespace CT6GAMAI
 
         RaycastHit nodeHit;
 
-        public NodeStateData VisualData;
-        public SpriteRenderer SpriteRenderer;
-        public Canvas PointerCanvas;
+        public NodeStateVisualData[] VisualDatas;
+        public NodeStateVisualData[] SelectorVisualDatas;
+
+        public SpriteRenderer VisualSR;
+        public SpriteRenderer SelectorSR;
+
+        public GameObject PointerCanvas;
+        public GameObject Selector;
 
         public State CurrentState = default;
         public bool IsSelected = false;
@@ -21,17 +26,21 @@ namespace CT6GAMAI
         {
             if (IsSelected)
             {
-                CurrentState = State.Selector;
-                PointerCanvas.gameObject.SetActive(true);
+                ChangeVisualData(SelectorSR, SelectorVisualDatas[0]);
+
+                Selector.SetActive(true);
+                PointerCanvas.SetActive(true);
             }
             if (IsLocked)
             {
-                CurrentState = State.ConfirmedSelected;
-                PointerCanvas.gameObject.SetActive(false);
+                ChangeVisualData(SelectorSR, SelectorVisualDatas[1]);
+
+                PointerCanvas.SetActive(false);
             }
             if(!IsSelected && !IsLocked)
             {
                 CurrentState = State.Default;
+                Selector.SetActive(false);
                 PointerCanvas.gameObject.SetActive(false);
             }
 
@@ -69,23 +78,43 @@ namespace CT6GAMAI
             switch (CurrentState)
             {
                 case State.Default:
-                    ChangeToDefault();
+                    ChangeVisualData(VisualSR, VisualDatas[0]);
                     break;
 
-                case State.Selector:
-                    ChangeToSelector();
+                case State.HoveredBlue:
+                    ChangeVisualData(VisualSR, VisualDatas[1]); 
                     break;
 
-                case State.ConfirmedSelected:
-                    ChangeToConfirmedSelected();
+                case State.HoveredRed:
+                    ChangeVisualData(VisualSR, VisualDatas[2]);
                     break;
 
-                case State.Selected:
-                    ChangeToSelected();
+                case State.HoveredGreen:
+                    ChangeVisualData(VisualSR, VisualDatas[3]);
                     break;
 
-                case State.Pathway:
-                    ChangeToPathway();
+                case State.SelectedBlue:
+                    ChangeVisualData(VisualSR, VisualDatas[4]);
+                    break;
+
+                case State.SelectedRed:
+                    ChangeVisualData(VisualSR, VisualDatas[5]);
+                    break;
+
+                case State.SelectedGreen:
+                    ChangeVisualData(VisualSR, VisualDatas[6]);
+                    break;
+
+                case State.AllEnemyRange:
+                    ChangeVisualData(VisualSR, VisualDatas[7]);
+                    break;
+
+                case State.SingularEnemyRange:
+                    ChangeVisualData(VisualSR, VisualDatas[8]);
+                    break;
+
+                case State.PointOfInterest:
+                    ChangeVisualData(VisualSR, VisualDatas[9]);
                     break;
 
                 default:
@@ -93,40 +122,11 @@ namespace CT6GAMAI
             }
         }
 
-        void ChangeToDefault()
+        void ChangeVisualData(SpriteRenderer SR, NodeStateVisualData VisualData)
         {
-            SpriteRenderer.material = VisualData.DefaultMaterial;
-            SpriteRenderer.color = VisualData.DefaultColor;
-            SpriteRenderer.sprite = VisualData.DefaultSprite;
-        }
-
-        void ChangeToSelected()
-        {
-            SpriteRenderer.material = VisualData.SelectedMaterial;
-            SpriteRenderer.color = VisualData.SelectedColor;
-            SpriteRenderer.sprite = VisualData.SelectedSprite;
-        }
-
-        void ChangeToConfirmedSelected()
-        {
-            SpriteRenderer.material = VisualData.ConfirmedSelectedMaterial;
-            SpriteRenderer.color = VisualData.ConfirmedSelectedColor;
-            SpriteRenderer.sprite = VisualData.ConfirmedSelectedSprite;
-        }
-
-
-        void ChangeToSelector()
-        {
-            SpriteRenderer.material = VisualData.SelectorMaterial;
-            SpriteRenderer.color = VisualData.SelectorColor;
-            SpriteRenderer.sprite = VisualData.SelectorSprite;
-        }
-
-        void ChangeToPathway()
-        {
-            SpriteRenderer.material = VisualData.PathwayMaterial;
-            SpriteRenderer.color = VisualData.PathwayColor;
-            SpriteRenderer.sprite = VisualData.PathwaySprite;
+            SR.material = VisualData.Material;
+            SR.color = VisualData.Color;
+            SR.sprite = VisualData.Sprite;
         }
     }
 }
