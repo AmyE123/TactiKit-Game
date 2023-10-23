@@ -1,7 +1,6 @@
 namespace CT6GAMAI
 {
     using UnityEngine;
-    using UnityEngine.Experimental.GlobalIllumination;
 
     public class NodeManager : MonoBehaviour
     {
@@ -22,6 +21,8 @@ namespace CT6GAMAI
         public NodeManager EastNode => _eastNode;
         public NodeManager SouthNode => _southNode;
         public NodeManager WestNode => _westNode;
+
+        public UnitManager StoodUnit;
 
         void Start()
         {

@@ -4,7 +4,11 @@ namespace CT6GAMAI
     using static CT6GAMAI.Constants;
 
     public class NodeState : MonoBehaviour
-    {       
+    {
+        [SerializeField] private NodeManager _nodeManager;
+
+        RaycastHit nodeHit;
+
         public NodeStateData VisualData;
         public SpriteRenderer SpriteRenderer;
         public Canvas PointerCanvas;
@@ -12,20 +16,6 @@ namespace CT6GAMAI
         public State CurrentState = default;
         public bool IsSelected = false;
         public bool IsLocked = false;
-
-        RaycastHit nodeHit;
-
-        //public NodeState NorthNodeState;
-        //public NodeState EastNodeState;
-        //public NodeState SouthNodeState;
-        //public NodeState WestNodeState;        
-
-        [SerializeField] private NodeManager _nodeManager;
-
-        private void Start()
-        {
-
-        }
 
         void Update()
         {
