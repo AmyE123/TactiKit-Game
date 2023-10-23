@@ -4,8 +4,7 @@ namespace CT6GAMAI
 
     public class UnitManager : MonoBehaviour
     {
-        [SerializeField]
-        private UnitData _unitData;
+        [SerializeField] private UnitData _unitData;
 
         public NodeManager StoodNode;
 
