@@ -1,13 +1,13 @@
 namespace CT6GAMAI
 {
     using UnityEngine;
+    using static CT6GAMAI.Constants;
 
     public class NodeState : MonoBehaviour
-    {
-        public enum State { Default, Selector, ConfirmedSelected, Selected, Pathway }
-
-        public NodeData VisualData;
+    {       
+        public NodeStateData VisualData;
         public SpriteRenderer SpriteRenderer;
+        public Canvas PointerCanvas;
 
         public State CurrentState = default;
         public bool IsSelected = false;
@@ -15,17 +15,16 @@ namespace CT6GAMAI
 
         RaycastHit nodeHit;
 
-        public NodeState ForwardNode;
-        public NodeState LeftNode;
-        public NodeState RightNode;
-        public NodeState BackwardNode;
+        //public NodeState NorthNodeState;
+        //public NodeState EastNodeState;
+        //public NodeState SouthNodeState;
+        //public NodeState WestNodeState;        
+
+        [SerializeField] private NodeManager _nodeManager;
 
         private void Start()
         {
-            ForwardNode = CheckForNeighbourNode(-transform.forward);
-            LeftNode = CheckForNeighbourNode(transform.right);
-            BackwardNode = CheckForNeighbourNode(transform.forward);
-            RightNode = CheckForNeighbourNode(-transform.right);
+
         }
 
         void Update()
@@ -33,14 +32,17 @@ namespace CT6GAMAI
             if (IsSelected)
             {
                 CurrentState = State.Selector;
+                PointerCanvas.gameObject.SetActive(true);
             }
             if (IsLocked)
             {
                 CurrentState = State.ConfirmedSelected;
+                PointerCanvas.gameObject.SetActive(false);
             }
             if(!IsSelected && !IsLocked)
             {
                 CurrentState = State.Default;
+                PointerCanvas.gameObject.SetActive(false);
             }
 
             CheckState();

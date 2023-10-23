@@ -26,9 +26,11 @@ namespace CT6GAMAI
             // Moving forward
             if (Input.GetKeyDown(KeyCode.W))
             {
-                if (SelectedNodeState.ForwardNode != null)
+                var northNs = SelectedNode.NorthNode.NodeState;
+
+                if (northNs != null)
                 {
-                    SelectedNodeState.ForwardNode.IsSelected = true;
+                    northNs.IsSelected = true;
                     SelectedNodeState.IsSelected = false;
                 }
             }
@@ -36,9 +38,11 @@ namespace CT6GAMAI
             // Moving left
             if (Input.GetKeyDown(KeyCode.A))
             {
-                if (SelectedNodeState.LeftNode != null)
+                var westNs = SelectedNode.WestNode.NodeState;
+
+                if (westNs != null)
                 {
-                    SelectedNodeState.LeftNode.IsSelected = true;
+                    westNs.IsSelected = true;
                     SelectedNodeState.IsSelected = false;
                 }
             }
@@ -46,9 +50,11 @@ namespace CT6GAMAI
             // Moving backward
             if (Input.GetKeyDown(KeyCode.S))
             {
-                if (SelectedNodeState.BackwardNode != null)
+                var southNs = SelectedNode.SouthNode.NodeState;
+
+                if (southNs != null)
                 {
-                    SelectedNodeState.BackwardNode.IsSelected = true;
+                    southNs.IsSelected = true;
                     SelectedNodeState.IsSelected = false;
                 }
             }
@@ -56,9 +62,11 @@ namespace CT6GAMAI
             // Moving right
             if (Input.GetKeyDown(KeyCode.D))
             {
-                if (SelectedNodeState.RightNode != null)
+                var eastNs = SelectedNode.EastNode.NodeState;
+
+                if (eastNs != null)
                 {
-                    SelectedNodeState.RightNode.IsSelected = true;
+                    eastNs.IsSelected = true;
                     SelectedNodeState.IsSelected = false;
                 }
             }
@@ -67,7 +75,10 @@ namespace CT6GAMAI
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 SelectedNodeState.IsLocked = true;
-                SelectedNodeState.ForwardNode.IsSelected = true;
+
+                // TODO: Select North IF avaliable, else, select from avaliable.
+                SelectedNode.NorthNode.NodeState.IsSelected = true;
+
                 SelectedNodeState.IsSelected = false;
             }
 
