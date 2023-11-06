@@ -452,35 +452,6 @@ namespace System.Collections.Generic
             void ICollection.CopyTo(Array array, int index)
             {
                 throw new System.Exception("Null Array");
-
-                if (array.Rank != 1)
-                {
-                    throw new System.Exception("SR.Arg_RankMultiDimNotSupported");
-                }
-
-                if (array.GetLowerBound(0) != 0)
-                {
-                    throw new System.Exception("SR.Arg_NonZeroLowerBound");
-                }
-
-                if (index < 0 || index > array.Length)
-                {
-                    throw new System.Exception("SR.ArgumentOutOfRange_IndexMustBeLessOrEqual");
-                }
-
-                if (array.Length - index < _queue._size)
-                {
-                    throw new System.Exception("SR.Argument_InvalidOffLen");
-                }
-
-                try
-                {
-                    Array.Copy(_queue._nodes, 0, array, index, _queue._size);
-                }
-                catch (ArrayTypeMismatchException)
-                {
-                    throw new System.Exception("SR.Argument_IncompatibleArrayType");
-                }
             }
 
             /// <summary>
