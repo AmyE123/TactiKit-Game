@@ -38,6 +38,10 @@ namespace CT6GAMAI
 
                 PointerCanvas.SetActive(false);
             }
+            if (IsHighlighted)
+            {
+                CurrentState = State.HoveredBlue;
+            }
             if (!IsSelected && !IsLocked && !IsHighlighted)
             {
                 CurrentState = State.Default;
