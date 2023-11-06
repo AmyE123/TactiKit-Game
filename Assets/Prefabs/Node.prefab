@@ -93,6 +93,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8274021174057386249}
+  - component: {fileID: 5803010649068779603}
   - component: {fileID: 2361947876645388068}
   - component: {fileID: 593979796380849875}
   m_Layer: 0
@@ -118,6 +119,23 @@ Transform:
   - {fileID: 2362405307524370818}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5803010649068779603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2527803989374386003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dee1ec270e8cf0242b5399511028dd3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _manager: {fileID: 2361947876645388068}
+  Cost: 1
+  Visited: 0
+  Walkable: 0
+  Neighbors: []
 --- !u!114 &2361947876645388068
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132,6 +150,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _nodeState: {fileID: 593979796380849875}
   _nodeData: {fileID: 11400000, guid: a56582a3aa33fde418185e5c3b04d1a7, type: 2}
+  _node: {fileID: 5803010649068779603}
+  StoodUnit: {fileID: 0}
   _northNode: {fileID: 0}
   _eastNode: {fileID: 0}
   _southNode: {fileID: 0}
@@ -140,7 +160,8 @@ MonoBehaviour:
   _northWestNode: {fileID: 0}
   _southEastNode: {fileID: 0}
   _southWestNode: {fileID: 0}
-  StoodUnit: {fileID: 0}
+  _movementRange: {fileID: 0}
+  MovementRNG: []
 --- !u!114 &593979796380849875
 MonoBehaviour:
   m_ObjectHideFlags: 0

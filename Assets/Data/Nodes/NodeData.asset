@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: NodeData
   m_EditorClassIdentifier: 
   Coordinates: {x: 0, y: 0, z: 0}
-  TerrainType: {fileID: 0}
+  TerrainType: {fileID: 11400000, guid: 84261c56e48c46847a6f6522b0b09157, type: 2}
