@@ -1,13 +1,24 @@
 namespace CT6GAMAI
 {
-    using UnityEditor.Experimental.GraphView;
+    using System.Collections.Generic;
     using UnityEngine;
 
     public class NodeManager : MonoBehaviour
     {
+        #region Editor Fields
+        [Header("Temp Params")]
+        // TODO: Find a new way to implement this
+        public MovementRange _movementRange;
+
+        [Header("Node Information")]
         [SerializeField] private NodeState _nodeState;
         [SerializeField] private NodeData _nodeData;
+        [SerializeField] private Node _node;
 
+        // If valid, the unit which is stood within the node.
+        public UnitManager StoodUnit;
+
+        [Header("Neighbouring Nodes")]
         [SerializeField] private NodeManager _northNode;
         [SerializeField] private NodeManager _eastNode;
         [SerializeField] private NodeManager _southNode;
@@ -17,8 +28,15 @@ namespace CT6GAMAI
         [SerializeField] private NodeManager _northWestNode;
         [SerializeField] private NodeManager _southEastNode;
         [SerializeField] private NodeManager _southWestNode;
+        #endregion // Editor Fields
+
+        #region Private
 
         private RaycastHit nodeHit;
+
+        #endregion //Private
+
+        #region Public Getters
 
         public NodeManager NorthNode => _northNode;
         public NodeManager EastNode => _eastNode;
@@ -32,13 +50,17 @@ namespace CT6GAMAI
 
         public NodeState NodeState => _nodeState;
         public NodeData NodeData => _nodeData;
+        public Node Node => _node;
 
-        public UnitManager StoodUnit;
+        #endregion // Public Getters
 
         void Start()
         {
             SetupNeighbours();
             _nodeState = GetComponent<NodeState>();
+
+            // TODO: Find another way to deal with this
+            _movementRange = FindObjectOfType<MovementRange>();
         }
 
         void SetupNeighbours()
@@ -52,6 +74,25 @@ namespace CT6GAMAI
             _northWestNode = CheckForNeighbourNode(new Vector3(0.5f, 0, -0.5f));
             _southEastNode = CheckForNeighbourNode(new Vector3(-0.5f, 0, 0.5f));
             _southWestNode = CheckForNeighbourNode(new Vector3(0.5f, 0, 0.5f));
+
+
+            // TODO: Cleanup this code
+            if (_northNode != null)
+            {
+                Node.AddNeighbor(_northNode.Node);
+            }
+            if (_eastNode != null)
+            {
+                Node.AddNeighbor(_eastNode.Node);
+            }
+            if (_southNode != null)
+            {
+                Node.AddNeighbor(_southNode.Node);
+            }
+            if (_westNode != null)
+            {
+                Node.AddNeighbor(_westNode.Node);
+            }
         }
 
         NodeManager CheckForNeighbourNode(Vector3 Direction)
@@ -71,7 +112,6 @@ namespace CT6GAMAI
             }
             else
             {
-                Debug.Log("ERROR: Cast hit nothing");
                 return null;
             }
         }
@@ -81,29 +121,39 @@ namespace CT6GAMAI
             // Identify unit's movement range
             var range = unit.UnitData.MovementBaseValue;
 
-            // Highlight selected node
-            SetNodeState(unit.StoodNode.NodeState, Constants.State.HoveredBlue);
+            _movementRange.CalculateMovementRange(Node, range);
 
-            // Highlight N E S W with the range amount
-            HighlightNodes(_northNode, range, Constants.Direction.North);
-            HighlightNodes(_eastNode, range, Constants.Direction.East);
-            HighlightNodes(_southNode, range, Constants.Direction.South);
-            HighlightNodes(_westNode, range, Constants.Direction.West);
+            for (int i = 0; i < _movementRange.Nodes.Count; i++)
+            {
+                _movementRange.Nodes[i].NodeManager.NodeState.IsHighlighted = true;
+            }
 
-            // Highlight diagonals with the range amount -1
-            HighlightNodes(_northEastNode, range, Constants.Direction.NorthEast);
-            HighlightNodes(_northWestNode, range, Constants.Direction.NorthWest);
-            HighlightNodes(_southEastNode, range, Constants.Direction.SouthEast);
-            HighlightNodes(_southWestNode, range, Constants.Direction.SouthWest);
+            /// --- OLD IMPLEMENTATION START ---
+            //// Highlight selected node
+            //SetNodeState(unit.StoodNode.NodeState, Constants.State.HoveredBlue);
 
-            // Highlight range amount + 1 with either heal/attack range depending on unit type
+            //// Highlight N E S W with the range amount
+            //HighlightNodes(_northNode, range, Constants.Direction.North);
+            //HighlightNodes(_eastNode, range, Constants.Direction.East);
+            //HighlightNodes(_southNode, range, Constants.Direction.South);
+            //HighlightNodes(_westNode, range, Constants.Direction.West);
+
+            //// Highlight diagonals with the range amount -1
+            //HighlightNodes(_northEastNode, range, Constants.Direction.NorthEast);
+            //HighlightNodes(_northWestNode, range, Constants.Direction.NorthWest);
+            //HighlightNodes(_southEastNode, range, Constants.Direction.SouthEast);
+            //HighlightNodes(_southWestNode, range, Constants.Direction.SouthWest);
+
+            //// Highlight range amount + 1 with either heal/attack range depending on unit type
+            /// --- OLD IMPLEMENTATION END ---
         }
 
+        /// --- OLD IMPLEMENTATION START ---
         private void HighlightNodes(NodeManager startNode, int range, Constants.Direction direction)
         {
             // the full range includes enemy/heal range
             int movementRange = range - 1;
-            
+
             // If highlighting diagonally, -1, if normally 0
             int directionModifier = CalculateDirectionModifier(direction);
 
@@ -115,7 +165,7 @@ namespace CT6GAMAI
             startNode.NodeState.IsHighlighted = true;
             SetNodeState(startNode.NodeState, Constants.State.HoveredBlue);
 
-            NodeManager currentNode = startNode;           
+            NodeManager currentNode = startNode;
 
             for (int i = 0; i < movementRange + directionModifier; i++)
             {
@@ -127,7 +177,7 @@ namespace CT6GAMAI
                         nextNode = currentNode.NorthNode;
                         break;
 
-                    case Constants.Direction.NorthEast: 
+                    case Constants.Direction.NorthEast:
                         nextNode = currentNode.NorthEastNode;
                         break;
 
@@ -135,7 +185,7 @@ namespace CT6GAMAI
                         nextNode = currentNode.EastNode;
                         break;
 
-                    case Constants.Direction.SouthEast: 
+                    case Constants.Direction.SouthEast:
                         nextNode = currentNode.SouthEastNode;
                         break;
 
@@ -159,7 +209,7 @@ namespace CT6GAMAI
                 if (nextNode != null)
                 {
                     nextNode.NodeState.IsHighlighted = true;
-                    SetNodeState(nextNode.NodeState, Constants.State.HoveredBlue);                   
+                    SetNodeState(nextNode.NodeState, Constants.State.HoveredBlue);
                     currentNode = nextNode;
                 }
                 else
@@ -168,13 +218,14 @@ namespace CT6GAMAI
                 }
             }
         }
-        
+        /// --- OLD IMPLEMENTATION END ---
+
         private int CalculateDirectionModifier(Constants.Direction direction)
         {
             // If direction is diagonal, apply a modifier
-            if (direction == Constants.Direction.NorthEast || 
-                direction == Constants.Direction.NorthWest || 
-                direction == Constants.Direction.SouthEast || 
+            if (direction == Constants.Direction.NorthEast ||
+                direction == Constants.Direction.NorthWest ||
+                direction == Constants.Direction.SouthEast ||
                 direction == Constants.Direction.SouthWest)
             {
                 return -1;
@@ -187,7 +238,7 @@ namespace CT6GAMAI
 
         private void SetNodeState(NodeState nodeState, Constants.State newState)
         {
-            nodeState.CurrentState = newState;           
+            nodeState.CurrentState = newState;
         }
     }
 }

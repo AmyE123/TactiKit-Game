@@ -8,9 +8,11 @@ namespace CT6GAMAI
         public NodeManager SelectedNode;
         private NodeState SelectedNodeState;
 
+        [SerializeField] private MovementRange _movementRange;
+
         // Update is called once per frame
         void Update()
-        {           
+        {
             if (SelectedNode == null || !SelectedNodeState.IsSelected)
             {
                 for (int i = 0; i < Nodes.Length; i++)
@@ -28,7 +30,9 @@ namespace CT6GAMAI
                 SelectedNode.HighlightRangeArea(SelectedNode.StoodUnit);
             }
             else
-            {              
+            {
+                _movementRange.ResetNodes();
+
                 for (int i = 0; i < Nodes.Length; i++)
                 {
                     if (Nodes[i].NodeState.IsHighlighted)
