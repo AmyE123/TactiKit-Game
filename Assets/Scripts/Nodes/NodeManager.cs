@@ -61,6 +61,8 @@ namespace CT6GAMAI
 
             // TODO: Find another way to deal with this
             _movementRange = FindObjectOfType<MovementRange>();
+
+            Node.Cost = NodeData.TerrainType.MovementCost;
         }
 
         void SetupNeighbours()

@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 2361947876645388068}
   - component: {fileID: 593979796380849875}
   m_Layer: 0
-  m_Name: Node
+  m_Name: Default
   m_TagString: Node
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -148,6 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a40c64957c296f4684535e3fd329216, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _movementRange: {fileID: 0}
   _nodeState: {fileID: 593979796380849875}
   _nodeData: {fileID: 11400000, guid: a56582a3aa33fde418185e5c3b04d1a7, type: 2}
   _node: {fileID: 5803010649068779603}
@@ -160,8 +161,6 @@ MonoBehaviour:
   _northWestNode: {fileID: 0}
   _southEastNode: {fileID: 0}
   _southWestNode: {fileID: 0}
-  _movementRange: {fileID: 0}
-  MovementRNG: []
 --- !u!114 &593979796380849875
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -262,7 +261,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 663834164c6a04740aaa1b778249ce7e, type: 2}
+  - {fileID: 2100000, guid: f6298605825d7154f8923c76872aa46e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

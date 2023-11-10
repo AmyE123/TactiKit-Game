@@ -6,13 +6,16 @@ namespace CT6GAMAI
     {
         public NodeManager[] Nodes;
         public NodeManager SelectedNode;
-        private NodeState SelectedNodeState;
+        public NodeState SelectedNodeState;
 
         [SerializeField] private MovementRange _movementRange;
 
         // Update is called once per frame
         void Update()
         {
+
+            if (SelectedNodeState == null) { SelectedNodeState = SelectedNode.NodeState; }
+
             if (SelectedNode == null || !SelectedNodeState.IsSelected)
             {
                 for (int i = 0; i < Nodes.Length; i++)

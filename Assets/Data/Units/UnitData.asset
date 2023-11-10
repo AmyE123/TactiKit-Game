@@ -16,7 +16,7 @@ MonoBehaviour:
   UnitClass: 1
   ClassLevel: 0
   HealthPointsBaseValue: 0
-  MovementBaseValue: 5
+  MovementBaseValue: 4
   AttackBaseValue: 0
   CriticalRateBaseValue: 0
   HitRateBaseValue: 0
