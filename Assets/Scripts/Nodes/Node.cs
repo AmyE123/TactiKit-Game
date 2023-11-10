@@ -31,6 +31,9 @@ namespace CT6GAMAI
         // A list of adjacent nodes (neighbors)
         public List<Node> Neighbors;
 
+        // For movement algorithm, store the predecessor
+        public Node Predecessor { get; set; }
+
         #endregion // Public Variables
 
         #region Public Getters

@@ -8,6 +8,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2361947876645388068, guid: 5ee1594f0d98de3458ccfe7cd7fe628a, type: 3}
+      propertyPath: _nodeData
+      value: 
+      objectReference: {fileID: 11400000, guid: 1c4ecfc069f02c044b75c70657d772ee, type: 2}
     - target: {fileID: 2527803989374386003, guid: 5ee1594f0d98de3458ccfe7cd7fe628a, type: 3}
       propertyPath: m_Name
       value: River

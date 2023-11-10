@@ -10,6 +10,12 @@ namespace CT6GAMAI
         public List<Node> ReachableNodes;
         public List<Node> Nodes;
 
+        /// <summary>
+        /// Uses Dijkstra's Algorithm to calculate the range that the unit can move
+        /// </summary>
+        /// <param name="start">The starting node</param>
+        /// <param name="movementPoints">How much the unit can move</param>
+        /// <returns></returns>
         public List<Node> CalculateMovementRange(Node start, int movementPoints)
         {
             foreach (NodeManager nodeManager in gridSelector.Nodes)
@@ -70,6 +76,9 @@ namespace CT6GAMAI
                         // Update the neighbor's distance
                         neighbor.Distance = tentativeDistance;
 
+                        // Sets the predecessor for pathfinding
+                        neighbor.Predecessor = current;
+
                         // If the neighbor has not been visited or the tentative distance is better, enqueue it
                         if (!neighbor.Visited)
                         {
@@ -87,6 +96,23 @@ namespace CT6GAMAI
             }
 
             return Nodes;
+        }
+
+        public List<Node> ReconstructPath(Node start, Node target)
+        {
+            List<Node> path = new List<Node>();
+            Node current = target;
+
+            while (current != null && current != start)
+            {
+                path.Add(current);
+                current = current.Predecessor;
+            }
+
+            path.Add(start); // Add the start node
+            path.Reverse(); // Reverse the list to get the path from start to target
+
+            return path;
         }
 
         public void ResetNodes()
