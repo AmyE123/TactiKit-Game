@@ -58,6 +58,7 @@ namespace CT6GAMAI
                         SelectedNodeState.NodeVisualManager.SetDefault();
                     }
                 }
+            }
 
                 if (Input.GetKeyDown(KeyCode.P))
                 {
@@ -159,6 +160,7 @@ namespace CT6GAMAI
                 }
 
             }
-        }
+        
     }
+    
 }
