@@ -18,7 +18,7 @@ namespace CT6GAMAI
         public GameObject PointerCanvas;
         public GameObject Selector;
 
-        public State CurrentState = default;
+        public NodeVisualState CurrentState = default;
         public bool IsSelected = false;
         public bool IsLocked = false;
         public bool IsHighlighted = false;
@@ -41,15 +41,15 @@ namespace CT6GAMAI
             }
             if (IsHighlighted)
             {
-                CurrentState = State.HoveredBlue;
+                CurrentState = NodeVisualState.HoveredBlue;
             }
             if (IsBolded)
             {
-                CurrentState = State.PointOfInterest;
+                CurrentState = NodeVisualState.PointOfInterest;
             }
             if (!IsSelected && !IsLocked && !IsHighlighted && !IsBolded)
             {
-                CurrentState = State.Default;
+                CurrentState = NodeVisualState.Default;
                 Selector.SetActive(false);
                 PointerCanvas.gameObject.SetActive(false);
             }
@@ -61,43 +61,43 @@ namespace CT6GAMAI
         {
             switch (CurrentState)
             {
-                case State.Default:
+                case NodeVisualState.Default:
                     ChangeVisualData(VisualSR, VisualDatas[0]);
                     break;
 
-                case State.HoveredBlue:
+                case NodeVisualState.HoveredBlue:
                     ChangeVisualData(VisualSR, VisualDatas[1]); 
                     break;
 
-                case State.HoveredRed:
+                case NodeVisualState.HoveredRed:
                     ChangeVisualData(VisualSR, VisualDatas[2]);
                     break;
 
-                case State.HoveredGreen:
+                case NodeVisualState.HoveredGreen:
                     ChangeVisualData(VisualSR, VisualDatas[3]);
                     break;
 
-                case State.SelectedBlue:
+                case NodeVisualState.SelectedBlue:
                     ChangeVisualData(VisualSR, VisualDatas[4]);
                     break;
 
-                case State.SelectedRed:
+                case NodeVisualState.SelectedRed:
                     ChangeVisualData(VisualSR, VisualDatas[5]);
                     break;
 
-                case State.SelectedGreen:
+                case NodeVisualState.SelectedGreen:
                     ChangeVisualData(VisualSR, VisualDatas[6]);
                     break;
 
-                case State.AllEnemyRange:
+                case NodeVisualState.AllEnemyRange:
                     ChangeVisualData(VisualSR, VisualDatas[7]);
                     break;
 
-                case State.SingularEnemyRange:
+                case NodeVisualState.SingularEnemyRange:
                     ChangeVisualData(VisualSR, VisualDatas[8]);
                     break;
 
-                case State.PointOfInterest:
+                case NodeVisualState.PointOfInterest:
                     ChangeVisualData(VisualSR, VisualDatas[9]);
                     break;
 
@@ -106,7 +106,7 @@ namespace CT6GAMAI
             }
         }
 
-        void ChangeVisualData(SpriteRenderer SR, NodeStateVisualData VisualData)
+        public void ChangeVisualData(SpriteRenderer SR, NodeStateVisualData VisualData)
         {
             SR.material = VisualData.Material;
             SR.color = VisualData.Color;

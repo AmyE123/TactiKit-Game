@@ -165,7 +165,7 @@ namespace CT6GAMAI
             }
 
             startNode.NodeState.IsHighlighted = true;
-            SetNodeState(startNode.NodeState, Constants.State.HoveredBlue);
+            SetNodeState(startNode.NodeState, Constants.NodeVisualState.HoveredBlue);
 
             NodeManager currentNode = startNode;
 
@@ -211,7 +211,7 @@ namespace CT6GAMAI
                 if (nextNode != null)
                 {
                     nextNode.NodeState.IsHighlighted = true;
-                    SetNodeState(nextNode.NodeState, Constants.State.HoveredBlue);
+                    SetNodeState(nextNode.NodeState, Constants.NodeVisualState.HoveredBlue);
                     currentNode = nextNode;
                 }
                 else
@@ -238,7 +238,7 @@ namespace CT6GAMAI
             }
         }
 
-        private void SetNodeState(NodeState nodeState, Constants.State newState)
+        private void SetNodeState(NodeState nodeState, Constants.NodeVisualState newState)
         {
             nodeState.CurrentState = newState;
         }

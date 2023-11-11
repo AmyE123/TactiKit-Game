@@ -47,7 +47,7 @@ namespace CT6GAMAI
                     }
                 }
 
-                SelectedNodeState.CurrentState = Constants.State.Default;
+                SelectedNodeState.CurrentState = Constants.NodeVisualState.Default;
             }
 
             if (Input.GetKeyDown(KeyCode.P))
