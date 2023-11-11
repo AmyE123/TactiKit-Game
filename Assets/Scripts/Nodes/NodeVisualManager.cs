@@ -51,7 +51,7 @@ namespace CT6GAMAI
         {
             Debug.Log("VisualManager: Start");
 
-            visualFSM = new NodeVisualFSM(gameObject);
+            visualFSM = new NodeVisualFSM();
             visualFSM.Manager = this;
             visualFSM.Initialize();
         }

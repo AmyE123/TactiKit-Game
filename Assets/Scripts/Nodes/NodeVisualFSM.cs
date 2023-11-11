@@ -9,7 +9,6 @@ namespace CT6GAMAI
     public class NodeVisualFSM
     {
         private NodeVisualState _currentState;
-        private GameObject _nodeGameObject;
 
         private NodeVisualManager _manager;
 
@@ -21,10 +20,9 @@ namespace CT6GAMAI
             set { _manager = value; }
         }
 
-        public NodeVisualFSM(GameObject nodeObject)
+        public NodeVisualFSM()
         {
             _currentState = NodeVisualState.Default;
-            _nodeGameObject = nodeObject;
         }
 
         public void Initialize()
