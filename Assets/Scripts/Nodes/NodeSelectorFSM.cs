@@ -9,7 +9,6 @@ namespace CT6GAMAI
     public class NodeSelectorFSM
     {
         private NodeSelectorState _currentState;
-        private GameObject _nodeGameObject;
 
         private NodeSelectorManager _manager;
 
@@ -21,10 +20,9 @@ namespace CT6GAMAI
             set { _manager = value; }
         }
 
-        public NodeSelectorFSM(GameObject nodeObject)
+        public NodeSelectorFSM()
         {
             _currentState = NodeSelectorState.NoSelection;
-            _nodeGameObject = nodeObject;
         }
 
         public void Initialize()

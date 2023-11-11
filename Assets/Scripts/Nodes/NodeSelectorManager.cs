@@ -49,7 +49,7 @@ namespace CT6GAMAI
         {
             Debug.Log("SelectorManager: Start");
 
-            selectorFSM = new NodeSelectorFSM(gameObject);
+            selectorFSM = new NodeSelectorFSM();
             selectorFSM.Manager = this;
             selectorFSM.Initialize();
 
