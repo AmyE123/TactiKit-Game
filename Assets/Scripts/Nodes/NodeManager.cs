@@ -1,8 +1,6 @@
 namespace CT6GAMAI
 {
-    using System.Collections.Generic;
     using UnityEngine;
-    using static CT6GAMAI.Constants;
 
     public class NodeManager : MonoBehaviour
     {
@@ -119,6 +117,11 @@ namespace CT6GAMAI
             }
         }
 
+        /// <summary>
+        /// Highlight the movement range of a Unit
+        /// </summary>
+        /// <param name="unit">The unit which we want to highlight the range of.</param>
+        /// <param name="isPressed">Whether we are highlighting in a pressed state or not.</param>
         public void HighlightRangeArea(UnitManager unit, bool isPressed = false)
         {
             // Identify unit's movement range
@@ -136,148 +139,7 @@ namespace CT6GAMAI
                 {
                     _movementRange.Nodes[i].NodeManager.NodeState.NodeVisualManager.SetHovered(Constants.NodeVisualColorState.Blue);
                 }
-
-                //_movementRange.Nodes[i].NodeManager.NodeState.IsHighlighted = true;               
             }
-        }
-
-        public void HighlightRangeArea(UnitManager unit)
-        {
-            // Identify unit's movement range
-            var range = unit.UnitData.MovementBaseValue;
-
-            _movementRange.CalculateMovementRange(Node, range);
-
-            for (int i = 0; i < _movementRange.Nodes.Count; i++)
-            {
-                //_movementRange.Nodes[i].NodeManager.NodeState.IsHighlighted = true;
-                _movementRange.Nodes[i].NodeManager.NodeState.NodeVisualManager.SetHovered(Constants.NodeVisualColorState.Blue);
-                               
-            }
-
-            /// --- OLD IMPLEMENTATION START ---
-            //// Highlight selected node
-            //SetNodeState(unit.StoodNode.NodeState, Constants.State.HoveredBlue);
-
-            //// Highlight N E S W with the range amount
-            //HighlightNodes(_northNode, range, Constants.Direction.North);
-            //HighlightNodes(_eastNode, range, Constants.Direction.East);
-            //HighlightNodes(_southNode, range, Constants.Direction.South);
-            //HighlightNodes(_westNode, range, Constants.Direction.West);
-
-            //// Highlight diagonals with the range amount -1
-            //HighlightNodes(_northEastNode, range, Constants.Direction.NorthEast);
-            //HighlightNodes(_northWestNode, range, Constants.Direction.NorthWest);
-            //HighlightNodes(_southEastNode, range, Constants.Direction.SouthEast);
-            //HighlightNodes(_southWestNode, range, Constants.Direction.SouthWest);
-
-            //// Highlight range amount + 1 with either heal/attack range depending on unit type
-            /// --- OLD IMPLEMENTATION END ---
-        }
-
-        /// --- OLD IMPLEMENTATION START ---
-        private void HighlightNodes(NodeManager startNode, int range, Constants.Direction direction)
-        {
-            // the full range includes enemy/heal range
-            int movementRange = range - 1;
-
-            // If highlighting diagonally, -1, if normally 0
-            int directionModifier = CalculateDirectionModifier(direction);
-
-            if (movementRange + directionModifier <= -1)
-            {
-                return;
-            }
-
-            //startNode.NodeState.IsHighlighted = true;
-            //SetNodeState(startNode.NodeState, Constants.NodeVisualState.HoveredBlue);
-
-            if (!startNode.NodeState.NodeVisualManager.IsPressed)
-            {
-                startNode.NodeState.NodeVisualManager.SetHovered(Constants.NodeVisualColorState.Blue);
-            }
-            
-
-            NodeManager currentNode = startNode;
-
-            for (int i = 0; i < movementRange + directionModifier; i++)
-            {
-                NodeManager nextNode = null;
-
-                switch (direction)
-                {
-                    case Constants.Direction.North:
-                        nextNode = currentNode.NorthNode;
-                        break;
-
-                    case Constants.Direction.NorthEast:
-                        nextNode = currentNode.NorthEastNode;
-                        break;
-
-                    case Constants.Direction.East:
-                        nextNode = currentNode.EastNode;
-                        break;
-
-                    case Constants.Direction.SouthEast:
-                        nextNode = currentNode.SouthEastNode;
-                        break;
-
-                    case Constants.Direction.South:
-                        nextNode = currentNode.SouthNode;
-                        break;
-
-                    case Constants.Direction.SouthWest:
-                        nextNode = currentNode.SouthWestNode;
-                        break;
-
-                    case Constants.Direction.West:
-                        nextNode = currentNode.WestNode;
-                        break;
-
-                    case Constants.Direction.NorthWest:
-                        nextNode = currentNode.NorthWestNode;
-                        break;
-                }
-
-                if (nextNode != null)
-                {
-                    //nextNode.NodeState.IsHighlighted = true;
-                    //SetNodeState(nextNode.NodeState, Constants.NodeVisualState.HoveredBlue);
-
-                    if (!nextNode.NodeState.NodeVisualManager.IsPressed)
-                    {
-                        nextNode.NodeState.NodeVisualManager.SetHovered(Constants.NodeVisualColorState.Blue);
-                    }
-
-                    currentNode = nextNode;
-                }
-                else
-                {
-                    break;
-                }
-            }
-        }
-        /// --- OLD IMPLEMENTATION END ---
-
-        private int CalculateDirectionModifier(Constants.Direction direction)
-        {
-            // If direction is diagonal, apply a modifier
-            if (direction == Constants.Direction.NorthEast ||
-                direction == Constants.Direction.NorthWest ||
-                direction == Constants.Direction.SouthEast ||
-                direction == Constants.Direction.SouthWest)
-            {
-                return -1;
-            }
-            else
-            {
-                return 0;
-            }
-        }
-
-        private void SetNodeState(NodeState nodeState, Constants.NodeVisualState newState)
-        {
-            nodeState.CurrentState = newState;
         }
     }
 }
