@@ -60,107 +60,105 @@ namespace CT6GAMAI
                 }
             }
 
-                if (Input.GetKeyDown(KeyCode.P))
+            if (Input.GetKeyDown(KeyCode.P))
+            {
+                Node startNode = OccupiedNode;
+                Node targetNode = SelectedNode.Node;
+
+                path = _movementRange.ReconstructPath(startNode, targetNode);
+
+                foreach (Node n in path)
                 {
-                    Node startNode = OccupiedNode;
-                    Node targetNode = SelectedNode.Node;
-
-                    path = _movementRange.ReconstructPath(startNode, targetNode);
-
-                    foreach (Node n in path)
-                    {
-                        n.NodeManager.NodeState.NodeVisualManager.SetPath();
-                    }
+                    n.NodeManager.NodeState.NodeVisualManager.SetPath();
                 }
-
-                // Moving forward
-                if (Input.GetKeyDown(KeyCode.W))
-                {
-                    var northNs = SelectedNode.NorthNode.NodeState;
-
-                    if (northNs != null)
-                    {
-                        northNs.NodeSelectorManager.SetDefaultSelected();
-                        SelectedNodeState.NodeSelectorManager.SetInactive();
-                    }
-                }
-
-                // Moving left
-                if (Input.GetKeyDown(KeyCode.A))
-                {
-                    var westNs = SelectedNode.WestNode.NodeState;
-
-                    if (westNs != null)
-                    {
-                        westNs.NodeSelectorManager.SetDefaultSelected();
-                        SelectedNodeState.NodeSelectorManager.SetInactive();
-                    }
-                }
-
-                // Moving backward
-                if (Input.GetKeyDown(KeyCode.S))
-                {
-                    var southNs = SelectedNode.SouthNode.NodeState;
-
-                    if (southNs != null)
-                    {
-                        southNs.NodeSelectorManager.SetDefaultSelected();
-                        SelectedNodeState.NodeSelectorManager.SetInactive();
-                    }
-                }
-
-                // Moving right
-                if (Input.GetKeyDown(KeyCode.D))
-                {
-                    var eastNs = SelectedNode.EastNode.NodeState;
-
-                    if (eastNs != null)
-                    {
-                        eastNs.NodeSelectorManager.SetDefaultSelected();
-                        SelectedNodeState.NodeSelectorManager.SetInactive();
-                    }
-                }
-
-                // Selection of a unit, if hovered over one.
-                if (Input.GetKeyDown(KeyCode.Space))
-                {
-                    if (SelectedNode.StoodUnit != null)
-                    {
-                        unitPressed = !unitPressed;
-
-                        if (unitPressed)
-                        {
-                            SelectedNodeState.NodeVisualManager.SetPressed(Constants.NodeVisualColorState.Blue);
-
-                            foreach (Node n in _movementRange.Nodes)
-                            {
-                                n.NodeManager.NodeState.NodeVisualManager.SetPressed(Constants.NodeVisualColorState.Blue);
-                            }
-                        }
-
-                        if (!unitPressed)
-                        {
-                            SelectedNodeState.NodeVisualManager.SetHovered(Constants.NodeVisualColorState.Blue);
-
-                            foreach (Node n in _movementRange.Nodes)
-                            {
-                                n.NodeManager.NodeState.NodeVisualManager.SetHovered(Constants.NodeVisualColorState.Blue);
-                            }
-                        }
-
-                    }
-                }
-
-                if (unitPressed)
-                {
-                    foreach (Node n in _movementRange.Nodes)
-                    {
-                        n.NodeManager.NodeState.NodeVisualManager.SetPressed(Constants.NodeVisualColorState.Blue);
-                    }
-                }
-
             }
-        
+
+            // Moving forward
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                var northNs = SelectedNode.NorthNode.NodeState;
+
+                if (northNs != null)
+                {
+                    northNs.NodeSelectorManager.SetDefaultSelected();
+                    SelectedNodeState.NodeSelectorManager.SetInactive();
+                }
+            }
+
+            // Moving left
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                var westNs = SelectedNode.WestNode.NodeState;
+
+                if (westNs != null)
+                {
+                    westNs.NodeSelectorManager.SetDefaultSelected();
+                    SelectedNodeState.NodeSelectorManager.SetInactive();
+                }
+            }
+
+            // Moving backward
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                var southNs = SelectedNode.SouthNode.NodeState;
+
+                if (southNs != null)
+                {
+                    southNs.NodeSelectorManager.SetDefaultSelected();
+                    SelectedNodeState.NodeSelectorManager.SetInactive();
+                }
+            }
+
+            // Moving right
+            if (Input.GetKeyDown(KeyCode.D))
+            {
+                var eastNs = SelectedNode.EastNode.NodeState;
+
+                if (eastNs != null)
+                {
+                    eastNs.NodeSelectorManager.SetDefaultSelected();
+                    SelectedNodeState.NodeSelectorManager.SetInactive();
+                }
+            }
+
+            // Selection of a unit, if hovered over one.
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                if (SelectedNode.StoodUnit != null)
+                {
+                    unitPressed = !unitPressed;
+
+                    if (unitPressed)
+                    {
+                        SelectedNodeState.NodeVisualManager.SetPressed(Constants.NodeVisualColorState.Blue);
+
+                        foreach (Node n in _movementRange.Nodes)
+                        {
+                            n.NodeManager.NodeState.NodeVisualManager.SetPressed(Constants.NodeVisualColorState.Blue);
+                        }
+                    }
+
+                    if (!unitPressed)
+                    {
+                        SelectedNodeState.NodeVisualManager.SetHovered(Constants.NodeVisualColorState.Blue);
+
+                        foreach (Node n in _movementRange.Nodes)
+                        {
+                            n.NodeManager.NodeState.NodeVisualManager.SetHovered(Constants.NodeVisualColorState.Blue);
+                        }
+                    }
+
+                }
+            }
+
+            if (unitPressed)
+            {
+                foreach (Node n in _movementRange.Nodes)
+                {
+                    n.NodeManager.NodeState.NodeVisualManager.SetPressed(Constants.NodeVisualColorState.Blue);
+                }
+            }
+
+        }
     }
-    
 }
