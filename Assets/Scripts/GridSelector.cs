@@ -14,16 +14,21 @@ namespace CT6GAMAI
 
         [SerializeField] private MovementRange _movementRange;
 
+        private void Start()
+        {
+            SelectedNode.NodeState.NodeSelectorManager.SetDefaultSelected();
+        }
+
         // Update is called once per frame
         void Update()
         {
             if (SelectedNodeState == null) { SelectedNodeState = SelectedNode.NodeState; }
 
-            if (SelectedNode == null || !SelectedNodeState.IsSelected)
+            if (SelectedNode == null || !SelectedNodeState.NodeSelectorManager.IsActiveSelection)
             {
                 for (int i = 0; i < Nodes.Length; i++)
                 {
-                    if (Nodes[i].NodeState.IsSelected)
+                    if (Nodes[i].NodeState.NodeSelectorManager.IsActiveSelection)
                     {
                         SelectedNode = Nodes[i];
                         SelectedNodeState = SelectedNode.NodeState;
@@ -71,8 +76,8 @@ namespace CT6GAMAI
 
                 if (northNs != null)
                 {
-                    northNs.IsSelected = true;
-                    SelectedNodeState.IsSelected = false;
+                    northNs.NodeSelectorManager.SetDefaultSelected();
+                    SelectedNodeState.NodeSelectorManager.SetInactive();
                 }
             }
 
@@ -83,8 +88,8 @@ namespace CT6GAMAI
 
                 if (westNs != null)
                 {
-                    westNs.IsSelected = true;
-                    SelectedNodeState.IsSelected = false;
+                    westNs.NodeSelectorManager.SetDefaultSelected();
+                    SelectedNodeState.NodeSelectorManager.SetInactive();
                 }
             }
 
@@ -95,8 +100,8 @@ namespace CT6GAMAI
 
                 if (southNs != null)
                 {
-                    southNs.IsSelected = true;
-                    SelectedNodeState.IsSelected = false;
+                    southNs.NodeSelectorManager.SetDefaultSelected();
+                    SelectedNodeState.NodeSelectorManager.SetInactive();
                 }
             }
 
@@ -107,8 +112,8 @@ namespace CT6GAMAI
 
                 if (eastNs != null)
                 {
-                    eastNs.IsSelected = true;
-                    SelectedNodeState.IsSelected = false;
+                    eastNs.NodeSelectorManager.SetDefaultSelected();
+                    SelectedNodeState.NodeSelectorManager.SetInactive();
                 }
             }
 

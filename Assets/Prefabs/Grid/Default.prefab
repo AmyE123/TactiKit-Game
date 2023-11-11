@@ -199,6 +199,8 @@ MonoBehaviour:
   IsLocked: 0
   IsHighlighted: 0
   IsBolded: 0
+  NodeVisualManager: {fileID: 7354190729456982330}
+  NodeSelectorManager: {fileID: 6523508518634145030}
 --- !u!114 &7354190729456982330
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -244,9 +246,15 @@ MonoBehaviour:
   State: {fileID: 593979796380849875}
   SelectorVisualDatas:
   - {fileID: 11400000, guid: 4597a9117c303534a8cc65a9e369ff54, type: 2}
-  - {fileID: 11400000, guid: e557149fe8171e348be574362c32bf03, type: 2}
   SelectorSR: {fileID: 2113958563014563909}
-  _isActive: 0
+  SelectorNodeDecal: {fileID: 5469833492010107051}
+  SelectorCanvas: {fileID: 5342038288916271231}
+  SelectorImage: {fileID: 1058421250425296787}
+  SelectorSprites:
+  - {fileID: 21300000, guid: 1078d65449a34774da4dad4c83a3ea16, type: 3}
+  - {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  _isActiveSelection: 0
   _isDefaultSelected: 0
   _isPlayerSelected: 0
   _isEnemySelected: 0

@@ -23,16 +23,25 @@ namespace CT6GAMAI
         public bool IsLocked = false;
         public bool IsHighlighted = false;
         public bool IsBolded = false;
+       
+        public NodeVisualManager NodeVisualManager;
+        public NodeSelectorManager NodeSelectorManager;
 
         void Update()
         {
-            if (IsSelected)
+            if (NodeSelectorManager.IsActiveSelection)
             {
+                // TODO: Update with new visualFSM
                 ChangeVisualData(SelectorSR, SelectorVisualDatas[0]);
-
-                Selector.SetActive(true);
-                PointerCanvas.SetActive(true);
             }
+            else
+            {
+                // TODO: Update with new visualFSM
+                CurrentState = NodeVisualState.Default;
+                //NodeVisualManager.SetDefault();
+            }
+
+
             if (IsLocked)
             {
                 ChangeVisualData(SelectorSR, SelectorVisualDatas[1]);
@@ -47,12 +56,7 @@ namespace CT6GAMAI
             {
                 CurrentState = NodeVisualState.PointOfInterest;
             }
-            if (!IsSelected && !IsLocked && !IsHighlighted && !IsBolded)
-            {
-                CurrentState = NodeVisualState.Default;
-                Selector.SetActive(false);
-                PointerCanvas.gameObject.SetActive(false);
-            }
+
 
             CheckState();
         }

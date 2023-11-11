@@ -23,7 +23,7 @@ namespace CT6GAMAI
 
         public NodeSelectorFSM(GameObject nodeObject)
         {
-            _currentState = NodeSelectorState.DefaultSelected;
+            _currentState = NodeSelectorState.NoSelection;
             _nodeGameObject = nodeObject;
         }
 
@@ -35,26 +35,32 @@ namespace CT6GAMAI
             }
         }
 
+        public NodeSelectorState GetState()
+        {
+            return _currentState;
+        }
+
         public void ChangeState(NodeSelectorState newState)
         {
-            Debug.Log("Changing selector state to " + newState);
-
             if (_currentState == newState)
                 return;
 
             // Update the node's appearance based on the new state
+            // TODO: Add more visual datas for each state
             switch (newState)
             {
+                case NodeSelectorState.NoSelection:
+                    break;
                 case NodeSelectorState.DefaultSelected:
                     _nodeState.ChangeVisualData(_manager.SelectorSR, _manager.SelectorVisualDatas[0]);
                     break;
 
                 case NodeSelectorState.PlayerSelected:
-                    _nodeState.ChangeVisualData(_manager.SelectorSR, _manager.SelectorVisualDatas[1]);
+                    _nodeState.ChangeVisualData(_manager.SelectorSR, _manager.SelectorVisualDatas[0]);
                     break;
 
                 case NodeSelectorState.EnemySelected:
-                    _nodeState.ChangeVisualData(_manager.SelectorSR, _manager.SelectorVisualDatas[2]);
+                    _nodeState.ChangeVisualData(_manager.SelectorSR, _manager.SelectorVisualDatas[0]);
                     break;
             }
 

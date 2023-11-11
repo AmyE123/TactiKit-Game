@@ -1,6 +1,8 @@
 namespace CT6GAMAI
 {
     using UnityEngine;
+    using UnityEngine.UI;
+    using UnityEngine.XR;
     using static CT6GAMAI.Constants;
 
     public class NodeSelectorManager : MonoBehaviour
@@ -11,12 +13,34 @@ namespace CT6GAMAI
         public NodeStateVisualData[] SelectorVisualDatas;
         public SpriteRenderer SelectorSR;
 
-        public bool IsActive => _isActive;
+        public GameObject SelectorNodeDecal;
+        public GameObject SelectorCanvas;
+        public Image SelectorImage;
+
+        public Sprite[] SelectorSprites;
+
+        /// <summary>
+        /// A bool indicating whether there is an active selection or not.
+        /// This returns true if either Default Selected, Player Selected or Enemy Selected states are true.
+        /// </summary>
+        public bool IsActiveSelection => _isActiveSelection;
+
+        /// <summary>
+        /// A bool indicating whether the selector is in Default state.
+        /// </summary>
         public bool IsDefaultSelected => _isDefaultSelected;
+
+        /// <summary>
+        /// A bool indicating whether the selector is over a player
+        /// </summary>
         public bool IsPlayerSelected => _isPlayerSelected;
+
+        /// <summary>
+        /// A bool indicating whether the selector is over an enemy
+        /// </summary>
         public bool IsEnemySelected => _isEnemySelected;
 
-        [SerializeField] private bool _isActive;
+        [SerializeField] private bool _isActiveSelection;
         [SerializeField] private bool _isDefaultSelected;
         [SerializeField] private bool _isPlayerSelected;
         [SerializeField] private bool _isEnemySelected;
@@ -28,52 +52,94 @@ namespace CT6GAMAI
             selectorFSM = new NodeSelectorFSM(gameObject);
             selectorFSM.Manager = this;
             selectorFSM.Initialize();
+
+            RefreshSelector();
         }
 
         public void SetInactive()
         {
             Debug.Log("SelectorManager: SetInactive");
 
-            _isActive = false;
+            _isActiveSelection = false;
             _isDefaultSelected = false;
             _isPlayerSelected = false;
             _isEnemySelected = false;
+
+            selectorFSM.ChangeState(NodeSelectorState.NoSelection);
+            RefreshSelector();
         }
 
         public void SetDefaultSelected()
         {
             Debug.Log("SelectorManager: SetDefaultSelected");
 
-            _isActive = true;
+            _isActiveSelection = true;
             _isDefaultSelected = true;
             _isPlayerSelected = false;
             _isEnemySelected = false;
 
             selectorFSM.ChangeState(NodeSelectorState.DefaultSelected);
+            RefreshSelector();
         }
 
         public void SetPlayerSelected()
         {
             Debug.Log("SelectorManager: SetPlayerSelected");
 
-            _isActive = true;
+            _isActiveSelection = true;
             _isDefaultSelected = false;
             _isPlayerSelected = true;
             _isEnemySelected = false;
 
             selectorFSM.ChangeState(NodeSelectorState.PlayerSelected);
+            RefreshSelector();
         }
 
         public void SetEnemySelected()
         {
             Debug.Log("SelectorManager: SetEnemySelected");
 
-            _isActive = true;
+            _isActiveSelection = true;
             _isDefaultSelected = false;
             _isPlayerSelected = false;
             _isEnemySelected = true;
 
             selectorFSM.ChangeState(NodeSelectorState.EnemySelected);
+            RefreshSelector();
+        }
+
+        /// <summary>
+        /// Refreshes the selector to make sure it is up to date with the right state.
+        /// </summary>
+        private void RefreshSelector()
+        {
+            switch (selectorFSM.GetState())
+            {
+                case NodeSelectorState.NoSelection:
+                    SetSelectorVisuals(SelectorSprites[0], false);
+                    break;
+                case NodeSelectorState.DefaultSelected:
+                    SetSelectorVisuals(SelectorSprites[0]);
+                    break;
+                case NodeSelectorState.PlayerSelected:
+                    SetSelectorVisuals(SelectorSprites[1]);
+                    break;
+                case NodeSelectorState.EnemySelected:
+                    SetSelectorVisuals(SelectorSprites[2]);
+                    break;
+            }           
+        }
+
+        /// <summary>
+        /// Sets the selector visuals, the image of the selector, and its active state.
+        /// </summary>
+        /// <param name="selectorImage">The image that is shown where the selector is. This can be a hand, an enemy indicator, or something else.</param>
+        /// <param name="isActive">Whether the selector is active or not.</param>
+        private void SetSelectorVisuals(Sprite selectorImage, bool isActive = true)
+        {
+            SelectorImage.sprite = selectorImage;
+            SelectorNodeDecal.SetActive(isActive);
+            SelectorCanvas.SetActive(isActive);
         }
     }
 }
