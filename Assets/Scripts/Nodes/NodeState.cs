@@ -22,6 +22,7 @@ namespace CT6GAMAI
         public bool IsSelected = false;
         public bool IsLocked = false;
         public bool IsHighlighted = false;
+        public bool IsBolded = false;
 
         void Update()
         {
@@ -38,7 +39,15 @@ namespace CT6GAMAI
 
                 PointerCanvas.SetActive(false);
             }
-            if (!IsSelected && !IsLocked && !IsHighlighted)
+            if (IsHighlighted)
+            {
+                CurrentState = State.HoveredBlue;
+            }
+            if (IsBolded)
+            {
+                CurrentState = State.PointOfInterest;
+            }
+            if (!IsSelected && !IsLocked && !IsHighlighted && !IsBolded)
             {
                 CurrentState = State.Default;
                 Selector.SetActive(false);

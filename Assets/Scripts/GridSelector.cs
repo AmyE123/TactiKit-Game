@@ -1,16 +1,24 @@
 namespace CT6GAMAI
 {
+    using System.Collections.Generic;
     using UnityEngine;
 
     public class GridSelector : MonoBehaviour
     {
         public NodeManager[] Nodes;
         public NodeManager SelectedNode;
-        private NodeState SelectedNodeState;
+        public NodeState SelectedNodeState;
+
+        public Node OccupiedNode;
+        public List<Node> path = new List<Node>();
+
+        [SerializeField] private MovementRange _movementRange;
 
         // Update is called once per frame
         void Update()
-        {           
+        {
+            if (SelectedNodeState == null) { SelectedNodeState = SelectedNode.NodeState; }
+
             if (SelectedNode == null || !SelectedNodeState.IsSelected)
             {
                 for (int i = 0; i < Nodes.Length; i++)
@@ -28,7 +36,9 @@ namespace CT6GAMAI
                 SelectedNode.HighlightRangeArea(SelectedNode.StoodUnit);
             }
             else
-            {              
+            {
+                _movementRange.ResetNodes();
+
                 for (int i = 0; i < Nodes.Length; i++)
                 {
                     if (Nodes[i].NodeState.IsHighlighted)
@@ -38,6 +48,20 @@ namespace CT6GAMAI
                 }
 
                 SelectedNodeState.CurrentState = Constants.State.Default;
+            }
+
+            if (Input.GetKeyDown(KeyCode.P))
+            {
+                Node startNode = OccupiedNode;
+                Node targetNode = SelectedNode.Node;
+
+                path = _movementRange.ReconstructPath(startNode, targetNode);
+
+                foreach (Node n in path)
+                {
+                    n.NodeManager.NodeState.IsBolded = true;
+                    //n.NodeManager.NodeState.IsBolded = true;
+                }
             }
 
             // Moving forward
@@ -89,14 +113,20 @@ namespace CT6GAMAI
             }
 
             // Selection
+            // TODO: Make this work
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 SelectedNodeState.IsLocked = true;
 
                 // TODO: Select North IF avaliable, else, select from avaliable.
-                SelectedNode.NorthNode.NodeState.IsSelected = true;
+                //SelectedNode.NorthNode.NodeState.IsSelected = true;
 
-                SelectedNodeState.IsSelected = false;
+                //SelectedNodeState.IsSelected = false;
+
+                //foreach (Node n in _movementRange.Nodes)
+                //{
+                //    n.NodeManager.NodeState.IsBolded = true;
+                //}
             }
 
         }

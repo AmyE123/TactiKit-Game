@@ -6,6 +6,6 @@ namespace CT6GAMAI
     public class NodeData : ScriptableObject
     {
         public Vector3 Coordinates;
-        public Constants.Terrain TerrainType;
+        public TerrainData TerrainType;
     }
 }
