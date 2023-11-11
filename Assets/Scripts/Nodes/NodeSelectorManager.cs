@@ -2,7 +2,6 @@ namespace CT6GAMAI
 {
     using UnityEngine;
     using UnityEngine.UI;
-    using UnityEngine.XR;
     using static CT6GAMAI.Constants;
 
     public class NodeSelectorManager : MonoBehaviour

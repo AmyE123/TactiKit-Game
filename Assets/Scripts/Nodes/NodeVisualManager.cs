@@ -1,7 +1,6 @@
 namespace CT6GAMAI
 {
     using UnityEngine;
-    using UnityEngine.XR;
     using static CT6GAMAI.Constants;
 
     public class NodeVisualManager : MonoBehaviour
