@@ -14,6 +14,8 @@ namespace CT6GAMAI
 
         [SerializeField] private MovementRange _movementRange;
 
+        public bool unitPressed = false;
+
         private void Start()
         {
             SelectedNode.NodeState.NodeSelectorManager.SetDefaultSelected();
@@ -42,24 +44,27 @@ namespace CT6GAMAI
             }
             else
             {
-                _movementRange.ResetNodes();
-
-                for (int i = 0; i < Nodes.Length; i++)
+                if (!unitPressed)
                 {
-                    if (Nodes[i].NodeState.NodeVisualManager.IsActive)
+                    _movementRange.ResetNodes();
+
+                    for (int i = 0; i < Nodes.Length; i++)
                     {
-                        Nodes[i].NodeState.NodeVisualManager.SetDefault();
+                        if (Nodes[i].NodeState.NodeVisualManager.IsActive)
+                        {
+                            Nodes[i].NodeState.NodeVisualManager.SetDefault();
+                        }
+
+                        //if (Nodes[i].NodeState.IsHighlighted)
+                        //{
+                        //    Nodes[i].NodeState.IsHighlighted = false;
+                        //    Nodes[i].NodeState.NodeVisualManager.SetDefault();
+                        //}
                     }
 
-                    //if (Nodes[i].NodeState.IsHighlighted)
-                    //{
-                    //    Nodes[i].NodeState.IsHighlighted = false;
-                    //    Nodes[i].NodeState.NodeVisualManager.SetDefault();
-                    //}
+                    //SelectedNodeState.CurrentState = Constants.NodeVisualState.Default;
+                    SelectedNodeState.NodeVisualManager.SetDefault();
                 }
-
-                //SelectedNodeState.CurrentState = Constants.NodeVisualState.Default;
-                SelectedNodeState.NodeVisualManager.SetDefault();
             }
 
             if (Input.GetKeyDown(KeyCode.P))
@@ -128,17 +133,39 @@ namespace CT6GAMAI
             // Selection
             // TODO: Make this work
             if (Input.GetKeyDown(KeyCode.Space))
-            {               
-                SelectedNodeState.NodeVisualManager.SetPressed(Constants.NodeVisualColorState.Blue);
+            {
+                if (SelectedNode.StoodUnit != null)
+                {
+                    unitPressed = !unitPressed;
+
+                    if (unitPressed)
+                    {
+                        SelectedNodeState.NodeVisualManager.SetPressed(Constants.NodeVisualColorState.Blue);
+
+                        foreach (Node n in _movementRange.Nodes)
+                        {
+                            n.NodeManager.NodeState.NodeVisualManager.SetPressed(Constants.NodeVisualColorState.Blue);
+                        }
+                    }
+
+                    if (!unitPressed)
+                    {
+                        SelectedNodeState.NodeVisualManager.SetHovered(Constants.NodeVisualColorState.Blue);
+
+                        foreach (Node n in _movementRange.Nodes)
+                        {
+                            n.NodeManager.NodeState.NodeVisualManager.SetHovered(Constants.NodeVisualColorState.Blue);
+                        }
+                    }
+
+                }
+
 
                 // TODO: Select North IF avaliable, else, select from avaliable.
                 //SelectedNode.NorthNode.NodeState.NodeSelectorManager.SetDefaultSelected();
                 //SelectedNodeState.NodeSelectorManager.SetInactive();
 
-                foreach (Node n in _movementRange.Nodes)
-                {
-                    n.NodeManager.NodeState.NodeVisualManager.SetPressed(Constants.NodeVisualColorState.Blue);
-                }
+
 
                 //SelectedNodeState.IsLocked = true;
 
@@ -150,6 +177,14 @@ namespace CT6GAMAI
                 //{
                 //    n.NodeManager.NodeState.IsBolded = true;
                 //}
+            }
+
+            if(unitPressed)
+            {
+                foreach (Node n in _movementRange.Nodes)
+                {
+                    n.NodeManager.NodeState.NodeVisualManager.SetPressed(Constants.NodeVisualColorState.Blue);
+                }
             }
 
         }

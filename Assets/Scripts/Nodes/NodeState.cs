@@ -29,86 +29,8 @@ namespace CT6GAMAI
 
         void Update()
         {
-            if (NodeSelectorManager.IsActiveSelection)
-            {
-                // TODO: Update with new visualFSM
-                ChangeVisualData(SelectorSR, SelectorVisualDatas[0]);
-            }
-            else
-            {
-                // TODO: Update with new visualFSM
-                //CurrentState = NodeVisualState.Default;
-                NodeVisualManager.SetDefault();
-            }
 
-
-            //if (IsLocked)
-            //{
-            //    ChangeVisualData(SelectorSR, SelectorVisualDatas[1]);
-
-            //    PointerCanvas.SetActive(false);
-            //}
-            //if (IsHighlighted)
-            //{
-            //    CurrentState = NodeVisualState.HoveredBlue;
-            //}
-            //if (IsBolded)
-            //{
-            //    CurrentState = NodeVisualState.PointOfInterest;
-            //}
-
-
-            //CheckState();
         }
-
-        //void CheckState()
-        //{
-        //    switch (CurrentState)
-        //    {
-        //        case NodeVisualState.Default:
-        //            ChangeVisualData(VisualSR, VisualDatas[0]);
-        //            break;
-
-        //        case NodeVisualState.HoveredBlue:
-        //            ChangeVisualData(VisualSR, VisualDatas[1]); 
-        //            break;
-
-        //        case NodeVisualState.HoveredRed:
-        //            ChangeVisualData(VisualSR, VisualDatas[2]);
-        //            break;
-
-        //        case NodeVisualState.HoveredGreen:
-        //            ChangeVisualData(VisualSR, VisualDatas[3]);
-        //            break;
-
-        //        case NodeVisualState.SelectedBlue:
-        //            ChangeVisualData(VisualSR, VisualDatas[4]);
-        //            break;
-
-        //        case NodeVisualState.SelectedRed:
-        //            ChangeVisualData(VisualSR, VisualDatas[5]);
-        //            break;
-
-        //        case NodeVisualState.SelectedGreen:
-        //            ChangeVisualData(VisualSR, VisualDatas[6]);
-        //            break;
-
-        //        case NodeVisualState.AllEnemyRange:
-        //            ChangeVisualData(VisualSR, VisualDatas[7]);
-        //            break;
-
-        //        case NodeVisualState.SingularEnemyRange:
-        //            ChangeVisualData(VisualSR, VisualDatas[8]);
-        //            break;
-
-        //        case NodeVisualState.PointOfInterest:
-        //            ChangeVisualData(VisualSR, VisualDatas[9]);
-        //            break;
-
-        //        default:
-        //            break;
-        //    }
-        //}
 
         public void ChangeVisualData(SpriteRenderer SR, NodeStateVisualData VisualData)
         {
