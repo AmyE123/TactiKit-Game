@@ -47,18 +47,17 @@ namespace CT6GAMAI
 
         private void Start()
         {
-            Debug.Log("SelectorManager: Start");
-
             selectorFSM = new NodeSelectorFSM();
             selectorFSM.Manager = this;
 
             RefreshSelector();
         }
 
+        /// <summary>
+        /// Sets the selector to inactive.
+        /// </summary>
         public void SetInactive()
         {
-            Debug.Log("SelectorManager: SetInactive");
-
             _isActiveSelection = false;
             _isDefaultSelected = false;
             _isPlayerSelected = false;
@@ -68,10 +67,11 @@ namespace CT6GAMAI
             RefreshSelector();
         }
 
+        /// <summary>
+        /// Sets the selector to default selected.
+        /// </summary>
         public void SetDefaultSelected()
         {
-            Debug.Log("SelectorManager: SetDefaultSelected");
-
             _isActiveSelection = true;
             _isDefaultSelected = true;
             _isPlayerSelected = false;
@@ -81,10 +81,11 @@ namespace CT6GAMAI
             RefreshSelector();
         }
 
+        /// <summary>
+        /// Sets the selector to player selected (when the selector is over a player)
+        /// </summary>
         public void SetPlayerSelected()
         {
-            Debug.Log("SelectorManager: SetPlayerSelected");
-
             _isActiveSelection = true;
             _isDefaultSelected = false;
             _isPlayerSelected = true;
@@ -94,10 +95,11 @@ namespace CT6GAMAI
             RefreshSelector();
         }
 
+        /// <summary>
+        /// Sets the selector to enemy selected (when the selector is over an enemy)
+        /// </summary>
         public void SetEnemySelected()
         {
-            Debug.Log("SelectorManager: SetEnemySelected");
-
             _isActiveSelection = true;
             _isDefaultSelected = false;
             _isPlayerSelected = false;
@@ -126,7 +128,7 @@ namespace CT6GAMAI
                 case NodeSelectorState.EnemySelected:
                     SetSelectorVisuals(SelectorSprites[2]);
                     break;
-            }           
+            }
         }
 
         /// <summary>
