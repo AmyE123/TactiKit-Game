@@ -17,7 +17,7 @@ namespace CT6GAMAI
         /// The enumerations representing the different enemy color states of a node
         /// </summary>
         public enum NodeVisualEnemyColorState { SingularEnemy, AllEnemy }
-        
+
         /// <summary>
         /// The enumerations representing the different states of a selector
         /// </summary>
