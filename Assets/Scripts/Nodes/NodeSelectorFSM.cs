@@ -25,19 +25,19 @@ namespace CT6GAMAI
             _currentState = NodeSelectorState.NoSelection;
         }
 
-        public void Initialize()
-        {
-            if (_manager != null)
-            {
-                _nodeState = _manager.State;
-            }
-        }
-
+        /// <summary>
+        /// Gets the current state of the selector.
+        /// </summary>
+        /// <returns>The current state of the selector.</returns>
         public NodeSelectorState GetState()
         {
             return _currentState;
         }
 
+        /// <summary>
+        /// Change the state of the selector.
+        /// </summary>
+        /// <param name="newState">The state to change to.</param>
         public void ChangeState(NodeSelectorState newState)
         {
             if (_currentState == newState)
@@ -50,15 +50,15 @@ namespace CT6GAMAI
                 case NodeSelectorState.NoSelection:
                     break;
                 case NodeSelectorState.DefaultSelected:
-                    _nodeState.ChangeVisualData(_manager.SelectorSR, _manager.SelectorVisualDatas[0]);
+                    _manager.State.ChangeVisualData(_manager.SelectorSR, _manager.SelectorVisualDatas[0]);
                     break;
 
                 case NodeSelectorState.PlayerSelected:
-                    _nodeState.ChangeVisualData(_manager.SelectorSR, _manager.SelectorVisualDatas[0]);
+                    _manager.State.ChangeVisualData(_manager.SelectorSR, _manager.SelectorVisualDatas[0]);
                     break;
 
                 case NodeSelectorState.EnemySelected:
-                    _nodeState.ChangeVisualData(_manager.SelectorSR, _manager.SelectorVisualDatas[0]);
+                    _manager.State.ChangeVisualData(_manager.SelectorSR, _manager.SelectorVisualDatas[0]);
                     break;
             }
 

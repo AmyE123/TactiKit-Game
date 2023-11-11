@@ -53,7 +53,6 @@ namespace CT6GAMAI
 
             visualFSM = new NodeVisualFSM();
             visualFSM.Manager = this;
-            visualFSM.Initialize();
         }
 
         public void SetDefault()

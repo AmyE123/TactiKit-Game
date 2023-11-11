@@ -51,7 +51,6 @@ namespace CT6GAMAI
 
             selectorFSM = new NodeSelectorFSM();
             selectorFSM.Manager = this;
-            selectorFSM.Initialize();
 
             RefreshSelector();
         }

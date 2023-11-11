@@ -12,8 +12,6 @@ namespace CT6GAMAI
 
         private NodeVisualManager _manager;
 
-        private NodeState _nodeState;
-
         public NodeVisualManager Manager 
         {
             get { return  _manager; }
@@ -25,19 +23,20 @@ namespace CT6GAMAI
             _currentState = NodeVisualState.Default;
         }
 
-        public void Initialize()
-        {
-            if (_manager != null)
-            {
-                _nodeState = _manager.State;
-            }         
-        }
 
+        /// <summary>
+        /// Gets the current state of the node visual.
+        /// </summary>
+        /// <returns>The current state of the node visual.</returns>
         public NodeVisualState GetState()
         {
             return _currentState;
         }
 
+        /// <summary>
+        /// Change the state of the node visual.
+        /// </summary>
+        /// <param name="newState">The state to change to.</param>
         public void ChangeState(NodeVisualState newState)
         {
             if (_currentState == newState)
@@ -47,43 +46,43 @@ namespace CT6GAMAI
             switch (newState)
             {
                 case NodeVisualState.Default:
-                    _nodeState.ChangeVisualData(_manager.VisualSR, _manager.VisualDatas[0]);
+                    _manager.State.ChangeVisualData(_manager.VisualSR, _manager.VisualDatas[0]);
                     break;
 
                 case NodeVisualState.HoveredBlue:
-                    _nodeState.ChangeVisualData(_manager.VisualSR, _manager.VisualDatas[1]);
+                    _manager.State.ChangeVisualData(_manager.VisualSR, _manager.VisualDatas[1]);
                     break;
 
                 case NodeVisualState.HoveredRed:
-                    _nodeState.ChangeVisualData(_manager.VisualSR, _manager.VisualDatas[2]);
+                    _manager.State.ChangeVisualData(_manager.VisualSR, _manager.VisualDatas[2]);
                     break;
 
                 case NodeVisualState.HoveredGreen:
-                    _nodeState.ChangeVisualData(_manager.VisualSR, _manager.VisualDatas[3]);
+                    _manager.State.ChangeVisualData(_manager.VisualSR, _manager.VisualDatas[3]);
                     break;
 
                 case NodeVisualState.SelectedBlue:
-                    _nodeState.ChangeVisualData(_manager.VisualSR, _manager.VisualDatas[4]);
+                    _manager.State.ChangeVisualData(_manager.VisualSR, _manager.VisualDatas[4]);
                     break;
 
                 case NodeVisualState.SelectedRed:
-                    _nodeState.ChangeVisualData(_manager.VisualSR, _manager.VisualDatas[5]);
+                    _manager.State.ChangeVisualData(_manager.VisualSR, _manager.VisualDatas[5]);
                     break;
 
                 case NodeVisualState.SelectedGreen:
-                    _nodeState.ChangeVisualData(_manager.VisualSR, _manager.VisualDatas[6]);
+                    _manager.State.ChangeVisualData(_manager.VisualSR, _manager.VisualDatas[6]);
                     break;
 
                 case NodeVisualState.AllEnemyRange:
-                    _nodeState.ChangeVisualData(_manager.VisualSR, _manager.VisualDatas[7]);
+                    _manager.State.ChangeVisualData(_manager.VisualSR, _manager.VisualDatas[7]);
                     break;
 
                 case NodeVisualState.SingularEnemyRange:
-                    _nodeState.ChangeVisualData(_manager.VisualSR, _manager.VisualDatas[8]);
+                    _manager.State.ChangeVisualData(_manager.VisualSR, _manager.VisualDatas[8]);
                     break;
 
                 case NodeVisualState.PointOfInterest:
-                    _nodeState.ChangeVisualData(_manager.VisualSR, _manager.VisualDatas[9]);
+                    _manager.State.ChangeVisualData(_manager.VisualSR, _manager.VisualDatas[9]);
                     break;
             }
 
