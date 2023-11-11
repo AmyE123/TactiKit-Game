@@ -12,9 +12,9 @@ namespace CT6GAMAI
 
         private NodeVisualManager _manager;
 
-        public NodeVisualManager Manager 
+        public NodeVisualManager Manager
         {
-            get { return  _manager; }
+            get { return _manager; }
             set { _manager = value; }
         }
 
