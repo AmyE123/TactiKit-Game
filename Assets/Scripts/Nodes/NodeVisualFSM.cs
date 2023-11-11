@@ -35,6 +35,11 @@ namespace CT6GAMAI
             }         
         }
 
+        public NodeVisualState GetState()
+        {
+            return _currentState;
+        }
+
         public void ChangeState(NodeVisualState newState)
         {
             if (_currentState == newState)

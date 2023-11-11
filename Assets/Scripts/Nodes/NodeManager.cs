@@ -2,6 +2,7 @@ namespace CT6GAMAI
 {
     using System.Collections.Generic;
     using UnityEngine;
+    using static CT6GAMAI.Constants;
 
     public class NodeManager : MonoBehaviour
     {
@@ -118,6 +119,28 @@ namespace CT6GAMAI
             }
         }
 
+        public void HighlightRangeArea(UnitManager unit, bool isPressed = false)
+        {
+            // Identify unit's movement range
+            var range = unit.UnitData.MovementBaseValue;
+
+            _movementRange.CalculateMovementRange(Node, range);
+
+            for (int i = 0; i < _movementRange.Nodes.Count; i++)
+            {
+                if (isPressed)
+                {
+                    _movementRange.Nodes[i].NodeManager.NodeState.NodeVisualManager.SetPressed(Constants.NodeVisualColorState.Blue);
+                }
+                else
+                {
+                    _movementRange.Nodes[i].NodeManager.NodeState.NodeVisualManager.SetHovered(Constants.NodeVisualColorState.Blue);
+                }
+
+                //_movementRange.Nodes[i].NodeManager.NodeState.IsHighlighted = true;               
+            }
+        }
+
         public void HighlightRangeArea(UnitManager unit)
         {
             // Identify unit's movement range
@@ -127,7 +150,9 @@ namespace CT6GAMAI
 
             for (int i = 0; i < _movementRange.Nodes.Count; i++)
             {
-                _movementRange.Nodes[i].NodeManager.NodeState.IsHighlighted = true;
+                //_movementRange.Nodes[i].NodeManager.NodeState.IsHighlighted = true;
+                _movementRange.Nodes[i].NodeManager.NodeState.NodeVisualManager.SetHovered(Constants.NodeVisualColorState.Blue);
+                               
             }
 
             /// --- OLD IMPLEMENTATION START ---
@@ -164,8 +189,14 @@ namespace CT6GAMAI
                 return;
             }
 
-            startNode.NodeState.IsHighlighted = true;
-            SetNodeState(startNode.NodeState, Constants.NodeVisualState.HoveredBlue);
+            //startNode.NodeState.IsHighlighted = true;
+            //SetNodeState(startNode.NodeState, Constants.NodeVisualState.HoveredBlue);
+
+            if (!startNode.NodeState.NodeVisualManager.IsPressed)
+            {
+                startNode.NodeState.NodeVisualManager.SetHovered(Constants.NodeVisualColorState.Blue);
+            }
+            
 
             NodeManager currentNode = startNode;
 
@@ -210,8 +241,14 @@ namespace CT6GAMAI
 
                 if (nextNode != null)
                 {
-                    nextNode.NodeState.IsHighlighted = true;
-                    SetNodeState(nextNode.NodeState, Constants.NodeVisualState.HoveredBlue);
+                    //nextNode.NodeState.IsHighlighted = true;
+                    //SetNodeState(nextNode.NodeState, Constants.NodeVisualState.HoveredBlue);
+
+                    if (!nextNode.NodeState.NodeVisualManager.IsPressed)
+                    {
+                        nextNode.NodeState.NodeVisualManager.SetHovered(Constants.NodeVisualColorState.Blue);
+                    }
+
                     currentNode = nextNode;
                 }
                 else
