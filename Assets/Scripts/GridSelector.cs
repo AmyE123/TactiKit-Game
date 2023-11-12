@@ -14,7 +14,9 @@ namespace CT6GAMAI
 
         [SerializeField] private MovementRange _movementRange;
 
-        public bool unitPressed = false;
+        private bool unitPressed = false;
+        private bool pathing = false;
+        private bool selectorWithinRange;
 
         private void Start()
         {
@@ -57,19 +59,6 @@ namespace CT6GAMAI
 
                         SelectedNodeState.VisualStateManager.SetDefault();
                     }
-                }
-            }
-
-            if (Input.GetKeyDown(KeyCode.P))
-            {
-                Node startNode = OccupiedNode;
-                Node targetNode = SelectedNode.Node;
-
-                path = _movementRange.ReconstructPath(startNode, targetNode);
-
-                foreach (Node n in path)
-                {
-                    n.NodeManager.NodeState.VisualStateManager.SetPath();
                 }
             }
 
@@ -127,9 +116,10 @@ namespace CT6GAMAI
                 if (SelectedNode.StoodUnit != null)
                 {
                     unitPressed = !unitPressed;
+                    pathing = unitPressed;
 
                     if (unitPressed)
-                    {
+                    {                       
                         SelectedNodeState.VisualStateManager.SetPressed(Constants.NodeVisualColorState.Blue);
 
                         foreach (Node n in _movementRange.Nodes)
@@ -155,10 +145,38 @@ namespace CT6GAMAI
             {
                 foreach (Node n in _movementRange.Nodes)
                 {
+                    if (_movementRange.Nodes.Contains(SelectedNode.Node))
+                    {
+                        selectorWithinRange = true;
+                    }
+                    else
+                    {
+                        selectorWithinRange = false;
+                    }
+
                     n.NodeManager.NodeState.VisualStateManager.SetPressed(Constants.NodeVisualColorState.Blue);
                 }
-            }
 
+                if (pathing)
+                {
+                    Node startNode = OccupiedNode;
+                    Node targetNode = SelectedNode.Node;
+
+                    if(selectorWithinRange)
+                    {
+                        path = _movementRange.ReconstructPath(startNode, targetNode);
+                    }
+                    
+
+                    foreach (Node n in path)
+                    {
+                        if (_movementRange.Nodes.Contains(n))
+                        {
+                            n.NodeManager.NodeState.VisualStateManager.SetPath();
+                        }                       
+                    }
+                }
+            }
         }
     }
 }
