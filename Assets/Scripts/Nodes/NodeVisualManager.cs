@@ -7,6 +7,7 @@ namespace CT6GAMAI
     {
         [SerializeField] private NodeVisualFSM visualFSM;
 
+        [HideInInspector]
         public NodeState State;
         public NodeStateVisualData[] VisualDatas;
         public SpriteRenderer VisualSR;
@@ -48,16 +49,14 @@ namespace CT6GAMAI
 
         private void Start()
         {
-            Debug.Log("VisualManager: Start");
-
             visualFSM = new NodeVisualFSM();
             visualFSM.Manager = this;
+
+            State = GetComponent<NodeState>();
         }
 
         public void SetDefault()
         {
-            Debug.Log("VisualManager: SetDefault");
-
             _isActive = false;
             _isDefault = true;
             _isHovered = false;
@@ -69,8 +68,6 @@ namespace CT6GAMAI
 
         public void SetHovered(NodeVisualColorState color)
         {
-            Debug.Log("VisualManager: SetHovered");
-
             _isActive = true;
             _isDefault = false;
             _isHovered = true;
@@ -93,8 +90,6 @@ namespace CT6GAMAI
 
         public void SetPressed(NodeVisualColorState color)
         {
-            Debug.Log("VisualManager: SetPressed");
-
             _isActive = true;
             _isDefault = false;
             _isHovered = false;
@@ -117,8 +112,6 @@ namespace CT6GAMAI
 
         public void SetEnemyRange(NodeVisualEnemyColorState color)
         {
-            Debug.Log("VisualManager: SetEnemyRange");
-
             _isActive = true;
             _isDefault = false;
             _isHovered = false;
@@ -138,8 +131,6 @@ namespace CT6GAMAI
 
         public void SetPath()
         {
-            Debug.Log("VisualManager: SetPath");
-
             _isActive = true;
             _isDefault = false;
             _isHovered = false;

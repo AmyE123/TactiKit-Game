@@ -8,15 +8,46 @@ namespace CT6GAMAI
     {
         [SerializeField] private NodeSelectorFSM selectorFSM;
 
-        public NodeState State;
-        public NodeStateVisualData[] SelectorVisualDatas;
-        public SpriteRenderer SelectorSR;
+        [Header("State Booleans")]
+        [SerializeField] private bool _isActiveSelection;
+        [SerializeField] private bool _isDefaultSelected;
+        [SerializeField] private bool _isPlayerSelected;
+        [SerializeField] private bool _isEnemySelected;
 
-        public GameObject SelectorNodeDecal;
-        public GameObject SelectorCanvas;
+        [Header("Selector Visual Data")]
+        /// <summary>
+        /// The image for the selector hand
+        /// </summary>
         public Image SelectorImage;
 
+        /// <summary>
+        /// The sprite renderer for the selector
+        /// </summary>
+        public SpriteRenderer SelectorSR;
+
+        /// <summary>
+        /// The gameObject of the node decal (selection on the node) for the selector
+        /// </summary>
+        public GameObject SelectorNodeDecal;
+
+        /// <summary>
+        /// The gameObject of the canvas for the selector
+        /// </summary>
+        public GameObject SelectorCanvas;
+        
+        /// <summary>
+        /// The different sprites for the selector
+        /// </summary>
+        // TODO: Update this into the data scriptable object
         public Sprite[] SelectorSprites;
+
+        /// <summary>
+        /// Visual data objects for the selector
+        /// </summary>
+        public NodeStateVisualData[] SelectorVisualDatas;
+
+
+        #region Public Getters
 
         /// <summary>
         /// A bool indicating whether there is an active selection or not.
@@ -39,17 +70,59 @@ namespace CT6GAMAI
         /// </summary>
         public bool IsEnemySelected => _isEnemySelected;
 
-        [SerializeField] private bool _isActiveSelection;
-        [SerializeField] private bool _isDefaultSelected;
-        [SerializeField] private bool _isPlayerSelected;
-        [SerializeField] private bool _isEnemySelected;
+        #endregion // Public Getters
+
+        #region Hidden In Inspector
+
+        /// <summary>
+        /// Reference to NodeState
+        /// </summary>
+        [HideInInspector] public NodeState State;
+
+        #endregion // Hidden In Inspector
 
         private void Start()
         {
             selectorFSM = new NodeSelectorFSM();
             selectorFSM.Manager = this;
 
+            State = GetComponent<NodeState>();
+
             RefreshSelector();
+        }
+
+        /// <summary>
+        /// Refreshes the selector to make sure it is up to date with the right state.
+        /// </summary>
+        private void RefreshSelector()
+        {
+            switch (selectorFSM.GetState())
+            {
+                case NodeSelectorState.NoSelection:
+                    SetSelectorVisuals(SelectorSprites[0], false);
+                    break;
+                case NodeSelectorState.DefaultSelected:
+                    SetSelectorVisuals(SelectorSprites[0]);
+                    break;
+                case NodeSelectorState.PlayerSelected:
+                    SetSelectorVisuals(SelectorSprites[1]);
+                    break;
+                case NodeSelectorState.EnemySelected:
+                    SetSelectorVisuals(SelectorSprites[2]);
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Sets the selector visuals, the image of the selector, and its active state.
+        /// </summary>
+        /// <param name="selectorImage">The image that is shown where the selector is. This can be a hand, an enemy indicator, or something else.</param>
+        /// <param name="isActive">Whether the selector is active or not.</param>
+        private void SetSelectorVisuals(Sprite selectorImage, bool isActive = true)
+        {
+            SelectorImage.sprite = selectorImage;
+            SelectorNodeDecal.SetActive(isActive);
+            SelectorCanvas.SetActive(isActive);
         }
 
         /// <summary>
@@ -106,40 +179,6 @@ namespace CT6GAMAI
 
             selectorFSM.ChangeState(NodeSelectorState.EnemySelected);
             RefreshSelector();
-        }
-
-        /// <summary>
-        /// Refreshes the selector to make sure it is up to date with the right state.
-        /// </summary>
-        private void RefreshSelector()
-        {
-            switch (selectorFSM.GetState())
-            {
-                case NodeSelectorState.NoSelection:
-                    SetSelectorVisuals(SelectorSprites[0], false);
-                    break;
-                case NodeSelectorState.DefaultSelected:
-                    SetSelectorVisuals(SelectorSprites[0]);
-                    break;
-                case NodeSelectorState.PlayerSelected:
-                    SetSelectorVisuals(SelectorSprites[1]);
-                    break;
-                case NodeSelectorState.EnemySelected:
-                    SetSelectorVisuals(SelectorSprites[2]);
-                    break;
-            }
-        }
-
-        /// <summary>
-        /// Sets the selector visuals, the image of the selector, and its active state.
-        /// </summary>
-        /// <param name="selectorImage">The image that is shown where the selector is. This can be a hand, an enemy indicator, or something else.</param>
-        /// <param name="isActive">Whether the selector is active or not.</param>
-        private void SetSelectorVisuals(Sprite selectorImage, bool isActive = true)
-        {
-            SelectorImage.sprite = selectorImage;
-            SelectorNodeDecal.SetActive(isActive);
-            SelectorCanvas.SetActive(isActive);
         }
     }
 }

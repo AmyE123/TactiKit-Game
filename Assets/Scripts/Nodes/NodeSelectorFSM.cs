@@ -12,8 +12,6 @@ namespace CT6GAMAI
 
         private NodeSelectorManager _manager;
 
-        private NodeState _nodeState;
-
         public NodeSelectorManager Manager
         {
             get { return _manager; }
