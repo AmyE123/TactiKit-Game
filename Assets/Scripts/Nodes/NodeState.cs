@@ -1,35 +1,16 @@
 namespace CT6GAMAI
 {
     using UnityEngine;
-    using static CT6GAMAI.Constants;
 
     public class NodeState : MonoBehaviour
     {
-        [SerializeField] private NodeManager _nodeManager;
+        public NodeVisualManager VisualStateManager;
+        public NodeSelectorManager SelectorStateManager;
 
-        RaycastHit nodeHit;
-
-        public NodeStateVisualData[] VisualDatas;
-        public NodeStateVisualData[] SelectorVisualDatas;
-
-        public SpriteRenderer VisualSR;
-        public SpriteRenderer SelectorSR;
-
-        public GameObject PointerCanvas;
-        public GameObject Selector;
-
-        public NodeVisualState CurrentState = default;
-        public bool IsSelected = false;
-        public bool IsLocked = false;
-        //public bool IsHighlighted = false;
-        public bool IsBolded = false;
-       
-        public NodeVisualManager NodeVisualManager;
-        public NodeSelectorManager NodeSelectorManager;
-
-        void Update()
+        private void Start()
         {
-
+            VisualStateManager = GetComponent<NodeVisualManager>();
+            SelectorStateManager = GetComponent<NodeSelectorManager>();
         }
 
         public void ChangeVisualData(SpriteRenderer SR, NodeStateVisualData VisualData)

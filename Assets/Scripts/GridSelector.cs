@@ -18,7 +18,7 @@ namespace CT6GAMAI
 
         private void Start()
         {
-            SelectedNode.NodeState.NodeSelectorManager.SetDefaultSelected();
+            SelectedNode.NodeState.SelectorStateManager.SetDefaultSelected();
         }
 
         // Update is called once per frame
@@ -26,11 +26,11 @@ namespace CT6GAMAI
         {
             if (SelectedNodeState == null) { SelectedNodeState = SelectedNode.NodeState; }
 
-            if (SelectedNode == null || !SelectedNodeState.NodeSelectorManager.IsActiveSelection)
+            if (SelectedNode == null || !SelectedNodeState.SelectorStateManager.IsActiveSelection)
             {
                 for (int i = 0; i < Nodes.Length; i++)
                 {
-                    if (Nodes[i].NodeState.NodeSelectorManager.IsActiveSelection)
+                    if (Nodes[i].NodeState.SelectorStateManager.IsActiveSelection)
                     {
                         SelectedNode = Nodes[i];
                         SelectedNodeState = SelectedNode.NodeState;
@@ -40,7 +40,7 @@ namespace CT6GAMAI
 
             if (SelectedNode.StoodUnit != null)
             {
-                SelectedNode.HighlightRangeArea(SelectedNode.StoodUnit, SelectedNodeState.NodeVisualManager.IsPressed);
+                SelectedNode.HighlightRangeArea(SelectedNode.StoodUnit, SelectedNodeState.VisualStateManager.IsPressed);
             }
             else
             {
@@ -50,12 +50,12 @@ namespace CT6GAMAI
 
                     for (int i = 0; i < Nodes.Length; i++)
                     {
-                        if (Nodes[i].NodeState.NodeVisualManager.IsActive)
+                        if (Nodes[i].NodeState.VisualStateManager.IsActive)
                         {
-                            Nodes[i].NodeState.NodeVisualManager.SetDefault();
+                            Nodes[i].NodeState.VisualStateManager.SetDefault();
                         }
 
-                        SelectedNodeState.NodeVisualManager.SetDefault();
+                        SelectedNodeState.VisualStateManager.SetDefault();
                     }
                 }
             }
@@ -69,7 +69,7 @@ namespace CT6GAMAI
 
                 foreach (Node n in path)
                 {
-                    n.NodeManager.NodeState.NodeVisualManager.SetPath();
+                    n.NodeManager.NodeState.VisualStateManager.SetPath();
                 }
             }
 
@@ -80,8 +80,8 @@ namespace CT6GAMAI
 
                 if (northNs != null)
                 {
-                    northNs.NodeSelectorManager.SetDefaultSelected();
-                    SelectedNodeState.NodeSelectorManager.SetInactive();
+                    northNs.SelectorStateManager.SetDefaultSelected();
+                    SelectedNodeState.SelectorStateManager.SetInactive();
                 }
             }
 
@@ -92,8 +92,8 @@ namespace CT6GAMAI
 
                 if (westNs != null)
                 {
-                    westNs.NodeSelectorManager.SetDefaultSelected();
-                    SelectedNodeState.NodeSelectorManager.SetInactive();
+                    westNs.SelectorStateManager.SetDefaultSelected();
+                    SelectedNodeState.SelectorStateManager.SetInactive();
                 }
             }
 
@@ -104,8 +104,8 @@ namespace CT6GAMAI
 
                 if (southNs != null)
                 {
-                    southNs.NodeSelectorManager.SetDefaultSelected();
-                    SelectedNodeState.NodeSelectorManager.SetInactive();
+                    southNs.SelectorStateManager.SetDefaultSelected();
+                    SelectedNodeState.SelectorStateManager.SetInactive();
                 }
             }
 
@@ -116,8 +116,8 @@ namespace CT6GAMAI
 
                 if (eastNs != null)
                 {
-                    eastNs.NodeSelectorManager.SetDefaultSelected();
-                    SelectedNodeState.NodeSelectorManager.SetInactive();
+                    eastNs.SelectorStateManager.SetDefaultSelected();
+                    SelectedNodeState.SelectorStateManager.SetInactive();
                 }
             }
 
@@ -130,21 +130,21 @@ namespace CT6GAMAI
 
                     if (unitPressed)
                     {
-                        SelectedNodeState.NodeVisualManager.SetPressed(Constants.NodeVisualColorState.Blue);
+                        SelectedNodeState.VisualStateManager.SetPressed(Constants.NodeVisualColorState.Blue);
 
                         foreach (Node n in _movementRange.Nodes)
                         {
-                            n.NodeManager.NodeState.NodeVisualManager.SetPressed(Constants.NodeVisualColorState.Blue);
+                            n.NodeManager.NodeState.VisualStateManager.SetPressed(Constants.NodeVisualColorState.Blue);
                         }
                     }
 
                     if (!unitPressed)
                     {
-                        SelectedNodeState.NodeVisualManager.SetHovered(Constants.NodeVisualColorState.Blue);
+                        SelectedNodeState.VisualStateManager.SetHovered(Constants.NodeVisualColorState.Blue);
 
                         foreach (Node n in _movementRange.Nodes)
                         {
-                            n.NodeManager.NodeState.NodeVisualManager.SetHovered(Constants.NodeVisualColorState.Blue);
+                            n.NodeManager.NodeState.VisualStateManager.SetHovered(Constants.NodeVisualColorState.Blue);
                         }
                     }
 
@@ -155,7 +155,7 @@ namespace CT6GAMAI
             {
                 foreach (Node n in _movementRange.Nodes)
                 {
-                    n.NodeManager.NodeState.NodeVisualManager.SetPressed(Constants.NodeVisualColorState.Blue);
+                    n.NodeManager.NodeState.VisualStateManager.SetPressed(Constants.NodeVisualColorState.Blue);
                 }
             }
 

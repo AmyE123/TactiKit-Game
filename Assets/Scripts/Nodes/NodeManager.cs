@@ -133,11 +133,11 @@ namespace CT6GAMAI
             {
                 if (isPressed)
                 {
-                    _movementRange.Nodes[i].NodeManager.NodeState.NodeVisualManager.SetPressed(Constants.NodeVisualColorState.Blue);
+                    _movementRange.Nodes[i].NodeManager.NodeState.VisualStateManager.SetPressed(Constants.NodeVisualColorState.Blue);
                 }
                 else
                 {
-                    _movementRange.Nodes[i].NodeManager.NodeState.NodeVisualManager.SetHovered(Constants.NodeVisualColorState.Blue);
+                    _movementRange.Nodes[i].NodeManager.NodeState.VisualStateManager.SetHovered(Constants.NodeVisualColorState.Blue);
                 }
             }
         }

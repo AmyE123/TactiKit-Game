@@ -23,7 +23,6 @@ namespace CT6GAMAI
             _currentState = NodeVisualState.Default;
         }
 
-
         /// <summary>
         /// Gets the current state of the node visual.
         /// </summary>
