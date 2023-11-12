@@ -14,6 +14,8 @@ namespace CT6GAMAI
 
         [SerializeField] private MovementRange _movementRange;
 
+        [SerializeField] private Animator _animator;
+
         private bool unitPressed = false;
         private bool pathing = false;
         private bool selectorWithinRange;
@@ -26,6 +28,8 @@ namespace CT6GAMAI
         // Update is called once per frame
         void Update()
         {
+            _animator.SetBool("Ready", unitPressed);
+
             if (SelectedNodeState == null) { SelectedNodeState = SelectedNode.NodeState; }
 
             if (SelectedNode == null || !SelectedNodeState.SelectorStateManager.IsActiveSelection)
@@ -142,7 +146,7 @@ namespace CT6GAMAI
             }
 
             if (unitPressed)
-            {
+            {               
                 foreach (Node n in _movementRange.Nodes)
                 {
                     if (_movementRange.Nodes.Contains(SelectedNode.Node))
