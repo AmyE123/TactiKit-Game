@@ -4,6 +4,9 @@ namespace CT6GAMAI
     using UnityEngine.UI;
     using static CT6GAMAI.Constants;
 
+    /// <summary>
+    /// A manager for the node selector, containing controls for the NodeSelectorFSM
+    /// </summary>
     public class NodeSelectorManager : MonoBehaviour
     {
         [SerializeField] private NodeSelectorFSM selectorFSM;
@@ -34,7 +37,7 @@ namespace CT6GAMAI
         /// The gameObject of the canvas for the selector
         /// </summary>
         public GameObject SelectorCanvas;
-        
+
         /// <summary>
         /// The different sprites for the selector
         /// </summary>
