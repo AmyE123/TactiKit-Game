@@ -3,14 +3,32 @@ namespace CT6GAMAI
     using UnityEngine;
     using static CT6GAMAI.Constants;
 
+    /// <summary>
+    /// A manager for the node visuals (on the ground), containing controls for the NodeVisualFSM
+    /// </summary>
     public class NodeVisualManager : MonoBehaviour
     {
         [SerializeField] private NodeVisualFSM visualFSM;
 
-        [HideInInspector]
-        public NodeState State;
-        public NodeStateVisualData[] VisualDatas;
+        [Header("State Booleans")]
+        [SerializeField] private bool _isActive;
+        [SerializeField] private bool _isDefault;
+        [SerializeField] private bool _isHovered;
+        [SerializeField] private bool _isPressed;
+        [SerializeField] private bool _isPath;
+
+        [Header("Node Visual Data")]
+        /// <summary>
+        /// The sprite renderer for the node visual
+        /// </summary>
         public SpriteRenderer VisualSR;
+
+        /// <summary>
+        /// Visual data objects for the node visual
+        /// </summary>
+        public NodeStateVisualData[] VisualDatas;       
+
+        #region Public Getters
 
         /// <summary>
         /// A bool indicating whether the node visual is active or not.
@@ -41,11 +59,14 @@ namespace CT6GAMAI
         /// </summary>
         public bool IsPath => _isPath;
 
-        [SerializeField] private bool _isActive;
-        [SerializeField] private bool _isDefault;
-        [SerializeField] private bool _isHovered;
-        [SerializeField] private bool _isPressed;
-        [SerializeField] private bool _isPath;
+        #endregion // Public Getters
+
+        #region Hidden In Inspector
+
+        [HideInInspector]
+        public NodeState State;
+
+        #endregion // Hidden In Inspector
 
         private void Start()
         {
