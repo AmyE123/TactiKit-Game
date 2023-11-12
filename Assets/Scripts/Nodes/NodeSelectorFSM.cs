@@ -60,8 +60,6 @@ namespace CT6GAMAI
                     break;
             }
 
-            Debug.Log("SelectorFSM: Changing State - " + newState);
-
             _currentState = newState;
         }
     }
