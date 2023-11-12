@@ -14,16 +14,25 @@ namespace CT6GAMAI
 
         [SerializeField] private MovementRange _movementRange;
 
+        private bool unitPressed = false;
+        private bool pathing = false;
+        private bool selectorWithinRange;
+
+        private void Start()
+        {
+            SelectedNode.NodeState.SelectorStateManager.SetDefaultSelected();
+        }
+
         // Update is called once per frame
         void Update()
         {
             if (SelectedNodeState == null) { SelectedNodeState = SelectedNode.NodeState; }
 
-            if (SelectedNode == null || !SelectedNodeState.IsSelected)
+            if (SelectedNode == null || !SelectedNodeState.SelectorStateManager.IsActiveSelection)
             {
                 for (int i = 0; i < Nodes.Length; i++)
                 {
-                    if (Nodes[i].NodeState.IsSelected)
+                    if (Nodes[i].NodeState.SelectorStateManager.IsActiveSelection)
                     {
                         SelectedNode = Nodes[i];
                         SelectedNodeState = SelectedNode.NodeState;
@@ -33,34 +42,23 @@ namespace CT6GAMAI
 
             if (SelectedNode.StoodUnit != null)
             {
-                SelectedNode.HighlightRangeArea(SelectedNode.StoodUnit);
+                SelectedNode.HighlightRangeArea(SelectedNode.StoodUnit, SelectedNodeState.VisualStateManager.IsPressed);
             }
             else
             {
-                _movementRange.ResetNodes();
-
-                for (int i = 0; i < Nodes.Length; i++)
+                if (!unitPressed)
                 {
-                    if (Nodes[i].NodeState.IsHighlighted)
+                    _movementRange.ResetNodes();
+
+                    for (int i = 0; i < Nodes.Length; i++)
                     {
-                        Nodes[i].NodeState.IsHighlighted = false;
+                        if (Nodes[i].NodeState.VisualStateManager.IsActive)
+                        {
+                            Nodes[i].NodeState.VisualStateManager.SetDefault();
+                        }
+
+                        SelectedNodeState.VisualStateManager.SetDefault();
                     }
-                }
-
-                SelectedNodeState.CurrentState = Constants.State.Default;
-            }
-
-            if (Input.GetKeyDown(KeyCode.P))
-            {
-                Node startNode = OccupiedNode;
-                Node targetNode = SelectedNode.Node;
-
-                path = _movementRange.ReconstructPath(startNode, targetNode);
-
-                foreach (Node n in path)
-                {
-                    n.NodeManager.NodeState.IsBolded = true;
-                    //n.NodeManager.NodeState.IsBolded = true;
                 }
             }
 
@@ -71,8 +69,8 @@ namespace CT6GAMAI
 
                 if (northNs != null)
                 {
-                    northNs.IsSelected = true;
-                    SelectedNodeState.IsSelected = false;
+                    northNs.SelectorStateManager.SetDefaultSelected();
+                    SelectedNodeState.SelectorStateManager.SetInactive();
                 }
             }
 
@@ -83,8 +81,8 @@ namespace CT6GAMAI
 
                 if (westNs != null)
                 {
-                    westNs.IsSelected = true;
-                    SelectedNodeState.IsSelected = false;
+                    westNs.SelectorStateManager.SetDefaultSelected();
+                    SelectedNodeState.SelectorStateManager.SetInactive();
                 }
             }
 
@@ -95,8 +93,8 @@ namespace CT6GAMAI
 
                 if (southNs != null)
                 {
-                    southNs.IsSelected = true;
-                    SelectedNodeState.IsSelected = false;
+                    southNs.SelectorStateManager.SetDefaultSelected();
+                    SelectedNodeState.SelectorStateManager.SetInactive();
                 }
             }
 
@@ -107,28 +105,78 @@ namespace CT6GAMAI
 
                 if (eastNs != null)
                 {
-                    eastNs.IsSelected = true;
-                    SelectedNodeState.IsSelected = false;
+                    eastNs.SelectorStateManager.SetDefaultSelected();
+                    SelectedNodeState.SelectorStateManager.SetInactive();
                 }
             }
 
-            // Selection
-            // TODO: Make this work
+            // Selection of a unit, if hovered over one.
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                SelectedNodeState.IsLocked = true;
+                if (SelectedNode.StoodUnit != null)
+                {
+                    unitPressed = !unitPressed;
+                    pathing = unitPressed;
 
-                // TODO: Select North IF avaliable, else, select from avaliable.
-                //SelectedNode.NorthNode.NodeState.IsSelected = true;
+                    if (unitPressed)
+                    {
+                        SelectedNodeState.VisualStateManager.SetPressed(Constants.NodeVisualColorState.Blue);
 
-                //SelectedNodeState.IsSelected = false;
+                        foreach (Node n in _movementRange.Nodes)
+                        {
+                            n.NodeManager.NodeState.VisualStateManager.SetPressed(Constants.NodeVisualColorState.Blue);
+                        }
+                    }
 
-                //foreach (Node n in _movementRange.Nodes)
-                //{
-                //    n.NodeManager.NodeState.IsBolded = true;
-                //}
+                    if (!unitPressed)
+                    {
+                        SelectedNodeState.VisualStateManager.SetHovered(Constants.NodeVisualColorState.Blue);
+
+                        foreach (Node n in _movementRange.Nodes)
+                        {
+                            n.NodeManager.NodeState.VisualStateManager.SetHovered(Constants.NodeVisualColorState.Blue);
+                        }
+                    }
+
+                }
             }
 
+            if (unitPressed)
+            {
+                foreach (Node n in _movementRange.Nodes)
+                {
+                    if (_movementRange.Nodes.Contains(SelectedNode.Node))
+                    {
+                        selectorWithinRange = true;
+                    }
+                    else
+                    {
+                        selectorWithinRange = false;
+                    }
+
+                    n.NodeManager.NodeState.VisualStateManager.SetPressed(Constants.NodeVisualColorState.Blue);
+                }
+
+                if (pathing)
+                {
+                    Node startNode = OccupiedNode;
+                    Node targetNode = SelectedNode.Node;
+
+                    if (selectorWithinRange)
+                    {
+                        path = _movementRange.ReconstructPath(startNode, targetNode);
+                    }
+
+
+                    foreach (Node n in path)
+                    {
+                        if (_movementRange.Nodes.Contains(n))
+                        {
+                            n.NodeManager.NodeState.VisualStateManager.SetPath();
+                        }
+                    }
+                }
+            }
         }
     }
 }

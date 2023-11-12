@@ -96,6 +96,8 @@ GameObject:
   - component: {fileID: 5803010649068779603}
   - component: {fileID: 2361947876645388068}
   - component: {fileID: 593979796380849875}
+  - component: {fileID: 7354190729456982330}
+  - component: {fileID: 6523508518634145030}
   m_Layer: 0
   m_Name: Default
   m_TagString: Node
@@ -196,6 +198,66 @@ MonoBehaviour:
   IsSelected: 0
   IsLocked: 0
   IsHighlighted: 0
+  IsBolded: 0
+  NodeVisualManager: {fileID: 7354190729456982330}
+  NodeSelectorManager: {fileID: 6523508518634145030}
+--- !u!114 &7354190729456982330
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2527803989374386003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c37f2e8a98d0c943ab96cd2823baeee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  State: {fileID: 593979796380849875}
+  VisualDatas:
+  - {fileID: 11400000, guid: d580abf5a71a62c4187ff1e881003c06, type: 2}
+  - {fileID: 11400000, guid: 4ea9e9d87e05bf741b7bbed769020ea6, type: 2}
+  - {fileID: 11400000, guid: 735eec8d90994514588071f71f2d9446, type: 2}
+  - {fileID: 11400000, guid: 076e38846753f4c46b9314e165d1b34b, type: 2}
+  - {fileID: 11400000, guid: 6a4c8a9060414864fbd3af706beaef62, type: 2}
+  - {fileID: 11400000, guid: 6ef0635d2d16acc4ba291c884720b99b, type: 2}
+  - {fileID: 11400000, guid: e16de4cf337634840ac29ea89807f83a, type: 2}
+  - {fileID: 11400000, guid: db6de9ca512604f4e9455262d58bd7c5, type: 2}
+  - {fileID: 11400000, guid: 0176188c42464e54595c88adf496c217, type: 2}
+  - {fileID: 11400000, guid: 4c7d80defe04e0a46a987b8468309890, type: 2}
+  VisualSR: {fileID: 5189403585633391542}
+  _isActive: 0
+  _isDefault: 0
+  _isHovered: 0
+  _isPressed: 0
+  _isPath: 0
+--- !u!114 &6523508518634145030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2527803989374386003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4798cb9923942324591a869dc5777f9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  State: {fileID: 593979796380849875}
+  SelectorVisualDatas:
+  - {fileID: 11400000, guid: 4597a9117c303534a8cc65a9e369ff54, type: 2}
+  SelectorSR: {fileID: 2113958563014563909}
+  SelectorNodeDecal: {fileID: 5469833492010107051}
+  SelectorCanvas: {fileID: 5342038288916271231}
+  SelectorImage: {fileID: 1058421250425296787}
+  SelectorSprites:
+  - {fileID: 21300000, guid: 1078d65449a34774da4dad4c83a3ea16, type: 3}
+  - {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  _isActiveSelection: 0
+  _isDefaultSelected: 0
+  _isPlayerSelected: 0
+  _isEnemySelected: 0
 --- !u!1 &4085781567587022053
 GameObject:
   m_ObjectHideFlags: 0
