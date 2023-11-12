@@ -119,7 +119,7 @@ namespace CT6GAMAI
                     pathing = unitPressed;
 
                     if (unitPressed)
-                    {                       
+                    {
                         SelectedNodeState.VisualStateManager.SetPressed(Constants.NodeVisualColorState.Blue);
 
                         foreach (Node n in _movementRange.Nodes)
@@ -162,18 +162,18 @@ namespace CT6GAMAI
                     Node startNode = OccupiedNode;
                     Node targetNode = SelectedNode.Node;
 
-                    if(selectorWithinRange)
+                    if (selectorWithinRange)
                     {
                         path = _movementRange.ReconstructPath(startNode, targetNode);
                     }
-                    
+
 
                     foreach (Node n in path)
                     {
                         if (_movementRange.Nodes.Contains(n))
                         {
                             n.NodeManager.NodeState.VisualStateManager.SetPath();
-                        }                       
+                        }
                     }
                 }
             }
