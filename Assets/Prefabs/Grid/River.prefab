@@ -17,9 +17,21 @@ PrefabInstance:
       value: River
       objectReference: {fileID: 0}
     - target: {fileID: 3409825687070328371, guid: 5ee1594f0d98de3458ccfe7cd7fe628a, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3409825687070328371, guid: 5ee1594f0d98de3458ccfe7cd7fe628a, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: b2b4c9b67982292459b96da759c294f9, type: 2}
+    - target: {fileID: 8274021174057386249, guid: 5ee1594f0d98de3458ccfe7cd7fe628a, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8274021174057386249, guid: 5ee1594f0d98de3458ccfe7cd7fe628a, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 8274021174057386249, guid: 5ee1594f0d98de3458ccfe7cd7fe628a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

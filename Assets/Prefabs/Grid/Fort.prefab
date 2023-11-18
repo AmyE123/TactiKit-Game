@@ -105,6 +105,14 @@ PrefabInstance:
       value: Fort
       objectReference: {fileID: 0}
     - target: {fileID: 8274021174057386249, guid: 5ee1594f0d98de3458ccfe7cd7fe628a, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8274021174057386249, guid: 5ee1594f0d98de3458ccfe7cd7fe628a, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8274021174057386249, guid: 5ee1594f0d98de3458ccfe7cd7fe628a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
