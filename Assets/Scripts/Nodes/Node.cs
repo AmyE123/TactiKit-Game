@@ -34,6 +34,8 @@ namespace CT6GAMAI
         // For movement algorithm, store the predecessor
         public Node Predecessor { get; set; }
 
+        public Transform UnitTransform;
+
         #endregion // Public Variables
 
         #region Public Getters

@@ -1,6 +1,7 @@
 namespace CT6GAMAI
 {
     using System.Collections.Generic;
+    using Unity.VisualScripting;
     using UnityEngine;
 
     public class GridSelector : MonoBehaviour
@@ -16,13 +17,17 @@ namespace CT6GAMAI
 
         [SerializeField] private Animator _animator;
 
+        [SerializeField] private UnitManager _unit;
+
         private bool unitPressed = false;
         private bool pathing = false;
         private bool selectorWithinRange;
 
+
         private void Start()
         {
             SelectedNode.NodeState.SelectorStateManager.SetDefaultSelected();
+            _unit = FindObjectOfType<UnitManager>();
         }
 
         // Update is called once per frame
@@ -169,6 +174,13 @@ namespace CT6GAMAI
                     if (selectorWithinRange)
                     {
                         path = _movementRange.ReconstructPath(startNode, targetNode);
+
+                        if (path.Count > 1 && Input.GetKeyDown(KeyCode.Space))
+                        {
+                            //Move unit here
+                            StartCoroutine(_unit.MoveToEndPoint());
+                            _animator.SetBool("Moving", _unit.IsMoving);
+                        }
                     }
 
 

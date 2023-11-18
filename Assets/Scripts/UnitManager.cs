@@ -1,6 +1,8 @@
 namespace CT6GAMAI
 {
     using UnityEngine;
+    using DG.Tweening;
+    using System.Collections;
 
     public class UnitManager : MonoBehaviour
     {
@@ -12,11 +14,16 @@ namespace CT6GAMAI
 
         private RaycastHit raycastHit;
 
+        public GridSelector _gridSelector;
+
+        public bool IsMoving = false;
+
         private void Start()
         {
             // TODO: Once player can move, update this every movement
             StoodNode = DetectStoodNode();
             StoodNode.StoodUnit = this;
+            _gridSelector = FindObjectOfType<GridSelector>();
         }
 
         NodeManager DetectStoodNode()
@@ -38,6 +45,45 @@ namespace CT6GAMAI
             {
                 Debug.Log("ERROR: Cast hit nothing");
                 return null;
+            }
+        }
+
+        public void MoveToNextNode(Node endPoint)
+        {           
+
+            var endPointPos = endPoint.UnitTransform.transform.position;
+
+            var dir = (endPointPos - transform.position).normalized;
+            var lookRot = Quaternion.LookRotation(dir);
+
+            transform.DORotateQuaternion(lookRot, 0.3f);
+
+            transform.DOMove(endPointPos, 0.3f).SetEase(Ease.InOutQuad);
+
+
+        }
+
+        public IEnumerator MoveToEndPoint()
+        {
+            IsMoving = true;
+
+            for (int i = 1; i < _gridSelector.path.Count; i++)
+            {
+                Node n = _gridSelector.path[i];
+
+                //Debug.Log("MoveToEndPoint: Moving to next node");
+
+                MoveToNextNode(n);
+
+                yield return new WaitForSeconds(0.5f);
+
+                if (i == _gridSelector.path.Count)
+                {
+                    IsMoving = false;
+                }
+
+                //Debug.Log("MoveToEndPoint: Node next point movement complete");
+
             }
         }
     }
