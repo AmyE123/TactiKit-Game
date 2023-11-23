@@ -35,7 +35,7 @@ namespace CT6GAMAI
         // Update is called once per frame
         void Update()
         {
-            _animator.SetBool("Ready", UnitPressed);
+            _animator.SetBool("Ready", UnitPressed);            
 
             if (SelectedNodeState == null) { SelectedNodeState = SelectedNode.NodeState; }
 

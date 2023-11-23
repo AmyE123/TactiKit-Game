@@ -8,6 +8,8 @@ namespace CT6GAMAI
     {
         [SerializeField] private UnitData _unitData;
 
+        [SerializeField] private Animator _animator;
+
         public NodeManager StoodNode;
 
         public UnitData UnitData => _unitData;
@@ -24,6 +26,11 @@ namespace CT6GAMAI
             StoodNode = DetectStoodNode();
             StoodNode.StoodUnit = this;
             _gridSelector = FindObjectOfType<GridSelector>();
+        }
+
+        private void Update()
+        {
+            _animator.SetBool("Moving", IsMoving);
         }
 
         NodeManager DetectStoodNode()
@@ -56,9 +63,9 @@ namespace CT6GAMAI
             var dir = (endPointPos - transform.position).normalized;
             var lookRot = Quaternion.LookRotation(dir);
 
-            transform.DORotateQuaternion(lookRot, 0.3f);
+            transform.DORotateQuaternion(lookRot, 0.1f);
 
-            transform.DOMove(endPointPos, 0.3f).SetEase(Ease.InOutQuad);
+            transform.DOMove(endPointPos, 0.2f).SetEase(Ease.InOutQuad);
 
 
         }
@@ -73,7 +80,7 @@ namespace CT6GAMAI
 
                 MoveToNextNode(n);
 
-                yield return new WaitForSeconds(0.5f);
+                yield return new WaitForSeconds(0.3f);
 
                 if (i == _gridSelector.path.Count - 1)
                 {
