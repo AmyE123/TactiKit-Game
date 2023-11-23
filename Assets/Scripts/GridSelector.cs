@@ -23,6 +23,8 @@ namespace CT6GAMAI
         private bool pathing = false;
         private bool selectorWithinRange;
 
+        public bool unitActivatedMoving = false;
+
 
         private void Start()
         {

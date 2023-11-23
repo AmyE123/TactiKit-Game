@@ -71,18 +71,15 @@ namespace CT6GAMAI
             {
                 Node n = _gridSelector.path[i];
 
-                //Debug.Log("MoveToEndPoint: Moving to next node");
-
                 MoveToNextNode(n);
 
                 yield return new WaitForSeconds(0.5f);
 
-                if (i == _gridSelector.path.Count)
+                if (i == _gridSelector.path.Count - 1)
                 {
-                    IsMoving = false;
+                    _gridSelector.OccupiedNode = _gridSelector.path[i];
+                    IsMoving = false; 
                 }
-
-                //Debug.Log("MoveToEndPoint: Node next point movement complete");
 
             }
         }
