@@ -24,6 +24,8 @@ namespace CT6GAMAI
         {
             _stoodNode = DetectStoodNode();
             _stoodNode.StoodUnit = this;
+
+            // TODO: Cleanup of gridselector stuff
             _gridSelector = FindObjectOfType<GridSelector>();
         }
 
@@ -53,6 +55,29 @@ namespace CT6GAMAI
             }
         }
 
+        private void MoveToNextNode(Node endPoint)
+        {
+            var endPointPos = endPoint.UnitTransform.transform.position;
+
+            var dir = (endPointPos - transform.position).normalized;
+            var lookRot = Quaternion.LookRotation(dir);
+
+            // TODO: Magic numbers can be cleaned up
+            transform.DORotateQuaternion(lookRot, 0.1f);
+
+            transform.DOMove(endPointPos, 0.2f).SetEase(Ease.InOutQuad);
+        }
+
+        private void FinalizeMovementValues(int pathIndex)
+        {
+            // TODO: This can be cleaned up
+            _gridSelector.OccupiedNode = _gridSelector.path[pathIndex];
+            _isMoving = false;
+            _gridSelector.UnitPressed = false;
+            _stoodNode = DetectStoodNode();
+            UpdateStoodNode(this);
+        }
+
         /// <summary>
         /// Updates the stood unit value from the node.
         /// </summary>
@@ -77,19 +102,10 @@ namespace CT6GAMAI
             }
         }
 
-        public void MoveToNextNode(Node endPoint)
-        {
-
-            var endPointPos = endPoint.UnitTransform.transform.position;
-
-            var dir = (endPointPos - transform.position).normalized;
-            var lookRot = Quaternion.LookRotation(dir);
-
-            transform.DORotateQuaternion(lookRot, 0.1f);
-
-            transform.DOMove(endPointPos, 0.2f).SetEase(Ease.InOutQuad);
-        }
-
+   
+        /// <summary>
+        /// Move the unit to their selected end point
+        /// </summary>
         public IEnumerator MoveToEndPoint()
         {
             _isMoving = true;
@@ -109,15 +125,6 @@ namespace CT6GAMAI
                     FinalizeMovementValues(i);
                 }
             }
-        }
-
-        private void FinalizeMovementValues(int pathIndex)
-        {
-            _gridSelector.OccupiedNode = _gridSelector.path[pathIndex];
-            _isMoving = false;
-            _gridSelector.UnitPressed = false;
-            _stoodNode = DetectStoodNode();
-            UpdateStoodNode(this);
         }
     }
 }
