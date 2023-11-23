@@ -4,11 +4,12 @@ namespace CT6GAMAI
     using DG.Tweening;
     using System.Collections;
 
+    /// <summary>
+    /// Manager for the singular unit.
+    /// </summary>
     public class UnitManager : MonoBehaviour
     {
         [SerializeField] private UnitData _unitData;
-
-        [SerializeField] private Animator _animator;
 
         public NodeManager StoodNode;
 
@@ -26,11 +27,6 @@ namespace CT6GAMAI
             StoodNode = DetectStoodNode();
             StoodNode.StoodUnit = this;
             _gridSelector = FindObjectOfType<GridSelector>();
-        }
-
-        private void Update()
-        {
-            _animator.SetBool("Moving", IsMoving);
         }
 
         NodeManager DetectStoodNode()
