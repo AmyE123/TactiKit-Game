@@ -19,7 +19,7 @@ namespace CT6GAMAI
 
         [SerializeField] private UnitManager _unit;
 
-        private bool unitPressed = false;
+        public bool UnitPressed = false;
         private bool pathing = false;
         private bool selectorWithinRange;
 
@@ -35,7 +35,7 @@ namespace CT6GAMAI
         // Update is called once per frame
         void Update()
         {
-            _animator.SetBool("Ready", unitPressed);
+            _animator.SetBool("Ready", UnitPressed);
 
             if (SelectedNodeState == null) { SelectedNodeState = SelectedNode.NodeState; }
 
@@ -53,23 +53,14 @@ namespace CT6GAMAI
 
             if (SelectedNode.StoodUnit != null)
             {
+                ResetHighlightedNodes();
                 SelectedNode.HighlightRangeArea(SelectedNode.StoodUnit, SelectedNodeState.VisualStateManager.IsPressed);
             }
             else
             {
-                if (!unitPressed)
+                if (!UnitPressed)
                 {
-                    _movementRange.ResetNodes();
-
-                    for (int i = 0; i < Nodes.Length; i++)
-                    {
-                        if (Nodes[i].NodeState.VisualStateManager.IsActive)
-                        {
-                            Nodes[i].NodeState.VisualStateManager.SetDefault();
-                        }
-
-                        SelectedNodeState.VisualStateManager.SetDefault();
-                    }
+                    ResetHighlightedNodes();
                 }
             }
 
@@ -126,10 +117,10 @@ namespace CT6GAMAI
             {
                 if (SelectedNode.StoodUnit != null)
                 {
-                    unitPressed = !unitPressed;
-                    pathing = unitPressed;
+                    UnitPressed = !UnitPressed;
+                    pathing = UnitPressed;
 
-                    if (unitPressed)
+                    if (UnitPressed)
                     {
                         SelectedNodeState.VisualStateManager.SetPressed(Constants.NodeVisualColorState.Blue);
 
@@ -139,7 +130,7 @@ namespace CT6GAMAI
                         }
                     }
 
-                    if (!unitPressed)
+                    if (!UnitPressed)
                     {
                         SelectedNodeState.VisualStateManager.SetHovered(Constants.NodeVisualColorState.Blue);
 
@@ -152,7 +143,7 @@ namespace CT6GAMAI
                 }
             }
 
-            if (unitPressed)
+            if (UnitPressed)
             {               
                 foreach (Node n in _movementRange.Nodes)
                 {
@@ -179,9 +170,13 @@ namespace CT6GAMAI
 
                         if (path.Count > 1 && Input.GetKeyDown(KeyCode.Space))
                         {
+                            //clear the stood node's reference to the unit
+                            var stoodNode = _unit.StoodNode;
+                            stoodNode.StoodUnit = null;
+
                             //Move unit here
                             StartCoroutine(_unit.MoveToEndPoint());
-                            _animator.SetBool("Moving", _unit.IsMoving);
+                            _animator.SetBool("Moving", _unit.IsMoving);                      
                         }
                     }
 
@@ -194,6 +189,21 @@ namespace CT6GAMAI
                         }
                     }
                 }
+            }
+        }
+
+        public void ResetHighlightedNodes()
+        {
+            _movementRange.ResetNodes();
+
+            for (int i = 0; i < Nodes.Length; i++)
+            {
+                if (Nodes[i].NodeState.VisualStateManager.IsActive)
+                {
+                    Nodes[i].NodeState.VisualStateManager.SetDefault();
+                }
+
+                SelectedNodeState.VisualStateManager.SetDefault();
             }
         }
     }

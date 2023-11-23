@@ -78,7 +78,10 @@ namespace CT6GAMAI
                 if (i == _gridSelector.path.Count - 1)
                 {
                     _gridSelector.OccupiedNode = _gridSelector.path[i];
-                    IsMoving = false; 
+                    IsMoving = false;
+                    _gridSelector.UnitPressed = false;
+                    StoodNode = _gridSelector.path[i].NodeManager;
+                    StoodNode.StoodUnit = this;
                 }
 
             }
