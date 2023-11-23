@@ -10,8 +10,8 @@ namespace CT6GAMAI
     public class UnitManager : MonoBehaviour
     {
         [SerializeField] private UnitData _unitData;
-        [SerializeField] private NodeManager _stoodNode;   
-        
+        [SerializeField] private NodeManager _stoodNode;
+
         private RaycastHit _stoodNodeRayHit;
         private GridSelector _gridSelector;
         private bool _isMoving = false;
@@ -22,31 +22,46 @@ namespace CT6GAMAI
 
         private void Start()
         {
-            // TODO: Once player can move, update this every movement
             _stoodNode = DetectStoodNode();
             _stoodNode.StoodUnit = this;
             _gridSelector = FindObjectOfType<GridSelector>();
         }
 
-        NodeManager DetectStoodNode()
+        private NodeManager DetectStoodNode()
         {
             if (Physics.Raycast(transform.position, -transform.up, out _stoodNodeRayHit, 1))
             {
-                if (_stoodNodeRayHit.transform.gameObject.tag == Constants.NODE_TAG_REFERENCE)
-                {
-                    var NodeManager = _stoodNodeRayHit.transform.parent.GetComponent<NodeManager>();
-                    return NodeManager;
-                }
-                else
-                {
-                    Debug.Log("ERROR: Cast hit non-node object - " + _stoodNodeRayHit.transform.gameObject.name);
-                    return null;
-                }
+                return GetNodeFromRayHit(_stoodNodeRayHit);
             }
             else
             {
-                Debug.Log("ERROR: Cast hit nothing");
+                Debug.Log("[ERROR]: Cast hit nothing");
                 return null;
+            }
+        }
+
+        private NodeManager GetNodeFromRayHit(RaycastHit hit)
+        {
+            if (hit.transform.gameObject.tag == Constants.NODE_TAG_REFERENCE)
+            {
+                return _stoodNodeRayHit.transform.parent.GetComponent<NodeManager>();
+            }
+            else
+            {
+                Debug.Log("[ERROR]: Cast hit non-node object - " + _stoodNodeRayHit.transform.gameObject.name);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Updates the stood unit value from the node.
+        /// </summary>
+        /// <param name="unit">The unit you want to update the stood node of.</param>
+        public void UpdateStoodNode(UnitManager unit)
+        {
+            if (_stoodNode != null)
+            {
+                _stoodNode.StoodUnit = unit;
             }
         }
 
@@ -56,11 +71,14 @@ namespace CT6GAMAI
         /// </summary>
         public void ClearStoodUnit()
         {
-            _stoodNode.StoodUnit = null;
+            if (_stoodNode != null)
+            {
+                _stoodNode.StoodUnit = null;
+            }
         }
 
         public void MoveToNextNode(Node endPoint)
-        {           
+        {
 
             var endPointPos = endPoint.UnitTransform.transform.position;
 
@@ -70,8 +88,6 @@ namespace CT6GAMAI
             transform.DORotateQuaternion(lookRot, 0.1f);
 
             transform.DOMove(endPointPos, 0.2f).SetEase(Ease.InOutQuad);
-
-
         }
 
         public IEnumerator MoveToEndPoint()
@@ -84,18 +100,24 @@ namespace CT6GAMAI
 
                 MoveToNextNode(n);
 
+                _stoodNode = DetectStoodNode();
+
                 yield return new WaitForSeconds(0.3f);
 
                 if (i == _gridSelector.path.Count - 1)
                 {
-                    _gridSelector.OccupiedNode = _gridSelector.path[i];
-                    _isMoving = false;
-                    _gridSelector.UnitPressed = false;
-                    _stoodNode = DetectStoodNode();
-                    _stoodNode.StoodUnit = this;
+                    FinalizeMovementValues(i);
                 }
-
             }
+        }
+
+        private void FinalizeMovementValues(int pathIndex)
+        {
+            _gridSelector.OccupiedNode = _gridSelector.path[pathIndex];
+            _isMoving = false;
+            _gridSelector.UnitPressed = false;
+            _stoodNode = DetectStoodNode();
+            UpdateStoodNode(this);
         }
     }
 }
