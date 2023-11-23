@@ -2939,6 +2939,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7592517802941822380, guid: b0cf7274a78f12d43910a5c79373d142, type: 3}
+      propertyPath: _animator
+      value: 
+      objectReference: {fileID: 5417473472962778680}
     - target: {fileID: 8445902401575187227, guid: b0cf7274a78f12d43910a5c79373d142, type: 3}
       propertyPath: m_Name
       value: Unit1
