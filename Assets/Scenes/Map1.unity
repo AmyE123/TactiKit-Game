@@ -23784,6 +23784,9 @@ MonoBehaviour:
   path: []
   _movementRange: {fileID: 952884374}
   _animator: {fileID: 256055815}
+  _unit: {fileID: 0}
+  UnitPressed: 0
+  unitActivatedMoving: 0
 --- !u!4 &1427844805
 Transform:
   m_ObjectHideFlags: 0

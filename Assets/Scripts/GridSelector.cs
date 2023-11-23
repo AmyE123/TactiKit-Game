@@ -171,8 +171,7 @@ namespace CT6GAMAI
                         if (path.Count > 1 && Input.GetKeyDown(KeyCode.Space))
                         {
                             //clear the stood node's reference to the unit
-                            var stoodNode = _unit.StoodNode;
-                            stoodNode.StoodUnit = null;
+                            _unit.ClearStoodUnit();
 
                             //Move unit here
                             StartCoroutine(_unit.MoveToEndPoint());

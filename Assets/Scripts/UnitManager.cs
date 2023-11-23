@@ -10,37 +10,36 @@ namespace CT6GAMAI
     public class UnitManager : MonoBehaviour
     {
         [SerializeField] private UnitData _unitData;
+        [SerializeField] private NodeManager _stoodNode;   
+        
+        private RaycastHit _stoodNodeRayHit;
+        private GridSelector _gridSelector;
+        private bool _isMoving = false;
 
-        public NodeManager StoodNode;
-
+        public bool IsMoving => _isMoving;
+        public NodeManager StoodNode => _stoodNode;
         public UnitData UnitData => _unitData;
-
-        private RaycastHit raycastHit;
-
-        public GridSelector _gridSelector;
-
-        public bool IsMoving = false;
 
         private void Start()
         {
             // TODO: Once player can move, update this every movement
-            StoodNode = DetectStoodNode();
-            StoodNode.StoodUnit = this;
+            _stoodNode = DetectStoodNode();
+            _stoodNode.StoodUnit = this;
             _gridSelector = FindObjectOfType<GridSelector>();
         }
 
         NodeManager DetectStoodNode()
         {
-            if (Physics.Raycast(transform.position, -transform.up, out raycastHit, 1))
+            if (Physics.Raycast(transform.position, -transform.up, out _stoodNodeRayHit, 1))
             {
-                if (raycastHit.transform.gameObject.tag == Constants.NODE_TAG_REFERENCE)
+                if (_stoodNodeRayHit.transform.gameObject.tag == Constants.NODE_TAG_REFERENCE)
                 {
-                    var NodeManager = raycastHit.transform.parent.GetComponent<NodeManager>();
+                    var NodeManager = _stoodNodeRayHit.transform.parent.GetComponent<NodeManager>();
                     return NodeManager;
                 }
                 else
                 {
-                    Debug.Log("ERROR: Cast hit non-node object - " + raycastHit.transform.gameObject.name);
+                    Debug.Log("ERROR: Cast hit non-node object - " + _stoodNodeRayHit.transform.gameObject.name);
                     return null;
                 }
             }
@@ -49,6 +48,15 @@ namespace CT6GAMAI
                 Debug.Log("ERROR: Cast hit nothing");
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Clears the stood unit value from the node.
+        /// This is used when a unit moves spaces.
+        /// </summary>
+        public void ClearStoodUnit()
+        {
+            _stoodNode.StoodUnit = null;
         }
 
         public void MoveToNextNode(Node endPoint)
@@ -68,7 +76,7 @@ namespace CT6GAMAI
 
         public IEnumerator MoveToEndPoint()
         {
-            IsMoving = true;
+            _isMoving = true;
 
             for (int i = 1; i < _gridSelector.path.Count; i++)
             {
@@ -81,10 +89,10 @@ namespace CT6GAMAI
                 if (i == _gridSelector.path.Count - 1)
                 {
                     _gridSelector.OccupiedNode = _gridSelector.path[i];
-                    IsMoving = false;
+                    _isMoving = false;
                     _gridSelector.UnitPressed = false;
-                    StoodNode = _gridSelector.path[i].NodeManager;
-                    StoodNode.StoodUnit = this;
+                    _stoodNode = DetectStoodNode();
+                    _stoodNode.StoodUnit = this;
                 }
 
             }
