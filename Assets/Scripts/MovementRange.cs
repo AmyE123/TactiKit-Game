@@ -21,26 +21,39 @@ namespace CT6GAMAI
         /// <summary>
         /// Calculates the movement range of a unit using Dijkstra's Algorithm.
         /// </summary>
-        /// <param name="start">The starting node.</param>
+        /// <param name="unit">The unit whose movement you want to calculate.</param>
+        /// <returns>A list of nodes representing the reachable area.</returns>
+        public List<Node> CalculateMovementRange(UnitManager unit)
+        {
+            var startingNode = unit.StoodNode.Node;
+            var movementPoints = unit.UnitData.MovementBaseValue;
+
+            return CalculateMovementRange(startingNode, movementPoints);
+        }
+
+        /// <summary>
+        /// Calculates the movement range of a unit using Dijkstra's Algorithm.
+        /// </summary>
+        /// <param name="startingNode">The starting node.</param>
         /// <param name="movementPoints">The maximum movement points of the unit.</param>
         /// <returns>A list of nodes representing the reachable area.</returns>
-        public List<Node> CalculateMovementRange(Node start, int movementPoints)
+        public List<Node> CalculateMovementRange(Node startingNode, int movementPoints)
         {
             InitializeNodes();
 
             // Initialize the starting node's distance to 0
-            start.Distance = 0;
+            startingNode.Distance = 0;
 
             // Priority queue to select the node with the smallest distance
-            var priorityQueue = new PriorityQueue<Node>();
-            priorityQueue.Enqueue(start, start.Distance);
+            var queue = new PriorityQueue<Node>();
+            queue.Enqueue(startingNode, startingNode.Distance);
 
-            AddNodeToReachable(start);
+            AddNodeToReachable(startingNode);
 
-            while (!priorityQueue.IsEmpty())
+            while (!queue.IsEmpty())
             {
                 // Get the node with the smallest distance
-                Node current = priorityQueue.Dequeue();
+                Node current = queue.Dequeue();
 
                 if (current.Visited)
                 {
@@ -55,7 +68,7 @@ namespace CT6GAMAI
                     AddNodeToReachable(current);            
                 }
 
-                EnqueueNeighbours(current, priorityQueue);
+                EnqueueNeighbours(current, queue);
             }
 
             ResetNodeStates();

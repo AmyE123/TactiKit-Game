@@ -127,7 +127,8 @@ namespace CT6GAMAI
             // Identify unit's movement range
             var range = unit.UnitData.MovementBaseValue;
 
-            _movementRange.CalculateMovementRange(Node, range);
+            //_movementRange.CalculateMovementRange(Node, range);
+            _movementRange.CalculateMovementRange(unit);
 
             for (int i = 0; i < _movementRange.ReachableNodes.Count; i++)
             {

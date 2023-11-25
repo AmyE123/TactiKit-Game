@@ -9280,6 +9280,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8274021174057386249, guid: 5ee1594f0d98de3458ccfe7cd7fe628a, type: 3}
   m_PrefabInstance: {fileID: 1227678813}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &618212862 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8089228892077568607, guid: 91a91b20b6197f247b2c18400977a2a4, type: 3}
+  m_PrefabInstance: {fileID: 329596583987511193}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5308d16231cadfa47bef99df6f0abd59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &619282008
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15510,17 +15521,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6a40c64957c296f4684535e3fd329216, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &952884374 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6689749160200817601, guid: 91a91b20b6197f247b2c18400977a2a4, type: 3}
-  m_PrefabInstance: {fileID: 329596583987511193}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6862e56514140554cbeafe50b442085c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &962257312
@@ -23782,7 +23782,7 @@ MonoBehaviour:
   SelectedNodeState: {fileID: 0}
   OccupiedNode: {fileID: 2072923245}
   path: []
-  _movementRange: {fileID: 952884374}
+  _movementRange: {fileID: 618212862}
   _animator: {fileID: 256055815}
   _unit: {fileID: 0}
   UnitPressed: 0
@@ -34747,6 +34747,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1427844804}
     - target: {fileID: 6689749160200817601, guid: 91a91b20b6197f247b2c18400977a2a4, type: 3}
+      propertyPath: _gridSelector
+      value: 
+      objectReference: {fileID: 1427844804}
+    - target: {fileID: 8089228892077568607, guid: 91a91b20b6197f247b2c18400977a2a4, type: 3}
       propertyPath: _gridSelector
       value: 
       objectReference: {fileID: 1427844804}

@@ -257,7 +257,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8517126878481087917}
   - component: {fileID: 7592517802941822380}
-  - component: {fileID: 7075305428908455859}
+  - component: {fileID: 5666932915701534253}
   - component: {fileID: 7294320862941142420}
   m_Layer: 0
   m_Name: Unit
@@ -295,11 +295,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _unitData: {fileID: 11400000, guid: 3b01a90fd69b8cb4a976a4f223464697, type: 2}
-  _animator: {fileID: 0}
-  StoodNode: {fileID: 0}
-  _gridSelector: {fileID: 0}
-  IsMoving: 0
---- !u!114 &7075305428908455859
+  _stoodNode: {fileID: 0}
+--- !u!114 &5666932915701534253
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -308,12 +305,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 8445902401575187227}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6862e56514140554cbeafe50b442085c, type: 3}
+  m_Script: {fileID: 11500000, guid: 5308d16231cadfa47bef99df6f0abd59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridSelector: {fileID: 0}
-  ReachableNodes: []
-  Nodes: []
+  _gridSelector: {fileID: 0}
+  _reachableNodes: []
 --- !u!114 &7294320862941142420
 MonoBehaviour:
   m_ObjectHideFlags: 0
