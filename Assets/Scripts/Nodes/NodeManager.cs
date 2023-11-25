@@ -129,15 +129,15 @@ namespace CT6GAMAI
 
             _movementRange.CalculateMovementRange(Node, range);
 
-            for (int i = 0; i < _movementRange.Nodes.Count; i++)
+            for (int i = 0; i < _movementRange.ReachableNodes.Count; i++)
             {
                 if (isPressed)
                 {
-                    _movementRange.Nodes[i].NodeManager.NodeState.VisualStateManager.SetPressed(Constants.NodeVisualColorState.Blue);
+                    _movementRange.ReachableNodes[i].NodeManager.NodeState.VisualStateManager.SetPressed(Constants.NodeVisualColorState.Blue);
                 }
                 else
                 {
-                    _movementRange.Nodes[i].NodeManager.NodeState.VisualStateManager.SetHovered(Constants.NodeVisualColorState.Blue);
+                    _movementRange.ReachableNodes[i].NodeManager.NodeState.VisualStateManager.SetHovered(Constants.NodeVisualColorState.Blue);
                 }
             }
         }

@@ -124,7 +124,7 @@ namespace CT6GAMAI
                     {
                         SelectedNodeState.VisualStateManager.SetPressed(Constants.NodeVisualColorState.Blue);
 
-                        foreach (Node n in _movementRange.Nodes)
+                        foreach (Node n in _movementRange.ReachableNodes)
                         {
                             n.NodeManager.NodeState.VisualStateManager.SetPressed(Constants.NodeVisualColorState.Blue);
                         }
@@ -134,7 +134,7 @@ namespace CT6GAMAI
                     {
                         SelectedNodeState.VisualStateManager.SetHovered(Constants.NodeVisualColorState.Blue);
 
-                        foreach (Node n in _movementRange.Nodes)
+                        foreach (Node n in _movementRange.ReachableNodes)
                         {
                             n.NodeManager.NodeState.VisualStateManager.SetHovered(Constants.NodeVisualColorState.Blue);
                         }
@@ -145,9 +145,9 @@ namespace CT6GAMAI
 
             if (UnitPressed)
             {               
-                foreach (Node n in _movementRange.Nodes)
+                foreach (Node n in _movementRange.ReachableNodes)
                 {
-                    if (_movementRange.Nodes.Contains(SelectedNode.Node))
+                    if (_movementRange.ReachableNodes.Contains(SelectedNode.Node))
                     {
                         selectorWithinRange = true;
                     }
@@ -182,7 +182,7 @@ namespace CT6GAMAI
 
                     foreach (Node n in path)
                     {
-                        if (_movementRange.Nodes.Contains(n))
+                        if (_movementRange.ReachableNodes.Contains(n))
                         {
                             n.NodeManager.NodeState.VisualStateManager.SetPath();
                         }

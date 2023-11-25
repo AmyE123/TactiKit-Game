@@ -3,26 +3,30 @@ namespace CT6GAMAI
     using System.Collections.Generic;
     using UnityEngine;
 
+    /// <summary>
+    /// A class for calculating the range that the unit can move.
+    /// </summary>
     public class MovementRange : MonoBehaviour
     {
-        [SerializeField] private GridSelector gridSelector;
-
-        public List<Node> ReachableNodes;
-        public List<Node> Nodes;
+        // TODO: Update grid selector to grid manager
+        [SerializeField] private GridSelector _gridSelector;
+        [SerializeField] private List<Node> _reachableNodes = new List<Node>();
 
         /// <summary>
-        /// Uses Dijkstra's Algorithm to calculate the range that the unit can move
+        /// A list of nodes which the unit can reach.
+        /// This list is only populated when the unit has been selected.
         /// </summary>
-        /// <param name="start">The starting node</param>
-        /// <param name="movementPoints">How much the unit can move</param>
-        /// <returns></returns>
+        public List<Node> ReachableNodes => _reachableNodes;
+
+        /// <summary>
+        /// Calculates the movement range of a unit using Dijkstra's Algorithm.
+        /// </summary>
+        /// <param name="start">The starting node.</param>
+        /// <param name="movementPoints">The maximum movement points of the unit.</param>
+        /// <returns>A list of nodes representing the reachable area.</returns>
         public List<Node> CalculateMovementRange(Node start, int movementPoints)
         {
-            foreach (NodeManager nodeManager in gridSelector.Nodes)
-            {
-                nodeManager.Node.Visited = false;
-                nodeManager.Node.Distance = int.MaxValue;
-            }
+            InitializeNodes();
 
             // Initialize the starting node's distance to 0
             start.Distance = 0;
@@ -31,13 +35,7 @@ namespace CT6GAMAI
             var priorityQueue = new PriorityQueue<Node>();
             priorityQueue.Enqueue(start, start.Distance);
 
-            if (!Nodes.Contains(start))
-            {
-                Nodes.Add(start);
-            }
-
-            // A list to hold all nodes within movement range
-            var reachableNodes = new List<Node>();
+            AddNodeToReachable(start);
 
             while (!priorityQueue.IsEmpty())
             {
@@ -54,50 +52,23 @@ namespace CT6GAMAI
                 // If the current node is within movement points, add to reachable nodes
                 if (current.Distance <= movementPoints)
                 {
-                    reachableNodes.Add(current);
-
-                    if (!Nodes.Contains(current))
-                    {
-                        Nodes.Add(current);
-                    }
+                    AddNodeToReachable(current);            
                 }
 
-                // Loop through each neighbor of the current node
-                foreach (Node neighbor in current.Neighbors)
-                {
-                    if (neighbor.Visited) continue; // Skip already visited neighbors
-
-                    // Calculate the tentative distance to the neighbor
-                    int tentativeDistance = current.Distance + neighbor.Cost;
-
-                    // If the tentative distance is less than the neighbor's recorded distance
-                    if (tentativeDistance < neighbor.Distance)
-                    {
-                        // Update the neighbor's distance
-                        neighbor.Distance = tentativeDistance;
-
-                        // Sets the predecessor for pathfinding
-                        neighbor.Predecessor = current;
-
-                        // If the neighbor has not been visited or the tentative distance is better, enqueue it
-                        if (!neighbor.Visited)
-                        {
-                            priorityQueue.Enqueue(neighbor, tentativeDistance);
-                        }
-                    }
-                }
+                EnqueueNeighbours(current, priorityQueue);
             }
 
-            // Reset visited and distance for all nodes for the next calculation
-            foreach (NodeManager nodeManager in gridSelector.Nodes)
-            {
-                nodeManager.Node.Visited = false;
-                nodeManager.Node.Distance = int.MaxValue;
-            }
+            ResetNodeStates();
 
-            return Nodes;
+            return _reachableNodes;
         }
 
+        /// <summary>
+        /// Reconstructs the path from a start node to a target node.
+        /// </summary>
+        /// <param name="start">The starting node.</param>
+        /// <param name="target">The target node.</param>
+        /// <returns>A list of nodes representing the path from start to target.</returns>
         public List<Node> ReconstructPath(Node start, Node target)
         {
             List<Node> path = new List<Node>();
@@ -115,10 +86,67 @@ namespace CT6GAMAI
             return path;
         }
 
+        /// <summary>
+        /// Resets the state of the nodes for a new calculation.
+        /// </summary>
         public void ResetNodes()
         {
-            Nodes.Clear();
-            ReachableNodes.Clear();
+            _reachableNodes.Clear();
+        }
+
+        private void InitializeNodes()
+        {
+            foreach (NodeManager nodeManager in _gridSelector.Nodes)
+            {
+                nodeManager.Node.Visited = false;
+                nodeManager.Node.Distance = int.MaxValue;
+            }
+        }
+
+        private void AddNodeToReachable(Node node)
+        {
+            if (!_reachableNodes.Contains(node))
+            {
+                _reachableNodes.Add(node);
+            }
+        }
+
+        private void EnqueueNeighbours(Node current, PriorityQueue<Node> queue)
+        {
+            // Loop through each neighbor of the current node
+            foreach (Node neighbor in current.Neighbors)
+            {
+                if (neighbor.Visited) continue; // Skip already visited neighbors
+
+                // Calculate the tentative distance to the neighbor
+                int tentativeDistance = current.Distance + neighbor.Cost;
+
+                // If the tentative distance is less than the neighbor's recorded distance
+                if (tentativeDistance < neighbor.Distance)
+                {
+                    // Update the neighbor's distance
+                    neighbor.Distance = tentativeDistance;
+
+                    // Sets the predecessor for pathfinding
+                    neighbor.Predecessor = current;
+
+                    // If the neighbor has not been visited or the tentative distance is better, enqueue it
+                    if (!neighbor.Visited)
+                    {
+                        queue.Enqueue(neighbor, tentativeDistance);
+                    }
+                }
+            }
+        }
+
+        private void ResetNodeStates()
+        {
+            // Reset visited and distance for all nodes for the next calculation
+            foreach (NodeManager nodeManager in _gridSelector.Nodes)
+            {
+                nodeManager.Node.Visited = false;
+                nodeManager.Node.Distance = int.MaxValue;
+            }
         }
     }
 }
