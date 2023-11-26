@@ -1,5 +1,6 @@
 namespace CT6GAMAI
 {
+    using Unity.Burst.CompilerServices;
     using UnityEngine;
 
     public class NodeManager : MonoBehaviour
@@ -32,8 +33,11 @@ namespace CT6GAMAI
         #region Private
 
         private RaycastHit nodeHit;
+        private RaycastHit unitHit;
 
         #endregion //Private
+
+        public bool NodeInitialized = false;
 
         #region Public Getters
 
@@ -62,6 +66,35 @@ namespace CT6GAMAI
             _movementRange = FindObjectOfType<MovementRange>();
 
             Node.Cost = NodeData.TerrainType.MovementCost;
+
+            StoodUnit = DetectStoodUnit();
+
+            NodeInitialized = true;
+        }
+
+        public UnitManager DetectStoodUnit()
+        {
+            if (Physics.Raycast(transform.position, transform.up * 5, out unitHit, 1))
+            {
+                return GetUnitFromRayHit(unitHit);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private UnitManager GetUnitFromRayHit(RaycastHit hit)
+        {
+            if (hit.transform.gameObject.tag == Constants.UNIT_TAG_REFERENCE)
+            {
+                return unitHit.transform.GetComponentInParent<UnitManager>();
+            }
+            else
+            {
+                Debug.Log("[ERROR]: Cast hit non-unit object - " + unitHit.transform.gameObject.name);
+                return null;
+            }
         }
 
         void SetupNeighbours()

@@ -31,6 +31,8 @@ namespace CT6GAMAI
 
         #region Units
         public enum Class { Knight, Mercenary, Archer };
+
+        public const string UNIT_TAG_REFERENCE = "Unit";
         #endregion //Units                           
     }
 }

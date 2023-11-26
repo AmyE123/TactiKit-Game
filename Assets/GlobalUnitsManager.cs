@@ -1,18 +1,37 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class GlobalUnitsManager : MonoBehaviour
+namespace CT6GAMAI
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    using System.Collections.Generic;
+    using System.Linq;
+    using UnityEngine;
 
-    // Update is called once per frame
-    void Update()
+    public class GlobalUnitsManager : MonoBehaviour
     {
-        
+        [SerializeField] private List<UnitManager> _allUnits;
+        [SerializeField] private List<UnitManager> _activeUnits;
+
+        private bool _unitsInitalized = false;
+
+        private void Update()
+        {           
+            if (!_unitsInitalized)
+            {
+                InitializeUnits();                
+            }
+        }
+
+        private void InitializeUnits()
+        {
+            if (_allUnits.Count == 0)
+            {
+                FindAllUnits();
+            }
+
+            _unitsInitalized = true;
+        }
+
+        private void FindAllUnits()
+        {
+            _allUnits = FindObjectsOfType<UnitManager>().ToList();
+        }
     }
 }
