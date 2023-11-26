@@ -126,5 +126,14 @@ namespace CT6GAMAI
                 }
             }
         }
+
+        /// <summary>
+        /// Move the unit to an end point
+        /// </summary>
+        public IEnumerator MoveToPoint(Node targetNode)
+        {
+            // TODO: Make this work
+            return null;
+        }
     }
 }
