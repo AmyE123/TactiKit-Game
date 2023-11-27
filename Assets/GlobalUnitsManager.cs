@@ -9,6 +9,9 @@ namespace CT6GAMAI
         [SerializeField] private List<UnitManager> _allUnits;
         [SerializeField] private List<UnitManager> _activeUnits;
 
+        public List<UnitManager> AllUnits => _allUnits;
+        public List<UnitManager> ActiveUnits => _activeUnits;
+
         private bool _unitsInitalized = false;
 
         private void Update()

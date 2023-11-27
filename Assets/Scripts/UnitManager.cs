@@ -11,6 +11,10 @@ namespace CT6GAMAI
     {
         [SerializeField] private UnitData _unitData;
         [SerializeField] private NodeManager _stoodNode;
+        [SerializeField] private Animator _animator;
+
+        private GameManager _gameManager;
+        private GridManager _gridManager;
 
         private RaycastHit _stoodNodeRayHit;
         private GridSelector _gridSelector;
@@ -19,9 +23,13 @@ namespace CT6GAMAI
         public bool IsMoving => _isMoving;
         public NodeManager StoodNode => _stoodNode;
         public UnitData UnitData => _unitData;
+        public Animator Animator => _animator;
 
         private void Start()
         {
+            _gameManager = GameManager.Instance;
+            _gridManager = _gameManager.GridManager;
+
             _stoodNode = DetectStoodNode();
             _stoodNode.StoodUnit = this;
 
@@ -71,10 +79,13 @@ namespace CT6GAMAI
         private void FinalizeMovementValues(int pathIndex)
         {
             // TODO: This can be cleaned up
-            _gridSelector.OccupiedNode = _gridSelector.path[pathIndex];
+            //_gridSelector.OccupiedNode = _gridSelector.path[pathIndex];
+            _gridManager.OccupiedNodes[0] = _gridManager.MovementPath[pathIndex].NodeManager;
+
             _isMoving = false;
             _gridSelector.UnitPressed = false;
             _stoodNode = DetectStoodNode();
+            _gridManager.MovementPath.Clear();
             UpdateStoodNode(this);
         }
 
@@ -110,9 +121,9 @@ namespace CT6GAMAI
         {
             _isMoving = true;
 
-            for (int i = 1; i < _gridSelector.path.Count; i++)
+            for (int i = 1; i < _gridManager.MovementPath.Count; i++)
             {
-                Node n = _gridSelector.path[i];
+                Node n = _gridManager.MovementPath[i];
 
                 MoveToNextNode(n);
 
@@ -120,7 +131,7 @@ namespace CT6GAMAI
 
                 yield return new WaitForSeconds(0.3f);
 
-                if (i == _gridSelector.path.Count - 1)
+                if (i == _gridManager.MovementPath.Count - 1)
                 {
                     FinalizeMovementValues(i);
                 }

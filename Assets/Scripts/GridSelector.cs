@@ -1,6 +1,5 @@
 namespace CT6GAMAI
 {
-    using System.Collections.Generic;
     using UnityEngine;
     using static CT6GAMAI.Constants;
 
@@ -10,19 +9,27 @@ namespace CT6GAMAI
         public NodeManager SelectedNode;
         public NodeState SelectedNodeState;
 
-        public Node OccupiedNode;
-        public List<Node> path = new List<Node>();
+        //public Node OccupiedNode;
+        //public List<Node> path = new List<Node>();
 
         [SerializeField] private MovementRange _movementRange;
         [SerializeField] private Animator _animator;
         [SerializeField] private UnitManager _unit;
 
         public bool UnitPressed = false;
-        private bool pathing = false;
-        private bool selectorWithinRange;
+        private bool _pathing = false;
+        //private bool selectorWithinRange;
+
+        public bool Pathing => _pathing;
+
+        private GameManager _gameManager;
+        private GridManager _gridManager;
 
         private void Start()
         {
+            _gameManager = GameManager.Instance;
+            _gridManager = _gameManager.GridManager;
+
             SelectedNode.NodeState.SelectorStateManager.SetDefaultSelected();
             _unit = FindObjectOfType<UnitManager>();
         }
@@ -154,7 +161,7 @@ namespace CT6GAMAI
             if (SelectedNode.StoodUnit != null)
             {
                 UnitPressed = !UnitPressed;
-                pathing = UnitPressed;
+                _pathing = UnitPressed;
 
                 UpdateNodeVisualState();
             }
@@ -193,63 +200,8 @@ namespace CT6GAMAI
         {
             if (!UnitPressed) return;
 
-            UpdateSelectorRange();
-            ProcessPathing();
-        }
-
-        /// <summary>
-        /// Updates whether the selector is within range of the reachable nodes.
-        /// </summary>
-        private void UpdateSelectorRange()
-        {
-            foreach (Node n in _movementRange.ReachableNodes)
-            {
-                selectorWithinRange = _movementRange.ReachableNodes.Contains(SelectedNode.Node);
-                n.NodeManager.NodeState.VisualStateManager.SetPressed(NodeVisualColorState.Blue);
-            }          
-        }
-
-        /// <summary>
-        /// Processes pathing for the selected unit, including movement and path highlighting.
-        /// </summary>
-        private void ProcessPathing()
-        {
-            if (pathing)
-            {
-                Node startNode = OccupiedNode;
-                Node targetNode = SelectedNode.Node;
-
-                if (selectorWithinRange)
-                {
-                    path = _movementRange.ReconstructPath(startNode, targetNode);
-
-                    if (path.Count > 1 && Input.GetKeyDown(KeyCode.Space))
-                    {
-                        // Clear the stood node's reference to the unit
-                        _unit.ClearStoodUnit();
-
-                        // Move unit here
-                        StartCoroutine(_unit.MoveToEndPoint());
-                        _animator.SetBool("Moving", _unit.IsMoving);
-                    }
-                }
-            }
-
-            HighlightPath();
-        }
-
-        /// <summary>
-        /// Highlights the path for the selected units potential movement.
-        /// </summary>
-        private void HighlightPath()
-        {
-            foreach (Node n in path)
-            {
-                if (_movementRange.ReachableNodes.Contains(n))
-                {
-                    n.NodeManager.NodeState.VisualStateManager.SetPath();
-                }
-            }
+            _gridManager.UpdateSelectorRange();
+            _gridManager.ProcessPathing();
         }
 
         /// <summary>
