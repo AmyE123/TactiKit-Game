@@ -88,6 +88,15 @@ namespace CT6GAMAI
         }
 
         /// <summary>
+        /// Handles the pathing logic when a unit is selected.
+        /// </summary>
+        public void HandleUnitPathing()
+        {
+            UpdateSelectorRange();
+            ProcessPathing();
+        }
+
+        /// <summary>
         /// Updates whether the selector is within range of the reachable nodes.
         /// </summary>
         public void UpdateSelectorRange()

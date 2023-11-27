@@ -2948,9 +2948,45 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 5417473472962778680}
     - target: {fileID: 7592517802941822380, guid: b0cf7274a78f12d43910a5c79373d142, type: 3}
+      propertyPath: greyMat
+      value: 
+      objectReference: {fileID: 2100000, guid: c0c425919b8d8b340bc45c8b43f48c49, type: 2}
+    - target: {fileID: 7592517802941822380, guid: b0cf7274a78f12d43910a5c79373d142, type: 3}
       propertyPath: _animator
       value: 
       objectReference: {fileID: 5417473472962778680}
+    - target: {fileID: 7592517802941822380, guid: b0cf7274a78f12d43910a5c79373d142, type: 3}
+      propertyPath: knightBaseObj
+      value: 
+      objectReference: {fileID: 7688440134149859990}
+    - target: {fileID: 7592517802941822380, guid: b0cf7274a78f12d43910a5c79373d142, type: 3}
+      propertyPath: allRenderers.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592517802941822380, guid: b0cf7274a78f12d43910a5c79373d142, type: 3}
+      propertyPath: allRenderers.Array.data[0]
+      value: 
+      objectReference: {fileID: 5418102138261501220}
+    - target: {fileID: 7592517802941822380, guid: b0cf7274a78f12d43910a5c79373d142, type: 3}
+      propertyPath: allRenderers.Array.data[1]
+      value: 
+      objectReference: {fileID: 1500001786005867172}
+    - target: {fileID: 7592517802941822380, guid: b0cf7274a78f12d43910a5c79373d142, type: 3}
+      propertyPath: allRenderers.Array.data[2]
+      value: 
+      objectReference: {fileID: 7335362129805869027}
+    - target: {fileID: 7592517802941822380, guid: b0cf7274a78f12d43910a5c79373d142, type: 3}
+      propertyPath: allRenderers.Array.data[3]
+      value: 
+      objectReference: {fileID: 7196176080929270758}
+    - target: {fileID: 7592517802941822380, guid: b0cf7274a78f12d43910a5c79373d142, type: 3}
+      propertyPath: allRenderers.Array.data[4]
+      value: 
+      objectReference: {fileID: 4733716451881158063}
+    - target: {fileID: 7592517802941822380, guid: b0cf7274a78f12d43910a5c79373d142, type: 3}
+      propertyPath: allRenderers.Array.data[5]
+      value: 
+      objectReference: {fileID: 2921819768908906081}
     - target: {fileID: 8445902401575187227, guid: b0cf7274a78f12d43910a5c79373d142, type: 3}
       propertyPath: m_Name
       value: Unit1

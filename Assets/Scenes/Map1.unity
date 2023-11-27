@@ -9755,7 +9755,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 640078128}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.0000000098647766, y: 0.9436284, z: -0.33100694, w: 0.000000028122319}
+  m_LocalRotation: {x: -2.0641513e-15, y: 0.9436283, z: -0.33100694, w: -1.5760844e-15}
   m_LocalPosition: {x: 0, y: 8, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -18733,7 +18733,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1151930736}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.0000000098647766, y: 0.9436284, z: -0.33100694, w: 0.000000028122319}
+  m_LocalRotation: {x: -2.0641513e-15, y: 0.9436283, z: -0.33100694, w: -1.5760844e-15}
   m_LocalPosition: {x: 0, y: 8, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -23783,8 +23783,6 @@ MonoBehaviour:
   - {fileID: 191785070}
   SelectedNode: {fileID: 2034517191}
   SelectedNodeState: {fileID: 0}
-  OccupiedNode: {fileID: 2072923245}
-  path: []
   _movementRange: {fileID: 618212862}
   _animator: {fileID: 256055815}
   _unit: {fileID: 0}
@@ -33814,17 +33812,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a40c64957c296f4684535e3fd329216, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2072923245 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5803010649068779603, guid: 5ee1594f0d98de3458ccfe7cd7fe628a, type: 3}
-  m_PrefabInstance: {fileID: 2072923240}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dee1ec270e8cf0242b5399511028dd3c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &2075165669
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -35190,6 +35177,10 @@ PrefabInstance:
       propertyPath: _gridSelector
       value: 
       objectReference: {fileID: 1427844804}
+    - target: {fileID: 6320873617587096030, guid: 91a91b20b6197f247b2c18400977a2a4, type: 3}
+      propertyPath: allRenderers.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6689749160200817601, guid: 91a91b20b6197f247b2c18400977a2a4, type: 3}
       propertyPath: gridSelector
       value: 

@@ -200,8 +200,7 @@ namespace CT6GAMAI
         {
             if (!UnitPressed) return;
 
-            _gridManager.UpdateSelectorRange();
-            _gridManager.ProcessPathing();
+            _gridManager.HandleUnitPathing();
         }
 
         /// <summary>

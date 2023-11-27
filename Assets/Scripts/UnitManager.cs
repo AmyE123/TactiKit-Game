@@ -3,6 +3,8 @@ namespace CT6GAMAI
     using UnityEngine;
     using DG.Tweening;
     using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// Manager for the singular unit.
@@ -25,6 +27,12 @@ namespace CT6GAMAI
         public UnitData UnitData => _unitData;
         public Animator Animator => _animator;
 
+        // TODO: Cleanup!
+        public Material greyMat;
+        public GameObject knightBaseObj;
+        public List<SkinnedMeshRenderer> allSMRenderers;
+        public List<MeshRenderer> allRenderers;
+
         private void Start()
         {
             _gameManager = GameManager.Instance;
@@ -35,6 +43,35 @@ namespace CT6GAMAI
 
             // TODO: Cleanup of gridselector stuff
             _gridSelector = FindObjectOfType<GridSelector>();
+        }
+
+        private void Update()
+        {
+            // WIP code!!
+            if (Input.GetKeyDown(KeyCode.I))
+            {
+                Debug.Log("Pressed key");
+                TurnUnitInactive();
+            }
+        }
+
+        // TODO: CLEANUP
+        private void TurnUnitInactive()
+        {
+            allSMRenderers = knightBaseObj.GetComponentsInChildren<SkinnedMeshRenderer>().ToList();
+            allRenderers = knightBaseObj.GetComponentsInChildren<MeshRenderer>().ToList();
+
+            foreach (Renderer renderer in allSMRenderers) 
+            {
+                Debug.Log("Grabbing " + renderer.name + "And changing mat");
+                renderer.material = greyMat;
+            }
+
+            foreach (MeshRenderer renderer in allRenderers)
+            {
+                renderer.material = greyMat;
+            }
+
         }
 
         private NodeManager DetectStoodNode()
