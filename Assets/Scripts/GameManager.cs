@@ -2,10 +2,29 @@ namespace CT6GAMAI
 {
     using UnityEngine;
 
+    /// <summary>
+    /// Manages the overall game state and interactions between game components.
+    /// </summary>
     public class GameManager : MonoBehaviour
     {
-        // Singleton instance
+        /// <summary>
+        /// Singleton instance of GameManager.
+        /// </summary>
         public static GameManager Instance;
+
+        #region Public Manager References
+
+        /// <summary>
+        /// Public getter for GlobalUnitsManager.
+        /// </summary>
+        public GlobalUnitsManager UnitsManager => _unitsManager;
+
+        /// <summary>
+        /// Public getter for GridManager.
+        /// </summary>
+        public GridManager GridManager => _gridManager;
+
+        #endregion // Public Manager References
 
         #region Private Manager References
 
@@ -14,18 +33,9 @@ namespace CT6GAMAI
 
         #endregion // Private Manager References
 
-        #region Public Manager References
-
-        public GlobalUnitsManager UnitsManager => _unitsManager;
-        public GridManager GridManager => _gridManager;
-
-        #endregion // Public Manager References
-
         void Awake()
         {
             Instance = this;
         }
-
-
     }
 }
