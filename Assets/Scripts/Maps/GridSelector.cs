@@ -10,8 +10,8 @@ namespace CT6GAMAI
     public class GridSelector : MonoBehaviour
     {
         [SerializeField] private MovementRange _movementRange;
-        [SerializeField] private Animator _animator;
-        [SerializeField] private UnitManager _unit;
+        [SerializeField] private Animator _animator; // TODO: Update with UnitAnimationManager.cs functionality.
+        [SerializeField] private UnitManager _unit; // TODO: Once multi-units is implemented, this will be changed.
 
         private bool _pathing = false;
         private GameManager _gameManager;
@@ -55,6 +55,7 @@ namespace CT6GAMAI
 
         private void Update()
         {
+            // TODO: Update with UnitAnimationManager.cs functionality.
             _animator.SetBool("Ready", UnitPressed);
 
             UpdateSelectedNode();
