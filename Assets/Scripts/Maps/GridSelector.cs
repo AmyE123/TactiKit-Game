@@ -3,27 +3,44 @@ namespace CT6GAMAI
     using UnityEngine;
     using static CT6GAMAI.Constants;
 
+    /// <summary>
+    /// Manages the selection and interaction of nodes within the grid.
+    /// This includes handling node selection, grid navigation, unit selection, and pathing.
+    /// </summary>
     public class GridSelector : MonoBehaviour
     {
-        public NodeManager[] Nodes;
-        public NodeManager SelectedNode;
-        public NodeState SelectedNodeState;
-
-        //public Node OccupiedNode;
-        //public List<Node> path = new List<Node>();
-
         [SerializeField] private MovementRange _movementRange;
         [SerializeField] private Animator _animator;
         [SerializeField] private UnitManager _unit;
 
-        public bool UnitPressed = false;
         private bool _pathing = false;
-        //private bool selectorWithinRange;
-
-        public bool Pathing => _pathing;
-
         private GameManager _gameManager;
         private GridManager _gridManager;
+
+        /// <summary>
+        /// Array of all NodeManagers in the grid.
+        /// </summary>
+        public NodeManager[] Nodes; // TODO: Update with AllNodes in GridManager.
+
+        /// <summary>
+        /// The currently selected node.
+        /// </summary>
+        public NodeManager SelectedNode;
+
+        /// <summary>
+        /// The state of the currently selected node.
+        /// </summary>
+        public NodeState SelectedNodeState; // TODO: Update this, this isn't needed (SelectedNode.NodeState).
+
+        /// <summary>
+        /// Indicates whether a unit is currently pressed (selected).
+        /// </summary>
+        public bool UnitPressed = false;
+
+        /// <summary>
+        /// Indicates whether pathing mode is active.
+        /// </summary>
+        public bool Pathing => _pathing;
 
         private void Start()
         {
@@ -45,9 +62,6 @@ namespace CT6GAMAI
             HandleUnitPathing();
         }
 
-        /// <summary>
-        /// Updates the currently selected node and its state.
-        /// </summary>
         private void UpdateSelectedNode()
         {
             if (SelectedNodeState == null) 
@@ -61,9 +75,6 @@ namespace CT6GAMAI
             }
         }
 
-        /// <summary>
-        /// Scans all nodes and updates the currently active selection.
-        /// </summary>
         private void UpdateActiveNodeSelection()
         {
             for (int i = 0; i < Nodes.Length; i++)
@@ -76,9 +87,6 @@ namespace CT6GAMAI
             }
         }
 
-        /// <summary>
-        /// Handles interactions for the node.
-        /// </summary>
         private void HandleNodeUnitInteraction()
         {
             if (SelectedNode.StoodUnit != null)
@@ -92,9 +100,6 @@ namespace CT6GAMAI
             }
         }
 
-        /// <summary>
-        /// Handles user input for grid navigation.
-        /// </summary>
         private void HandleGridNavigation()
         {
             if (!_unit.IsMoving)
@@ -106,10 +111,6 @@ namespace CT6GAMAI
             }
         }
 
-        /// <summary>
-        /// Moves the selector in the specified direction.
-        /// </summary>
-        /// <param name="direction">The direction to move the selector.</param>
         private void MoveSelector(Direction direction)
         {
             NodeState adjacentNodeState = GetAdjacentNodeState(direction);
@@ -120,11 +121,6 @@ namespace CT6GAMAI
             }
         }
 
-        /// <summary>
-        /// Gets the node state of the adjacent node in the specified direction.
-        /// </summary>
-        /// <param name="direction">The direction of the adjacent node.</param>
-        /// <returns>The state of the adjacent node, or null if none.</returns>
         private NodeState GetAdjacentNodeState(Direction direction)
         {
             switch (direction)
@@ -142,9 +138,6 @@ namespace CT6GAMAI
             }
         }
 
-        /// <summary>
-        /// Handles the user input for selecting or deselecting a unit.
-        /// </summary>
         private void HandleUnitSelection()
         {
             if (Input.GetKeyDown(KeyCode.Space))
@@ -153,9 +146,6 @@ namespace CT6GAMAI
             }
         }
 
-        /// <summary>
-        /// Toggles the selection state of a unit and updates the visual state of nodes.
-        /// </summary>
         private void ToggleUnitSelection()
         {
             if (SelectedNode.StoodUnit != null)
@@ -167,9 +157,6 @@ namespace CT6GAMAI
             }
         }
 
-        /// <summary>
-        /// Updates the visual state of the selected node and its reachable nodes.
-        /// </summary>
         private void UpdateNodeVisualState()
         {
             if (UnitPressed)
@@ -193,9 +180,6 @@ namespace CT6GAMAI
             }
         }
 
-        /// <summary>
-        /// Handles the pathing logic when a unit is selected.
-        /// </summary>
         private void HandleUnitPathing()
         {
             if (!UnitPressed) return;
@@ -204,7 +188,7 @@ namespace CT6GAMAI
         }
 
         /// <summary>
-        /// Resets all highlighted nodes.
+        /// Resets the visual state of all highlighted nodes to default.
         /// </summary>
         public void ResetHighlightedNodes()
         {
