@@ -144,6 +144,8 @@ namespace CT6GAMAI
 
                         // Move unit here
                         StartCoroutine(unit.MoveToEndPoint());
+
+                        // TODO: Update with UnitAnimationManager.cs functionality.
                         unit.Animator.SetBool("Moving", unit.IsMoving);
                     }
                 }
