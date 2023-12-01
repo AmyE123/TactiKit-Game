@@ -152,6 +152,7 @@ namespace CT6GAMAI
                 case Direction.East:
                     return SelectedNode.EastNode.NodeState;
                 default:
+                    Debug.Assert(false, "Invalid direction passed to GetAdjacentNodeState.");
                     return null;
             }
         }
