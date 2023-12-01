@@ -48,6 +48,8 @@ namespace CT6GAMAI
             _gridManager = _gameManager.GridManager;
 
             SelectedNode.NodeState.SelectorStateManager.SetDefaultSelected();
+
+            // TODO: Once multi-units is implemented, this will be changed.
             _unit = FindObjectOfType<UnitManager>();
         }
 
