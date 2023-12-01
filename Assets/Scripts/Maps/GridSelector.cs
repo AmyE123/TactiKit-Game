@@ -107,10 +107,25 @@ namespace CT6GAMAI
         {
             if (!_unit.IsMoving)
             {
-                if (Input.GetKeyDown(KeyCode.W)) MoveSelector(Direction.North);
-                if (Input.GetKeyDown(KeyCode.A)) MoveSelector(Direction.West);
-                if (Input.GetKeyDown(KeyCode.S)) MoveSelector(Direction.South);
-                if (Input.GetKeyDown(KeyCode.D)) MoveSelector(Direction.East);
+                if (Input.GetKeyDown(KeyCode.W))
+                {
+                    MoveSelector(Direction.North);
+                }
+
+                if (Input.GetKeyDown(KeyCode.A))
+                {
+                    MoveSelector(Direction.West);
+                }
+
+                if (Input.GetKeyDown(KeyCode.S))
+                {
+                    MoveSelector(Direction.South);
+                }
+
+                if (Input.GetKeyDown(KeyCode.D))
+                {
+                    MoveSelector(Direction.East);
+                }
             }
         }
 
@@ -185,7 +200,10 @@ namespace CT6GAMAI
 
         private void HandleUnitPathing()
         {
-            if (!UnitPressed) return;
+            if (!UnitPressed)
+            {
+                return;
+            }
 
             _gridManager.HandleUnitPathing();
         }
