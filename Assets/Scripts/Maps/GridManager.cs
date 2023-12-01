@@ -5,27 +5,39 @@ namespace CT6GAMAI
     using UnityEngine;
     using static CT6GAMAI.Constants;
 
+    /// <summary>
+    /// Manages the grid for the map.
+    /// </summary>
     public class GridManager : MonoBehaviour
     {
-        private GameManager _gameManager;
         [SerializeField] private GridSelector _gridSelector;
-
-        // TODO: Make this auto-populate.
         [SerializeField] private List<NodeManager> _allNodes;
-
-        // TODO: Auto-detect and auto-populate this.
         [SerializeField] private List<NodeManager> _occupiedNodes;
-
         [SerializeField] private List<Node> _movementPath;
         [SerializeField] private MovementRange _movementRange;
 
+        private GameManager _gameManager;
         private bool _selectorWithinRange;
         private bool _gridInitialized = false;
 
+        /// <summary>
+        /// Indicates if a unit has been selected.
+        /// </summary>
         public bool UnitPressed = false;
 
+        /// <summary>
+        /// Gets the list of all nodes in the grid.
+        /// </summary>
         public List<NodeManager> AllNodes => _allNodes;
+
+        /// <summary>
+        /// Gets the list of currently occupied nodes.
+        /// </summary>
         public List<NodeManager> OccupiedNodes => _occupiedNodes;
+
+        /// <summary>
+        /// Gets the movement path of the currently selected unit.
+        /// </summary>
         public List<Node> MovementPath => _movementPath;
 
         private void Start()
