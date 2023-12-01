@@ -99,6 +99,17 @@ namespace CT6GAMAI
             }
         }
 
+        private void HighlightPath()
+        {
+            foreach (Node n in _movementPath)
+            {
+                if (_movementRange.ReachableNodes.Contains(n))
+                {
+                    n.NodeManager.NodeState.VisualStateManager.SetPath();
+                }
+            }
+        }
+
         /// <summary>
         /// Handles the pathing logic when a unit is selected.
         /// </summary>
@@ -152,20 +163,6 @@ namespace CT6GAMAI
             }
 
             HighlightPath();
-        }
-
-        /// <summary>
-        /// Highlights the path for the selected units potential movement.
-        /// </summary>
-        private void HighlightPath()
-        {
-            foreach (Node n in _movementPath)
-            {
-                if (_movementRange.ReachableNodes.Contains(n))
-                {
-                    n.NodeManager.NodeState.VisualStateManager.SetPath();
-                }
-            }
         }
     }
 }
