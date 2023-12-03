@@ -2,6 +2,9 @@ namespace CT6GAMAI
 {
     using UnityEngine;
 
+    /// <summary>
+    /// Manages the animations for a unit.
+    /// </summary>
     public class UnitAnimationManager : MonoBehaviour
     {
         [SerializeField] private UnitManager _unitManager;
@@ -24,6 +27,9 @@ namespace CT6GAMAI
             }
         }
 
+        /// <summary>
+        /// Tries to attach an Animator component to the unit if one is not already attached.
+        /// </summary>
         private void TryForceAnimationComponentAttach()
         {
             _animator = GetComponentInChildren<Animator>();
