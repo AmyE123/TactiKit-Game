@@ -8,8 +8,7 @@ namespace CT6GAMAI
     /// </summary>
     public class MovementRange : MonoBehaviour
     {
-        // TODO: Update grid selector to grid manager
-        [SerializeField] private GridSelector _gridSelector;
+        [SerializeField] private GridManager _gridManager;
         [SerializeField] private List<Node> _reachableNodes = new List<Node>();
 
         /// <summary>
@@ -109,7 +108,7 @@ namespace CT6GAMAI
 
         private void InitializeNodes()
         {
-            foreach (NodeManager nodeManager in _gridSelector.Nodes)
+            foreach (NodeManager nodeManager in _gridManager.AllNodes)
             {
                 nodeManager.Node.Visited = false;
                 nodeManager.Node.Distance = int.MaxValue;
@@ -155,7 +154,7 @@ namespace CT6GAMAI
         private void ResetNodeStates()
         {
             // Reset visited and distance for all nodes for the next calculation
-            foreach (NodeManager nodeManager in _gridSelector.Nodes)
+            foreach (NodeManager nodeManager in _gridManager.AllNodes)
             {
                 nodeManager.Node.Visited = false;
                 nodeManager.Node.Distance = int.MaxValue;
