@@ -54,12 +54,18 @@ namespace CT6GAMAI
         public const string UNIT_TAG_REFERENCE = "Unit";
 
         /// <summary>
-        /// A value representing the amount of time between movement
+        /// A value representing the amount of time a unit waits between moving tiles
         /// </summary>
         public const float MOVEMENT_DELAY = 0.3f;
 
+        /// <summary>
+        /// A value representing the speed a unit moves from one tile to the next
+        /// </summary>
         public const float MOVEMENT_SPEED = 0.2f;
 
+        /// <summary>
+        /// A value representing the speed a unit rotates toward their look rotation
+        /// </summary>
         public const float LOOK_ROTATION_SPEED = 0.1f;
         #endregion //Units                           
     }
