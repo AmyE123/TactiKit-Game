@@ -5,6 +5,7 @@ namespace CT6GAMAI
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
+    using static CT6GAMAI.Constants;
 
     /// <summary>
     /// Manager for the singular unit.
@@ -98,7 +99,7 @@ namespace CT6GAMAI
 
         private NodeManager GetNodeFromRayHit(RaycastHit hit)
         {
-            if (hit.transform.gameObject.tag == Constants.NODE_TAG_REFERENCE)
+            if (hit.transform.gameObject.tag == NODE_TAG_REFERENCE)
             {
                 return _stoodNodeRayHit.transform.parent.GetComponent<NodeManager>();
             }
@@ -116,10 +117,9 @@ namespace CT6GAMAI
             var dir = (endPointPos - transform.position).normalized;
             var lookRot = Quaternion.LookRotation(dir);
 
-            // TODO: Magic numbers can be cleaned up
-            transform.DORotateQuaternion(lookRot, 0.1f);
+            transform.DORotateQuaternion(lookRot, LOOK_ROTATION_SPEED);
 
-            transform.DOMove(endPointPos, 0.2f).SetEase(Ease.InOutQuad);
+            transform.DOMove(endPointPos, MOVEMENT_SPEED).SetEase(Ease.InOutQuad);
         }
 
         private void FinalizeMovementValues(int pathIndex)
@@ -174,7 +174,7 @@ namespace CT6GAMAI
 
                 _stoodNode = DetectStoodNode();
 
-                yield return new WaitForSeconds(0.3f);
+                yield return new WaitForSeconds(MOVEMENT_DELAY);
 
                 if (i == _gridManager.MovementPath.Count - 1)
                 {

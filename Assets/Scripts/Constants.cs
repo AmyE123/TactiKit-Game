@@ -52,6 +52,15 @@ namespace CT6GAMAI
         /// Constant string for the tag string used on units.
         /// </summary>
         public const string UNIT_TAG_REFERENCE = "Unit";
+
+        /// <summary>
+        /// A value representing the amount of time between movement
+        /// </summary>
+        public const float MOVEMENT_DELAY = 0.3f;
+
+        public const float MOVEMENT_SPEED = 0.2f;
+
+        public const float LOOK_ROTATION_SPEED = 0.1f;
         #endregion //Units                           
     }
 }
