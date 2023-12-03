@@ -144,7 +144,7 @@ namespace CT6GAMAI
             }
             else
             {
-                Debug.LogError("[ERROR]: Cast hit non-unit object - " + unitHit.transform.gameObject.name);
+                Debug.LogWarning("[WARNING]: Cast hit non-unit object - " + unitHit.transform.gameObject.name);
                 return null;
             }
         }
@@ -193,7 +193,7 @@ namespace CT6GAMAI
                 }
                 else
                 {
-                    Debug.LogError("ERROR: Cast hit non-node object - " + nodeHit.transform.gameObject.name);
+                    Debug.LogWarning("[WARNING]: Cast hit non-node object - " + nodeHit.transform.gameObject.name);
                     return null;
                 }
             }
