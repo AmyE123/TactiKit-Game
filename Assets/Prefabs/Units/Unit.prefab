@@ -296,6 +296,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _unitData: {fileID: 11400000, guid: 3b01a90fd69b8cb4a976a4f223464697, type: 2}
   _stoodNode: {fileID: 0}
+  _animator: {fileID: 0}
+  greyMat: {fileID: 0}
+  normalMat: {fileID: -8384745679888196477, guid: 72424cd63cf9f354b99496ccfbb90b34, type: 3}
+  knightBaseObj: {fileID: 0}
+  allSMRenderers: []
+  allRenderers: []
 --- !u!114 &5666932915701534253
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -308,7 +314,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5308d16231cadfa47bef99df6f0abd59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gridSelector: {fileID: 0}
+  _gridManager: {fileID: 0}
   _reachableNodes: []
 --- !u!114 &7294320862941142420
 MonoBehaviour:

@@ -21,17 +21,20 @@ namespace CT6GAMAI
         private RaycastHit _stoodNodeRayHit;
         private GridSelector _gridSelector;
         private bool _isMoving = false;
+        private bool _isUnitInactive;
+        private List<SkinnedMeshRenderer> _allSMRRenderers;
+        private List<MeshRenderer> _allMRRenderers;
+
+        public Material greyMat;
+        public Material normalMat;
+        public GameObject knightBaseObj;
+        public List<Renderer> AllRenderers;
 
         public bool IsMoving => _isMoving;
         public NodeManager StoodNode => _stoodNode;
         public UnitData UnitData => _unitData;
         public Animator Animator => _animator;
-
-        // TODO: Cleanup!
-        public Material greyMat;
-        public GameObject knightBaseObj;
-        public List<SkinnedMeshRenderer> allSMRenderers;
-        public List<MeshRenderer> allRenderers;
+        public bool IsUnitInactive => _isUnitInactive;
 
         private void Start()
         {
@@ -47,31 +50,36 @@ namespace CT6GAMAI
 
         private void Update()
         {
-            // WIP code!!
             if (Input.GetKeyDown(KeyCode.I))
             {
-                Debug.Log("Pressed key");
-                TurnUnitInactive();
+                _isUnitInactive = !_isUnitInactive;
+                SetUnitInactiveState(_isUnitInactive);
             }
         }
 
-        // TODO: CLEANUP
-        private void TurnUnitInactive()
+        private void GetAllRenderers()
         {
-            allSMRenderers = knightBaseObj.GetComponentsInChildren<SkinnedMeshRenderer>().ToList();
-            allRenderers = knightBaseObj.GetComponentsInChildren<MeshRenderer>().ToList();
+            _allSMRRenderers = knightBaseObj.GetComponentsInChildren<SkinnedMeshRenderer>().ToList();
+            _allMRRenderers = knightBaseObj.GetComponentsInChildren<MeshRenderer>().ToList();
 
-            foreach (Renderer renderer in allSMRenderers) 
+            AllRenderers.AddRange(_allSMRRenderers.Cast<Renderer>());
+            AllRenderers.AddRange(_allMRRenderers.Cast<Renderer>());
+        }
+
+        // TODO: Cleanup this messy 'Inactive' setting
+        private void SetUnitInactiveState(bool isInactive)
+        {
+            if (AllRenderers.Count == 0)
             {
-                Debug.Log("Grabbing " + renderer.name + "And changing mat");
-                renderer.material = greyMat;
+                GetAllRenderers();
             }
 
-            foreach (MeshRenderer renderer in allRenderers)
-            {
-                renderer.material = greyMat;
-            }
+            Material matToSet = isInactive ? greyMat : normalMat;
 
+            foreach (Renderer renderer in AllRenderers)
+            {
+                renderer.material = matToSet;
+            }
         }
 
         private NodeManager DetectStoodNode()
