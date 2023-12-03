@@ -188,7 +188,7 @@ namespace CT6GAMAI
         /// </summary>
         public IEnumerator MoveToPoint(Node targetNode)
         {
-            // TODO: Make this work
+            // TODO: Complete this functionality to make a unit move to a target node automatically
             return null;
         }
     }
