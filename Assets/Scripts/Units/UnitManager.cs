@@ -50,6 +50,7 @@ namespace CT6GAMAI
 
         private void Update()
         {
+            // For debugging purposes
             if (Input.GetKeyDown(KeyCode.I))
             {
                 _isUnitInactive = !_isUnitInactive;
