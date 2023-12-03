@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // https://github.com/dotnet/runtime/blob/main/src/libraries/System.Collections/src/System/Collections/Generic/PriorityQueue.cs
 
+#nullable enable
+
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
@@ -532,9 +534,11 @@ namespace System.Collections.Generic
             /// <returns>An <see cref="Enumerator"/> for the <see cref="UnorderedItems"/>.</returns>
             public Enumerator GetEnumerator() => new Enumerator(_queue);
 
+#pragma warning disable 8603
             IEnumerator<(TElement Element, int Priority)> IEnumerable<(TElement Element, int Priority)>.GetEnumerator() =>
                 _queue.Count == 0 ? null :
                 GetEnumerator();
+#pragma warning restore 8603
 
             IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<(TElement Element, int Priority)>)this).GetEnumerator();
         }
