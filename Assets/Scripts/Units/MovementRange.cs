@@ -17,6 +17,64 @@ namespace CT6GAMAI
         /// </summary>
         public List<Node> ReachableNodes => _reachableNodes;
 
+        private void InitializeNodes()
+        {
+            foreach (NodeManager nodeManager in _gridManager.AllNodes)
+            {
+                nodeManager.Node.Visited = false;
+                nodeManager.Node.Distance = int.MaxValue;
+            }
+        }
+
+        private void AddNodeToReachable(Node node)
+        {
+            if (!_reachableNodes.Contains(node))
+            {
+                _reachableNodes.Add(node);
+            }
+        }
+
+        private void EnqueueNeighbours(Node current, PriorityQueue<Node> queue)
+        {
+            // Loop through each neighbor of the current node
+            foreach (Node neighbor in current.Neighbors)
+            {
+                if (neighbor.Visited)
+                {
+                    continue; // Skip already visited neighbors
+                }                 
+
+                // Calculate the tentative distance to the neighbor
+                int tentativeDistance = current.Distance + neighbor.Cost;
+
+                // If the tentative distance is less than the neighbor's recorded distance
+                if (tentativeDistance < neighbor.Distance)
+                {
+                    // Update the neighbor's distance
+                    neighbor.Distance = tentativeDistance;
+
+                    // Sets the predecessor for pathfinding
+                    neighbor.Predecessor = current;
+
+                    // If the neighbor has not been visited or the tentative distance is better, enqueue it
+                    if (!neighbor.Visited)
+                    {
+                        queue.Enqueue(neighbor, tentativeDistance);
+                    }
+                }
+            }
+        }
+
+        private void ResetNodeStates()
+        {
+            // Reset visited and distance for all nodes for the next calculation
+            foreach (NodeManager nodeManager in _gridManager.AllNodes)
+            {
+                nodeManager.Node.Visited = false;
+                nodeManager.Node.Distance = int.MaxValue;
+            }
+        }
+
         /// <summary>
         /// Calculates the movement range of a unit using Dijkstra's Algorithm.
         /// </summary>
@@ -104,61 +162,6 @@ namespace CT6GAMAI
         public void ResetNodes()
         {
             _reachableNodes.Clear();
-        }
-
-        private void InitializeNodes()
-        {
-            foreach (NodeManager nodeManager in _gridManager.AllNodes)
-            {
-                nodeManager.Node.Visited = false;
-                nodeManager.Node.Distance = int.MaxValue;
-            }
-        }
-
-        private void AddNodeToReachable(Node node)
-        {
-            if (!_reachableNodes.Contains(node))
-            {
-                _reachableNodes.Add(node);
-            }
-        }
-
-        private void EnqueueNeighbours(Node current, PriorityQueue<Node> queue)
-        {
-            // Loop through each neighbor of the current node
-            foreach (Node neighbor in current.Neighbors)
-            {
-                if (neighbor.Visited) continue; // Skip already visited neighbors
-
-                // Calculate the tentative distance to the neighbor
-                int tentativeDistance = current.Distance + neighbor.Cost;
-
-                // If the tentative distance is less than the neighbor's recorded distance
-                if (tentativeDistance < neighbor.Distance)
-                {
-                    // Update the neighbor's distance
-                    neighbor.Distance = tentativeDistance;
-
-                    // Sets the predecessor for pathfinding
-                    neighbor.Predecessor = current;
-
-                    // If the neighbor has not been visited or the tentative distance is better, enqueue it
-                    if (!neighbor.Visited)
-                    {
-                        queue.Enqueue(neighbor, tentativeDistance);
-                    }
-                }
-            }
-        }
-
-        private void ResetNodeStates()
-        {
-            // Reset visited and distance for all nodes for the next calculation
-            foreach (NodeManager nodeManager in _gridManager.AllNodes)
-            {
-                nodeManager.Node.Visited = false;
-                nodeManager.Node.Distance = int.MaxValue;
-            }
         }
     }
 }
