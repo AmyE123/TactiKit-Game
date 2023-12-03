@@ -125,7 +125,6 @@ namespace CT6GAMAI
         private void FinalizeMovementValues(int pathIndex)
         {
             // TODO: This can be cleaned up
-            //_gridSelector.OccupiedNode = _gridSelector.path[pathIndex];
             _gridManager.OccupiedNodes[0] = _gridManager.MovementPath[pathIndex].NodeManager;
 
             _isMoving = false;
