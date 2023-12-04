@@ -56,9 +56,6 @@ namespace CT6GAMAI
 
         private void Update()
         {
-            // TODO: Update with UnitAnimationManager.cs functionality.
-            //_animator.SetBool("Ready", UnitPressed);
-
             UpdateUnitReferences();
             UpdateSelectedNode();
             HandleNodeUnitInteraction();
@@ -194,6 +191,7 @@ namespace CT6GAMAI
         {
             if (UnitPressed)
             {
+                _gameManager.UnitsManager.ActiveUnit.IsSelected = true;
                 SelectedNodeState.VisualStateManager.SetPressed(NodeVisualColorState.Blue);
 
                 foreach (Node n in _lastSelectedUnit.MovementRange.ReachableNodes)
@@ -204,6 +202,7 @@ namespace CT6GAMAI
 
             if (!UnitPressed)
             {
+                _gameManager.UnitsManager.ActiveUnit.IsSelected = false;
                 SelectedNodeState.VisualStateManager.SetHovered(NodeVisualColorState.Blue);
 
                 foreach (Node n in _lastSelectedUnit.MovementRange.ReachableNodes)

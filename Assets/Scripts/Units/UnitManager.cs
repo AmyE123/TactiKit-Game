@@ -29,13 +29,16 @@ namespace CT6GAMAI
         private bool _isUnitInactive;
         private List<SkinnedMeshRenderer> _allSMRRenderers;
         private List<MeshRenderer> _allMRRenderers;
+        private bool _isSelected = false;
 
         public Material greyMat;
         public Material normalMat;
         public GameObject knightBaseObj;
         public List<Renderer> AllRenderers;
 
-        public bool IsMoving => _isMoving;
+        public bool IsSelected { get { return _isSelected; } set { _isSelected = value; } }
+
+        public bool IsMoving => _isMoving;       
         public NodeManager StoodNode => _stoodNode;
         public NodeManager UpdatedStoodNode => _updatedStoodNode;
         public UnitData UnitData => _unitData;
@@ -44,6 +47,7 @@ namespace CT6GAMAI
 
         public MovementRange MovementRange => _movementRange;
         public UnitAnimationManager UnitAnimationManager => _unitAnimationManager;
+
 
         private void Start()
         {
@@ -139,6 +143,7 @@ namespace CT6GAMAI
             _gridManager.OccupiedNodes[0] = _gridManager.MovementPath[pathIndex].NodeManager;
 
             _isMoving = false;
+            _isSelected = false;
             _gridSelector.UnitPressed = false;
             _stoodNode = DetectStoodNode();
             _updatedStoodNode = _stoodNode;

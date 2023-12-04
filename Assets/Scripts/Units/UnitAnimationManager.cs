@@ -50,8 +50,7 @@ namespace CT6GAMAI
         {
             // TODO: Move all animation updating into here when multiple units get added
             _animator.SetBool("Moving", _unitManager.IsMoving);
-
-            _animator.SetBool("Ready", _gridSelector.UnitPressed);
+            _animator.SetBool("Ready", _unitManager.IsSelected);
         }
     }
 }
