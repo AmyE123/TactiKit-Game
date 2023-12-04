@@ -2948,10 +2948,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 5417473472962778680}
     - target: {fileID: 7592517802941822380, guid: b0cf7274a78f12d43910a5c79373d142, type: 3}
-      propertyPath: greyMat
-      value: 
-      objectReference: {fileID: 2100000, guid: c0c425919b8d8b340bc45c8b43f48c49, type: 2}
-    - target: {fileID: 7592517802941822380, guid: b0cf7274a78f12d43910a5c79373d142, type: 3}
       propertyPath: _animator
       value: 
       objectReference: {fileID: 5417473472962778680}

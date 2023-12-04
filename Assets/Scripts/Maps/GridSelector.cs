@@ -9,13 +9,14 @@ namespace CT6GAMAI
     /// </summary>
     public class GridSelector : MonoBehaviour
     {
-        [SerializeField] private MovementRange _movementRange;
-        [SerializeField] private Animator _animator; // TODO: Update with UnitAnimationManager.cs functionality.
-        [SerializeField] private UnitManager _unit; // TODO: Once multi-units is implemented, this will be changed.
+        //[SerializeField] private MovementRange _movementRange;
+        //[SerializeField] private Animator _animator; // TODO: Update with UnitAnimationManager.cs functionality.
+        //[SerializeField] private UnitManager _unit; // TODO: Once multi-units is implemented, this will be changed.
 
         private bool _pathing = false;
         private GameManager _gameManager;
         private GridManager _gridManager;
+        private UnitManager _lastSelectedUnit;
 
         /// <summary>
         /// Array of all NodeManagers in the grid.
@@ -50,19 +51,26 @@ namespace CT6GAMAI
             SelectedNode.NodeState.SelectorStateManager.SetDefaultSelected();
 
             // TODO: Once multi-units is implemented, this will be changed.
-            _unit = FindObjectOfType<UnitManager>();
+            //_activeUnit = FindObjectOfType<UnitManager>();
         }
 
         private void Update()
         {
             // TODO: Update with UnitAnimationManager.cs functionality.
-            _animator.SetBool("Ready", UnitPressed);
+            //_animator.SetBool("Ready", UnitPressed);
 
+            UpdateUnitReferences();
             UpdateSelectedNode();
             HandleNodeUnitInteraction();
             HandleGridNavigation();
             HandleUnitSelection();
             HandleUnitPathing();
+        }
+
+        private void UpdateUnitReferences()
+        {
+            var unitManager = _gameManager.UnitsManager;
+            _lastSelectedUnit = unitManager.LastSelectedUnit;
         }
 
         private void UpdateSelectedNode()
@@ -94,18 +102,24 @@ namespace CT6GAMAI
         {
             if (SelectedNode.StoodUnit != null)
             {
-                ResetHighlightedNodes();
+                _gameManager.UnitsManager.SetActiveUnit(SelectedNode.StoodUnit);
+
+                ResetHighlightedNodes();              
                 SelectedNode.HighlightRangeArea(SelectedNode.StoodUnit, SelectedNodeState.VisualStateManager.IsPressed);
             }
-            else if (!UnitPressed)
+            else
             {
-                ResetHighlightedNodes();
+                _gameManager.UnitsManager.SetActiveUnit(null);
+                if (!UnitPressed)
+                {
+                    ResetHighlightedNodes();
+                }
             }
         }
 
         private void HandleGridNavigation()
         {
-            if (!_unit.IsMoving)
+            if (!_gameManager.UnitsManager.IsAnyUnitMoving())
             {
                 if (Input.GetKeyDown(KeyCode.W))
                 {
@@ -182,7 +196,7 @@ namespace CT6GAMAI
             {
                 SelectedNodeState.VisualStateManager.SetPressed(NodeVisualColorState.Blue);
 
-                foreach (Node n in _movementRange.ReachableNodes)
+                foreach (Node n in _lastSelectedUnit.MovementRange.ReachableNodes)
                 {
                     n.NodeManager.NodeState.VisualStateManager.SetPressed(NodeVisualColorState.Blue);
                 }
@@ -192,7 +206,7 @@ namespace CT6GAMAI
             {
                 SelectedNodeState.VisualStateManager.SetHovered(NodeVisualColorState.Blue);
 
-                foreach (Node n in _movementRange.ReachableNodes)
+                foreach (Node n in _lastSelectedUnit.MovementRange.ReachableNodes)
                 {
                     n.NodeManager.NodeState.VisualStateManager.SetHovered(NodeVisualColorState.Blue);
                 }
@@ -214,7 +228,10 @@ namespace CT6GAMAI
         /// </summary>
         public void ResetHighlightedNodes()
         {
-            _movementRange.ResetNodes();
+            if (_lastSelectedUnit != null)
+            {
+                _lastSelectedUnit.MovementRange.ResetNodes();
+            }        
 
             for (int i = 0; i < Nodes.Length; i++)
             {

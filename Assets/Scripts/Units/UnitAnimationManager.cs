@@ -10,6 +10,8 @@ namespace CT6GAMAI
         [SerializeField] private UnitManager _unitManager;
         [SerializeField] private Animator _animator;
 
+        [SerializeField] private GridSelector _gridSelector;
+
         private bool _warningLogSent = false;
 
         private void Update()
@@ -48,6 +50,8 @@ namespace CT6GAMAI
         {
             // TODO: Move all animation updating into here when multiple units get added
             _animator.SetBool("Moving", _unitManager.IsMoving);
+
+            _animator.SetBool("Ready", _gridSelector.UnitPressed);
         }
     }
 }

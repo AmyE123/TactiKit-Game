@@ -11,11 +11,18 @@ namespace CT6GAMAI
         [SerializeField] private GridManager _gridManager;
         [SerializeField] private List<Node> _reachableNodes = new List<Node>();
 
+        private GameManager _gameManager;
+
         /// <summary>
         /// A list of nodes which the unit can reach.
         /// This list is only populated when the unit has been selected.
         /// </summary>
         public List<Node> ReachableNodes => _reachableNodes;
+
+        private void Start()
+        {
+            _gameManager = GameManager.Instance;
+        }
 
         private void InitializeNodes()
         {
@@ -28,9 +35,27 @@ namespace CT6GAMAI
 
         private void AddNodeToReachable(Node node)
         {
-            if (!_reachableNodes.Contains(node))
+            if (!_reachableNodes.Contains(node) /*&& !IsNodeOccupiedByOtherUnit(node)*/)
             {
                 _reachableNodes.Add(node);
+            }
+        }
+
+        private bool IsNodeOccupiedByOtherUnit(Node node)
+        {
+            var stoodUnit = node.NodeManager.StoodUnit;
+
+            if(stoodUnit == null)
+            {
+                return false;
+            }
+            else
+            {
+                if (stoodUnit == _gameManager.UnitsManager.LastSelectedUnit)
+                {
+                    return false;
+                }
+                return true;
             }
         }
 
@@ -71,7 +96,7 @@ namespace CT6GAMAI
             foreach (NodeManager nodeManager in _gridManager.AllNodes)
             {
                 nodeManager.Node.Visited = false;
-                nodeManager.Node.Distance = int.MaxValue;
+                nodeManager.Node.Distance = int.MaxValue;              
             }
         }
 

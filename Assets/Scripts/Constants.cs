@@ -40,6 +40,12 @@ namespace CT6GAMAI
         /// Constant string for the tag string used on nodes.
         /// </summary>
         public const string NODE_TAG_REFERENCE = "Node";
+
+        /// <summary>
+        /// A cost value to set on nodes which should be unpassable.
+        /// Reason being is that using int.MaxValue leads to int overflow.
+        /// </summary>
+        public const int MAX_NODE_COST = 99999;
         #endregion //Nodes
 
         #region Units
