@@ -35,7 +35,7 @@ namespace CT6GAMAI
 
         private void AddNodeToReachable(Node node)
         {
-            if (!_reachableNodes.Contains(node) /*&& !IsNodeOccupiedByOtherUnit(node)*/)
+            if (!_reachableNodes.Contains(node))
             {
                 _reachableNodes.Add(node);
             }
