@@ -54,7 +54,7 @@ namespace CT6GAMAI
         private void UpdateUnitReferences()
         {
             var unitManager = _gameManager.UnitsManager;
-            _lastSelectedUnit = unitManager.LastSelectedUnit;
+            _lastSelectedUnit = unitManager.ActiveUnit;
         }
 
         private void UpdateSelectedNode()
@@ -85,16 +85,18 @@ namespace CT6GAMAI
 
         private void HandleNodeUnitInteraction()
         {
-            if (SelectedNode.StoodUnit != null)
-            {
-                _gameManager.UnitsManager.SetActiveUnit(SelectedNode.StoodUnit);
+            _gameManager.UnitsManager.SetSelectorUnit(SelectedNode.StoodUnit);
 
+            if (SelectedNode.StoodUnit != null)
+            {             
+
+                _gameManager.UnitsManager.SetActiveUnit(SelectedNode.StoodUnit);
+                             
                 ResetHighlightedNodes();              
                 SelectedNode.HighlightRangeArea(SelectedNode.StoodUnit, SelectedNodeState.VisualStateManager.IsPressed);
             }
             else
-            {
-                _gameManager.UnitsManager.SetActiveUnit(null);
+            {                
                 if (!UnitPressed)
                 {
                     ResetHighlightedNodes();

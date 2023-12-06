@@ -15,7 +15,7 @@ namespace CT6GAMAI
         [SerializeField] private List<NodeManager> _occupiedNodes;
         [SerializeField] private List<Node> _movementPath;
 
-        private UnitManager _lastSelectedUnit;
+        private UnitManager _activeUnit;
 
         private GameManager _gameManager;
         private bool _selectorWithinRange;
@@ -58,7 +58,7 @@ namespace CT6GAMAI
 
         private void UpdateUnitReferences()
         {
-            _lastSelectedUnit = _gameManager.UnitsManager.LastSelectedUnit;
+            _activeUnit = _gameManager.UnitsManager.ActiveUnit;
         }
 
         private void InitializeGrid()
@@ -111,11 +111,28 @@ namespace CT6GAMAI
         {
             foreach (Node n in _movementPath)
             {
-                if (_lastSelectedUnit.MovementRange.ReachableNodes.Contains(n))
+                if (_activeUnit.MovementRange.ReachableNodes.Contains(n))
                 {
                     n.NodeManager.NodeState.VisualStateManager.SetPath();
                 }
             }
+        }
+
+        /// <summary>
+        /// Checks if a movement to a node is valid based on current game rules.
+        /// </summary>
+        /// <returns>
+        /// False if the node is occupied by a unit other than the last selected unit. Otherwise true.
+        /// </returns>
+        public bool CanMoveToNode(Node node)
+        {
+            // Checks if the node is occupied by a unit other than the last selected one.
+            var currentUnitOnNode = node.NodeManager.StoodUnit;
+            var nodeOccupiedByOtherUnit = currentUnitOnNode != null && currentUnitOnNode != _gameManager.UnitsManager.ActiveUnit;
+
+            bool canMoveToNode = !nodeOccupiedByOtherUnit;
+
+            return canMoveToNode;
         }
 
         /// <summary>
@@ -132,9 +149,9 @@ namespace CT6GAMAI
         /// </summary>
         public void UpdateSelectorRange()
         {
-            foreach (Node n in _lastSelectedUnit.MovementRange.ReachableNodes)
+            foreach (Node n in _activeUnit.MovementRange.ReachableNodes)
             {
-                _selectorWithinRange = _lastSelectedUnit.MovementRange.ReachableNodes.Contains(_gridSelector.SelectedNode.Node);
+                _selectorWithinRange = _activeUnit.MovementRange.ReachableNodes.Contains(_gridSelector.SelectedNode.Node);
                 n.NodeManager.NodeState.VisualStateManager.SetPressed(NodeVisualColorState.Blue);
             }
         }
@@ -146,16 +163,18 @@ namespace CT6GAMAI
         {
             if (_gridSelector.Pathing)
             {
-                Node startNode = _gameManager.UnitsManager.LastSelectedUnit.StoodNode.Node;
+                Node startNode = _gameManager.UnitsManager.ActiveUnit.StoodNode.Node;
                 Node targetNode = _gridSelector.SelectedNode.Node;
 
                 if (_selectorWithinRange)
                 {
-                    _movementPath = _lastSelectedUnit.MovementRange.ReconstructPath(startNode, targetNode);
+                    _movementPath = _activeUnit.MovementRange.ReconstructPath(startNode, targetNode);
 
-                    if (_movementPath.Count > 1 && Input.GetKeyDown(KeyCode.Space))
+                    var validPath = _movementPath.Count > 1 && CanMoveToNode(targetNode);
+
+                    if (validPath && Input.GetKeyDown(KeyCode.Space))
                     {
-                        var unit = _gameManager.UnitsManager.LastSelectedUnit;
+                        var unit = _gameManager.UnitsManager.ActiveUnit;
 
                         // Clear the stood node's reference to the unit
                         unit.ClearStoodUnit();

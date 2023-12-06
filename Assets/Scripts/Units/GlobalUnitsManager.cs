@@ -11,8 +11,9 @@ namespace CT6GAMAI
     {
         [SerializeField] private List<UnitManager> _allUnits;
         [SerializeField] private List<UnitManager> _activeUnits;
+
+        [SerializeField] private UnitManager _selectorUnit;
         [SerializeField] private UnitManager _activeUnit;
-        [SerializeField] private UnitManager _lastSelectedUnit;
 
         private bool _unitsInitalized = false;
 
@@ -30,7 +31,6 @@ namespace CT6GAMAI
         /// Gets the currently active/selected unit in the game.
         /// </summary>
         public UnitManager ActiveUnit => _activeUnit;
-        public UnitManager LastSelectedUnit => _lastSelectedUnit;
 
         private void Update()
         {           
@@ -38,12 +38,6 @@ namespace CT6GAMAI
             {
                 InitializeUnits();                
             }
-
-            if(_activeUnit != null)
-            {
-                _lastSelectedUnit = _activeUnit;
-            }
-
         }
 
         private void InitializeUnits()
@@ -85,6 +79,11 @@ namespace CT6GAMAI
         public void SetActiveUnit(UnitManager unit)
         {
             _activeUnit = unit;           
+        }
+
+        public void SetSelectorUnit(UnitManager unit)
+        {
+            _selectorUnit = unit;
         }
     }
 }
