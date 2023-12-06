@@ -117,6 +117,11 @@ namespace CT6GAMAI
 
         private void Update()
         {
+            UpdateStoodNodeCost();
+        }
+
+        private void UpdateStoodNodeCost()
+        {
             if (StoodUnit != null)
             {
                 Node.Cost = MAX_NODE_COST;

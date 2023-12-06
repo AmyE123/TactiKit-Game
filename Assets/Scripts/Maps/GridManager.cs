@@ -146,7 +146,6 @@ namespace CT6GAMAI
         {
             if (_gridSelector.Pathing)
             {
-                // TODO: Upate this start node with new pathing
                 Node startNode = _gameManager.UnitsManager.LastSelectedUnit.StoodNode.Node;
                 Node targetNode = _gridSelector.SelectedNode.Node;
 

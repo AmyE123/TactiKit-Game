@@ -77,7 +77,14 @@ namespace CT6GAMAI
 
         #region Animation Parameter Strings
 
+        /// <summary>
+        /// The string value for the moving parameter in the animator
+        /// </summary>
         public const string MOVING_ANIM_PARAM = "Moving";
+
+        /// <summary>
+        /// The string value for the ready parameter in the animator
+        /// </summary>
         public const string READY_ANIM_PARAM = "Ready";
 
         #endregion // Animation Parameter Strings
