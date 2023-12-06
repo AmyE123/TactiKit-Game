@@ -3066,7 +3066,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _movementRange: {fileID: 5666932915701534253}
   _unitAnimationManager: {fileID: 7294320862941142420}
-  _unitData: {fileID: 11400000, guid: 3b01a90fd69b8cb4a976a4f223464697, type: 2}
+  _unitData: {fileID: 11400000, guid: 3af0ba63208365148b0bb586b0328a73, type: 2}
   _stoodNode: {fileID: 0}
   _updatedStoodNode: {fileID: 0}
   _animator: {fileID: 2889186292050570900}

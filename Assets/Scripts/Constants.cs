@@ -52,7 +52,7 @@ namespace CT6GAMAI
         /// <summary>
         /// Enumerations representing different unit classes.
         /// </summary>
-        public enum Class { Knight, Mercenary, Archer };
+        public enum Class { Knight, Mercenary, Archer, Mage };
 
         /// <summary>
         /// Constant string for the tag string used on units.

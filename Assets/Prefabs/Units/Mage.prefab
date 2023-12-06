@@ -152,6 +152,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8142291615275888403}
     - target: {fileID: 7592517802941822380, guid: b0cf7274a78f12d43910a5c79373d142, type: 3}
+      propertyPath: _unitData
+      value: 
+      objectReference: {fileID: 11400000, guid: bcdb8d4fbb8351541bf93478b04620d5, type: 2}
+    - target: {fileID: 7592517802941822380, guid: b0cf7274a78f12d43910a5c79373d142, type: 3}
       propertyPath: normalMat
       value: 
       objectReference: {fileID: -6565442159171177796, guid: a54a7c95344f634498480e5236a3ea62, type: 3}
