@@ -10,12 +10,6 @@ namespace CT6GAMAI
     public class NodeManager : MonoBehaviour
     {
         #region Editor Fields
-        [Header("Temp Params")]        
-        /// <summary>
-        /// Temporary parameter for movement range.
-        /// </summary>
-        public MovementRange _movementRange; // TODO: Find a new way to implement this with multi-units
-
         [Header("Node Information")]
         [SerializeField] private NodeState _nodeState;
         [SerializeField] private NodeData _nodeData;
@@ -114,14 +108,28 @@ namespace CT6GAMAI
             SetupNeighbours();
             _nodeState = GetComponent<NodeState>();
 
-            // TODO: Find another way to deal with this
-            _movementRange = FindObjectOfType<MovementRange>();
-
             Node.Cost = NodeData.TerrainType.MovementCost;
 
             StoodUnit = DetectStoodUnit();
 
             NodeInitialized = true;
+        }
+
+        private void Update()
+        {
+            UpdateStoodNodeCost();
+        }
+
+        private void UpdateStoodNodeCost()
+        {
+            if (StoodUnit != null)
+            {
+                Node.Cost = MAX_NODE_COST;
+            }
+            else
+            {
+                Node.Cost = NodeData.TerrainType.MovementCost;
+            }
         }
 
         private UnitManager DetectStoodUnit()
@@ -210,17 +218,17 @@ namespace CT6GAMAI
         /// <param name="isPressed">Whether we are highlighting in a pressed state or not.</param>
         public void HighlightRangeArea(UnitManager unit, bool isPressed = false)
         {
-            _movementRange.CalculateMovementRange(unit);
+            unit.MovementRange.CalculateMovementRange(unit);
 
-            for (int i = 0; i < _movementRange.ReachableNodes.Count; i++)
+            for (int i = 0; i < unit.MovementRange.ReachableNodes.Count; i++)
             {
                 if (isPressed)
                 {
-                    _movementRange.ReachableNodes[i].NodeManager.NodeState.VisualStateManager.SetPressed(NodeVisualColorState.Blue);
+                    unit.MovementRange.ReachableNodes[i].NodeManager.NodeState.VisualStateManager.SetPressed(NodeVisualColorState.Blue);
                 }
                 else
                 {
-                    _movementRange.ReachableNodes[i].NodeManager.NodeState.VisualStateManager.SetHovered(NodeVisualColorState.Blue);
+                    unit.MovementRange.ReachableNodes[i].NodeManager.NodeState.VisualStateManager.SetHovered(NodeVisualColorState.Blue);
                 }
             }
         }

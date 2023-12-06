@@ -12,8 +12,12 @@ namespace CT6GAMAI
     /// </summary>
     public class UnitManager : MonoBehaviour
     {
+        [SerializeField] private MovementRange _movementRange;
+        [SerializeField] private UnitAnimationManager _unitAnimationManager;
+
         [SerializeField] private UnitData _unitData;
         [SerializeField] private NodeManager _stoodNode;
+        [SerializeField] private NodeManager _updatedStoodNode;
         [SerializeField] private Animator _animator;
 
         private GameManager _gameManager;
@@ -25,17 +29,24 @@ namespace CT6GAMAI
         private bool _isUnitInactive;
         private List<SkinnedMeshRenderer> _allSMRRenderers;
         private List<MeshRenderer> _allMRRenderers;
+        private bool _isSelected = false;
 
         public Material greyMat;
         public Material normalMat;
         public GameObject knightBaseObj;
         public List<Renderer> AllRenderers;
 
+        public bool IsSelected { get { return _isSelected; } set { _isSelected = value; } }
+
         public bool IsMoving => _isMoving;
         public NodeManager StoodNode => _stoodNode;
+        public NodeManager UpdatedStoodNode => _updatedStoodNode;
         public UnitData UnitData => _unitData;
         public Animator Animator => _animator;
         public bool IsUnitInactive => _isUnitInactive;
+
+        public MovementRange MovementRange => _movementRange;
+        public UnitAnimationManager UnitAnimationManager => _unitAnimationManager;
 
         private void Start()
         {
@@ -44,6 +55,9 @@ namespace CT6GAMAI
 
             _stoodNode = DetectStoodNode();
             _stoodNode.StoodUnit = this;
+
+            _updatedStoodNode = DetectStoodNode();
+            _updatedStoodNode.StoodUnit = this;
 
             // TODO: Cleanup of gridselector stuff
             _gridSelector = FindObjectOfType<GridSelector>();
@@ -128,8 +142,10 @@ namespace CT6GAMAI
             _gridManager.OccupiedNodes[0] = _gridManager.MovementPath[pathIndex].NodeManager;
 
             _isMoving = false;
+            _isSelected = false;
             _gridSelector.UnitPressed = false;
             _stoodNode = DetectStoodNode();
+            _updatedStoodNode = _stoodNode;
             _gridManager.MovementPath.Clear();
             UpdateStoodNode(this);
         }
@@ -140,6 +156,11 @@ namespace CT6GAMAI
         /// <param name="unit">The unit you want to update the stood node of.</param>
         public void UpdateStoodNode(UnitManager unit)
         {
+            if (_updatedStoodNode != null)
+            {
+                _updatedStoodNode.StoodUnit = unit;
+            }
+
             if (_stoodNode != null)
             {
                 _stoodNode.StoodUnit = unit;
@@ -152,6 +173,11 @@ namespace CT6GAMAI
         /// </summary>
         public void ClearStoodUnit()
         {
+            if (_updatedStoodNode != null)
+            {
+                _updatedStoodNode.StoodUnit = null;
+            }
+
             if (_stoodNode != null)
             {
                 _stoodNode.StoodUnit = null;
@@ -172,7 +198,7 @@ namespace CT6GAMAI
 
                 MoveToNextNode(n);
 
-                _stoodNode = DetectStoodNode();
+                _updatedStoodNode = DetectStoodNode();
 
                 yield return new WaitForSeconds(MOVEMENT_DELAY);
 

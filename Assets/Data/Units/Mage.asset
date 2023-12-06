@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 405c8f4dbca7484448b2c4d31d9a7def, type: 3}
-  m_Name: UnitData
+  m_Name: Mage
   m_EditorClassIdentifier: 
   UnitName: Unassigned
   UnitClass: 1
   ClassLevel: 0
   HealthPointsBaseValue: 0
-  MovementBaseValue: 7
+  MovementBaseValue: 3
   AttackBaseValue: 0
   CriticalRateBaseValue: 0
   HitRateBaseValue: 0

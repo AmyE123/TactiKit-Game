@@ -8,19 +8,11 @@ namespace CT6GAMAI
     /// This includes handling node selection, grid navigation, unit selection, and pathing.
     /// </summary>
     public class GridSelector : MonoBehaviour
-    {
-        [SerializeField] private MovementRange _movementRange;
-        [SerializeField] private Animator _animator; // TODO: Update with UnitAnimationManager.cs functionality.
-        [SerializeField] private UnitManager _unit; // TODO: Once multi-units is implemented, this will be changed.
-
-        private bool _pathing = false;
+    {       
         private GameManager _gameManager;
         private GridManager _gridManager;
-
-        /// <summary>
-        /// Array of all NodeManagers in the grid.
-        /// </summary>
-        public NodeManager[] Nodes; // TODO: Update with AllNodes in GridManager.
+        private UnitManager _lastSelectedUnit;
+        private bool _pathing = false;
 
         /// <summary>
         /// The currently selected node.
@@ -30,7 +22,7 @@ namespace CT6GAMAI
         /// <summary>
         /// The state of the currently selected node.
         /// </summary>
-        public NodeState SelectedNodeState; // TODO: Update this, this isn't needed (SelectedNode.NodeState).
+        public NodeState SelectedNodeState;
 
         /// <summary>
         /// Indicates whether a unit is currently pressed (selected).
@@ -48,21 +40,21 @@ namespace CT6GAMAI
             _gridManager = _gameManager.GridManager;
 
             SelectedNode.NodeState.SelectorStateManager.SetDefaultSelected();
-
-            // TODO: Once multi-units is implemented, this will be changed.
-            _unit = FindObjectOfType<UnitManager>();
         }
 
         private void Update()
         {
-            // TODO: Update with UnitAnimationManager.cs functionality.
-            _animator.SetBool("Ready", UnitPressed);
-
             UpdateSelectedNode();
             HandleNodeUnitInteraction();
             HandleGridNavigation();
             HandleUnitSelection();
             HandleUnitPathing();
+        }
+
+        private void UpdateUnitReferences()
+        {
+            var unitManager = _gameManager.UnitsManager;
+            _lastSelectedUnit = unitManager.LastSelectedUnit;
         }
 
         private void UpdateSelectedNode()
@@ -80,11 +72,12 @@ namespace CT6GAMAI
 
         private void UpdateActiveNodeSelection()
         {
-            for (int i = 0; i < Nodes.Length; i++)
+            var nodes = _gridManager.AllNodes;
+            for (int i = 0; i < nodes.Count; i++)
             {
-                if (Nodes[i].NodeState.SelectorStateManager.IsActiveSelection)
+                if (nodes[i].NodeState.SelectorStateManager.IsActiveSelection)
                 {
-                    SelectedNode = Nodes[i];
+                    SelectedNode = nodes[i];
                     SelectedNodeState = SelectedNode.NodeState;
                 }
             }
@@ -94,18 +87,26 @@ namespace CT6GAMAI
         {
             if (SelectedNode.StoodUnit != null)
             {
-                ResetHighlightedNodes();
+                _gameManager.UnitsManager.SetActiveUnit(SelectedNode.StoodUnit);
+
+                ResetHighlightedNodes();              
                 SelectedNode.HighlightRangeArea(SelectedNode.StoodUnit, SelectedNodeState.VisualStateManager.IsPressed);
             }
-            else if (!UnitPressed)
+            else
             {
-                ResetHighlightedNodes();
+                _gameManager.UnitsManager.SetActiveUnit(null);
+                if (!UnitPressed)
+                {
+                    ResetHighlightedNodes();
+                }
             }
         }
 
         private void HandleGridNavigation()
         {
-            if (!_unit.IsMoving)
+            UpdateUnitReferences();
+
+            if (!_gameManager.UnitsManager.IsAnyUnitMoving())
             {
                 if (Input.GetKeyDown(KeyCode.W))
                 {
@@ -180,9 +181,10 @@ namespace CT6GAMAI
         {
             if (UnitPressed)
             {
+                _gameManager.UnitsManager.ActiveUnit.IsSelected = true;
                 SelectedNodeState.VisualStateManager.SetPressed(NodeVisualColorState.Blue);
 
-                foreach (Node n in _movementRange.ReachableNodes)
+                foreach (Node n in _lastSelectedUnit.MovementRange.ReachableNodes)
                 {
                     n.NodeManager.NodeState.VisualStateManager.SetPressed(NodeVisualColorState.Blue);
                 }
@@ -190,9 +192,10 @@ namespace CT6GAMAI
 
             if (!UnitPressed)
             {
+                _gameManager.UnitsManager.ActiveUnit.IsSelected = false;
                 SelectedNodeState.VisualStateManager.SetHovered(NodeVisualColorState.Blue);
 
-                foreach (Node n in _movementRange.ReachableNodes)
+                foreach (Node n in _lastSelectedUnit.MovementRange.ReachableNodes)
                 {
                     n.NodeManager.NodeState.VisualStateManager.SetHovered(NodeVisualColorState.Blue);
                 }
@@ -214,13 +217,18 @@ namespace CT6GAMAI
         /// </summary>
         public void ResetHighlightedNodes()
         {
-            _movementRange.ResetNodes();
+            var nodes = _gridManager.AllNodes;
 
-            for (int i = 0; i < Nodes.Length; i++)
+            if (_lastSelectedUnit != null)
             {
-                if (Nodes[i].NodeState.VisualStateManager.IsActive)
+                _lastSelectedUnit.MovementRange.ResetNodes();
+            }        
+
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                if (nodes[i].NodeState.VisualStateManager.IsActive)
                 {
-                    Nodes[i].NodeState.VisualStateManager.SetDefault();
+                    nodes[i].NodeState.VisualStateManager.SetDefault();
                 }
 
                 SelectedNodeState.VisualStateManager.SetDefault();

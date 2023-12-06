@@ -11,6 +11,8 @@ namespace CT6GAMAI
     {
         [SerializeField] private List<UnitManager> _allUnits;
         [SerializeField] private List<UnitManager> _activeUnits;
+        [SerializeField] private UnitManager _activeUnit;
+        [SerializeField] private UnitManager _lastSelectedUnit;
 
         private bool _unitsInitalized = false;
 
@@ -22,7 +24,13 @@ namespace CT6GAMAI
         /// <summary>
         /// Gets the list of active units in the game.
         /// </summary>
-        public List<UnitManager> ActiveUnits => _activeUnits;     
+        public List<UnitManager> ActiveUnits => _activeUnits;  
+        
+        /// <summary>
+        /// Gets the currently active/selected unit in the game.
+        /// </summary>
+        public UnitManager ActiveUnit => _activeUnit;
+        public UnitManager LastSelectedUnit => _lastSelectedUnit;
 
         private void Update()
         {           
@@ -30,6 +38,12 @@ namespace CT6GAMAI
             {
                 InitializeUnits();                
             }
+
+            if(_activeUnit != null)
+            {
+                _lastSelectedUnit = _activeUnit;
+            }
+
         }
 
         private void InitializeUnits()
@@ -45,6 +59,32 @@ namespace CT6GAMAI
         private void FindAllUnits()
         {
             _allUnits = FindObjectsOfType<UnitManager>().ToList();
+            _activeUnits = _allUnits;
+        }
+
+        /// <summary>
+        /// A check to see if any unit is currently in a 'moving' state.
+        /// </summary>
+        /// <returns>True if any unit is moving.</returns>
+        public bool IsAnyUnitMoving()
+        {
+            foreach (UnitManager unit in _allUnits)
+            {
+                if (unit.IsMoving)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Setter for the current active unit.
+        /// </summary>
+        /// <param name="unit">The unit you want to set as active.</param>
+        public void SetActiveUnit(UnitManager unit)
+        {
+            _activeUnit = unit;           
         }
     }
 }

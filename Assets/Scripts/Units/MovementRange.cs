@@ -11,11 +11,18 @@ namespace CT6GAMAI
         [SerializeField] private GridManager _gridManager;
         [SerializeField] private List<Node> _reachableNodes = new List<Node>();
 
+        private GameManager _gameManager;
+
         /// <summary>
         /// A list of nodes which the unit can reach.
         /// This list is only populated when the unit has been selected.
         /// </summary>
         public List<Node> ReachableNodes => _reachableNodes;
+
+        private void Start()
+        {
+            _gameManager = GameManager.Instance;
+        }
 
         private void InitializeNodes()
         {
@@ -34,6 +41,24 @@ namespace CT6GAMAI
             }
         }
 
+        private bool IsNodeOccupiedByOtherUnit(Node node)
+        {
+            var stoodUnit = node.NodeManager.StoodUnit;
+
+            if (stoodUnit == null)
+            {
+                return false;
+            }
+            else
+            {
+                if (stoodUnit == _gameManager.UnitsManager.LastSelectedUnit)
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
+
         private void EnqueueNeighbours(Node current, PriorityQueue<Node> queue)
         {
             // Loop through each neighbor of the current node
@@ -42,7 +67,7 @@ namespace CT6GAMAI
                 if (neighbor.Visited)
                 {
                     continue; // Skip already visited neighbors
-                }                 
+                }
 
                 // Calculate the tentative distance to the neighbor
                 int tentativeDistance = current.Distance + neighbor.Cost;
@@ -122,7 +147,7 @@ namespace CT6GAMAI
                 // If the current node is within movement points, add to reachable nodes
                 if (current.Distance <= movementPoints)
                 {
-                    AddNodeToReachable(current);            
+                    AddNodeToReachable(current);
                 }
 
                 EnqueueNeighbours(current, queue);

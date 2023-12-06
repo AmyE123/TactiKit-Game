@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 405c8f4dbca7484448b2c4d31d9a7def, type: 3}
+  m_Name: Knight
+  m_EditorClassIdentifier: 
+  UnitName: Unassigned
+  UnitClass: 1
+  ClassLevel: 0
+  HealthPointsBaseValue: 0
+  MovementBaseValue: 3
+  AttackBaseValue: 0
+  CriticalRateBaseValue: 0
+  HitRateBaseValue: 0
+  AvoidRateBaseValue: 0
+  StrengthBaseValue: 0
+  SpeedBaseValue: 0
+  MagicBaseValue: 0
+  LuckBaseValue: 0
+  SkillBaseValue: 0
+  DefenseBaseValue: 0
+  ResistanceBaseValue: 0
+  RatingValue: 0

@@ -14,7 +14,8 @@ namespace CT6GAMAI
         [SerializeField] private List<NodeManager> _allNodes;
         [SerializeField] private List<NodeManager> _occupiedNodes;
         [SerializeField] private List<Node> _movementPath;
-        [SerializeField] private MovementRange _movementRange;
+
+        private UnitManager _lastSelectedUnit;
 
         private GameManager _gameManager;
         private bool _selectorWithinRange;
@@ -47,10 +48,17 @@ namespace CT6GAMAI
 
         private void Update()
         {
+            UpdateUnitReferences();
+
             if (!_gridInitialized)
             {
                 InitializeGrid();
             }
+        }
+
+        private void UpdateUnitReferences()
+        {
+            _lastSelectedUnit = _gameManager.UnitsManager.LastSelectedUnit;
         }
 
         private void InitializeGrid()
@@ -103,7 +111,7 @@ namespace CT6GAMAI
         {
             foreach (Node n in _movementPath)
             {
-                if (_movementRange.ReachableNodes.Contains(n))
+                if (_lastSelectedUnit.MovementRange.ReachableNodes.Contains(n))
                 {
                     n.NodeManager.NodeState.VisualStateManager.SetPath();
                 }
@@ -124,9 +132,9 @@ namespace CT6GAMAI
         /// </summary>
         public void UpdateSelectorRange()
         {
-            foreach (Node n in _movementRange.ReachableNodes)
+            foreach (Node n in _lastSelectedUnit.MovementRange.ReachableNodes)
             {
-                _selectorWithinRange = _movementRange.ReachableNodes.Contains(_gridSelector.SelectedNode.Node);
+                _selectorWithinRange = _lastSelectedUnit.MovementRange.ReachableNodes.Contains(_gridSelector.SelectedNode.Node);
                 n.NodeManager.NodeState.VisualStateManager.SetPressed(NodeVisualColorState.Blue);
             }
         }
@@ -138,26 +146,22 @@ namespace CT6GAMAI
         {
             if (_gridSelector.Pathing)
             {
-                // TODO: Upate this start node with new pathing
-                Node startNode = _occupiedNodes[0].Node;
+                Node startNode = _gameManager.UnitsManager.LastSelectedUnit.StoodNode.Node;
                 Node targetNode = _gridSelector.SelectedNode.Node;
 
                 if (_selectorWithinRange)
                 {
-                    _movementPath = _movementRange.ReconstructPath(startNode, targetNode);
+                    _movementPath = _lastSelectedUnit.MovementRange.ReconstructPath(startNode, targetNode);
 
                     if (_movementPath.Count > 1 && Input.GetKeyDown(KeyCode.Space))
                     {
-                        var unit = _gameManager.UnitsManager.AllUnits[0];
-                        // Clear the stood node's reference to the unit
+                        var unit = _gameManager.UnitsManager.LastSelectedUnit;
 
+                        // Clear the stood node's reference to the unit
                         unit.ClearStoodUnit();
 
                         // Move unit here
                         StartCoroutine(unit.MoveToEndPoint());
-
-                        // TODO: Update with UnitAnimationManager.cs functionality.
-                        unit.Animator.SetBool("Moving", unit.IsMoving);
                     }
                 }
             }

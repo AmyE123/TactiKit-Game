@@ -40,13 +40,19 @@ namespace CT6GAMAI
         /// Constant string for the tag string used on nodes.
         /// </summary>
         public const string NODE_TAG_REFERENCE = "Node";
+
+        /// <summary>
+        /// A cost value to set on nodes which should be unpassable.
+        /// Reason being is that using int.MaxValue leads to int overflow.
+        /// </summary>
+        public const int MAX_NODE_COST = 99999;
         #endregion //Nodes
 
         #region Units
         /// <summary>
         /// Enumerations representing different unit classes.
         /// </summary>
-        public enum Class { Knight, Mercenary, Archer };
+        public enum Class { Knight, Mercenary, Archer, Mage };
 
         /// <summary>
         /// Constant string for the tag string used on units.
@@ -68,5 +74,19 @@ namespace CT6GAMAI
         /// </summary>
         public const float LOOK_ROTATION_SPEED = 0.1f;
         #endregion //Units                           
+
+        #region Animation Parameter Strings
+
+        /// <summary>
+        /// The string value for the moving parameter in the animator
+        /// </summary>
+        public const string MOVING_ANIM_PARAM = "Moving";
+
+        /// <summary>
+        /// The string value for the ready parameter in the animator
+        /// </summary>
+        public const string READY_ANIM_PARAM = "Ready";
+
+        #endregion // Animation Parameter Strings
     }
 }
