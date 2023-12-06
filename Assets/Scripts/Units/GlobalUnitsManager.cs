@@ -62,6 +62,10 @@ namespace CT6GAMAI
             _activeUnits = _allUnits;
         }
 
+        /// <summary>
+        /// A check to see if any unit is currently in a 'moving' state.
+        /// </summary>
+        /// <returns>True if any unit is moving.</returns>
         public bool IsAnyUnitMoving()
         {
             foreach (UnitManager unit in _allUnits)
@@ -74,6 +78,10 @@ namespace CT6GAMAI
             return false;
         }
 
+        /// <summary>
+        /// Setter for the current active unit.
+        /// </summary>
+        /// <param name="unit">The unit you want to set as active.</param>
         public void SetActiveUnit(UnitManager unit)
         {
             _activeUnit = unit;           

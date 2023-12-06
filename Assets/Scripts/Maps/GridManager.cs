@@ -43,7 +43,7 @@ namespace CT6GAMAI
 
         private void Start()
         {
-            _gameManager = GameManager.Instance;           
+            _gameManager = GameManager.Instance;
         }
 
         private void Update()
@@ -59,7 +59,6 @@ namespace CT6GAMAI
         private void UpdateUnitReferences()
         {
             _lastSelectedUnit = _gameManager.UnitsManager.LastSelectedUnit;
-
         }
 
         private void InitializeGrid()

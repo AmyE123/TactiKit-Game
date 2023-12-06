@@ -45,7 +45,7 @@ namespace CT6GAMAI
         {
             var stoodUnit = node.NodeManager.StoodUnit;
 
-            if(stoodUnit == null)
+            if (stoodUnit == null)
             {
                 return false;
             }
@@ -67,7 +67,7 @@ namespace CT6GAMAI
                 if (neighbor.Visited)
                 {
                     continue; // Skip already visited neighbors
-                }                 
+                }
 
                 // Calculate the tentative distance to the neighbor
                 int tentativeDistance = current.Distance + neighbor.Cost;
@@ -96,7 +96,7 @@ namespace CT6GAMAI
             foreach (NodeManager nodeManager in _gridManager.AllNodes)
             {
                 nodeManager.Node.Visited = false;
-                nodeManager.Node.Distance = int.MaxValue;              
+                nodeManager.Node.Distance = int.MaxValue;
             }
         }
 
@@ -147,7 +147,7 @@ namespace CT6GAMAI
                 // If the current node is within movement points, add to reachable nodes
                 if (current.Distance <= movementPoints)
                 {
-                    AddNodeToReachable(current);            
+                    AddNodeToReachable(current);
                 }
 
                 EnqueueNeighbours(current, queue);

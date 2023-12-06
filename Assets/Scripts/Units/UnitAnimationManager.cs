@@ -48,9 +48,8 @@ namespace CT6GAMAI
 
         private void UpdateAnimationParameters()
         {
-            // TODO: Move all animation updating into here when multiple units get added
-            _animator.SetBool("Moving", _unitManager.IsMoving);
-            _animator.SetBool("Ready", _unitManager.IsSelected);
+            _animator.SetBool(Constants.MOVING_ANIM_PARAM, _unitManager.IsMoving);
+            _animator.SetBool(Constants.READY_ANIM_PARAM, _unitManager.IsSelected);
         }
     }
 }

@@ -38,7 +38,7 @@ namespace CT6GAMAI
 
         public bool IsSelected { get { return _isSelected; } set { _isSelected = value; } }
 
-        public bool IsMoving => _isMoving;       
+        public bool IsMoving => _isMoving;
         public NodeManager StoodNode => _stoodNode;
         public NodeManager UpdatedStoodNode => _updatedStoodNode;
         public UnitData UnitData => _unitData;
@@ -47,7 +47,6 @@ namespace CT6GAMAI
 
         public MovementRange MovementRange => _movementRange;
         public UnitAnimationManager UnitAnimationManager => _unitAnimationManager;
-
 
         private void Start()
         {
@@ -179,7 +178,7 @@ namespace CT6GAMAI
                 _updatedStoodNode.StoodUnit = null;
             }
 
-            if(_stoodNode != null)
+            if (_stoodNode != null)
             {
                 _stoodNode.StoodUnit = null;
             }

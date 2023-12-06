@@ -74,5 +74,12 @@ namespace CT6GAMAI
         /// </summary>
         public const float LOOK_ROTATION_SPEED = 0.1f;
         #endregion //Units                           
+
+        #region Animation Parameter Strings
+
+        public const string MOVING_ANIM_PARAM = "Moving";
+        public const string READY_ANIM_PARAM = "Ready";
+
+        #endregion // Animation Parameter Strings
     }
 }
