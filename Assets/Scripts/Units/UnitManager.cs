@@ -131,7 +131,7 @@ namespace CT6GAMAI
             var dir = (endPointPos - transform.position).normalized;
             var lookRot = Quaternion.LookRotation(dir);
 
-            transform.DORotateQuaternion(lookRot, LOOK_ROTATION_SPEED);
+            knightBaseObj.transform.DORotateQuaternion(lookRot, LOOK_ROTATION_SPEED);
 
             transform.DOMove(endPointPos, MOVEMENT_SPEED).SetEase(Ease.InOutQuad);
         }
