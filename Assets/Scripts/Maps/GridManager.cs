@@ -168,19 +168,22 @@ namespace CT6GAMAI
 
                 if (_selectorWithinRange)
                 {
-                    _movementPath = _activeUnit.MovementRange.ReconstructPath(startNode, targetNode);
+                    _movementPath = _activeUnit.MovementRange.ReconstructPath(startNode, targetNode);              
 
-                    var validPath = _movementPath.Count > 1 && CanMoveToNode(targetNode);
-
-                    if (validPath && Input.GetKeyDown(KeyCode.Space))
+                    if (Input.GetKeyDown(KeyCode.Space))
                     {
-                        var unit = _gameManager.UnitsManager.ActiveUnit;
+                        var validPath = _movementPath.Count > 1 && CanMoveToNode(targetNode);
 
-                        // Clear the stood node's reference to the unit
-                        unit.ClearStoodUnit();
+                        if (validPath)
+                        {
+                            var unit = _gameManager.UnitsManager.ActiveUnit;
 
-                        // Move unit here
-                        StartCoroutine(unit.MoveToEndPoint());
+                            // Clear the stood node's reference to the unit
+                            unit.ClearStoodUnit();
+
+                            // Move unit here
+                            StartCoroutine(unit.MoveToEndPoint());
+                        }
                     }
                 }
             }

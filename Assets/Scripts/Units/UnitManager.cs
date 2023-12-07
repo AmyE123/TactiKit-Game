@@ -144,9 +144,10 @@ namespace CT6GAMAI
             _isMoving = false;
             _isSelected = false;
             _gridSelector.UnitPressed = false;
+            _gameManager.UnitsManager.SetActiveUnit(null);
             _stoodNode = DetectStoodNode();
             _updatedStoodNode = _stoodNode;
-            _gridManager.MovementPath.Clear();
+            _gridManager.MovementPath.Clear();            
             UpdateStoodNode(this);
         }
 

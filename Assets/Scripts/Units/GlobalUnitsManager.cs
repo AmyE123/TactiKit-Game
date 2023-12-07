@@ -32,6 +32,8 @@ namespace CT6GAMAI
         /// </summary>
         public UnitManager ActiveUnit => _activeUnit;
 
+        public UnitManager SelectorUnit => _selectorUnit;
+
         private void Update()
         {           
             if (!_unitsInitalized)

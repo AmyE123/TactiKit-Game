@@ -88,17 +88,20 @@ namespace CT6GAMAI
             _gameManager.UnitsManager.SetSelectorUnit(SelectedNode.StoodUnit);
 
             if (SelectedNode.StoodUnit != null)
-            {             
+            {
+                if (!_pathing || _gameManager.UnitsManager.ActiveUnit == null)
+                {
+                    _gameManager.UnitsManager.SetActiveUnit(SelectedNode.StoodUnit);
 
-                _gameManager.UnitsManager.SetActiveUnit(SelectedNode.StoodUnit);
-                             
-                ResetHighlightedNodes();              
-                SelectedNode.HighlightRangeArea(SelectedNode.StoodUnit, SelectedNodeState.VisualStateManager.IsPressed);
+                    ResetHighlightedNodes();
+                    SelectedNode.HighlightRangeArea(SelectedNode.StoodUnit, SelectedNodeState.VisualStateManager.IsPressed);
+                }       
             }
             else
-            {                
+            {               
                 if (!UnitPressed)
                 {
+                    _gameManager.UnitsManager.SetActiveUnit(null);
                     ResetHighlightedNodes();
                 }
             }
@@ -164,7 +167,12 @@ namespace CT6GAMAI
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                ToggleUnitSelection();
+                var valid = _pathing && _gameManager.UnitsManager.SelectorUnit != null && _gameManager.UnitsManager.SelectorUnit != _gameManager.UnitsManager.ActiveUnit;
+
+                if (!valid)
+                { 
+                    ToggleUnitSelection();
+                }
             }
         }
 
