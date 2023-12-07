@@ -108,10 +108,11 @@ namespace CT6GAMAI
                     SetSelectorVisuals(SelectorSprites[0]);
                     break;
                 case NodeSelectorState.PlayerSelected:
-                    SetSelectorVisuals(SelectorSprites[1]);
+                    SetSelectorVisuals(SelectorSprites[0]);
                     break;
                 case NodeSelectorState.EnemySelected:
-                    SetSelectorVisuals(SelectorSprites[2]);
+                    Debug.Log("AHHH ENEMY!!");
+                    SetSelectorVisuals(SelectorSprites[1], true);
                     break;
             }
         }

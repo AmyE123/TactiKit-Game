@@ -95,7 +95,20 @@ namespace CT6GAMAI
 
                     ResetHighlightedNodes();
                     SelectedNode.HighlightRangeArea(SelectedNode.StoodUnit, SelectedNodeState.VisualStateManager.IsPressed);
-                }       
+                }
+
+                if (_pathing)
+                {
+                    if (_gameManager.UnitsManager.SelectorUnit.UnitData.UnitTeam == Team.Enemy)
+                    {
+                        Debug.Log("Enemy selected!");
+                        SelectedNode.NodeState.SelectorStateManager.SetEnemySelected();
+                    }
+                    else
+                    {
+                        SelectedNode.NodeState.SelectorStateManager.SetDefaultSelected();
+                    }
+                }
             }
             else
             {               

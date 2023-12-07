@@ -55,6 +55,11 @@ namespace CT6GAMAI
         public enum Class { Knight, Mercenary, Archer, Mage };
 
         /// <summary>
+        /// Which team a unit is on.
+        /// </summary>
+        public enum Team { Player, Enemy };
+
+        /// <summary>
         /// Constant string for the tag string used on units.
         /// </summary>
         public const string UNIT_TAG_REFERENCE = "Unit";
