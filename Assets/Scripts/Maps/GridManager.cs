@@ -127,13 +127,32 @@ namespace CT6GAMAI
         public bool CanMoveToNode(Node node)
         {
             // Checks if the node is occupied by a unit other than the last selected one.
-            var currentUnitOnNode = node.NodeManager.StoodUnit;
+            var currentUnitOnNode = GetOccupyingUnitFromNode(node);
             var nodeOccupiedByOtherUnit = currentUnitOnNode != null && currentUnitOnNode != _gameManager.UnitsManager.ActiveUnit;
 
             bool canMoveToNode = !nodeOccupiedByOtherUnit;
 
             return canMoveToNode;
         }
+
+        /// <summary>
+        /// Gets the occupying unit from a node.
+        /// </summary>
+        public UnitManager GetOccupyingUnitFromNode(Node node)
+        {
+            return node.NodeManager.StoodUnit;
+        }
+
+        /// <summary>
+        /// Checks if a node is occupied by an enemy.
+        /// </summary>
+        public bool isNodeOccupiedByEnemy(Node node)
+        {
+            var currentUnitOnNode = GetOccupyingUnitFromNode(node);
+            return currentUnitOnNode != null && currentUnitOnNode.UnitData.UnitTeam == Team.Enemy;
+        }
+
+
 
         /// <summary>
         /// Handles the pathing logic when a unit is selected.
@@ -178,6 +197,8 @@ namespace CT6GAMAI
 
                         if (validPath)
                         {
+                            Debug.Log("[GAME]: Actions list pop-up UI here");
+
                             var unit = _gameManager.UnitsManager.ActiveUnit;
 
                             // Clear the stood node's reference to the unit
@@ -185,6 +206,13 @@ namespace CT6GAMAI
 
                             // Move unit here
                             StartCoroutine(unit.MoveToEndPoint());
+                        }
+                        else
+                        {
+                            if (isNodeOccupiedByEnemy(targetNode))
+                            {
+                                Debug.Log("[GAME]: Battle Forecast UI here");
+                            }
                         }
                     }
                 }

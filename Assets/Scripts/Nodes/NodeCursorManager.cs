@@ -138,20 +138,24 @@ namespace CT6GAMAI
                     SetCursorVisuals(CursorSprites[0]);
                     break;
                 case NodeCursorState.EnemySelected:
-                    Debug.Log("AHHH ENEMY!!");
-                    if (isPlayerAimingForEnemy())
-                    {
-                        SetCursorVisuals(CursorSprites[1], true);
-                    }
-                    else
-                    {
-                        SetCursorVisuals(CursorSprites[0]);
-                    }
+                    SetCursorVisualsForEnemySelected();
                     break;
             }
         }
 
-        private bool isPlayerAimingForEnemy()
+        /// <summary>
+        /// This function manages setting the correct state of the cursor when hovered over an enemy unit.
+        /// </summary>
+        private void SetCursorVisualsForEnemySelected()
+        {
+            SetCursorVisuals(CursorSprites[isUnitAimingForEnemy() ? 1 : 0], isUnitAimingForEnemy());
+        }
+
+        /// <summary>
+        /// This returns a boolean for whether the unit is aiming to attack an enemy through pathing.
+        /// If the unit is selected, and pathing, and the cursor is over an enemy this will return true.
+        /// </summary>
+        private bool isUnitAimingForEnemy()
         {
             return _gameManager.GridManager.UnitPressed;
         }
