@@ -22,9 +22,9 @@ namespace CT6GAMAI
         public enum NodeVisualEnemyColorState { SingularEnemy, AllEnemy }
 
         /// <summary>
-        /// Enumerations representing the different states of a selector.
+        /// Enumerations representing the different states of a cursor.
         /// </summary>
-        public enum NodeSelectorState { NoSelection, DefaultSelected, PlayerSelected, EnemySelected }
+        public enum NodeCursorState { NoSelection, DefaultSelected, PlayerSelected, EnemySelected }
 
         /// <summary>
         /// Enumerations representing different directions.
@@ -46,6 +46,11 @@ namespace CT6GAMAI
         /// Reason being is that using int.MaxValue leads to int overflow.
         /// </summary>
         public const int MAX_NODE_COST = 99999;
+
+        /// <summary>
+        /// The default Y position of the cursor's world space canvas.
+        /// </summary>
+        public const int CURSOR_WSC_DEFAULT_Y_POS = 15;
         #endregion //Nodes
 
         #region Units
@@ -53,6 +58,11 @@ namespace CT6GAMAI
         /// Enumerations representing different unit classes.
         /// </summary>
         public enum Class { Knight, Mercenary, Archer, Mage };
+
+        /// <summary>
+        /// Which team a unit is on.
+        /// </summary>
+        public enum Team { Player, Enemy };
 
         /// <summary>
         /// Constant string for the tag string used on units.

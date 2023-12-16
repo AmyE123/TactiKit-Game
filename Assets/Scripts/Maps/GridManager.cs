@@ -10,21 +10,16 @@ namespace CT6GAMAI
     /// </summary>
     public class GridManager : MonoBehaviour
     {
-        [SerializeField] private GridSelector _gridSelector;
+        [SerializeField] private GridCursor _gridCursor;
         [SerializeField] private List<NodeManager> _allNodes;
         [SerializeField] private List<NodeManager> _occupiedNodes;
         [SerializeField] private List<Node> _movementPath;
 
-        private UnitManager _lastSelectedUnit;
+        private UnitManager _activeUnit;
 
         private GameManager _gameManager;
-        private bool _selectorWithinRange;
+        private bool _cursorWithinRange;
         private bool _gridInitialized = false;
-
-        /// <summary>
-        /// Indicates if a unit has been selected.
-        /// </summary>
-        public bool UnitPressed = false;
 
         /// <summary>
         /// Gets the list of all nodes in the grid.
@@ -40,6 +35,11 @@ namespace CT6GAMAI
         /// Gets the movement path of the currently selected unit.
         /// </summary>
         public List<Node> MovementPath => _movementPath;
+
+        /// <summary>
+        /// Whether a unit is currently pressed or not
+        /// </summary>
+        public bool UnitPressed => _gridCursor.UnitPressed;
 
         private void Start()
         {
@@ -58,7 +58,7 @@ namespace CT6GAMAI
 
         private void UpdateUnitReferences()
         {
-            _lastSelectedUnit = _gameManager.UnitsManager.LastSelectedUnit;
+            _activeUnit = _gameManager.UnitsManager.ActiveUnit;
         }
 
         private void InitializeGrid()
@@ -111,7 +111,7 @@ namespace CT6GAMAI
         {
             foreach (Node n in _movementPath)
             {
-                if (_lastSelectedUnit.MovementRange.ReachableNodes.Contains(n))
+                if (_activeUnit.MovementRange.ReachableNodes.Contains(n))
                 {
                     n.NodeManager.NodeState.VisualStateManager.SetPath();
                 }
@@ -119,22 +119,58 @@ namespace CT6GAMAI
         }
 
         /// <summary>
+        /// Checks if a movement to a node is valid based on current game rules.
+        /// </summary>
+        /// <returns>
+        /// False if the node is occupied by a unit other than the last selected unit. Otherwise true.
+        /// </returns>
+        public bool CanMoveToNode(Node node)
+        {
+            // Checks if the node is occupied by a unit other than the last selected one.
+            var currentUnitOnNode = GetOccupyingUnitFromNode(node);
+            var nodeOccupiedByOtherUnit = currentUnitOnNode != null && currentUnitOnNode != _gameManager.UnitsManager.ActiveUnit;
+
+            bool canMoveToNode = !nodeOccupiedByOtherUnit;
+
+            return canMoveToNode;
+        }
+
+        /// <summary>
+        /// Gets the occupying unit from a node.
+        /// </summary>
+        public UnitManager GetOccupyingUnitFromNode(Node node)
+        {
+            return node.NodeManager.StoodUnit;
+        }
+
+        /// <summary>
+        /// Checks if a node is occupied by an enemy.
+        /// </summary>
+        public bool isNodeOccupiedByEnemy(Node node)
+        {
+            var currentUnitOnNode = GetOccupyingUnitFromNode(node);
+            return currentUnitOnNode != null && currentUnitOnNode.UnitData.UnitTeam == Team.Enemy;
+        }
+
+
+
+        /// <summary>
         /// Handles the pathing logic when a unit is selected.
         /// </summary>
         public void HandleUnitPathing()
         {
-            UpdateSelectorRange();
+            UpdateCursorRange();
             ProcessPathing();
         }
 
         /// <summary>
-        /// Updates whether the selector is within range of the reachable nodes.
+        /// Updates whether the cursor is within range of the reachable nodes.
         /// </summary>
-        public void UpdateSelectorRange()
+        public void UpdateCursorRange()
         {
-            foreach (Node n in _lastSelectedUnit.MovementRange.ReachableNodes)
+            foreach (Node n in _activeUnit.MovementRange.ReachableNodes)
             {
-                _selectorWithinRange = _lastSelectedUnit.MovementRange.ReachableNodes.Contains(_gridSelector.SelectedNode.Node);
+                _cursorWithinRange = _activeUnit.MovementRange.ReachableNodes.Contains(_gridCursor.SelectedNode.Node);
                 n.NodeManager.NodeState.VisualStateManager.SetPressed(NodeVisualColorState.Blue);
             }
         }
@@ -144,24 +180,40 @@ namespace CT6GAMAI
         /// </summary>
         public void ProcessPathing()
         {
-            if (_gridSelector.Pathing)
+            if (_gridCursor.Pathing)
             {
-                Node startNode = _gameManager.UnitsManager.LastSelectedUnit.StoodNode.Node;
-                Node targetNode = _gridSelector.SelectedNode.Node;
+                Node startNode = _gameManager.UnitsManager.ActiveUnit.StoodNode.Node;
+                Node targetNode = _gridCursor.SelectedNode.Node;
 
-                if (_selectorWithinRange)
+                if (_cursorWithinRange)
                 {
-                    _movementPath = _lastSelectedUnit.MovementRange.ReconstructPath(startNode, targetNode);
+                    _movementPath = _activeUnit.MovementRange.ReconstructPath(startNode, targetNode);
 
-                    if (_movementPath.Count > 1 && Input.GetKeyDown(KeyCode.Space))
+                    if (Input.GetKeyDown(KeyCode.Space))
                     {
-                        var unit = _gameManager.UnitsManager.LastSelectedUnit;
+                        var validPath = _movementPath.Count > 1 && CanMoveToNode(targetNode);
 
-                        // Clear the stood node's reference to the unit
-                        unit.ClearStoodUnit();
+                        _gameManager.AudioManager.PlaySelectPathSound(validPath);
 
-                        // Move unit here
-                        StartCoroutine(unit.MoveToEndPoint());
+                        if (validPath)
+                        {
+                            Debug.Log("[GAME]: Actions list pop-up UI here");
+
+                            var unit = _gameManager.UnitsManager.ActiveUnit;
+
+                            // Clear the stood node's reference to the unit
+                            unit.ClearStoodUnit();
+
+                            // Move unit here
+                            StartCoroutine(unit.MoveToEndPoint());
+                        }
+                        else
+                        {
+                            if (isNodeOccupiedByEnemy(targetNode))
+                            {
+                                Debug.Log("[GAME]: Battle Forecast UI here");
+                            }
+                        }
                     }
                 }
             }

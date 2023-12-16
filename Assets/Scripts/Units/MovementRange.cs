@@ -51,7 +51,7 @@ namespace CT6GAMAI
             }
             else
             {
-                if (stoodUnit == _gameManager.UnitsManager.LastSelectedUnit)
+                if (stoodUnit == _gameManager.UnitsManager.ActiveUnit)
                 {
                     return false;
                 }

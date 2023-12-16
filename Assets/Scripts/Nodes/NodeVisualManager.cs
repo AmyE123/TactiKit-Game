@@ -26,7 +26,7 @@ namespace CT6GAMAI
         /// <summary>
         /// Visual data objects for the node visual
         /// </summary>
-        public NodeStateVisualData[] VisualDatas;
+        public NodeVisualData[] VisualDatas;
 
         #region Public Getters
 

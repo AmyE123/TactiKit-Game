@@ -4,13 +4,13 @@ namespace CT6GAMAI
 
     public class FollowSelectedNode : MonoBehaviour
     {
-        [SerializeField] private GridSelector _gridSelector; 
+        [SerializeField] private GridCursor _gridCursor; 
 
         void Update()
         {
-            if (_gridSelector.SelectedNode != null)
+            if (_gridCursor.SelectedNode != null)
             {
-                transform.position = _gridSelector.SelectedNode.transform.position;
+                transform.position = _gridCursor.SelectedNode.transform.position;
             }            
         }
     }

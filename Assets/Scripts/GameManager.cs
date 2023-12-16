@@ -1,5 +1,6 @@
 namespace CT6GAMAI
 {
+    using DG.Tweening;
     using UnityEngine;
 
     /// <summary>
@@ -24,12 +25,18 @@ namespace CT6GAMAI
         /// </summary>
         public GridManager GridManager => _gridManager;
 
+        /// <summary>
+        /// Public getter for AudioManager
+        /// </summary>
+        public AudioManager AudioManager => _audioManager;
+
         #endregion // Public Manager References
 
         #region Private Manager References
 
         [SerializeField] private GlobalUnitsManager _unitsManager;
         [SerializeField] private GridManager _gridManager;
+        [SerializeField] private AudioManager _audioManager;
 
         #endregion // Private Manager References
 

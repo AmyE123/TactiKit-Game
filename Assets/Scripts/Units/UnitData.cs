@@ -15,6 +15,11 @@ namespace CT6GAMAI
         public string UnitName = "Unassigned";
 
         /// <summary>
+        /// Unit's team.
+        /// </summary>
+        public Constants.Team UnitTeam = Constants.Team.Player;
+
+        /// <summary>
         /// Unit's class. Determines stats.
         /// </summary>
         public Constants.Class UnitClass = Constants.Class.Mercenary;

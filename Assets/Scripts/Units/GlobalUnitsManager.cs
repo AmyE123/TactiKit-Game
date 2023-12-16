@@ -11,8 +11,9 @@ namespace CT6GAMAI
     {
         [SerializeField] private List<UnitManager> _allUnits;
         [SerializeField] private List<UnitManager> _activeUnits;
+
+        [SerializeField] private UnitManager _cursorUnit;
         [SerializeField] private UnitManager _activeUnit;
-        [SerializeField] private UnitManager _lastSelectedUnit;
 
         private bool _unitsInitalized = false;
 
@@ -30,7 +31,11 @@ namespace CT6GAMAI
         /// Gets the currently active/selected unit in the game.
         /// </summary>
         public UnitManager ActiveUnit => _activeUnit;
-        public UnitManager LastSelectedUnit => _lastSelectedUnit;
+
+        /// <summary>
+        /// Gets the current unit underneath the cursor.
+        /// </summary>
+        public UnitManager CursorUnit => _cursorUnit;
 
         private void Update()
         {           
@@ -38,12 +43,6 @@ namespace CT6GAMAI
             {
                 InitializeUnits();                
             }
-
-            if(_activeUnit != null)
-            {
-                _lastSelectedUnit = _activeUnit;
-            }
-
         }
 
         private void InitializeUnits()
@@ -85,6 +84,15 @@ namespace CT6GAMAI
         public void SetActiveUnit(UnitManager unit)
         {
             _activeUnit = unit;           
+        }
+
+        /// <summary>
+        /// Setter for the cursor unit.
+        /// </summary>
+        /// <param name="unit">The unit you want to set as under the cursor.</param>
+        public void SetCursorUnit(UnitManager unit)
+        {
+            _cursorUnit = unit;
         }
     }
 }

@@ -7,12 +7,16 @@ namespace CT6GAMAI
     /// Manages the selection and interaction of nodes within the grid.
     /// This includes handling node selection, grid navigation, unit selection, and pathing.
     /// </summary>
-    public class GridSelector : MonoBehaviour
-    {       
+    public class GridCursor : MonoBehaviour
+    {
+        [SerializeField] private AudioSource _cursorAudioSource;
+        [SerializeField] private CursorAudioClips _cursorAudioClips;
+
         private GameManager _gameManager;
         private GridManager _gridManager;
+        private AudioManager _audioManager;
         private UnitManager _lastSelectedUnit;
-        private bool _pathing = false;
+        [SerializeField] private bool _pathing = false;
 
         /// <summary>
         /// The currently selected node.
@@ -38,12 +42,15 @@ namespace CT6GAMAI
         {
             _gameManager = GameManager.Instance;
             _gridManager = _gameManager.GridManager;
+            _audioManager = _gameManager.AudioManager;
 
-            SelectedNode.NodeState.SelectorStateManager.SetDefaultSelected();
+            SelectedNode.NodeState.CursorStateManager.SetDefaultSelected();
         }
 
         private void Update()
         {
+            _pathing = UnitPressed;
+
             UpdateSelectedNode();
             HandleNodeUnitInteraction();
             HandleGridNavigation();
@@ -54,17 +61,17 @@ namespace CT6GAMAI
         private void UpdateUnitReferences()
         {
             var unitManager = _gameManager.UnitsManager;
-            _lastSelectedUnit = unitManager.LastSelectedUnit;
+            _lastSelectedUnit = unitManager.ActiveUnit;
         }
 
         private void UpdateSelectedNode()
         {
-            if (SelectedNodeState == null) 
-            { 
-                SelectedNodeState = SelectedNode.NodeState; 
+            if (SelectedNodeState == null)
+            {
+                SelectedNodeState = SelectedNode.NodeState;
             }
 
-            if (SelectedNode == null || !SelectedNodeState.SelectorStateManager.IsActiveSelection)
+            if (SelectedNode == null || !SelectedNodeState.CursorStateManager.IsActiveSelection)
             {
                 UpdateActiveNodeSelection();
             }
@@ -75,7 +82,7 @@ namespace CT6GAMAI
             var nodes = _gridManager.AllNodes;
             for (int i = 0; i < nodes.Count; i++)
             {
-                if (nodes[i].NodeState.SelectorStateManager.IsActiveSelection)
+                if (nodes[i].NodeState.CursorStateManager.IsActiveSelection)
                 {
                     SelectedNode = nodes[i];
                     SelectedNodeState = SelectedNode.NodeState;
@@ -85,18 +92,41 @@ namespace CT6GAMAI
 
         private void HandleNodeUnitInteraction()
         {
+            _gameManager.UnitsManager.SetCursorUnit(SelectedNode.StoodUnit);
+
             if (SelectedNode.StoodUnit != null)
             {
-                _gameManager.UnitsManager.SetActiveUnit(SelectedNode.StoodUnit);
+                if (!_pathing || _gameManager.UnitsManager.ActiveUnit == null)
+                {
+                    _gameManager.UnitsManager.SetActiveUnit(SelectedNode.StoodUnit);
 
-                ResetHighlightedNodes();              
-                SelectedNode.HighlightRangeArea(SelectedNode.StoodUnit, SelectedNodeState.VisualStateManager.IsPressed);
+                    ResetHighlightedNodes();
+                    SelectedNode.HighlightRangeArea(SelectedNode.StoodUnit, SelectedNodeState.VisualStateManager.IsPressed);
+                }
+
+                if (_pathing)
+                {
+                    if (_gameManager.UnitsManager.CursorUnit.UnitData.UnitTeam == Team.Enemy)
+                    {
+                        Debug.Log("[GAME]: UI Here for 'Enemy selected!'");
+                        SelectedNode.NodeState.CursorStateManager.SetEnemySelected();
+                    }
+                    else if (_gameManager.UnitsManager.CursorUnit.UnitData.UnitTeam == Team.Player)
+                    {
+                        Debug.Log("[GAME]: UI Here for 'Player selected!'");
+                        SelectedNode.NodeState.CursorStateManager.SetPlayerSelected();
+                    }
+                    else
+                    {
+                        SelectedNode.NodeState.CursorStateManager.SetDefaultSelected();
+                    }
+                }
             }
             else
             {
-                _gameManager.UnitsManager.SetActiveUnit(null);
                 if (!UnitPressed)
                 {
+                    _gameManager.UnitsManager.SetActiveUnit(null);
                     ResetHighlightedNodes();
                 }
             }
@@ -110,33 +140,35 @@ namespace CT6GAMAI
             {
                 if (Input.GetKeyDown(KeyCode.W))
                 {
-                    MoveSelector(Direction.North);
+                    MoveCursor(Direction.North);
                 }
 
                 if (Input.GetKeyDown(KeyCode.A))
                 {
-                    MoveSelector(Direction.West);
+                    MoveCursor(Direction.West);
                 }
 
                 if (Input.GetKeyDown(KeyCode.S))
                 {
-                    MoveSelector(Direction.South);
+                    MoveCursor(Direction.South);
                 }
 
                 if (Input.GetKeyDown(KeyCode.D))
                 {
-                    MoveSelector(Direction.East);
+                    MoveCursor(Direction.East);
                 }
             }
         }
 
-        private void MoveSelector(Direction direction)
+        private void MoveCursor(Direction direction)
         {
+            _audioManager.PlayCursorSound(UnitPressed);
+
             NodeState adjacentNodeState = GetAdjacentNodeState(direction);
             if (adjacentNodeState != null)
             {
-                adjacentNodeState.SelectorStateManager.SetDefaultSelected();
-                SelectedNodeState.SelectorStateManager.SetInactive();
+                adjacentNodeState.CursorStateManager.SetDefaultSelected();
+                SelectedNodeState.CursorStateManager.SetInactive();
             }
         }
 
@@ -162,7 +194,12 @@ namespace CT6GAMAI
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                ToggleUnitSelection();
+                var valid = _pathing && _gameManager.UnitsManager.CursorUnit != null && _gameManager.UnitsManager.CursorUnit != _gameManager.UnitsManager.ActiveUnit;
+
+                if (!valid)
+                {
+                    ToggleUnitSelection();
+                }
             }
         }
 
@@ -170,8 +207,9 @@ namespace CT6GAMAI
         {
             if (SelectedNode.StoodUnit != null)
             {
-                UnitPressed = !UnitPressed;
-                _pathing = UnitPressed;
+                UnitPressed = !UnitPressed;               
+
+                _audioManager.PlayToggleUnitSound(UnitPressed);
 
                 UpdateNodeVisualState();
             }
@@ -222,7 +260,7 @@ namespace CT6GAMAI
             if (_lastSelectedUnit != null)
             {
                 _lastSelectedUnit.MovementRange.ResetNodes();
-            }        
+            }
 
             for (int i = 0; i < nodes.Count; i++)
             {

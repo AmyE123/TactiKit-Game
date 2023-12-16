@@ -10,7 +10,7 @@ namespace CT6GAMAI
         [SerializeField] private UnitManager _unitManager;
         [SerializeField] private Animator _animator;
 
-        [SerializeField] private GridSelector _gridSelector;
+        [SerializeField] private GridCursor _gridCursor;
 
         private bool _warningLogSent = false;
 
