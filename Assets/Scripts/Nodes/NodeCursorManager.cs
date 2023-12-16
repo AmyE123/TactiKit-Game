@@ -2,6 +2,7 @@ namespace CT6GAMAI
 {
     using UnityEngine;
     using UnityEngine.UI;
+    using DG.Tweening;
     using static CT6GAMAI.Constants;
 
     /// <summary>
@@ -29,9 +30,15 @@ namespace CT6GAMAI
         public SpriteRenderer CursorSR;
 
         /// <summary>
+        /// The gameobject for the sprite renderer.
+        /// </summary>
+        public GameObject CursorSRGO;
+
+        /// <summary>
         /// The gameObject of the node decal (selection on the tile) for the cursor
         /// </summary>
         public GameObject CursorNodeDecal;
+
 
         /// <summary>
         /// The gameObject of the canvas for the cursor
@@ -84,6 +91,9 @@ namespace CT6GAMAI
 
         #endregion // Hidden In Inspector
 
+        Sequence mySequence;
+        private bool wasPlayerSelected;
+
         private void Start()
         {
             cursorFSM = new NodeCursorFSM();
@@ -91,7 +101,19 @@ namespace CT6GAMAI
 
             State = GetComponent<NodeState>();
 
-            RefreshCursor();
+            RefreshCursor();         
+        }
+
+        private void Awake()
+        {
+            AnimateCursor();
+        }
+
+        private void AnimateCursor()
+        {
+            DOTween.SetTweensCapacity(1250, 50);
+            CursorCanvas.transform.DOLocalMoveY(CURSOR_WSC_DEFAULT_Y_POS + 1, 0.5f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Yoyo);
+            CursorSRGO.transform.DOScale(1f, 0.5f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Yoyo);
         }
 
         /// <summary>

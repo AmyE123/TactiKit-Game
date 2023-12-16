@@ -46,6 +46,11 @@ namespace CT6GAMAI
         /// Reason being is that using int.MaxValue leads to int overflow.
         /// </summary>
         public const int MAX_NODE_COST = 99999;
+
+        /// <summary>
+        /// The default Y position of the cursor's world space canvas.
+        /// </summary>
+        public const int CURSOR_WSC_DEFAULT_Y_POS = 15;
         #endregion //Nodes
 
         #region Units

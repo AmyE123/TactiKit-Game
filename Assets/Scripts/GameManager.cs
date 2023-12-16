@@ -1,5 +1,6 @@
 namespace CT6GAMAI
 {
+    using DG.Tweening;
     using UnityEngine;
 
     /// <summary>
@@ -35,7 +36,7 @@ namespace CT6GAMAI
 
         void Awake()
         {
-            Instance = this;
+            Instance = this;           
         }
     }
 }

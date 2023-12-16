@@ -104,6 +104,11 @@ namespace CT6GAMAI
                         Debug.Log("Enemy selected!");
                         SelectedNode.NodeState.CursorStateManager.SetEnemySelected();
                     }
+                    else if (_gameManager.UnitsManager.CursorUnit.UnitData.UnitTeam == Team.Player)
+                    {
+                        Debug.Log("Player selected!");
+                        SelectedNode.NodeState.CursorStateManager.SetPlayerSelected();
+                    }
                     else
                     {
                         SelectedNode.NodeState.CursorStateManager.SetDefaultSelected();

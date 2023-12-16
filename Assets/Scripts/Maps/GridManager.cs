@@ -22,11 +22,6 @@ namespace CT6GAMAI
         private bool _gridInitialized = false;
 
         /// <summary>
-        /// Indicates if a unit has been selected.
-        /// </summary>
-        public bool UnitPressed = false;
-
-        /// <summary>
         /// Gets the list of all nodes in the grid.
         /// </summary>
         public List<NodeManager> AllNodes => _allNodes;
