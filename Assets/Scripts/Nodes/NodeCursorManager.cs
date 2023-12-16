@@ -18,6 +18,8 @@ namespace CT6GAMAI
         [SerializeField] private bool _isPlayerSelected;
         [SerializeField] private bool _isEnemySelected;
 
+        private GameManager _gameManager;
+
         [Header("Cursor Visual Data")]
         /// <summary>
         /// The image for the cursor hand
@@ -99,6 +101,8 @@ namespace CT6GAMAI
             cursorFSM = new NodeCursorFSM();
             cursorFSM.Manager = this;
 
+            _gameManager = GameManager.Instance;
+
             State = GetComponent<NodeState>();
 
             RefreshCursor();         
@@ -109,6 +113,7 @@ namespace CT6GAMAI
             AnimateCursor();
         }
 
+        // TODO: Add these magic numbers to constants
         private void AnimateCursor()
         {
             DOTween.SetTweensCapacity(1250, 50);
@@ -134,9 +139,21 @@ namespace CT6GAMAI
                     break;
                 case NodeCursorState.EnemySelected:
                     Debug.Log("AHHH ENEMY!!");
-                    SetCursorVisuals(CursorSprites[1], true);
+                    if (isPlayerAimingForEnemy())
+                    {
+                        SetCursorVisuals(CursorSprites[1], true);
+                    }
+                    else
+                    {
+                        SetCursorVisuals(CursorSprites[0]);
+                    }
                     break;
             }
+        }
+
+        private bool isPlayerAimingForEnemy()
+        {
+            return _gameManager.GridManager.UnitPressed;
         }
 
         /// <summary>

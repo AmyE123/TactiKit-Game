@@ -8,9 +8,13 @@ namespace CT6GAMAI
     /// This includes handling node selection, grid navigation, unit selection, and pathing.
     /// </summary>
     public class GridCursor : MonoBehaviour
-    {       
+    {
+        [SerializeField] private AudioSource _cursorAudioSource;
+        [SerializeField] private CursorAudioClips _cursorAudioClips;
+
         private GameManager _gameManager;
         private GridManager _gridManager;
+        private AudioManager _audioManager;
         private UnitManager _lastSelectedUnit;
         private bool _pathing = false;
 
@@ -38,6 +42,7 @@ namespace CT6GAMAI
         {
             _gameManager = GameManager.Instance;
             _gridManager = _gameManager.GridManager;
+            _audioManager = _gameManager.AudioManager;
 
             SelectedNode.NodeState.CursorStateManager.SetDefaultSelected();
         }
@@ -155,6 +160,8 @@ namespace CT6GAMAI
 
         private void MoveCursor(Direction direction)
         {
+            _audioManager.PlayCursorSound(UnitPressed);
+
             NodeState adjacentNodeState = GetAdjacentNodeState(direction);
             if (adjacentNodeState != null)
             {
@@ -197,9 +204,11 @@ namespace CT6GAMAI
         private void ToggleUnitSelection()
         {
             if (SelectedNode.StoodUnit != null)
-            {
+            {                
                 UnitPressed = !UnitPressed;
                 _pathing = UnitPressed;
+
+                _audioManager.PlayToggleUnitSound(UnitPressed);
 
                 UpdateNodeVisualState();
             }

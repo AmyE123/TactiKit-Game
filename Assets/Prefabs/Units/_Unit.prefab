@@ -108,7 +108,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1478145431854613616
 Transform:
   m_ObjectHideFlags: 0
@@ -3313,7 +3313,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _unitManager: {fileID: 7592517802941822380}
   _animator: {fileID: 2889186292050570900}
-  _gridSelector: {fileID: 0}
+  _gridCursor: {fileID: 0}
 --- !u!1 &8580508073901243422
 GameObject:
   m_ObjectHideFlags: 0

@@ -36,6 +36,11 @@ namespace CT6GAMAI
         /// </summary>
         public List<Node> MovementPath => _movementPath;
 
+        /// <summary>
+        /// Whether a unit is currently pressed or not
+        /// </summary>
+        public bool UnitPressed => _gridCursor.UnitPressed;
+
         private void Start()
         {
             _gameManager = GameManager.Instance;
@@ -168,6 +173,8 @@ namespace CT6GAMAI
                     if (Input.GetKeyDown(KeyCode.Space))
                     {
                         var validPath = _movementPath.Count > 1 && CanMoveToNode(targetNode);
+
+                        _gameManager.AudioManager.PlaySelectPathSound(validPath);
 
                         if (validPath)
                         {
