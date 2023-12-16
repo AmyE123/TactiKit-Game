@@ -16,7 +16,7 @@ namespace CT6GAMAI
         private GridManager _gridManager;
         private AudioManager _audioManager;
         private UnitManager _lastSelectedUnit;
-        private bool _pathing = false;
+        [SerializeField] private bool _pathing = false;
 
         /// <summary>
         /// The currently selected node.
@@ -49,6 +49,8 @@ namespace CT6GAMAI
 
         private void Update()
         {
+            _pathing = UnitPressed;
+
             UpdateSelectedNode();
             HandleNodeUnitInteraction();
             HandleGridNavigation();
@@ -205,8 +207,7 @@ namespace CT6GAMAI
         {
             if (SelectedNode.StoodUnit != null)
             {
-                UnitPressed = !UnitPressed;
-                _pathing = UnitPressed;
+                UnitPressed = !UnitPressed;               
 
                 _audioManager.PlayToggleUnitSound(UnitPressed);
 
