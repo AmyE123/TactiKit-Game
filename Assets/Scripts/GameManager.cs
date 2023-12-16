@@ -42,7 +42,7 @@ namespace CT6GAMAI
 
         void Awake()
         {
-            Instance = this;           
+            Instance = this;
         }
     }
 }

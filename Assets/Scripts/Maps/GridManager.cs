@@ -187,7 +187,7 @@ namespace CT6GAMAI
 
                 if (_cursorWithinRange)
                 {
-                    _movementPath = _activeUnit.MovementRange.ReconstructPath(startNode, targetNode);              
+                    _movementPath = _activeUnit.MovementRange.ReconstructPath(startNode, targetNode);
 
                     if (Input.GetKeyDown(KeyCode.Space))
                     {

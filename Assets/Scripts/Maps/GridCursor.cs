@@ -64,9 +64,9 @@ namespace CT6GAMAI
 
         private void UpdateSelectedNode()
         {
-            if (SelectedNodeState == null) 
-            { 
-                SelectedNodeState = SelectedNode.NodeState; 
+            if (SelectedNodeState == null)
+            {
+                SelectedNodeState = SelectedNode.NodeState;
             }
 
             if (SelectedNode == null || !SelectedNodeState.CursorStateManager.IsActiveSelection)
@@ -106,12 +106,12 @@ namespace CT6GAMAI
                 {
                     if (_gameManager.UnitsManager.CursorUnit.UnitData.UnitTeam == Team.Enemy)
                     {
-                        Debug.Log("Enemy selected!");
+                        Debug.Log("[GAME]: UI Here for 'Enemy selected!'");
                         SelectedNode.NodeState.CursorStateManager.SetEnemySelected();
                     }
                     else if (_gameManager.UnitsManager.CursorUnit.UnitData.UnitTeam == Team.Player)
                     {
-                        Debug.Log("Player selected!");
+                        Debug.Log("[GAME]: UI Here for 'Player selected!'");
                         SelectedNode.NodeState.CursorStateManager.SetPlayerSelected();
                     }
                     else
@@ -121,7 +121,7 @@ namespace CT6GAMAI
                 }
             }
             else
-            {               
+            {
                 if (!UnitPressed)
                 {
                     _gameManager.UnitsManager.SetActiveUnit(null);
@@ -195,7 +195,7 @@ namespace CT6GAMAI
                 var valid = _pathing && _gameManager.UnitsManager.CursorUnit != null && _gameManager.UnitsManager.CursorUnit != _gameManager.UnitsManager.ActiveUnit;
 
                 if (!valid)
-                { 
+                {
                     ToggleUnitSelection();
                 }
             }
@@ -204,7 +204,7 @@ namespace CT6GAMAI
         private void ToggleUnitSelection()
         {
             if (SelectedNode.StoodUnit != null)
-            {                
+            {
                 UnitPressed = !UnitPressed;
                 _pathing = UnitPressed;
 
@@ -259,7 +259,7 @@ namespace CT6GAMAI
             if (_lastSelectedUnit != null)
             {
                 _lastSelectedUnit.MovementRange.ResetNodes();
-            }        
+            }
 
             for (int i = 0; i < nodes.Count; i++)
             {

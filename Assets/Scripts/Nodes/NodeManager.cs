@@ -115,23 +115,6 @@ namespace CT6GAMAI
             NodeInitialized = true;
         }
 
-        //private void Update()
-        //{
-        //    UpdateStoodNodeCost();
-        //}
-
-        //private void UpdateStoodNodeCost()
-        //{
-        //    if (StoodUnit != null)
-        //    {
-        //        Node.Cost = MAX_NODE_COST;
-        //    }
-        //    else
-        //    {
-        //        Node.Cost = NodeData.TerrainType.MovementCost;
-        //    }
-        //}
-
         private UnitManager DetectStoodUnit()
         {
             if (Physics.Raycast(transform.position, transform.up * 5, out unitHit, 1))
