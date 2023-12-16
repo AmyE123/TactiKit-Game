@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace CT6GAMAI
 {
     /// <summary>
@@ -57,12 +59,27 @@ namespace CT6GAMAI
         /// <summary>
         /// Enumerations representing different unit classes.
         /// </summary>
-        public enum Class { Knight, Mercenary, Archer, Mage };
+        public enum Class { Knight, Druid, Barbarian, Archer, Mage };
 
         /// <summary>
         /// Which team a unit is on.
         /// </summary>
         public enum Team { Player, Enemy };
+
+        /// <summary>
+        /// The player team colour (FOR UI)
+        /// </summary>
+        public static Color32 UI_PlayerColour = new Color32(93, 149, 185, 255);
+
+        /// <summary>
+        /// The enemy team colour (FOR UI)
+        /// </summary>
+        public static Color32 UI_EnemyColour = new Color32(185, 94, 93, 255);
+
+        /// <summary>
+        /// The ally team colour (FOR UI)
+        /// </summary>
+        public static Color32 UI_AllyColour = new Color32(132, 185, 93, 255);
 
         /// <summary>
         /// Constant string for the tag string used on units.

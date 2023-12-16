@@ -3281,9 +3281,9 @@ MonoBehaviour:
   _stoodNode: {fileID: 0}
   _updatedStoodNode: {fileID: 0}
   _animator: {fileID: 2889186292050570900}
-  greyMat: {fileID: 2100000, guid: c0c425919b8d8b340bc45c8b43f48c49, type: 2}
-  normalMat: {fileID: -8384745679888196477, guid: 72424cd63cf9f354b99496ccfbb90b34, type: 3}
-  knightBaseObj: {fileID: 126320786744525254}
+  inactiveMaterial: {fileID: 2100000, guid: c0c425919b8d8b340bc45c8b43f48c49, type: 2}
+  normalMaterial: {fileID: 2100000, guid: 29ce18bc4497ee445a38759f8cfc848a, type: 2}
+  materialBaseObject: {fileID: 126320786744525254}
   AllRenderers: []
 --- !u!114 &5666932915701534253
 MonoBehaviour:
@@ -3372,7 +3372,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 1, b: 0.089552164, a: 0.5019608}
+  m_Color: {r: 0, g: 1, b: 0.97471046, a: 0.5019608}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

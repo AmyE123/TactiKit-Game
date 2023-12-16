@@ -12,20 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 405c8f4dbca7484448b2c4d31d9a7def, type: 3}
   m_Name: Knight
   m_EditorClassIdentifier: 
-  UnitName: Unassigned
-  UnitClass: 1
-  ClassLevel: 0
-  HealthPointsBaseValue: 0
-  MovementBaseValue: 3
-  AttackBaseValue: 0
+  UnitName: Clive
+  UnitTeam: 0
+  UnitClass: 0
+  ClassLevel: 3
+  HealthPointsBaseValue: 23
+  MovementBaseValue: 4
+  AttackBaseValue: 16
   CriticalRateBaseValue: 0
-  HitRateBaseValue: 0
-  AvoidRateBaseValue: 0
-  StrengthBaseValue: 0
-  SpeedBaseValue: 0
+  HitRateBaseValue: 107
+  AvoidRateBaseValue: 10
+  StrengthBaseValue: 11
+  SpeedBaseValue: 3
   MagicBaseValue: 0
-  LuckBaseValue: 0
-  SkillBaseValue: 0
-  DefenseBaseValue: 0
-  ResistanceBaseValue: 0
-  RatingValue: 0
+  LuckBaseValue: 11
+  SkillBaseValue: 8
+  DefenseBaseValue: 11
+  ResistanceBaseValue: 7
+  RatingValue: 51

@@ -31,9 +31,9 @@ namespace CT6GAMAI
         private List<MeshRenderer> _allMRRenderers;
         private bool _isSelected = false;
 
-        public Material greyMat;
-        public Material normalMat;
-        public GameObject knightBaseObj;
+        public Material inactiveMaterial;
+        public Material normalMaterial;
+        public GameObject materialBaseObject;
         public List<Renderer> AllRenderers;
 
         public bool IsSelected { get { return _isSelected; } set { _isSelected = value; } }
@@ -75,8 +75,8 @@ namespace CT6GAMAI
 
         private void GetAllRenderers()
         {
-            _allSMRRenderers = knightBaseObj.GetComponentsInChildren<SkinnedMeshRenderer>().ToList();
-            _allMRRenderers = knightBaseObj.GetComponentsInChildren<MeshRenderer>().ToList();
+            _allSMRRenderers = materialBaseObject.GetComponentsInChildren<SkinnedMeshRenderer>().ToList();
+            _allMRRenderers = materialBaseObject.GetComponentsInChildren<MeshRenderer>().ToList();
 
             AllRenderers.AddRange(_allSMRRenderers.Cast<Renderer>());
             AllRenderers.AddRange(_allMRRenderers.Cast<Renderer>());
@@ -90,7 +90,7 @@ namespace CT6GAMAI
                 GetAllRenderers();
             }
 
-            Material matToSet = isInactive ? greyMat : normalMat;
+            Material matToSet = isInactive ? inactiveMaterial : normalMaterial;
 
             foreach (Renderer renderer in AllRenderers)
             {
@@ -131,7 +131,7 @@ namespace CT6GAMAI
             var dir = (endPointPos - transform.position).normalized;
             var lookRot = Quaternion.LookRotation(dir);
 
-            knightBaseObj.transform.DORotateQuaternion(lookRot, LOOK_ROTATION_SPEED);
+            materialBaseObject.transform.DORotateQuaternion(lookRot, LOOK_ROTATION_SPEED);
 
             transform.DOMove(endPointPos, MOVEMENT_SPEED).SetEase(Ease.InOutQuad);
         }

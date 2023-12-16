@@ -22,7 +22,7 @@ namespace CT6GAMAI
         /// <summary>
         /// Unit's class. Determines stats.
         /// </summary>
-        public Constants.Class UnitClass = Constants.Class.Mercenary;
+        public Constants.Class UnitClass = Constants.Class.Knight;
 
         /// <summary>
         /// Shows how seasoned a unit is in his or her current class.

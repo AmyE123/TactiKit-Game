@@ -32,5 +32,4 @@ namespace CT6GAMAI
             RefreshTileInfoUI();
         }
     }
-
 }

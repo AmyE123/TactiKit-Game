@@ -10,23 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 405c8f4dbca7484448b2c4d31d9a7def, type: 3}
-  m_Name: E_Knight
+  m_Name: E_Mage
   m_EditorClassIdentifier: 
-  UnitName: Gunter
+  UnitName: Celica
   UnitTeam: 1
-  UnitClass: 0
+  UnitClass: 4
   ClassLevel: 1
-  HealthPointsBaseValue: 24
-  MovementBaseValue: 7
-  AttackBaseValue: 18
-  CriticalRateBaseValue: 5
-  HitRateBaseValue: 107
-  AvoidRateBaseValue: 16
-  StrengthBaseValue: 10
-  SpeedBaseValue: 8
-  MagicBaseValue: 0
-  LuckBaseValue: 9
-  SkillBaseValue: 15
-  DefenseBaseValue: 10
-  ResistanceBaseValue: 4
-  RatingValue: 56
+  HealthPointsBaseValue: 22
+  MovementBaseValue: 6
+  AttackBaseValue: 16
+  CriticalRateBaseValue: 4
+  HitRateBaseValue: 112
+  AvoidRateBaseValue: 13
+  StrengthBaseValue: 12
+  SpeedBaseValue: 7
+  MagicBaseValue: 8
+  LuckBaseValue: 5
+  SkillBaseValue: 13
+  DefenseBaseValue: 7
+  ResistanceBaseValue: 12
+  RatingValue: 64

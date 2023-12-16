@@ -10,23 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 405c8f4dbca7484448b2c4d31d9a7def, type: 3}
-  m_Name: E_Knight
+  m_Name: E_Druid
   m_EditorClassIdentifier: 
-  UnitName: Gunter
+  UnitName: Fernand
   UnitTeam: 1
-  UnitClass: 0
-  ClassLevel: 1
-  HealthPointsBaseValue: 24
-  MovementBaseValue: 7
-  AttackBaseValue: 18
-  CriticalRateBaseValue: 5
-  HitRateBaseValue: 107
-  AvoidRateBaseValue: 16
-  StrengthBaseValue: 10
-  SpeedBaseValue: 8
-  MagicBaseValue: 0
-  LuckBaseValue: 9
-  SkillBaseValue: 15
-  DefenseBaseValue: 10
-  ResistanceBaseValue: 4
-  RatingValue: 56
+  UnitClass: 1
+  ClassLevel: 2
+  HealthPointsBaseValue: 16
+  MovementBaseValue: 5
+  AttackBaseValue: 8
+  CriticalRateBaseValue: 0
+  HitRateBaseValue: 98
+  AvoidRateBaseValue: 14
+  StrengthBaseValue: 1
+  SpeedBaseValue: 7
+  MagicBaseValue: 5
+  LuckBaseValue: 8
+  SkillBaseValue: 6
+  DefenseBaseValue: 4
+  ResistanceBaseValue: 5
+  RatingValue: 36

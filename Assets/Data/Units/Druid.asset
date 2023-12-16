@@ -10,23 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 405c8f4dbca7484448b2c4d31d9a7def, type: 3}
-  m_Name: E_Knight
+  m_Name: Druid
   m_EditorClassIdentifier: 
-  UnitName: Gunter
-  UnitTeam: 1
-  UnitClass: 0
-  ClassLevel: 1
-  HealthPointsBaseValue: 24
-  MovementBaseValue: 7
-  AttackBaseValue: 18
-  CriticalRateBaseValue: 5
-  HitRateBaseValue: 107
-  AvoidRateBaseValue: 16
-  StrengthBaseValue: 10
+  UnitName: Dagr
+  UnitTeam: 0
+  UnitClass: 1
+  ClassLevel: 2
+  HealthPointsBaseValue: 20
+  MovementBaseValue: 5
+  AttackBaseValue: 15
+  CriticalRateBaseValue: 0
+  HitRateBaseValue: 105
+  AvoidRateBaseValue: 17
+  StrengthBaseValue: 11
   SpeedBaseValue: 8
   MagicBaseValue: 0
-  LuckBaseValue: 9
-  SkillBaseValue: 15
+  LuckBaseValue: 10
+  SkillBaseValue: 7
   DefenseBaseValue: 10
-  ResistanceBaseValue: 4
-  RatingValue: 56
+  ResistanceBaseValue: 6
+  RatingValue: 52

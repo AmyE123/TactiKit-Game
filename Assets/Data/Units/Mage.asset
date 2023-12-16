@@ -12,20 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 405c8f4dbca7484448b2c4d31d9a7def, type: 3}
   m_Name: Mage
   m_EditorClassIdentifier: 
-  UnitName: Unassigned
-  UnitClass: 1
-  ClassLevel: 0
-  HealthPointsBaseValue: 0
-  MovementBaseValue: 3
-  AttackBaseValue: 0
+  UnitName: Alice
+  UnitTeam: 0
+  UnitClass: 4
+  ClassLevel: 3
+  HealthPointsBaseValue: 17
+  MovementBaseValue: 5
+  AttackBaseValue: 14
   CriticalRateBaseValue: 0
-  HitRateBaseValue: 0
-  AvoidRateBaseValue: 0
-  StrengthBaseValue: 0
-  SpeedBaseValue: 0
-  MagicBaseValue: 0
-  LuckBaseValue: 0
-  SkillBaseValue: 0
-  DefenseBaseValue: 0
-  ResistanceBaseValue: 0
-  RatingValue: 0
+  HitRateBaseValue: 97
+  AvoidRateBaseValue: 16
+  StrengthBaseValue: 1
+  SpeedBaseValue: 10
+  MagicBaseValue: 11
+  LuckBaseValue: 2
+  SkillBaseValue: 4
+  DefenseBaseValue: 3
+  ResistanceBaseValue: 6
+  RatingValue: 37
