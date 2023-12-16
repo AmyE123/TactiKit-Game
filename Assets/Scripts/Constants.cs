@@ -22,9 +22,9 @@ namespace CT6GAMAI
         public enum NodeVisualEnemyColorState { SingularEnemy, AllEnemy }
 
         /// <summary>
-        /// Enumerations representing the different states of a selector.
+        /// Enumerations representing the different states of a cursor.
         /// </summary>
-        public enum NodeSelectorState { NoSelection, DefaultSelected, PlayerSelected, EnemySelected }
+        public enum NodeCursorState { NoSelection, DefaultSelected, PlayerSelected, EnemySelected }
 
         /// <summary>
         /// Enumerations representing different directions.

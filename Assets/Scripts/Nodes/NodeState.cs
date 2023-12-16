@@ -5,15 +5,15 @@ namespace CT6GAMAI
     public class NodeState : MonoBehaviour
     {
         public NodeVisualManager VisualStateManager;
-        public NodeSelectorManager SelectorStateManager;
+        public NodeCursorManager CursorStateManager;
 
         private void Start()
         {
             VisualStateManager = GetComponent<NodeVisualManager>();
-            SelectorStateManager = GetComponent<NodeSelectorManager>();
+            CursorStateManager = GetComponent<NodeCursorManager>();
         }
 
-        public void ChangeVisualData(SpriteRenderer SR, NodeStateVisualData VisualData)
+        public void ChangeVisualData(SpriteRenderer SR, NodeVisualData VisualData)
         {
             SR.material = VisualData.Material;
             SR.color = VisualData.Color;

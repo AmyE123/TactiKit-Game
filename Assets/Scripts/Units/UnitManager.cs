@@ -24,7 +24,7 @@ namespace CT6GAMAI
         private GridManager _gridManager;
 
         private RaycastHit _stoodNodeRayHit;
-        private GridSelector _gridSelector;
+        private GridCursor _gridCursor;
         private bool _isMoving = false;
         private bool _isUnitInactive;
         private List<SkinnedMeshRenderer> _allSMRRenderers;
@@ -59,8 +59,8 @@ namespace CT6GAMAI
             _updatedStoodNode = DetectStoodNode();
             _updatedStoodNode.StoodUnit = this;
 
-            // TODO: Cleanup of gridselector stuff
-            _gridSelector = FindObjectOfType<GridSelector>();
+            // TODO: Cleanup of gridcursor stuff
+            _gridCursor = FindObjectOfType<GridCursor>();
         }
 
         private void Update()
@@ -143,7 +143,7 @@ namespace CT6GAMAI
 
             _isMoving = false;
             _isSelected = false;
-            _gridSelector.UnitPressed = false;
+            _gridCursor.UnitPressed = false;
             _gameManager.UnitsManager.SetActiveUnit(null);
             _stoodNode = DetectStoodNode();
             _updatedStoodNode = _stoodNode;

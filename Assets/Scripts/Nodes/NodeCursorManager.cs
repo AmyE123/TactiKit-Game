@@ -5,11 +5,11 @@ namespace CT6GAMAI
     using static CT6GAMAI.Constants;
 
     /// <summary>
-    /// A manager for the node selector, containing controls for the NodeSelectorFSM
+    /// A manager for the node cursor, containing controls for the NodeCursorFSM
     /// </summary>
-    public class NodeSelectorManager : MonoBehaviour
+    public class NodeCursorManager : MonoBehaviour
     {
-        [SerializeField] private NodeSelectorFSM selectorFSM;
+        [SerializeField] private NodeCursorFSM cursorFSM;
 
         [Header("State Booleans")]
         [SerializeField] private bool _isActiveSelection;
@@ -17,37 +17,37 @@ namespace CT6GAMAI
         [SerializeField] private bool _isPlayerSelected;
         [SerializeField] private bool _isEnemySelected;
 
-        [Header("Selector Visual Data")]
+        [Header("Cursor Visual Data")]
         /// <summary>
-        /// The image for the selector hand
+        /// The image for the cursor hand
         /// </summary>
-        public Image SelectorImage;
+        public Image CursorImage;
 
         /// <summary>
-        /// The sprite renderer for the selector
+        /// The sprite renderer for the cursor
         /// </summary>
-        public SpriteRenderer SelectorSR;
+        public SpriteRenderer CursorSR;
 
         /// <summary>
-        /// The gameObject of the node decal (selection on the node) for the selector
+        /// The gameObject of the node decal (selection on the tile) for the cursor
         /// </summary>
-        public GameObject SelectorNodeDecal;
+        public GameObject CursorNodeDecal;
 
         /// <summary>
-        /// The gameObject of the canvas for the selector
+        /// The gameObject of the canvas for the cursor
         /// </summary>
-        public GameObject SelectorCanvas;
+        public GameObject CursorCanvas;
 
         /// <summary>
-        /// The different sprites for the selector
+        /// The different sprites for the cursor
         /// </summary>
         // TODO: Update this into the data scriptable object
-        public Sprite[] SelectorSprites;
+        public Sprite[] CursorSprites;
 
         /// <summary>
-        /// Visual data objects for the selector
+        /// Visual data objects for the cursor
         /// </summary>
-        public NodeStateVisualData[] SelectorVisualDatas;
+        public NodeVisualData[] CursorVisualDatas;
 
 
         #region Public Getters
@@ -59,17 +59,17 @@ namespace CT6GAMAI
         public bool IsActiveSelection => _isActiveSelection;
 
         /// <summary>
-        /// A bool indicating whether the selector is in Default state.
+        /// A bool indicating whether the cursor is in Default state.
         /// </summary>
         public bool IsDefaultSelected => _isDefaultSelected;
 
         /// <summary>
-        /// A bool indicating whether the selector is over a player
+        /// A bool indicating whether the cursor is over a player
         /// </summary>
         public bool IsPlayerSelected => _isPlayerSelected;
 
         /// <summary>
-        /// A bool indicating whether the selector is over an enemy
+        /// A bool indicating whether the cursor is over an enemy
         /// </summary>
         public bool IsEnemySelected => _isEnemySelected;
 
@@ -86,51 +86,51 @@ namespace CT6GAMAI
 
         private void Start()
         {
-            selectorFSM = new NodeSelectorFSM();
-            selectorFSM.Manager = this;
+            cursorFSM = new NodeCursorFSM();
+            cursorFSM.Manager = this;
 
             State = GetComponent<NodeState>();
 
-            RefreshSelector();
+            RefreshCursor();
         }
 
         /// <summary>
-        /// Refreshes the selector to make sure it is up to date with the right state.
+        /// Refreshes the cursor to make sure it is up to date with the right state.
         /// </summary>
-        private void RefreshSelector()
+        private void RefreshCursor()
         {
-            switch (selectorFSM.GetState())
+            switch (cursorFSM.GetState())
             {
-                case NodeSelectorState.NoSelection:
-                    SetSelectorVisuals(SelectorSprites[0], false);
+                case NodeCursorState.NoSelection:
+                    SetCursorVisuals(CursorSprites[0], false);
                     break;
-                case NodeSelectorState.DefaultSelected:
-                    SetSelectorVisuals(SelectorSprites[0]);
+                case NodeCursorState.DefaultSelected:
+                    SetCursorVisuals(CursorSprites[0]);
                     break;
-                case NodeSelectorState.PlayerSelected:
-                    SetSelectorVisuals(SelectorSprites[0]);
+                case NodeCursorState.PlayerSelected:
+                    SetCursorVisuals(CursorSprites[0]);
                     break;
-                case NodeSelectorState.EnemySelected:
+                case NodeCursorState.EnemySelected:
                     Debug.Log("AHHH ENEMY!!");
-                    SetSelectorVisuals(SelectorSprites[1], true);
+                    SetCursorVisuals(CursorSprites[1], true);
                     break;
             }
         }
 
         /// <summary>
-        /// Sets the selector visuals, the image of the selector, and its active state.
+        /// Sets the cursor visuals, the image of the cursor, and its active state.
         /// </summary>
-        /// <param name="selectorImage">The image that is shown where the selector is. This can be a hand, an enemy indicator, or something else.</param>
-        /// <param name="isActive">Whether the selector is active or not.</param>
-        private void SetSelectorVisuals(Sprite selectorImage, bool isActive = true)
+        /// <param name="cursorImage">The image that is shown where the cursor is. This can be a hand, an enemy indicator, or something else.</param>
+        /// <param name="isActive">Whether the cursor is active or not.</param>
+        private void SetCursorVisuals(Sprite cursorImage, bool isActive = true)
         {
-            SelectorImage.sprite = selectorImage;
-            SelectorNodeDecal.SetActive(isActive);
-            SelectorCanvas.SetActive(isActive);
+            CursorImage.sprite = cursorImage;
+            CursorNodeDecal.SetActive(isActive);
+            CursorCanvas.SetActive(isActive);
         }
 
         /// <summary>
-        /// Sets the selector to inactive.
+        /// Sets the cursor to inactive.
         /// </summary>
         public void SetInactive()
         {
@@ -139,12 +139,12 @@ namespace CT6GAMAI
             _isPlayerSelected = false;
             _isEnemySelected = false;
 
-            selectorFSM.ChangeState(NodeSelectorState.NoSelection);
-            RefreshSelector();
+            cursorFSM.ChangeState(NodeCursorState.NoSelection);
+            RefreshCursor();
         }
 
         /// <summary>
-        /// Sets the selector to default selected.
+        /// Sets the cursor to default selected.
         /// </summary>
         public void SetDefaultSelected()
         {
@@ -153,12 +153,12 @@ namespace CT6GAMAI
             _isPlayerSelected = false;
             _isEnemySelected = false;
 
-            selectorFSM.ChangeState(NodeSelectorState.DefaultSelected);
-            RefreshSelector();
+            cursorFSM.ChangeState(NodeCursorState.DefaultSelected);
+            RefreshCursor();
         }
 
         /// <summary>
-        /// Sets the selector to player selected (when the selector is over a player)
+        /// Sets the cursor to player selected (when the cursor is over a player)
         /// </summary>
         public void SetPlayerSelected()
         {
@@ -167,12 +167,12 @@ namespace CT6GAMAI
             _isPlayerSelected = true;
             _isEnemySelected = false;
 
-            selectorFSM.ChangeState(NodeSelectorState.PlayerSelected);
-            RefreshSelector();
+            cursorFSM.ChangeState(NodeCursorState.PlayerSelected);
+            RefreshCursor();
         }
 
         /// <summary>
-        /// Sets the selector to enemy selected (when the selector is over an enemy)
+        /// Sets the cursor to enemy selected (when the cursor is over an enemy)
         /// </summary>
         public void SetEnemySelected()
         {
@@ -181,8 +181,8 @@ namespace CT6GAMAI
             _isPlayerSelected = false;
             _isEnemySelected = true;
 
-            selectorFSM.ChangeState(NodeSelectorState.EnemySelected);
-            RefreshSelector();
+            cursorFSM.ChangeState(NodeCursorState.EnemySelected);
+            RefreshCursor();
         }
     }
 }

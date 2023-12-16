@@ -12,7 +12,7 @@ namespace CT6GAMAI
         [SerializeField] private List<UnitManager> _allUnits;
         [SerializeField] private List<UnitManager> _activeUnits;
 
-        [SerializeField] private UnitManager _selectorUnit;
+        [SerializeField] private UnitManager _cursorUnit;
         [SerializeField] private UnitManager _activeUnit;
 
         private bool _unitsInitalized = false;
@@ -32,7 +32,10 @@ namespace CT6GAMAI
         /// </summary>
         public UnitManager ActiveUnit => _activeUnit;
 
-        public UnitManager SelectorUnit => _selectorUnit;
+        /// <summary>
+        /// Gets the current unit underneath the cursor.
+        /// </summary>
+        public UnitManager CursorUnit => _cursorUnit;
 
         private void Update()
         {           
@@ -83,9 +86,13 @@ namespace CT6GAMAI
             _activeUnit = unit;           
         }
 
-        public void SetSelectorUnit(UnitManager unit)
+        /// <summary>
+        /// Setter for the cursor unit.
+        /// </summary>
+        /// <param name="unit">The unit you want to set as under the cursor.</param>
+        public void SetCursorUnit(UnitManager unit)
         {
-            _selectorUnit = unit;
+            _cursorUnit = unit;
         }
     }
 }

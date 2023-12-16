@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 7378149850651023714}
   - component: {fileID: 5189403585633391542}
   m_Layer: 0
-  m_Name: VisualSR
+  m_Name: TileColorSR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -261,8 +261,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe9b1508a4f9f104aa1200b1dba749f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  VisualStateManager: {fileID: 0}
-  SelectorStateManager: {fileID: 0}
+  VisualStateManager: {fileID: 7354190729456982330}
+  CursorStateManager: {fileID: 6523508518634145030}
 --- !u!114 &7354190729456982330
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -309,15 +309,16 @@ MonoBehaviour:
   _isDefaultSelected: 0
   _isPlayerSelected: 0
   _isEnemySelected: 0
-  SelectorImage: {fileID: 1058421250425296787}
-  SelectorSR: {fileID: 2113958563014563909}
-  SelectorNodeDecal: {fileID: 5469833492010107051}
-  SelectorCanvas: {fileID: 5342038288916271231}
-  SelectorSprites:
+  CursorImage: {fileID: 1058421250425296787}
+  CursorSR: {fileID: 2113958563014563909}
+  CursorNodeDecal: {fileID: 7963918946874948856}
+  CursorCanvas: {fileID: 5342038288916271231}
+  CursorSprites:
   - {fileID: 21300000, guid: 1078d65449a34774da4dad4c83a3ea16, type: 3}
   - {fileID: 21300000, guid: 54b12d0a6cd66c648820525e37e69258, type: 3}
-  SelectorVisualDatas:
+  CursorVisualDatas:
   - {fileID: 11400000, guid: 4597a9117c303534a8cc65a9e369ff54, type: 2}
+  - {fileID: 11400000, guid: e557149fe8171e348be574362c32bf03, type: 2}
   State: {fileID: 593979796380849875}
 --- !u!1 &4085781567587022053
 GameObject:
@@ -572,7 +573,7 @@ GameObject:
   - component: {fileID: 3838676920010523902}
   - component: {fileID: 2113958563014563909}
   m_Layer: 0
-  m_Name: SelectorSR
+  m_Name: CursorSR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -657,7 +658,7 @@ GameObject:
   - component: {fileID: 7524608377910422202}
   - component: {fileID: 1058421250425296787}
   m_Layer: 5
-  m_Name: Pointer
+  m_Name: Cursor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -10,7 +10,7 @@ namespace CT6GAMAI
     /// </summary>
     public class GridManager : MonoBehaviour
     {
-        [SerializeField] private GridSelector _gridSelector;
+        [SerializeField] private GridCursor _gridCursor;
         [SerializeField] private List<NodeManager> _allNodes;
         [SerializeField] private List<NodeManager> _occupiedNodes;
         [SerializeField] private List<Node> _movementPath;
@@ -18,7 +18,7 @@ namespace CT6GAMAI
         private UnitManager _activeUnit;
 
         private GameManager _gameManager;
-        private bool _selectorWithinRange;
+        private bool _cursorWithinRange;
         private bool _gridInitialized = false;
 
         /// <summary>
@@ -140,18 +140,18 @@ namespace CT6GAMAI
         /// </summary>
         public void HandleUnitPathing()
         {
-            UpdateSelectorRange();
+            UpdateCursorRange();
             ProcessPathing();
         }
 
         /// <summary>
-        /// Updates whether the selector is within range of the reachable nodes.
+        /// Updates whether the cursor is within range of the reachable nodes.
         /// </summary>
-        public void UpdateSelectorRange()
+        public void UpdateCursorRange()
         {
             foreach (Node n in _activeUnit.MovementRange.ReachableNodes)
             {
-                _selectorWithinRange = _activeUnit.MovementRange.ReachableNodes.Contains(_gridSelector.SelectedNode.Node);
+                _cursorWithinRange = _activeUnit.MovementRange.ReachableNodes.Contains(_gridCursor.SelectedNode.Node);
                 n.NodeManager.NodeState.VisualStateManager.SetPressed(NodeVisualColorState.Blue);
             }
         }
@@ -161,12 +161,12 @@ namespace CT6GAMAI
         /// </summary>
         public void ProcessPathing()
         {
-            if (_gridSelector.Pathing)
+            if (_gridCursor.Pathing)
             {
                 Node startNode = _gameManager.UnitsManager.ActiveUnit.StoodNode.Node;
-                Node targetNode = _gridSelector.SelectedNode.Node;
+                Node targetNode = _gridCursor.SelectedNode.Node;
 
-                if (_selectorWithinRange)
+                if (_cursorWithinRange)
                 {
                     _movementPath = _activeUnit.MovementRange.ReconstructPath(startNode, targetNode);              
 

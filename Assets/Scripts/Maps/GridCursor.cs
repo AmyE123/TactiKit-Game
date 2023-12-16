@@ -7,7 +7,7 @@ namespace CT6GAMAI
     /// Manages the selection and interaction of nodes within the grid.
     /// This includes handling node selection, grid navigation, unit selection, and pathing.
     /// </summary>
-    public class GridSelector : MonoBehaviour
+    public class GridCursor : MonoBehaviour
     {       
         private GameManager _gameManager;
         private GridManager _gridManager;
@@ -39,7 +39,7 @@ namespace CT6GAMAI
             _gameManager = GameManager.Instance;
             _gridManager = _gameManager.GridManager;
 
-            SelectedNode.NodeState.SelectorStateManager.SetDefaultSelected();
+            SelectedNode.NodeState.CursorStateManager.SetDefaultSelected();
         }
 
         private void Update()
@@ -64,7 +64,7 @@ namespace CT6GAMAI
                 SelectedNodeState = SelectedNode.NodeState; 
             }
 
-            if (SelectedNode == null || !SelectedNodeState.SelectorStateManager.IsActiveSelection)
+            if (SelectedNode == null || !SelectedNodeState.CursorStateManager.IsActiveSelection)
             {
                 UpdateActiveNodeSelection();
             }
@@ -75,7 +75,7 @@ namespace CT6GAMAI
             var nodes = _gridManager.AllNodes;
             for (int i = 0; i < nodes.Count; i++)
             {
-                if (nodes[i].NodeState.SelectorStateManager.IsActiveSelection)
+                if (nodes[i].NodeState.CursorStateManager.IsActiveSelection)
                 {
                     SelectedNode = nodes[i];
                     SelectedNodeState = SelectedNode.NodeState;
@@ -85,7 +85,7 @@ namespace CT6GAMAI
 
         private void HandleNodeUnitInteraction()
         {
-            _gameManager.UnitsManager.SetSelectorUnit(SelectedNode.StoodUnit);
+            _gameManager.UnitsManager.SetCursorUnit(SelectedNode.StoodUnit);
 
             if (SelectedNode.StoodUnit != null)
             {
@@ -99,14 +99,14 @@ namespace CT6GAMAI
 
                 if (_pathing)
                 {
-                    if (_gameManager.UnitsManager.SelectorUnit.UnitData.UnitTeam == Team.Enemy)
+                    if (_gameManager.UnitsManager.CursorUnit.UnitData.UnitTeam == Team.Enemy)
                     {
                         Debug.Log("Enemy selected!");
-                        SelectedNode.NodeState.SelectorStateManager.SetEnemySelected();
+                        SelectedNode.NodeState.CursorStateManager.SetEnemySelected();
                     }
                     else
                     {
-                        SelectedNode.NodeState.SelectorStateManager.SetDefaultSelected();
+                        SelectedNode.NodeState.CursorStateManager.SetDefaultSelected();
                     }
                 }
             }
@@ -128,33 +128,33 @@ namespace CT6GAMAI
             {
                 if (Input.GetKeyDown(KeyCode.W))
                 {
-                    MoveSelector(Direction.North);
+                    MoveCursor(Direction.North);
                 }
 
                 if (Input.GetKeyDown(KeyCode.A))
                 {
-                    MoveSelector(Direction.West);
+                    MoveCursor(Direction.West);
                 }
 
                 if (Input.GetKeyDown(KeyCode.S))
                 {
-                    MoveSelector(Direction.South);
+                    MoveCursor(Direction.South);
                 }
 
                 if (Input.GetKeyDown(KeyCode.D))
                 {
-                    MoveSelector(Direction.East);
+                    MoveCursor(Direction.East);
                 }
             }
         }
 
-        private void MoveSelector(Direction direction)
+        private void MoveCursor(Direction direction)
         {
             NodeState adjacentNodeState = GetAdjacentNodeState(direction);
             if (adjacentNodeState != null)
             {
-                adjacentNodeState.SelectorStateManager.SetDefaultSelected();
-                SelectedNodeState.SelectorStateManager.SetInactive();
+                adjacentNodeState.CursorStateManager.SetDefaultSelected();
+                SelectedNodeState.CursorStateManager.SetInactive();
             }
         }
 
@@ -180,7 +180,7 @@ namespace CT6GAMAI
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                var valid = _pathing && _gameManager.UnitsManager.SelectorUnit != null && _gameManager.UnitsManager.SelectorUnit != _gameManager.UnitsManager.ActiveUnit;
+                var valid = _pathing && _gameManager.UnitsManager.CursorUnit != null && _gameManager.UnitsManager.CursorUnit != _gameManager.UnitsManager.ActiveUnit;
 
                 if (!valid)
                 { 
