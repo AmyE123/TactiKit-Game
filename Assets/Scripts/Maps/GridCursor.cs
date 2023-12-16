@@ -64,6 +64,11 @@ namespace CT6GAMAI
             _lastSelectedUnit = unitManager.ActiveUnit;
         }
 
+        private void UpdateTerrainTypeUI()
+        {
+            _gameManager.UIManager.TileInfoManager.SetTerrainType(SelectedNode.NodeData.TerrainType);
+        }
+
         private void UpdateSelectedNode()
         {
             if (SelectedNodeState == null)
@@ -135,6 +140,7 @@ namespace CT6GAMAI
         private void HandleGridNavigation()
         {
             UpdateUnitReferences();
+            UpdateTerrainTypeUI();
 
             if (!_gameManager.UnitsManager.IsAnyUnitMoving())
             {
@@ -163,6 +169,7 @@ namespace CT6GAMAI
         private void MoveCursor(Direction direction)
         {
             _audioManager.PlayCursorSound(UnitPressed);
+            //UpdateTerrainTypeUI();
 
             NodeState adjacentNodeState = GetAdjacentNodeState(direction);
             if (adjacentNodeState != null)

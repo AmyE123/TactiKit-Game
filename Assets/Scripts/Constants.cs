@@ -34,7 +34,7 @@ namespace CT6GAMAI
         /// <summary>
         /// Enumerations representing different terrain types.
         /// </summary>
-        public enum Terrain { Default, Forest, River, Fort }
+        public enum Terrain { Plain, Forest, River, Fort }
 
         /// <summary>
         /// Constant string for the tag string used on nodes.
