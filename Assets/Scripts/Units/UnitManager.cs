@@ -6,6 +6,8 @@ namespace CT6GAMAI
     using System.Collections.Generic;
     using System.Linq;
     using static CT6GAMAI.Constants;
+    using UnityEditor.AssetImporters;
+    using System.Net;
 
     /// <summary>
     /// Manager for the singular unit.
@@ -33,7 +35,7 @@ namespace CT6GAMAI
 
         public Material inactiveMaterial;
         public Material normalMaterial;
-        public GameObject materialBaseObject;
+        public GameObject modelBaseObject;
         public List<Renderer> AllRenderers;
 
         public bool IsSelected { get { return _isSelected; } set { _isSelected = value; } }
@@ -71,12 +73,21 @@ namespace CT6GAMAI
                 _isUnitInactive = !_isUnitInactive;
                 SetUnitInactiveState(_isUnitInactive);
             }
+
+            //if (StoodNode.NodeData.TerrainType.TerrainType == Constants.Terrain.River)
+            //{
+            //    materialBaseObject.transform.DOLocalMoveY(-0.2f, 0.5f);
+            //}
+            //else
+            //{
+            //    materialBaseObject.transform.DOLocalMoveY(0.1f, 0.5f);
+            //}
         }
 
         private void GetAllRenderers()
         {
-            _allSMRRenderers = materialBaseObject.GetComponentsInChildren<SkinnedMeshRenderer>().ToList();
-            _allMRRenderers = materialBaseObject.GetComponentsInChildren<MeshRenderer>().ToList();
+            _allSMRRenderers = modelBaseObject.GetComponentsInChildren<SkinnedMeshRenderer>().ToList();
+            _allMRRenderers = modelBaseObject.GetComponentsInChildren<MeshRenderer>().ToList();
 
             AllRenderers.AddRange(_allSMRRenderers.Cast<Renderer>());
             AllRenderers.AddRange(_allMRRenderers.Cast<Renderer>());
@@ -131,9 +142,26 @@ namespace CT6GAMAI
             var dir = (endPointPos - transform.position).normalized;
             var lookRot = Quaternion.LookRotation(dir);
 
-            materialBaseObject.transform.DORotateQuaternion(lookRot, LOOK_ROTATION_SPEED);
+            AdjustTransformValuesForNodeEndpoint(lookRot, endPoint);
 
             transform.DOMove(endPointPos, MOVEMENT_SPEED).SetEase(Ease.InOutQuad);
+        }
+
+        private void AdjustTransformValuesForNodeEndpoint(Quaternion lookRot, Node endPoint)
+        {
+            // Make the unit look toward where they're moving
+            modelBaseObject.transform.DORotateQuaternion(lookRot, LOOK_ROTATION_SPEED);
+
+            // Adjust the unit's Y height if they go into a river
+            if (endPoint.NodeManager.NodeData.TerrainType.TerrainType == Constants.Terrain.River)
+            {
+                // TODO: Add these magic numbers to Constants
+                modelBaseObject.transform.DOLocalMoveY(-0.2f, 0.1f);
+            }
+            else
+            {
+                modelBaseObject.transform.DOLocalMoveY(0.1f, 0.1f);
+            }
         }
 
         private void FinalizeMovementValues(int pathIndex)
