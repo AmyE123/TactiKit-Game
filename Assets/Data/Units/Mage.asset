@@ -13,8 +13,11 @@ MonoBehaviour:
   m_Name: Mage
   m_EditorClassIdentifier: 
   UnitName: Alice
+  UnitPortrait: {fileID: 21300000, guid: 1e52ba0829540514fbcce3036f33eedf, type: 3}
   UnitTeam: 0
   UnitClass: 4
+  EquippedWeapon: 4
+  EquippedWeaponImage: {fileID: 21300000, guid: 86cb1380c20bbd843ab4b958b01f6fab, type: 3}
   ClassLevel: 3
   HealthPointsBaseValue: 17
   MovementBaseValue: 5

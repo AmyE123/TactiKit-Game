@@ -13,8 +13,11 @@ MonoBehaviour:
   m_Name: E_Druid
   m_EditorClassIdentifier: 
   UnitName: Fernand
+  UnitPortrait: {fileID: 21300000, guid: 719099743fd8d8846aefa2f18cd2e900, type: 3}
   UnitTeam: 1
   UnitClass: 1
+  EquippedWeapon: 3
+  EquippedWeaponImage: {fileID: 21300000, guid: 86cb1380c20bbd843ab4b958b01f6fab, type: 3}
   ClassLevel: 2
   HealthPointsBaseValue: 16
   MovementBaseValue: 5

@@ -67,6 +67,11 @@ namespace CT6GAMAI
         public enum Team { Player, Enemy };
 
         /// <summary>
+        /// The main weapon a unit has equipped.
+        /// </summary>
+        public enum Weapons { BronzeSword, SilverSword, WoodSpear, MetalSpear, Fire, Ice };
+
+        /// <summary>
         /// The player team colour (FOR UI)
         /// </summary>
         public static Color32 UI_PlayerColour = new Color32(93, 149, 185, 255);
@@ -115,5 +120,13 @@ namespace CT6GAMAI
         public const string READY_ANIM_PARAM = "Ready";
 
         #endregion // Animation Parameter Strings
+
+        #region User Interface
+
+        public const float BATTLE_FORECAST_LEFT_X_POS_TO = -400;
+
+        public const float BATTLE_FORECAST_RIGHT_X_POS_TO = 400;
+
+        #endregion // User Interface
     }
 }

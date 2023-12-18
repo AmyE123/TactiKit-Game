@@ -13,8 +13,11 @@ MonoBehaviour:
   m_Name: E_Mage
   m_EditorClassIdentifier: 
   UnitName: Celica
+  UnitPortrait: {fileID: 21300000, guid: 1e52ba0829540514fbcce3036f33eedf, type: 3}
   UnitTeam: 1
   UnitClass: 4
+  EquippedWeapon: 5
+  EquippedWeaponImage: {fileID: 21300000, guid: 86cb1380c20bbd843ab4b958b01f6fab, type: 3}
   ClassLevel: 1
   HealthPointsBaseValue: 22
   MovementBaseValue: 6
