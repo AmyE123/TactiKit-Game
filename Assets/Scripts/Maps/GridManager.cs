@@ -212,6 +212,7 @@ namespace CT6GAMAI
                             if (isNodeOccupiedByEnemy(targetNode))
                             {
                                 Debug.Log("[GAME]: Battle Forecast UI here");
+                                _gameManager.UIManager.SpawnBattleForecast(_activeUnit.UnitData, targetNode.NodeManager.StoodUnit.UnitData);
                             }
                         }
                     }

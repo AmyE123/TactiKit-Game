@@ -19,26 +19,47 @@ namespace CT6GAMAI
 
         private void Update()
         {
-            // TODO: Write function to deal with toggling battle forecast for both sides.
-            // Could be in it's own class? UI_BattleForecastManager, and rename the side ones to UI_BattleForecastSideManager
-            if (Input.GetKeyDown(KeyCode.T))
-            {
-                _battleForecastManagers[0].ToggleBattleForecastSide(testUnits[0]);
-                _battleForecastManagers[1].ToggleBattleForecastSide(testUnits[1]);
+            // TODO: Write function to deal with toggling battle forecast for both sides.            
+            //if (Input.GetKeyDown(KeyCode.T))
+            //{
+            //    _battleForecastManagers[0].ToggleBattleForecastSide(testUnits[0]);
+            //    _battleForecastManagers[1].ToggleBattleForecastSide(testUnits[1]);
 
-                // Don't spam T as it will break the fade. This is just test code
-                if (_battleForecastManagers[0].IsForecastToggled)
-                {
-                    _tileInfoManager.gameObject.SetActive(false);
-                    _unitInfoManager.gameObject.SetActive(false);
-                    _battleVignette.DOFade(1, 0.5f);
-                }
-                else
-                {
-                    _tileInfoManager.gameObject.SetActive(true);
-                    _unitInfoManager.gameObject.SetActive(true);
-                    _battleVignette.DOFade(0, 0.5f);
-                }
+            //    // Don't spam T as it will break the fade. This is just test code
+            //    if (_battleForecastManagers[0].IsForecastToggled)
+            //    {
+            //        _tileInfoManager.gameObject.SetActive(false);
+            //        _unitInfoManager.gameObject.SetActive(false);
+            //        _battleVignette.DOFade(1, 0.5f);
+            //    }
+            //    else
+            //    {
+            //        _tileInfoManager.gameObject.SetActive(true);
+            //        _unitInfoManager.gameObject.SetActive(true);
+            //        _battleVignette.DOFade(0, 0.5f);
+            //    }
+            //}
+        }
+
+
+        // TODO: Could THIS be in it's own class? UI_BattleForecastManager?
+        public void SpawnBattleForecast(UnitData unitA, UnitData unitB)
+        {
+            _battleForecastManagers[0].ToggleBattleForecastSide(unitA);
+            _battleForecastManagers[1].ToggleBattleForecastSide(unitB);
+
+            // Don't spam T as it will break the fade. This is just test code
+            if (_battleForecastManagers[0].IsForecastToggled)
+            {
+                _tileInfoManager.gameObject.SetActive(false);
+                _unitInfoManager.gameObject.SetActive(false);
+                _battleVignette.DOFade(1, 0.5f);
+            }
+            else
+            {
+                _tileInfoManager.gameObject.SetActive(true);
+                _unitInfoManager.gameObject.SetActive(true);
+                _battleVignette.DOFade(0, 0.5f);
             }
         }
     }
