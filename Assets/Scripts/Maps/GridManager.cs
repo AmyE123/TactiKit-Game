@@ -21,6 +21,8 @@ namespace CT6GAMAI
         private bool _cursorWithinRange;
         private bool _gridInitialized = false;
 
+        public GridCursor GridCursor => _gridCursor;
+
         /// <summary>
         /// Gets the list of all nodes in the grid.
         /// </summary>

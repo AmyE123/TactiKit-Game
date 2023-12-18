@@ -17,6 +17,7 @@ namespace CT6GAMAI
         [SerializeField] private bool _isDefaultSelected;
         [SerializeField] private bool _isPlayerSelected;
         [SerializeField] private bool _isEnemySelected;
+        [SerializeField] private bool _isDisabled;
 
         private GameManager _gameManager;
 
@@ -82,6 +83,11 @@ namespace CT6GAMAI
         /// </summary>
         public bool IsEnemySelected => _isEnemySelected;
 
+        /// <summary>
+        /// A bool indicating whether the cursor should be disabled for UI events
+        /// </summary>
+        public bool IsDisabled => _isDisabled;
+
         #endregion // Public Getters
 
         #region Hidden In Inspector
@@ -126,6 +132,9 @@ namespace CT6GAMAI
         /// </summary>
         private void RefreshCursor()
         {
+            CursorCanvas.SetActive(!_isDisabled);
+            CursorSRGO.SetActive(!_isDisabled);
+
             switch (cursorFSM.GetState())
             {
                 case NodeCursorState.NoSelection:
@@ -167,9 +176,12 @@ namespace CT6GAMAI
         /// <param name="isActive">Whether the cursor is active or not.</param>
         private void SetCursorVisuals(Sprite cursorImage, bool isActive = true)
         {
-            CursorImage.sprite = cursorImage;
-            CursorNodeDecal.SetActive(isActive);
-            CursorCanvas.SetActive(isActive);
+            if (!_isDisabled)
+            {
+                CursorImage.sprite = cursorImage;
+                CursorNodeDecal.SetActive(isActive);
+                CursorCanvas.SetActive(isActive);
+            }
         }
 
         /// <summary>
@@ -181,6 +193,7 @@ namespace CT6GAMAI
             _isDefaultSelected = false;
             _isPlayerSelected = false;
             _isEnemySelected = false;
+            _isDisabled = false;
 
             cursorFSM.ChangeState(NodeCursorState.NoSelection);
             RefreshCursor();
@@ -195,6 +208,7 @@ namespace CT6GAMAI
             _isDefaultSelected = true;
             _isPlayerSelected = false;
             _isEnemySelected = false;
+            _isDisabled = false;
 
             cursorFSM.ChangeState(NodeCursorState.DefaultSelected);
             RefreshCursor();
@@ -209,6 +223,7 @@ namespace CT6GAMAI
             _isDefaultSelected = false;
             _isPlayerSelected = true;
             _isEnemySelected = false;
+            _isDisabled = false;
 
             cursorFSM.ChangeState(NodeCursorState.PlayerSelected);
             RefreshCursor();
@@ -223,8 +238,27 @@ namespace CT6GAMAI
             _isDefaultSelected = false;
             _isPlayerSelected = false;
             _isEnemySelected = true;
+            _isDisabled = false;
 
             cursorFSM.ChangeState(NodeCursorState.EnemySelected);
+            RefreshCursor();
+        }
+
+        /// <summary>
+        /// Sets the cursor to diabled for UI events
+        /// </summary>
+        public void SetDisabled()
+        {
+            _isDisabled = true;
+            RefreshCursor();
+        }
+
+        /// <summary>
+        /// Sets the cursor to diabled for UI events
+        /// </summary>
+        public void SetEnabled()
+        {
+            _isDisabled = false;
             RefreshCursor();
         }
     }

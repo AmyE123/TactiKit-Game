@@ -2,10 +2,10 @@ namespace CT6GAMAI
 {
     using UnityEngine;
 
-    public class UI_IActionItemWait : ActionItemBase
+    public class UI_IActionItemAttack : ActionItemBase
     {
         [SerializeField] private RectTransform _pointer;
-        [SerializeField] private Actions _action = Actions.Wait;
+        [SerializeField] private Actions _action = Actions.Attack;
         [SerializeField] private bool _isActive = false;
         [SerializeField] private bool _isSelected = false;
 
@@ -15,14 +15,14 @@ namespace CT6GAMAI
             set { _action = value; }
         }
 
-        public override bool IsActive
+        public override bool IsActive 
         {
             get { return _isActive; }
             set { _isActive = value; }
         }
 
-        public override bool IsSelected 
-        {  
+        public override bool IsSelected
+        {
             get { return _isSelected; }
             set { _isSelected = value; }
         }
@@ -36,7 +36,7 @@ namespace CT6GAMAI
 
         public override void ActionEvent()
         {
-            Debug.Log("Event Action - Wait");
+            Debug.Log("Event Action - Attack");
         }
     }
 }

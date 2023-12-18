@@ -17,6 +17,7 @@ namespace CT6GAMAI
         private AudioManager _audioManager;
         private UnitManager _lastSelectedUnit;
         private bool _pathing = false;
+        //private bool _disableCursor = false;
 
         /// <summary>
         /// The currently selected node.
