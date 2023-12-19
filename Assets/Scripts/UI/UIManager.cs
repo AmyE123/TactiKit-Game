@@ -105,10 +105,20 @@ namespace CT6GAMAI
                 if (isDisabled)
                 {
                     cursorStateManager.SetDisabled();
+
+                    foreach (NodeManager NM in _gameManager.GridManager.AllNodes)
+                    {
+                        NM.NodeState.VisualStateManager.SetDisabled();
+                    }
                 }
                 else
                 {
                     cursorStateManager.SetEnabled();
+
+                    foreach (NodeManager NM in _gameManager.GridManager.AllNodes)
+                    {
+                        NM.NodeState.VisualStateManager.SetEnabled();
+                    }
                 }
             }
         }

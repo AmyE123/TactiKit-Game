@@ -17,7 +17,6 @@ namespace CT6GAMAI
         private AudioManager _audioManager;
         private UnitManager _lastSelectedUnit;
         private bool _pathing = false;
-        //private bool _disableCursor = false;
 
         /// <summary>
         /// The currently selected node.
@@ -147,7 +146,7 @@ namespace CT6GAMAI
             UpdateUnitReferences();
             UpdateTerrainTypeUI();
 
-            if (!_gameManager.UnitsManager.IsAnyUnitMoving())
+            if (!_gameManager.UnitsManager.IsAnyUnitMoving() && !_gameManager.UIManager.ActionItemsManager.IsActionItemsActive)
             {
                 if (Input.GetKeyDown(KeyCode.W))
                 {

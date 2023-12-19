@@ -200,6 +200,7 @@ namespace CT6GAMAI
                         if (validPath)
                         {
                             Debug.Log("[GAME]: Actions list pop-up UI here");
+                            _gameManager.UIManager.ActionItemsManager.ShowActionItems();
 
                             var unit = _gameManager.UnitsManager.ActiveUnit;
 
