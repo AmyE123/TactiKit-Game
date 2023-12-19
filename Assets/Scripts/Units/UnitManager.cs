@@ -46,6 +46,7 @@ namespace CT6GAMAI
         public UnitData UnitData => _unitData;
         public Animator Animator => _animator;
         public bool IsUnitInactive => _isUnitInactive;
+        public bool IsAwaitingMoveConfirmation;
 
         public MovementRange MovementRange => _movementRange;
         public UnitAnimationManager UnitAnimationManager => _unitAnimationManager;
@@ -164,8 +165,10 @@ namespace CT6GAMAI
             }
         }
 
-        private void FinalizeMovementValues(int pathIndex)
+        public void FinalizeMovementValues(int pathIndex)
         {
+            _gridManager._currentState = GridManager.CurrentState.ActionSelected;
+
             // TODO: This can be cleaned up
             _gridManager.OccupiedNodes[0] = _gridManager.MovementPath[pathIndex].NodeManager;
 
@@ -177,6 +180,24 @@ namespace CT6GAMAI
             _updatedStoodNode = _stoodNode;
             _gridManager.MovementPath.Clear();            
             UpdateStoodNode(this);
+        }
+
+        public void CancelMove()
+        {
+            _gridManager._currentState = GridManager.CurrentState.ActionSelected;
+
+            // Move the unit back to the original position
+            StartCoroutine(MoveToPoint(_gridManager.MovementPath[0]));
+
+            // Reset the state
+            _isMoving = false;
+            _isSelected = false;
+            _gridCursor.UnitPressed = false;
+            _gameManager.UnitsManager.SetActiveUnit(null);
+            _stoodNode = DetectStoodNode();
+            _updatedStoodNode = _stoodNode;
+            _gridManager.MovementPath.Clear();
+            UpdateStoodNode(this);            
         }
 
         /// <summary>
@@ -220,6 +241,7 @@ namespace CT6GAMAI
         public IEnumerator MoveToEndPoint()
         {
             _isMoving = true;
+            _gridManager._currentState = GridManager.CurrentState.Moving;
 
             for (int i = 1; i < _gridManager.MovementPath.Count; i++)
             {
@@ -233,7 +255,31 @@ namespace CT6GAMAI
 
                 if (i == _gridManager.MovementPath.Count - 1)
                 {
-                    FinalizeMovementValues(i);
+                    IsAwaitingMoveConfirmation = true;
+                    _gridManager._currentState = GridManager.CurrentState.ConfirmingMove;
+                    //FinalizeMovementValues(i);
+                }
+            }
+        }
+
+        public IEnumerator MoveToOriginalPosition()
+        {
+            _isMoving = true;
+
+            for (int i = 1; i < _gridManager.MovementPath.Count; i++)
+            {
+                Node n = _gridManager.MovementPath[i];
+
+                MoveToNextNode(n);
+
+                _updatedStoodNode = DetectStoodNode();
+
+                yield return new WaitForSeconds(MOVEMENT_DELAY);
+
+                if (i == _gridManager.MovementPath.Count - 1)
+                {
+                    IsAwaitingMoveConfirmation = true;
+                    //FinalizeMovementValues(i);
                 }
             }
         }
@@ -243,8 +289,13 @@ namespace CT6GAMAI
         /// </summary>
         public IEnumerator MoveToPoint(Node targetNode)
         {
+          
+            var endPointPos = targetNode.UnitTransform.transform.position;
+
+            transform.position = endPointPos;
+
             // TODO: Complete this functionality to make a unit move to a target node automatically
-            return null;
+            yield return new WaitForSeconds(1f);
         }
     }
 }

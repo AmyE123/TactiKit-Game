@@ -10,7 +10,12 @@ namespace CT6GAMAI
 
         [SerializeField] private GameObject _actionItemsGO;
         [SerializeField] private ActionItemBase[] _allActionItems;
-        [SerializeField] private List<ActionItemBase> _activeActionItems = new List<ActionItemBase>();      
+        [SerializeField] private List<ActionItemBase> _activeActionItems = new List<ActionItemBase>();
+
+        private GameManager _gameManager;
+        private UIManager _uiManager;
+        private GlobalUnitsManager _unitsManager;
+        private GridManager _gridManager;
 
         public bool IsActionItemsActive => _isActionItemsActive;
         public ActionItemBase[] AllActionItems => _allActionItems;
@@ -27,6 +32,14 @@ namespace CT6GAMAI
         public void HideActionItems()
         {
             _isActionItemsActive = false;
+        }
+
+        private void Start()
+        {
+            _gameManager = GameManager.Instance;
+            _unitsManager = _gameManager.UnitsManager;
+            _uiManager = _gameManager.UIManager;
+            _gridManager = _gameManager.GridManager;
         }
 
         private void Update()
@@ -58,6 +71,16 @@ namespace CT6GAMAI
                             RefreshActionItemCursor();
                         }
                     }
+                }
+            }
+
+            var unit = _unitsManager.ActiveUnit;
+
+            if(unit != null && unit.IsAwaitingMoveConfirmation)
+            {
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    _activeActionItems[_actionIndex].ActionEvent();
                 }
             }
         }

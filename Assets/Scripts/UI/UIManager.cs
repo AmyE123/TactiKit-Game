@@ -36,14 +36,6 @@ namespace CT6GAMAI
                 UpdateAllUIForActionItems();
             }
             
-            if (Input.GetKeyDown(KeyCode.P))
-            {
-                _actionItemsManager.ShowActionItems();
-            }
-            if (Input.GetKeyDown(KeyCode.U))
-            {
-                _actionItemsManager.ShowActionItems(true);
-            }
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 _actionItemsManager.HideActionItems();

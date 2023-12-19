@@ -9,6 +9,11 @@ namespace CT6GAMAI
         [SerializeField] private bool _isActive = false;
         [SerializeField] private bool _isSelected = false;
 
+        private GameManager _gameManager;
+        private UIManager _uiManager;
+        private GlobalUnitsManager _unitsManager;
+        private GridManager _gridManager;
+
         public override Actions Action
         {
             get { return _action; }
@@ -31,12 +36,24 @@ namespace CT6GAMAI
 
         private void Start()
         {
+            _gameManager = GameManager.Instance;
+            _unitsManager = _gameManager.UnitsManager;
+            _uiManager = _gameManager.UIManager;
+            _gridManager = _gameManager.GridManager;
+
+
             AnimatePointer();
         }
 
         public override void ActionEvent()
         {
-            Debug.Log("Event Action - Wait");
+            Debug.Log("[Event Action] - Wait");          
+
+            var unit = _unitsManager.ActiveUnit;
+            unit.FinalizeMovementValues(_gridManager.MovementPath.Count - 1);
+            unit.IsAwaitingMoveConfirmation = false;
+            _uiManager.ActionItemsManager.HideActionItems();
+            //_gridManager._currentState = GridManager.CurrentState.Idle;
         }
     }
 }

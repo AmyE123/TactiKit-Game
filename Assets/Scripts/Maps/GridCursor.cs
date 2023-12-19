@@ -202,7 +202,7 @@ namespace CT6GAMAI
 
         private void HandleUnitSelection()
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space) && _gameManager.GridManager._currentState != GridManager.CurrentState.ActionSelected)
             {
                 var valid = _pathing && _gameManager.UnitsManager.CursorUnit != null && _gameManager.UnitsManager.CursorUnit != _gameManager.UnitsManager.ActiveUnit;
 

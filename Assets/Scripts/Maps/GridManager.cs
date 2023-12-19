@@ -1,19 +1,25 @@
 namespace CT6GAMAI
 {
+    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using UnityEngine;
     using static CT6GAMAI.Constants;
+    using static CT6GAMAI.GridManager;
 
     /// <summary>
     /// Manages the grid for the map.
     /// </summary>
     public class GridManager : MonoBehaviour
     {
+        public enum CurrentState { Idle, Moving, ActionSelected, ConfirmingMove };
+
         [SerializeField] private GridCursor _gridCursor;
         [SerializeField] private List<NodeManager> _allNodes;
         [SerializeField] private List<NodeManager> _occupiedNodes;
         [SerializeField] private List<Node> _movementPath;
+        
+        public CurrentState _currentState;
 
         private UnitManager _activeUnit;
 
@@ -56,6 +62,33 @@ namespace CT6GAMAI
             {
                 InitializeGrid();
             }
+
+            if (_currentState == CurrentState.ConfirmingMove)
+            {
+                var unit = _gameManager.UnitsManager.ActiveUnit;
+
+                if (unit != null && unit.IsAwaitingMoveConfirmation)
+                {
+                    if (Input.GetKeyDown(KeyCode.Escape))
+                    {                      
+                        Debug.Log("CANCEL!!");
+                        unit.CancelMove();
+                        unit.IsAwaitingMoveConfirmation = false;
+                        //_currentState = CurrentState.Idle;
+                    }
+                }
+            }
+
+            if (_currentState == CurrentState.ActionSelected)
+            {
+                StartCoroutine(IdleDelay());
+            }
+        }
+
+        IEnumerator IdleDelay()
+        {
+            yield return new WaitForSeconds(0.5f);
+            _currentState = CurrentState.Idle;
         }
 
         private void UpdateUnitReferences()
@@ -191,7 +224,7 @@ namespace CT6GAMAI
                 {
                     _movementPath = _activeUnit.MovementRange.ReconstructPath(startNode, targetNode);
 
-                    if (Input.GetKeyDown(KeyCode.Space))
+                    if (_currentState != CurrentState.ConfirmingMove && _currentState != CurrentState.Moving && Input.GetKeyDown(KeyCode.Space))
                     {
                         var validPath = _movementPath.Count > 1 && CanMoveToNode(targetNode);
 

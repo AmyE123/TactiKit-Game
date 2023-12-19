@@ -36,7 +36,7 @@ namespace CT6GAMAI
 
         public override void ActionEvent()
         {
-            Debug.Log("Event Action - Attack");
+            Debug.Log("[Event Action] - Attack");
         }
     }
 }
