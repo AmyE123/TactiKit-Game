@@ -24,7 +24,7 @@ namespace CT6GAMAI
         /// <summary>
         /// The current state of the grid cursor in regards to unit actions.
         /// </summary>
-        public Constants.CurrentState CurrentState;
+        public CurrentState CurrentState;
 
         /// <summary>
         /// A reference to the grid cursor class.
