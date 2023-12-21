@@ -42,7 +42,6 @@ namespace CT6GAMAI
         /// </summary>
         public GameObject CursorNodeDecal;
 
-
         /// <summary>
         /// The gameObject of the canvas for the cursor
         /// </summary>
@@ -254,7 +253,7 @@ namespace CT6GAMAI
         }
 
         /// <summary>
-        /// Sets the cursor to diabled for UI events
+        /// Sets the cursor to enabled for UI events
         /// </summary>
         public void SetEnabled()
         {

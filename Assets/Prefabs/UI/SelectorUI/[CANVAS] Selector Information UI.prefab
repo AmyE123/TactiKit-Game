@@ -197,10 +197,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18a8ec627d8e8f94195b4bd9076a0e72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TerrainValueText: {fileID: 7461623950539476095}
-  DefenseValueText: {fileID: 6886112970139319388}
-  MovementValueText: {fileID: 6580698360631714477}
-  HealthBuffValueText: {fileID: 1796085691490232711}
+  _terrainValueText: {fileID: 7461623950539476095}
+  _defenseValueText: {fileID: 6886112970139319388}
+  _movementValueText: {fileID: 6580698360631714477}
+  _healthBuffValueText: {fileID: 1796085691490232711}
   ActiveTerrainData: {fileID: 11400000, guid: 84261c56e48c46847a6f6522b0b09157, type: 2}
 --- !u!1 &7730704152578299181
 GameObject:

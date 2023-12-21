@@ -81,14 +81,7 @@ namespace CT6GAMAI
 
         private void Update()
         {
-            if (_isDisabled)
-            {
-                VisualSR.gameObject.SetActive(false);
-            }
-            else
-            {
-                VisualSR.gameObject.SetActive(true);
-            }
+            VisualSR.gameObject.SetActive(!_isDisabled);
         }
 
         public void SetDefault()
@@ -185,7 +178,7 @@ namespace CT6GAMAI
         }
 
         /// <summary>
-        /// Sets the cursor to diabled for UI events
+        /// Sets the cursor to enabled for UI events
         /// </summary>
         public void SetEnabled()
         {

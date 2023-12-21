@@ -6,8 +6,6 @@ namespace CT6GAMAI
     using System.Collections.Generic;
     using System.Linq;
     using static CT6GAMAI.Constants;
-    using UnityEditor.AssetImporters;
-    using System.Net;
 
     /// <summary>
     /// Manager for the singular unit.
@@ -64,25 +62,6 @@ namespace CT6GAMAI
 
             // TODO: Cleanup of gridcursor stuff
             _gridCursor = FindObjectOfType<GridCursor>();
-        }
-
-        private void Update()
-        {
-            // For debugging purposes
-            if (Input.GetKeyDown(KeyCode.I))
-            {
-                _isUnitInactive = !_isUnitInactive;
-                SetUnitInactiveState(_isUnitInactive);
-            }
-
-            //if (StoodNode.NodeData.TerrainType.TerrainType == Constants.Terrain.River)
-            //{
-            //    materialBaseObject.transform.DOLocalMoveY(-0.2f, 0.5f);
-            //}
-            //else
-            //{
-            //    materialBaseObject.transform.DOLocalMoveY(0.1f, 0.5f);
-            //}
         }
 
         private void GetAllRenderers()
@@ -156,12 +135,11 @@ namespace CT6GAMAI
             // Adjust the unit's Y height if they go into a river
             if (endPoint.NodeManager.NodeData.TerrainType.TerrainType == Constants.Terrain.River)
             {
-                // TODO: Add these magic numbers to Constants
-                modelBaseObject.transform.DOLocalMoveY(-0.2f, 0.1f);
+                modelBaseObject.transform.DOLocalMoveY(UNIT_Y_VALUE_RIVER, UNIT_Y_ADJUSTMENT_SPEED);
             }
             else
             {
-                modelBaseObject.transform.DOLocalMoveY(0.1f, 0.1f);
+                modelBaseObject.transform.DOLocalMoveY(UNIT_Y_VALUE_LAND, UNIT_Y_ADJUSTMENT_SPEED);
             }
         }
 
@@ -187,7 +165,7 @@ namespace CT6GAMAI
             _gridManager.CurrentState = CurrentState.ActionSelected;
 
             // Move the unit back to the original position
-            StartCoroutine(MoveToPoint(_gridManager.MovementPath[0]));
+            StartCoroutine(MoveBackToPoint(_gridManager.MovementPath[0]));
 
             // Reset the state
             _isMoving = false;
@@ -261,40 +239,16 @@ namespace CT6GAMAI
             }
         }
 
-        public IEnumerator MoveToOriginalPosition()
-        {
-            _isMoving = true;
-
-            for (int i = 1; i < _gridManager.MovementPath.Count; i++)
-            {
-                Node n = _gridManager.MovementPath[i];
-
-                MoveToNextNode(n);
-
-                _updatedStoodNode = DetectStoodNode();
-
-                yield return new WaitForSeconds(MOVEMENT_DELAY);
-
-                if (i == _gridManager.MovementPath.Count - 1)
-                {
-                    IsAwaitingMoveConfirmation = true;
-                    //FinalizeMovementValues(i);
-                }
-            }
-        }
-
         /// <summary>
-        /// Move the unit to an end point
+        /// Move the unit instantly to an end point. Used for when cancelling movement.
         /// </summary>
-        public IEnumerator MoveToPoint(Node targetNode)
-        {
-          
+        public IEnumerator MoveBackToPoint(Node targetNode)
+        {      
             var endPointPos = targetNode.UnitTransform.transform.position;
 
             transform.position = endPointPos;
 
-            // TODO: Complete this functionality to make a unit move to a target node automatically
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(MOVEMENT_DELAY_CANCEL);
         }
     }
 }

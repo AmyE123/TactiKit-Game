@@ -102,6 +102,11 @@ namespace CT6GAMAI
         public const float MOVEMENT_DELAY = 0.3f;
 
         /// <summary>
+        /// A value representing the amount of time the coroutine waits after cancelling a move.
+        /// </summary>
+        public const float MOVEMENT_DELAY_CANCEL = 1f;
+
+        /// <summary>
         /// A value representing the speed a unit moves from one tile to the next
         /// </summary>
         public const float MOVEMENT_SPEED = 0.2f;
@@ -110,6 +115,21 @@ namespace CT6GAMAI
         /// A value representing the speed a unit rotates toward their look rotation
         /// </summary>
         public const float LOOK_ROTATION_SPEED = 0.1f;
+
+        /// <summary>
+        /// The Y value that the unit should go to when they're walking on river tiles
+        /// </summary>
+        public const float UNIT_Y_VALUE_RIVER = -0.2f;
+
+        /// <summary>
+        /// The Y value that the unit should go to when they're walking on land tiles
+        /// </summary>
+        public const float UNIT_Y_VALUE_LAND = 0.1f;
+
+        /// <summary>
+        /// The speed that the unit should adjust their Y value
+        /// </summary>
+        public const float UNIT_Y_ADJUSTMENT_SPEED = 0.1f;
         #endregion //Units                           
 
         #region Animation Parameter Strings
@@ -142,6 +162,16 @@ namespace CT6GAMAI
         /// The speed that the cursor pointer on the actions list should point
         /// </summary>
         public const float POINTER_X_YOYO_SPEED = 0.5f;
+
+        /// <summary>
+        /// The amount of time to wait between cancelling a move and moving state to idle.
+        /// </summary>
+        public const float IDLE_DELAY = 0.5f;
+
+        /// <summary>
+        /// The speed that it takes for the vignette for UI to fade in/out
+        /// </summary>
+        public const float VIGNETTE_FADE_SPEED = 0.5f;
 
         #endregion // User Interface
     }

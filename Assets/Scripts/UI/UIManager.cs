@@ -64,21 +64,22 @@ namespace CT6GAMAI
             _areBattleForecastsToggled = false;
         }
 
-        public void ToggleVignette()
+        public void SetVignette(bool isActive)
         {
-            if (_vignetteEnabled)
+            if (!isActive)
             {
-                _vignette.DOFade(0, 0.5f);
+                _vignette.DOFade(0, Constants.VIGNETTE_FADE_SPEED);
             }
             else
             {
-                _vignette.DOFade(1, 0.5f);
+                _vignette.DOFade(1, Constants.VIGNETTE_FADE_SPEED);
             }
         }
 
         private void UpdateAllUIForActionItems()
         {
             SetCursorState(ActionItemsManager.IsActionItemsActive);
+            SetVignette(ActionItemsManager.IsActionItemsActive);
 
             foreach (GameObject go in _uiObjectsToDisableForActions)
             {
@@ -88,6 +89,8 @@ namespace CT6GAMAI
 
         private void UpdateAllUIForBattle()
         {
+            SetVignette(_areBattleForecastsToggled);
+
             foreach (GameObject go in _uiObjectsToDisableForBattles)
             {
                 go.SetActive(!_areBattleForecastsToggled);

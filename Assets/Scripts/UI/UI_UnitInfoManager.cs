@@ -14,10 +14,6 @@ namespace CT6GAMAI
         [SerializeField] private Image _teamColourImage;
         [SerializeField] private GameObject _areaGO;
 
-        public Color32 player;
-        public Color32 enemy;
-        public Color32 ally;
-
         private UnitData _previousUnitData;
 
         public UnitData ActiveUnitData;

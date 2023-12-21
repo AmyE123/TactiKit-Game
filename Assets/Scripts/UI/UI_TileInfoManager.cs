@@ -5,10 +5,10 @@ namespace CT6GAMAI
 
     public class UI_TileInfoManager : MonoBehaviour
     {
-        [SerializeField] TMP_Text TerrainValueText;
-        [SerializeField] TMP_Text DefenseValueText;
-        [SerializeField] TMP_Text MovementValueText;
-        [SerializeField] TMP_Text HealthBuffValueText;
+        [SerializeField] private TMP_Text _terrainValueText;
+        [SerializeField] private TMP_Text _defenseValueText;
+        [SerializeField] private TMP_Text _movementValueText;
+        [SerializeField] private TMP_Text _healthBuffValueText;
 
         private TerrainData _previousTerrainData;
         public TerrainData ActiveTerrainData;        
@@ -19,10 +19,10 @@ namespace CT6GAMAI
             {
                 _previousTerrainData = ActiveTerrainData;
 
-                TerrainValueText.text = ActiveTerrainData.TerrainType.ToString();
-                DefenseValueText.text = ActiveTerrainData.DefenseBoost.ToString();
-                MovementValueText.text = ActiveTerrainData.MovementCost.ToString();
-                HealthBuffValueText.text = ActiveTerrainData.HealPercentageBoost.ToString();
+                _terrainValueText.text = ActiveTerrainData.TerrainType.ToString();
+                _defenseValueText.text = ActiveTerrainData.DefenseBoost.ToString();
+                _movementValueText.text = ActiveTerrainData.MovementCost.ToString();
+                _healthBuffValueText.text = ActiveTerrainData.HealPercentageBoost.ToString();
             }
         }
 
