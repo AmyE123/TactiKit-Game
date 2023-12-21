@@ -12,21 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 405c8f4dbca7484448b2c4d31d9a7def, type: 3}
   m_Name: E_Knight
   m_EditorClassIdentifier: 
-  UnitName: Evil
+  UnitName: Gunter
+  UnitPortrait: {fileID: 21300000, guid: df4d1ca458445464d817fa2bede503f2, type: 3}
   UnitTeam: 1
   UnitClass: 0
-  ClassLevel: 0
-  HealthPointsBaseValue: 0
-  MovementBaseValue: 3
-  AttackBaseValue: 0
-  CriticalRateBaseValue: 0
-  HitRateBaseValue: 0
-  AvoidRateBaseValue: 0
-  StrengthBaseValue: 0
-  SpeedBaseValue: 0
+  EquippedWeapon: 0
+  EquippedWeaponImage: {fileID: 21300000, guid: 86cb1380c20bbd843ab4b958b01f6fab, type: 3}
+  ClassLevel: 1
+  HealthPointsBaseValue: 24
+  MovementBaseValue: 7
+  AttackBaseValue: 18
+  CriticalRateBaseValue: 5
+  HitRateBaseValue: 107
+  AvoidRateBaseValue: 16
+  StrengthBaseValue: 10
+  SpeedBaseValue: 8
   MagicBaseValue: 0
-  LuckBaseValue: 0
-  SkillBaseValue: 0
-  DefenseBaseValue: 0
-  ResistanceBaseValue: 0
-  RatingValue: 0
+  LuckBaseValue: 9
+  SkillBaseValue: 15
+  DefenseBaseValue: 10
+  ResistanceBaseValue: 4
+  RatingValue: 56

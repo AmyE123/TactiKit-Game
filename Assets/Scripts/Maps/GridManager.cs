@@ -1,5 +1,6 @@
 namespace CT6GAMAI
 {
+    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using UnityEngine;
@@ -16,10 +17,19 @@ namespace CT6GAMAI
         [SerializeField] private List<Node> _movementPath;
 
         private UnitManager _activeUnit;
-
         private GameManager _gameManager;
         private bool _cursorWithinRange;
         private bool _gridInitialized = false;
+
+        /// <summary>
+        /// The current state of the grid cursor in regards to unit actions.
+        /// </summary>
+        public Constants.CurrentState CurrentState;
+
+        /// <summary>
+        /// A reference to the grid cursor class.
+        /// </summary>
+        public GridCursor GridCursor => _gridCursor;
 
         /// <summary>
         /// Gets the list of all nodes in the grid.
@@ -54,6 +64,36 @@ namespace CT6GAMAI
             {
                 InitializeGrid();
             }
+
+            if (CurrentState == CurrentState.ConfirmingMove)
+            {
+                var unit = _gameManager.UnitsManager.ActiveUnit;
+
+                if (unit != null && unit.IsAwaitingMoveConfirmation)
+                {
+                    if (Input.GetKeyDown(KeyCode.Escape))
+                    {
+                        if (_gameManager.UIManager.AreBattleForecastsToggled)
+                        {
+                            _gameManager.UIManager.CancelBattleForecast();
+                        }
+
+                        unit.CancelMove();
+                        unit.IsAwaitingMoveConfirmation = false;
+                    }
+                }
+            }
+
+            if (CurrentState == CurrentState.ActionSelected)
+            {
+                StartCoroutine(IdleDelay());
+            }
+        }
+
+        IEnumerator IdleDelay()
+        {
+            yield return new WaitForSeconds(IDLE_DELAY);
+            CurrentState = CurrentState.Idle;
         }
 
         private void UpdateUnitReferences()
@@ -118,6 +158,63 @@ namespace CT6GAMAI
             }
         }
 
+        private void ProcessMovementPath()
+        {
+            Node startNode = _gameManager.UnitsManager.ActiveUnit.StoodNode.Node;
+            Node targetNode = _gridCursor.SelectedNode.Node;
+
+            if (!_cursorWithinRange)
+            {
+                return;
+            }
+
+            _movementPath = _activeUnit.MovementRange.ReconstructPath(startNode, targetNode);
+            HandleMovementInput(targetNode);
+        }
+
+        private void HandleMovementInput(Node targetNode)
+        {
+            if (CurrentState != CurrentState.ConfirmingMove &&
+                CurrentState != CurrentState.Moving &&
+                Input.GetKeyDown(KeyCode.Space))
+            {
+                ProcessUnitMovement(targetNode);
+            }
+        }
+
+        private void ProcessUnitMovement(Node targetNode)
+        {
+            var validPath = _movementPath.Count > 1 && CanMoveToNode(targetNode);
+            _gameManager.AudioManager.PlaySelectPathSound(validPath);
+
+            if (validPath)
+            {
+                PerformValidPathMovement();
+            }
+            else
+            {
+                HandleInvalidPath(targetNode);
+            }
+        }
+
+        private void PerformValidPathMovement()
+        {
+            _gameManager.UIManager.ActionItemsManager.ShowActionItems();
+            var unit = _gameManager.UnitsManager.ActiveUnit;
+            unit.ClearStoodUnit();
+            StartCoroutine(unit.MoveToEndPoint());
+        }
+
+        private void HandleInvalidPath(Node targetNode)
+        {
+            if (isNodeOccupiedByEnemy(targetNode) && CurrentState != CurrentState.ConfirmingMove)
+            {
+                CurrentState = CurrentState.ConfirmingMove;
+                _activeUnit.IsAwaitingMoveConfirmation = true;
+                _gameManager.UIManager.SpawnBattleForecast(_activeUnit.UnitData, targetNode.NodeManager.StoodUnit.UnitData);
+            }
+        }
+
         /// <summary>
         /// Checks if a movement to a node is valid based on current game rules.
         /// </summary>
@@ -152,8 +249,6 @@ namespace CT6GAMAI
             return currentUnitOnNode != null && currentUnitOnNode.UnitData.UnitTeam == Team.Enemy;
         }
 
-
-
         /// <summary>
         /// Handles the pathing logic when a unit is selected.
         /// </summary>
@@ -180,44 +275,7 @@ namespace CT6GAMAI
         /// </summary>
         public void ProcessPathing()
         {
-            if (_gridCursor.Pathing)
-            {
-                Node startNode = _gameManager.UnitsManager.ActiveUnit.StoodNode.Node;
-                Node targetNode = _gridCursor.SelectedNode.Node;
-
-                if (_cursorWithinRange)
-                {
-                    _movementPath = _activeUnit.MovementRange.ReconstructPath(startNode, targetNode);
-
-                    if (Input.GetKeyDown(KeyCode.Space))
-                    {
-                        var validPath = _movementPath.Count > 1 && CanMoveToNode(targetNode);
-
-                        _gameManager.AudioManager.PlaySelectPathSound(validPath);
-
-                        if (validPath)
-                        {
-                            Debug.Log("[GAME]: Actions list pop-up UI here");
-
-                            var unit = _gameManager.UnitsManager.ActiveUnit;
-
-                            // Clear the stood node's reference to the unit
-                            unit.ClearStoodUnit();
-
-                            // Move unit here
-                            StartCoroutine(unit.MoveToEndPoint());
-                        }
-                        else
-                        {
-                            if (isNodeOccupiedByEnemy(targetNode))
-                            {
-                                Debug.Log("[GAME]: Battle Forecast UI here");
-                            }
-                        }
-                    }
-                }
-            }
-
+            ProcessMovementPath();
             HighlightPath();
         }
     }

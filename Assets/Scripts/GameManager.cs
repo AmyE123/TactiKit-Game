@@ -13,6 +13,15 @@ namespace CT6GAMAI
         /// </summary>
         public static GameManager Instance;
 
+        #region Private Manager References
+
+        [SerializeField] private GlobalUnitsManager _unitsManager;
+        [SerializeField] private GridManager _gridManager;
+        [SerializeField] private AudioManager _audioManager;
+        [SerializeField] private UIManager _uiManager;
+
+        #endregion // Private Manager References
+
         #region Public Manager References
 
         /// <summary>
@@ -30,15 +39,12 @@ namespace CT6GAMAI
         /// </summary>
         public AudioManager AudioManager => _audioManager;
 
+        /// <summary>
+        /// Public getter for UIManager
+        /// </summary>
+        public UIManager UIManager => _uiManager;
+
         #endregion // Public Manager References
-
-        #region Private Manager References
-
-        [SerializeField] private GlobalUnitsManager _unitsManager;
-        [SerializeField] private GridManager _gridManager;
-        [SerializeField] private AudioManager _audioManager;
-
-        #endregion // Private Manager References
 
         void Awake()
         {

@@ -16,6 +16,7 @@ namespace CT6GAMAI
         [SerializeField] private bool _isHovered;
         [SerializeField] private bool _isPressed;
         [SerializeField] private bool _isPath;
+        [SerializeField] private bool _isDisabled;
 
         [Header("Node Visual Data")]
         /// <summary>
@@ -59,6 +60,8 @@ namespace CT6GAMAI
         /// </summary>
         public bool IsPath => _isPath;
 
+        public bool IsDisabled => _isDisabled;
+
         #endregion // Public Getters
 
         #region Hidden In Inspector
@@ -74,6 +77,11 @@ namespace CT6GAMAI
             visualFSM.Manager = this;
 
             State = GetComponent<NodeState>();
+        }
+
+        private void Update()
+        {
+            VisualSR.gameObject.SetActive(!_isDisabled);
         }
 
         public void SetDefault()
@@ -159,6 +167,22 @@ namespace CT6GAMAI
             _isPath = true;
 
             visualFSM.ChangeState(NodeVisualState.PointOfInterest);
+        }
+
+        /// <summary>
+        /// Sets the cursor to diabled for UI events
+        /// </summary>
+        public void SetDisabled()
+        {
+            _isDisabled = true;
+        }
+
+        /// <summary>
+        /// Sets the cursor to enabled for UI events
+        /// </summary>
+        public void SetEnabled()
+        {
+            _isDisabled = false;
         }
     }
 }

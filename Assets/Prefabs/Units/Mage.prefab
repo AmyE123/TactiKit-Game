@@ -30,7 +30,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a54a7c95344f634498480e5236a3ea62, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.25
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a54a7c95344f634498480e5236a3ea62, type: 3}
       propertyPath: m_LocalRotation.w
@@ -161,6 +161,22 @@ PrefabInstance:
       objectReference: {fileID: -6565442159171177796, guid: a54a7c95344f634498480e5236a3ea62, type: 3}
     - target: {fileID: 7592517802941822380, guid: b0cf7274a78f12d43910a5c79373d142, type: 3}
       propertyPath: knightBaseObj
+      value: 
+      objectReference: {fileID: 3964570416540853922}
+    - target: {fileID: 7592517802941822380, guid: b0cf7274a78f12d43910a5c79373d142, type: 3}
+      propertyPath: normalMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 625583b056492ca489fec00cec8e34e8, type: 2}
+    - target: {fileID: 7592517802941822380, guid: b0cf7274a78f12d43910a5c79373d142, type: 3}
+      propertyPath: modelBaseObject
+      value: 
+      objectReference: {fileID: 3964570416540853922}
+    - target: {fileID: 7592517802941822380, guid: b0cf7274a78f12d43910a5c79373d142, type: 3}
+      propertyPath: inactiveMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: d4b9e0d79a92dcd4d8e5abe8eadfff49, type: 2}
+    - target: {fileID: 7592517802941822380, guid: b0cf7274a78f12d43910a5c79373d142, type: 3}
+      propertyPath: materialBaseObject
       value: 
       objectReference: {fileID: 3964570416540853922}
     - target: {fileID: 8445902401575187227, guid: b0cf7274a78f12d43910a5c79373d142, type: 3}

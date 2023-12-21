@@ -16,7 +16,7 @@ namespace CT6GAMAI
         private GridManager _gridManager;
         private AudioManager _audioManager;
         private UnitManager _lastSelectedUnit;
-        [SerializeField] private bool _pathing = false;
+        private bool _pathing = false;
 
         /// <summary>
         /// The currently selected node.
@@ -64,6 +64,11 @@ namespace CT6GAMAI
             _lastSelectedUnit = unitManager.ActiveUnit;
         }
 
+        private void UpdateTerrainTypeUI()
+        {
+            _gameManager.UIManager.TileInfoManager.SetTerrainType(SelectedNode.NodeData.TerrainType);
+        }
+
         private void UpdateSelectedNode()
         {
             if (SelectedNodeState == null)
@@ -96,6 +101,8 @@ namespace CT6GAMAI
 
             if (SelectedNode.StoodUnit != null)
             {
+                _gameManager.UIManager.UnitInfoManager.SetUnitType(SelectedNode.StoodUnit.UnitData);
+
                 if (!_pathing || _gameManager.UnitsManager.ActiveUnit == null)
                 {
                     _gameManager.UnitsManager.SetActiveUnit(SelectedNode.StoodUnit);
@@ -124,6 +131,8 @@ namespace CT6GAMAI
             }
             else
             {
+                _gameManager.UIManager.UnitInfoManager.SetUnitInfoUIInactive();
+
                 if (!UnitPressed)
                 {
                     _gameManager.UnitsManager.SetActiveUnit(null);
@@ -135,8 +144,9 @@ namespace CT6GAMAI
         private void HandleGridNavigation()
         {
             UpdateUnitReferences();
+            UpdateTerrainTypeUI();
 
-            if (!_gameManager.UnitsManager.IsAnyUnitMoving())
+            if (CanCursorMove())
             {
                 if (Input.GetKeyDown(KeyCode.W))
                 {
@@ -158,6 +168,15 @@ namespace CT6GAMAI
                     MoveCursor(Direction.East);
                 }
             }
+        }
+
+        private bool CanCursorMove()
+        {
+            bool IsAnyUnitMoving = _gameManager.UnitsManager.IsAnyUnitMoving();
+            bool IsActionItemsActive = _gameManager.UIManager.ActionItemsManager.IsActionItemsActive;
+            bool IsUnitConfirmingMove = _gameManager.GridManager.CurrentState == CurrentState.ConfirmingMove;
+
+            return !IsAnyUnitMoving && !IsActionItemsActive && !IsUnitConfirmingMove;
         }
 
         private void MoveCursor(Direction direction)
@@ -192,11 +211,17 @@ namespace CT6GAMAI
 
         private void HandleUnitSelection()
         {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                var valid = _pathing && _gameManager.UnitsManager.CursorUnit != null && _gameManager.UnitsManager.CursorUnit != _gameManager.UnitsManager.ActiveUnit;
+            bool isConfirmPressed = Input.GetKeyDown(KeyCode.Space);
+            bool isActionSelected = _gameManager.GridManager.CurrentState == CurrentState.ActionSelected;
 
-                if (!valid)
+            if (isConfirmPressed && !isActionSelected)
+            {
+                // Checks if we are pathing and the cursor unit is not on the active unit.
+                bool isCursorUnitValid = _pathing && 
+                    _gameManager.UnitsManager.CursorUnit != null && 
+                    _gameManager.UnitsManager.CursorUnit != _gameManager.UnitsManager.ActiveUnit;
+
+                if(!isCursorUnitValid)
                 {
                     ToggleUnitSelection();
                 }

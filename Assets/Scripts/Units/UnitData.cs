@@ -15,6 +15,11 @@ namespace CT6GAMAI
         public string UnitName = "Unassigned";
 
         /// <summary>
+        /// Unit's portrait.
+        /// </summary>
+        public Sprite UnitPortrait;
+
+        /// <summary>
         /// Unit's team.
         /// </summary>
         public Constants.Team UnitTeam = Constants.Team.Player;
@@ -22,7 +27,17 @@ namespace CT6GAMAI
         /// <summary>
         /// Unit's class. Determines stats.
         /// </summary>
-        public Constants.Class UnitClass = Constants.Class.Mercenary;
+        public Constants.Class UnitClass = Constants.Class.Knight;
+
+        /// <summary>
+        /// Unit's equipped weapon.
+        /// </summary>
+        public Constants.Weapons EquippedWeapon = Constants.Weapons.BronzeSword;
+
+        /// <summary>
+        /// Unit's equipped weapon sprite.
+        /// </summary>
+        public Sprite EquippedWeaponImage;
 
         /// <summary>
         /// Shows how seasoned a unit is in his or her current class.

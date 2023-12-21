@@ -31,9 +31,9 @@ namespace CT6GAMAI
         private List<MeshRenderer> _allMRRenderers;
         private bool _isSelected = false;
 
-        public Material greyMat;
-        public Material normalMat;
-        public GameObject knightBaseObj;
+        public Material inactiveMaterial;
+        public Material normalMaterial;
+        public GameObject modelBaseObject;
         public List<Renderer> AllRenderers;
 
         public bool IsSelected { get { return _isSelected; } set { _isSelected = value; } }
@@ -44,6 +44,7 @@ namespace CT6GAMAI
         public UnitData UnitData => _unitData;
         public Animator Animator => _animator;
         public bool IsUnitInactive => _isUnitInactive;
+        public bool IsAwaitingMoveConfirmation;
 
         public MovementRange MovementRange => _movementRange;
         public UnitAnimationManager UnitAnimationManager => _unitAnimationManager;
@@ -63,20 +64,10 @@ namespace CT6GAMAI
             _gridCursor = FindObjectOfType<GridCursor>();
         }
 
-        private void Update()
-        {
-            // For debugging purposes
-            if (Input.GetKeyDown(KeyCode.I))
-            {
-                _isUnitInactive = !_isUnitInactive;
-                SetUnitInactiveState(_isUnitInactive);
-            }
-        }
-
         private void GetAllRenderers()
         {
-            _allSMRRenderers = knightBaseObj.GetComponentsInChildren<SkinnedMeshRenderer>().ToList();
-            _allMRRenderers = knightBaseObj.GetComponentsInChildren<MeshRenderer>().ToList();
+            _allSMRRenderers = modelBaseObject.GetComponentsInChildren<SkinnedMeshRenderer>().ToList();
+            _allMRRenderers = modelBaseObject.GetComponentsInChildren<MeshRenderer>().ToList();
 
             AllRenderers.AddRange(_allSMRRenderers.Cast<Renderer>());
             AllRenderers.AddRange(_allMRRenderers.Cast<Renderer>());
@@ -90,7 +81,7 @@ namespace CT6GAMAI
                 GetAllRenderers();
             }
 
-            Material matToSet = isInactive ? greyMat : normalMat;
+            Material matToSet = isInactive ? inactiveMaterial : normalMaterial;
 
             foreach (Renderer renderer in AllRenderers)
             {
@@ -131,13 +122,31 @@ namespace CT6GAMAI
             var dir = (endPointPos - transform.position).normalized;
             var lookRot = Quaternion.LookRotation(dir);
 
-            knightBaseObj.transform.DORotateQuaternion(lookRot, LOOK_ROTATION_SPEED);
+            AdjustTransformValuesForNodeEndpoint(lookRot, endPoint);
 
             transform.DOMove(endPointPos, MOVEMENT_SPEED).SetEase(Ease.InOutQuad);
         }
 
-        private void FinalizeMovementValues(int pathIndex)
+        private void AdjustTransformValuesForNodeEndpoint(Quaternion lookRot, Node endPoint)
         {
+            // Make the unit look toward where they're moving
+            modelBaseObject.transform.DORotateQuaternion(lookRot, LOOK_ROTATION_SPEED);
+
+            // Adjust the unit's Y height if they go into a river
+            if (endPoint.NodeManager.NodeData.TerrainType.TerrainType == Constants.Terrain.River)
+            {
+                modelBaseObject.transform.DOLocalMoveY(UNIT_Y_VALUE_RIVER, UNIT_Y_ADJUSTMENT_SPEED);
+            }
+            else
+            {
+                modelBaseObject.transform.DOLocalMoveY(UNIT_Y_VALUE_LAND, UNIT_Y_ADJUSTMENT_SPEED);
+            }
+        }
+
+        public void FinalizeMovementValues(int pathIndex)
+        {
+            _gridManager.CurrentState = CurrentState.ActionSelected;
+
             // TODO: This can be cleaned up
             _gridManager.OccupiedNodes[0] = _gridManager.MovementPath[pathIndex].NodeManager;
 
@@ -149,6 +158,24 @@ namespace CT6GAMAI
             _updatedStoodNode = _stoodNode;
             _gridManager.MovementPath.Clear();            
             UpdateStoodNode(this);
+        }
+
+        public void CancelMove()
+        {
+            _gridManager.CurrentState = CurrentState.ActionSelected;
+
+            // Move the unit back to the original position
+            StartCoroutine(MoveBackToPoint(_gridManager.MovementPath[0]));
+
+            // Reset the state
+            _isMoving = false;
+            _isSelected = false;
+            _gridCursor.UnitPressed = false;
+            _gameManager.UnitsManager.SetActiveUnit(null);
+            _stoodNode = DetectStoodNode();
+            _updatedStoodNode = _stoodNode;
+            _gridManager.MovementPath.Clear();
+            UpdateStoodNode(this);            
         }
 
         /// <summary>
@@ -192,6 +219,7 @@ namespace CT6GAMAI
         public IEnumerator MoveToEndPoint()
         {
             _isMoving = true;
+            _gridManager.CurrentState = CurrentState.Moving;
 
             for (int i = 1; i < _gridManager.MovementPath.Count; i++)
             {
@@ -205,18 +233,22 @@ namespace CT6GAMAI
 
                 if (i == _gridManager.MovementPath.Count - 1)
                 {
-                    FinalizeMovementValues(i);
+                    IsAwaitingMoveConfirmation = true;
+                    _gridManager.CurrentState = CurrentState.ConfirmingMove;
                 }
             }
         }
 
         /// <summary>
-        /// Move the unit to an end point
+        /// Move the unit instantly to an end point. Used for when cancelling movement.
         /// </summary>
-        public IEnumerator MoveToPoint(Node targetNode)
-        {
-            // TODO: Complete this functionality to make a unit move to a target node automatically
-            return null;
+        public IEnumerator MoveBackToPoint(Node targetNode)
+        {      
+            var endPointPos = targetNode.UnitTransform.transform.position;
+
+            transform.position = endPointPos;
+
+            yield return new WaitForSeconds(MOVEMENT_DELAY_CANCEL);
         }
     }
 }
