@@ -1,6 +1,7 @@
 namespace CT6GAMAI
 {
     using DG.Tweening;
+    using Unity.Burst.CompilerServices;
     using UnityEngine;
 
     public interface IActionItem
@@ -26,7 +27,7 @@ namespace CT6GAMAI
 
         public void AnimatePointer()
         {
-            Pointer.DOAnchorPosX(0, 0.5f).SetLoops(-1, LoopType.Yoyo);
+            Pointer.DOAnchorPosX(0, Constants.POINTER_X_YOYO_SPEED).SetLoops(-1, LoopType.Yoyo);
         }
 
         public void SetActionItemActive(bool isActive)

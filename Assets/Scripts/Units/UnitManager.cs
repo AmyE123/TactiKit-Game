@@ -167,7 +167,7 @@ namespace CT6GAMAI
 
         public void FinalizeMovementValues(int pathIndex)
         {
-            _gridManager._currentState = GridManager.CurrentState.ActionSelected;
+            _gridManager.CurrentState = CurrentState.ActionSelected;
 
             // TODO: This can be cleaned up
             _gridManager.OccupiedNodes[0] = _gridManager.MovementPath[pathIndex].NodeManager;
@@ -184,7 +184,7 @@ namespace CT6GAMAI
 
         public void CancelMove()
         {
-            _gridManager._currentState = GridManager.CurrentState.ActionSelected;
+            _gridManager.CurrentState = CurrentState.ActionSelected;
 
             // Move the unit back to the original position
             StartCoroutine(MoveToPoint(_gridManager.MovementPath[0]));
@@ -241,7 +241,7 @@ namespace CT6GAMAI
         public IEnumerator MoveToEndPoint()
         {
             _isMoving = true;
-            _gridManager._currentState = GridManager.CurrentState.Moving;
+            _gridManager.CurrentState = CurrentState.Moving;
 
             for (int i = 1; i < _gridManager.MovementPath.Count; i++)
             {
@@ -256,8 +256,7 @@ namespace CT6GAMAI
                 if (i == _gridManager.MovementPath.Count - 1)
                 {
                     IsAwaitingMoveConfirmation = true;
-                    _gridManager._currentState = GridManager.CurrentState.ConfirmingMove;
-                    //FinalizeMovementValues(i);
+                    _gridManager.CurrentState = CurrentState.ConfirmingMove;
                 }
             }
         }

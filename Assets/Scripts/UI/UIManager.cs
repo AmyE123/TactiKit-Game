@@ -11,9 +11,11 @@ namespace CT6GAMAI
         [SerializeField] private UI_BattleForecastSideManager[] _battleForecastManagers;
         [SerializeField] private UI_ActionItemsManager _actionItemsManager;
         [SerializeField] private GameObject[] _uiObjectsToDisableForActions;
+        [SerializeField] private GameObject[] _uiObjectsToDisableForBattles;
 
         [SerializeField] private Image _vignette;
 
+        private bool _areBattleForecastsToggled;
         private GameManager _gameManager;
         private GlobalUnitsManager _unitsManager;
         private bool _vignetteEnabled;
@@ -21,7 +23,9 @@ namespace CT6GAMAI
         public UI_TileInfoManager TileInfoManager => _tileInfoManager;
         public UI_UnitInfoManager UnitInfoManager => _unitInfoManager;
         public UI_BattleForecastSideManager[] BattleForecastManagers => _battleForecastManagers;
-        public UI_ActionItemsManager ActionItemsManager => _actionItemsManager;        
+        public UI_ActionItemsManager ActionItemsManager => _actionItemsManager;    
+        
+        public bool AreBattleForecastsToggled => _areBattleForecastsToggled;
 
         private void Start()
         {
@@ -34,6 +38,7 @@ namespace CT6GAMAI
             if (_gameManager != null)
             {
                 UpdateAllUIForActionItems();
+                UpdateAllUIForBattle();
             }
             
             if (Input.GetKeyDown(KeyCode.Escape))
@@ -47,12 +52,16 @@ namespace CT6GAMAI
         {
             _battleForecastManagers[0].ToggleBattleForecastSide(unitA);
             _battleForecastManagers[1].ToggleBattleForecastSide(unitB);
+
+            _areBattleForecastsToggled = _battleForecastManagers[0].IsForecastToggled;
         }
 
         public void CancelBattleForecast()
         {
             _battleForecastManagers[0].CancelBattleForecast();
             _battleForecastManagers[1].CancelBattleForecast();
+
+            _areBattleForecastsToggled = false;
         }
 
         public void ToggleVignette()
@@ -74,6 +83,14 @@ namespace CT6GAMAI
             foreach (GameObject go in _uiObjectsToDisableForActions)
             {
                 go.SetActive(!_actionItemsManager.IsActionItemsActive);
+            }
+        }
+
+        private void UpdateAllUIForBattle()
+        {
+            foreach (GameObject go in _uiObjectsToDisableForBattles)
+            {
+                go.SetActive(!_areBattleForecastsToggled);
             }
         }
 

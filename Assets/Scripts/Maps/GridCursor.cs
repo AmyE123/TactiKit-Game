@@ -146,7 +146,7 @@ namespace CT6GAMAI
             UpdateUnitReferences();
             UpdateTerrainTypeUI();
 
-            if (!_gameManager.UnitsManager.IsAnyUnitMoving() && !_gameManager.UIManager.ActionItemsManager.IsActionItemsActive)
+            if (CanCursorMove())
             {
                 if (Input.GetKeyDown(KeyCode.W))
                 {
@@ -168,6 +168,15 @@ namespace CT6GAMAI
                     MoveCursor(Direction.East);
                 }
             }
+        }
+
+        private bool CanCursorMove()
+        {
+            bool IsAnyUnitMoving = _gameManager.UnitsManager.IsAnyUnitMoving();
+            bool IsActionItemsActive = _gameManager.UIManager.ActionItemsManager.IsActionItemsActive;
+            bool IsUnitConfirmingMove = _gameManager.GridManager.CurrentState == CurrentState.ConfirmingMove;
+
+            return !IsAnyUnitMoving && !IsActionItemsActive && !IsUnitConfirmingMove;
         }
 
         private void MoveCursor(Direction direction)
@@ -202,11 +211,17 @@ namespace CT6GAMAI
 
         private void HandleUnitSelection()
         {
-            if (Input.GetKeyDown(KeyCode.Space) && _gameManager.GridManager._currentState != GridManager.CurrentState.ActionSelected)
-            {
-                var valid = _pathing && _gameManager.UnitsManager.CursorUnit != null && _gameManager.UnitsManager.CursorUnit != _gameManager.UnitsManager.ActiveUnit;
+            bool isConfirmPressed = Input.GetKeyDown(KeyCode.Space);
+            bool isActionSelected = _gameManager.GridManager.CurrentState == CurrentState.ActionSelected;
 
-                if (!valid)
+            if (isConfirmPressed && !isActionSelected)
+            {
+                // Checks if we are pathing and the cursor unit is not on the active unit.
+                bool isCursorUnitValid = _pathing && 
+                    _gameManager.UnitsManager.CursorUnit != null && 
+                    _gameManager.UnitsManager.CursorUnit != _gameManager.UnitsManager.ActiveUnit;
+
+                if(!isCursorUnitValid)
                 {
                     ToggleUnitSelection();
                 }

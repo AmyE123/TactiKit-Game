@@ -39,6 +39,11 @@ namespace CT6GAMAI
         public enum Terrain { Plain, Forest, River, Fort }
 
         /// <summary>
+        /// Enumerations representing the current state of the grid cursor in regards to unit actions.
+        /// </summary>
+        public enum CurrentState { Idle, Moving, ActionSelected, ConfirmingMove };
+
+        /// <summary>
         /// Constant string for the tag string used on nodes.
         /// </summary>
         public const string NODE_TAG_REFERENCE = "Node";
@@ -123,9 +128,20 @@ namespace CT6GAMAI
 
         #region User Interface
 
+        /// <summary>
+        /// The left X position to move the left battle forecast to when disabled.
+        /// </summary>
         public const float BATTLE_FORECAST_LEFT_X_POS_TO = -400;
 
+        /// <summary>
+        /// The right x position to move the right battle forecast to when disabled.
+        /// </summary>
         public const float BATTLE_FORECAST_RIGHT_X_POS_TO = 400;
+
+        /// <summary>
+        /// The speed that the cursor pointer on the actions list should point
+        /// </summary>
+        public const float POINTER_X_YOYO_SPEED = 0.5f;
 
         #endregion // User Interface
     }
