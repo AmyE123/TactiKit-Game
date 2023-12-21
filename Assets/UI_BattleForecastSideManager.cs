@@ -58,9 +58,9 @@ namespace CT6GAMAI
             _unitNameValueText.text = unit.UnitName;
             _unitImage.sprite = unit.UnitPortrait;
 
-            var formattedWeaponName = Regex.Replace(unit.EquippedWeapon.ToString(), "(\\B[A-Z])", " $1");
+            var formattedWeaponName = Regex.Replace(unit.EquippedWeapon.WeaponName.ToString(), "(\\B[A-Z])", " $1");
             _equippedWeaponValueText.text = formattedWeaponName;
-            _equippedWeaponImage.sprite = unit.EquippedWeaponImage;
+            _equippedWeaponImage.sprite = unit.EquippedWeapon.WeaponSprite;
 
             // TODO: Like health bar fill image (damage) value, set this to the current value of HP (before damage)
             _currentHPValueText.text = unit.HealthPointsBaseValue.ToString();

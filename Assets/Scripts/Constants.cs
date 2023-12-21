@@ -72,6 +72,11 @@ namespace CT6GAMAI
         public enum Team { Player, Enemy };
 
         /// <summary>
+        /// The different types of weapons
+        /// </summary>
+        public enum WeaponType { Sword, Lance, Axe, Tome }
+
+        /// <summary>
         /// The main weapon a unit has equipped.
         /// </summary>
         public enum Weapons { BronzeSword, SilverSword, WoodSpear, MetalSpear, Fire, Ice };

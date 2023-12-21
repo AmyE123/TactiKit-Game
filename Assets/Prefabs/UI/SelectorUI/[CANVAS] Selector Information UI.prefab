@@ -254,18 +254,11 @@ MonoBehaviour:
   _nameValueText: {fileID: 673555851198181432}
   _levelValueText: {fileID: 1921820486389633372}
   _equippedValueText: {fileID: 1784135061239004774}
-  _equippedValueImage: {fileID: 2264613266950462444}
-  _teamColourImage: {fileID: 1330946635721625755}
+  _equippedValueImage: {fileID: 8734698704606836429}
+  _teamColourImages:
+  - {fileID: 2264613266950462444}
+  - {fileID: 1330946635721625755}
   _areaGO: {fileID: 653146323958345337}
-  player:
-    serializedVersion: 2
-    rgba: 12162397
-  enemy:
-    serializedVersion: 2
-    rgba: 6119097
-  ally:
-    serializedVersion: 2
-    rgba: 6142340
   ActiveUnitData: {fileID: 11400000, guid: 3af0ba63208365148b0bb586b0328a73, type: 2}
 --- !u!1001 &593428303262257216
 PrefabInstance:
@@ -493,6 +486,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 3353477651596075436, guid: 4dfa1033ca3da2a46a3f024df0868725, type: 3}
   m_PrefabInstance: {fileID: 593428303262257216}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8734698704606836429 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8145786682251912845, guid: 4dfa1033ca3da2a46a3f024df0868725, type: 3}
+  m_PrefabInstance: {fileID: 593428303262257216}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4425930233585885654
 PrefabInstance:
   m_ObjectHideFlags: 0
