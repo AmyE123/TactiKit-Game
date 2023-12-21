@@ -72,15 +72,15 @@ namespace CT6GAMAI
                         }
                     }
                 }
-            }
 
-            var unit = _unitsManager.ActiveUnit;
+                var unit = _unitsManager.ActiveUnit;
 
-            if(unit != null && unit.IsAwaitingMoveConfirmation)
-            {
-                if (Input.GetKeyDown(KeyCode.Space))
+                if (unit != null && unit.IsAwaitingMoveConfirmation)
                 {
-                    _activeActionItems[_actionIndex].ActionEvent();
+                    if (Input.GetKeyDown(KeyCode.Space))
+                    {
+                        _activeActionItems[_actionIndex].ActionEvent();
+                    }
                 }
             }
         }

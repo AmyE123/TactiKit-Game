@@ -72,6 +72,12 @@ namespace CT6GAMAI
                     if (Input.GetKeyDown(KeyCode.Escape))
                     {                      
                         Debug.Log("CANCEL!!");
+
+                        if (_gameManager.UIManager.BattleForecastManagers[0].IsForecastToggled)
+                        { 
+                            _gameManager.UIManager.CancelBattleForecast();
+                        }
+
                         unit.CancelMove();
                         unit.IsAwaitingMoveConfirmation = false;
                         //_currentState = CurrentState.Idle;
@@ -232,7 +238,6 @@ namespace CT6GAMAI
 
                         if (validPath)
                         {
-                            Debug.Log("[GAME]: Actions list pop-up UI here");
                             _gameManager.UIManager.ActionItemsManager.ShowActionItems();
 
                             var unit = _gameManager.UnitsManager.ActiveUnit;
@@ -245,9 +250,10 @@ namespace CT6GAMAI
                         }
                         else
                         {
-                            if (isNodeOccupiedByEnemy(targetNode))
+                            if (isNodeOccupiedByEnemy(targetNode) && _currentState != CurrentState.ConfirmingMove)
                             {
-                                Debug.Log("[GAME]: Battle Forecast UI here");
+                                _currentState = CurrentState.ConfirmingMove;
+                                _activeUnit.IsAwaitingMoveConfirmation = true;
                                 _gameManager.UIManager.SpawnBattleForecast(_activeUnit.UnitData, targetNode.NodeManager.StoodUnit.UnitData);
                             }
                         }

@@ -1,5 +1,6 @@
 namespace CT6GAMAI
 {
+    using System.Text.RegularExpressions;
     using TMPro;
     using UnityEngine;
     using UnityEngine.UI;
@@ -33,8 +34,9 @@ namespace CT6GAMAI
                 _levelValueText.text = "LV " + ActiveUnitData.ClassLevel.ToString();
 
                 // TODO: Unit Inventory System
-                _equippedValueText.text = "Silver Sword";
-                _equippedValueImage.sprite = null;
+                var formattedWeaponName = Regex.Replace(ActiveUnitData.EquippedWeapon.ToString(), "(\\B[A-Z])", " $1");
+                _equippedValueText.text = formattedWeaponName;
+                _equippedValueImage.sprite = ActiveUnitData.EquippedWeaponImage;
             }
         }
 

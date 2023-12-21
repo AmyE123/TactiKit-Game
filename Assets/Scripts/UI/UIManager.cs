@@ -47,20 +47,12 @@ namespace CT6GAMAI
         {
             _battleForecastManagers[0].ToggleBattleForecastSide(unitA);
             _battleForecastManagers[1].ToggleBattleForecastSide(unitB);
+        }
 
-            // Don't spam T as it will break the fade. This is just test code
-            if (_battleForecastManagers[0].IsForecastToggled)
-            {
-                _tileInfoManager.gameObject.SetActive(false);
-                _unitInfoManager.gameObject.SetActive(false);
-                _vignette.DOFade(1, 0.5f);
-            }
-            else
-            {
-                _tileInfoManager.gameObject.SetActive(true);
-                _unitInfoManager.gameObject.SetActive(true);
-                _vignette.DOFade(0, 0.5f);
-            }
+        public void CancelBattleForecast()
+        {
+            _battleForecastManagers[0].CancelBattleForecast();
+            _battleForecastManagers[1].CancelBattleForecast();
         }
 
         public void ToggleVignette()

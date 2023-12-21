@@ -46,6 +46,13 @@ namespace CT6GAMAI
             PopulateBattleForecastSide(unit);            
         }
 
+        public void CancelBattleForecast()
+        {
+            _forecastToggled = false;
+
+            CancelUISide();
+        }
+
         private void PopulateBattleForecastSide(UnitData unit)
         {
             _unitNameValueText.text = unit.UnitName;
@@ -107,6 +114,18 @@ namespace CT6GAMAI
                     _areaRT.DOAnchorPosX(Constants.BATTLE_FORECAST_RIGHT_X_POS_TO, 0.3f).SetEase(Ease.Linear);
                 }
             }            
+        }
+
+        private void CancelUISide()
+        {
+            if (_side == BattleForecastSide.Left)
+            {
+                _areaRT.DOAnchorPosX(Constants.BATTLE_FORECAST_LEFT_X_POS_TO, 0.3f).SetEase(Ease.Linear);
+            }
+            else
+            {
+                _areaRT.DOAnchorPosX(Constants.BATTLE_FORECAST_RIGHT_X_POS_TO, 0.3f).SetEase(Ease.Linear);
+            }
         }
 
         private void FlashingDamage()
