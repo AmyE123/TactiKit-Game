@@ -63,7 +63,7 @@ namespace CT6GAMAI
 
             if (_activeUnit != null)
             {
-                GetEnemiesFromRangeNodes(_activeUnit.MovementRange.RangeNodes);
+                GetEnemiesFromRangeNodes(CalculateAttackRange(_gridCursor.SelectedNode.Node, _activeUnit.UnitData.EquippedWeapon.WeaponMaxRange));
             }
             
             if (!_gridInitialized)
@@ -176,6 +176,32 @@ namespace CT6GAMAI
             
             _movementPath = _activeUnit.MovementRange.ReconstructPath(startNode, targetNode);
             HandleMovementInput(targetNode);
+        }
+
+        public List<Node> CalculateAttackRange(Node startingNode, int attackRange)
+        {
+            List<Node> attackableNodes = new List<Node>();
+
+            foreach (NodeManager nodeManager in AllNodes)
+            {
+                Node node = nodeManager.Node;
+                int distance = CalculateDistance(startingNode, node);
+
+                if (distance <= attackRange)
+                {
+                    attackableNodes.Add(node);
+                }
+            }
+
+            return attackableNodes;
+        }
+
+        private int CalculateDistance(Node a, Node b)
+        {
+            float ab = Mathf.Abs(a.transform.position.x - b.transform.position.x) + Mathf.Abs(a.transform.position.y - b.transform.position.y);
+            
+            // Assuming each node has a position (x, y), calculate the grid distance
+            return (int)ab;
         }
 
         private void GetEnemiesFromRangeNodes(List<Node> RangeNodes)
