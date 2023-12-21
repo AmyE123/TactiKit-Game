@@ -15,6 +15,7 @@ namespace CT6GAMAI
         [SerializeField] private List<NodeManager> _allNodes;
         [SerializeField] private List<NodeManager> _occupiedNodes;
         [SerializeField] private List<Node> _movementPath;
+        [SerializeField] private List<UnitManager> _attackableUnits;
 
         private UnitManager _activeUnit;
         private GameManager _gameManager;
@@ -60,6 +61,11 @@ namespace CT6GAMAI
         {
             UpdateUnitReferences();
 
+            if (_activeUnit != null)
+            {
+                GetEnemiesFromRangeNodes(_activeUnit.MovementRange.RangeNodes);
+            }
+            
             if (!_gridInitialized)
             {
                 InitializeGrid();
@@ -167,9 +173,25 @@ namespace CT6GAMAI
             {
                 return;
             }
-
+            
             _movementPath = _activeUnit.MovementRange.ReconstructPath(startNode, targetNode);
             HandleMovementInput(targetNode);
+        }
+
+        private void GetEnemiesFromRangeNodes(List<Node> RangeNodes)
+        {
+            _attackableUnits.Clear();
+
+            foreach (Node n in RangeNodes)
+            {
+                if (isNodeOccupiedByEnemy(n))
+                {
+                    if (!_attackableUnits.Contains(n.NodeManager.StoodUnit))
+                    {
+                        _attackableUnits.Add(n.NodeManager.StoodUnit);
+                    }
+                }
+            }
         }
 
         private void HandleMovementInput(Node targetNode)
@@ -274,9 +296,9 @@ namespace CT6GAMAI
         /// Processes pathing for the selected unit, including movement and path highlighting.
         /// </summary>
         public void ProcessPathing()
-        {
+        {           
             ProcessMovementPath();
-            HighlightPath();
+            HighlightPath();           
         }
     }
 }
