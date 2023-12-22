@@ -61,12 +61,14 @@ namespace CT6GAMAI
 
                 case BattleSequenceStates.PlayerMoveForward:
                     MoveUnitForward(_leftUnit);
-                    _currentBattleState = BattleSequenceStates.PlayerAttack;
                     break;
 
                 case BattleSequenceStates.PlayerAttack:
-                    AttackSequence(_leftUnit, _rightUnit);
-                    StartCoroutine(AttackDelay(1f, Side.Left));                   
+                    if (!_leftTakenTurn)
+                    {
+                        AttackSequence(_leftUnit, _rightUnit);
+                        StartCoroutine(AttackDelay(1f, Side.Left));
+                    }
                     break;
 
                 case BattleSequenceStates.PlayerMoveBack:
@@ -76,12 +78,14 @@ namespace CT6GAMAI
 
                 case BattleSequenceStates.EnemyMoveForward:
                     MoveUnitForward(_rightUnit);
-                    _currentBattleState = BattleSequenceStates.EnemyAttack;
                     break;
 
                 case BattleSequenceStates.EnemyAttack:
-                    AttackSequence(_rightUnit, _leftUnit);
-                    StartCoroutine(AttackDelay(1f, Side.Right));
+                    if (!_rightTakenTurn)
+                    {
+                        AttackSequence(_rightUnit, _leftUnit);
+                        StartCoroutine(AttackDelay(1f, Side.Right));
+                    }
                     break;
 
                 case BattleSequenceStates.EnemyMoveBack:
@@ -95,18 +99,21 @@ namespace CT6GAMAI
                         _leftTakenTurn = false;
                         _leftUnit.SetUnitCompleteAttacks(true);
                         _currentBattleState = BattleSequenceStates.PlayerMoveForward;
+                        ProcessBattleState();
                     }
                     else if (_rightUnit.CanUnitAttackAgain && !_rightUnit.UnitCompleteAttacks)
                     {
                         _rightTakenTurn = false;
                         _rightUnit.SetUnitCompleteAttacks(true);
                         _currentBattleState = BattleSequenceStates.EnemyMoveForward;
+                        ProcessBattleState();
                     }
                     else
                     {
                         _leftUnit.SetUnitCompleteAttacks(true);
                         _rightUnit.SetUnitCompleteAttacks(true);
                         _currentBattleState = BattleSequenceStates.BattleEnd;
+                        ProcessBattleState();
                     }
                     break;
 
@@ -116,7 +123,7 @@ namespace CT6GAMAI
             }
 
             // Call this method again after a delay or at the end of an animation event
-            Invoke("ProcessBattleState", BATTLE_SEQUENCE_ANIM_DELAY);
+            //Invoke("ProcessBattleState", BATTLE_SEQUENCE_ANIM_DELAY);
         }
 
         // Methods for MoveUnitForward, PlayAttackAnimation, EndBattle, etc., go here
@@ -126,11 +133,15 @@ namespace CT6GAMAI
             if (unit.UnitSide == Side.Left)
             {
                 unit.transform.DOMoveX(_attackPositionRight.position.x, BATTLE_SEQUENCE_MOVEMENT_SPEED);
+                _currentBattleState = BattleSequenceStates.PlayerAttack;
             }
             else
             {
                 unit.transform.DOMoveX(_attackPositionLeft.position.x, BATTLE_SEQUENCE_MOVEMENT_SPEED);
+                _currentBattleState = BattleSequenceStates.EnemyAttack;              
             }
+
+            ProcessBattleState();
         }
 
         private void PlayAttackAnimation(BattleUnitManager attackingUnit, BattleUnitManager defendingUnit)
@@ -184,17 +195,18 @@ namespace CT6GAMAI
             if (initiator == Team.Player)
             {
                 _currentBattleState = BattleSequenceStates.PlayerMoveForward;
+                ProcessBattleState();
             }
             else
             {
                 _currentBattleState = BattleSequenceStates.EnemyMoveForward;
+                ProcessBattleState();
             }
         }
 
         IEnumerator AttackDelay(float delaySeconds, Side side)
         {
             Debug.Log("[BATTLE]: Attacking!!");
-            
             yield return new WaitForSeconds(delaySeconds);
 
             if (_currentBattleState != BattleSequenceStates.BattleEnd)
@@ -202,10 +214,12 @@ namespace CT6GAMAI
                 if (side == Side.Left)
                 {
                     _currentBattleState = BattleSequenceStates.PlayerMoveBack;
+                    ProcessBattleState();
                 }
                 else
                 {
                     _currentBattleState = BattleSequenceStates.EnemyMoveBack;
+                    ProcessBattleState();
                 }
             }
         }
@@ -232,15 +246,18 @@ namespace CT6GAMAI
             if (_initiatingTeam == Team.Player && !_rightTakenTurn)
             {
                 _currentBattleState = BattleSequenceStates.EnemyMoveForward;
+                ProcessBattleState();
             }
             else if (_initiatingTeam == Team.Enemy && !_leftTakenTurn)
             {
                 _currentBattleState = BattleSequenceStates.PlayerMoveForward;
+                ProcessBattleState();
             }
 
             if (_rightTakenTurn && _leftTakenTurn)
             {
                 _currentBattleState = BattleSequenceStates.CheckAdditionalAttacks;
+                ProcessBattleState();
             }
         }
 
