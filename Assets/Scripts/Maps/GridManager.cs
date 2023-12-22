@@ -15,7 +15,6 @@ namespace CT6GAMAI
         [SerializeField] private List<NodeManager> _allNodes;
         [SerializeField] private List<NodeManager> _occupiedNodes;
         [SerializeField] private List<Node> _movementPath;
-        [SerializeField] private List<UnitManager> _attackableUnits;
 
         private UnitManager _activeUnit;
         private GameManager _gameManager;
@@ -60,11 +59,6 @@ namespace CT6GAMAI
         private void Update()
         {
             UpdateUnitReferences();
-
-            if (_activeUnit != null)
-            {
-                GetEnemiesFromRangeNodes(CalculateAttackRange(_gridCursor.SelectedNode.Node, _activeUnit.UnitData.EquippedWeapon.WeaponMaxRange));
-            }
             
             if (!_gridInitialized)
             {
@@ -79,9 +73,10 @@ namespace CT6GAMAI
                 {
                     if (Input.GetKeyDown(KeyCode.Escape))
                     {
-                        if (_gameManager.UIManager.AreBattleForecastsToggled)
+                        if (_gameManager.UIManager.BattleForecastManager.AreBattleForecastsToggled)
                         {
-                            _gameManager.UIManager.CancelBattleForecast();
+                            //_gameManager.UIManager.CancelBattleForecast();
+                            _gameManager.UIManager.BattleForecastManager.CancelBattleForecast();
                         }
 
                         unit.CancelMove();
@@ -178,48 +173,6 @@ namespace CT6GAMAI
             HandleMovementInput(targetNode);
         }
 
-        public List<Node> CalculateAttackRange(Node startingNode, int attackRange)
-        {
-            List<Node> attackableNodes = new List<Node>();
-
-            foreach (NodeManager nodeManager in AllNodes)
-            {
-                Node node = nodeManager.Node;
-                int distance = CalculateDistance(startingNode, node);
-
-                if (distance <= attackRange)
-                {
-                    attackableNodes.Add(node);
-                }
-            }
-
-            return attackableNodes;
-        }
-
-        private int CalculateDistance(Node a, Node b)
-        {
-            float ab = Mathf.Abs(a.transform.position.x - b.transform.position.x) + Mathf.Abs(a.transform.position.y - b.transform.position.y);
-            
-            // Assuming each node has a position (x, y), calculate the grid distance
-            return (int)ab;
-        }
-
-        private void GetEnemiesFromRangeNodes(List<Node> RangeNodes)
-        {
-            _attackableUnits.Clear();
-
-            foreach (Node n in RangeNodes)
-            {
-                if (isNodeOccupiedByEnemy(n))
-                {
-                    if (!_attackableUnits.Contains(n.NodeManager.StoodUnit))
-                    {
-                        _attackableUnits.Add(n.NodeManager.StoodUnit);
-                    }
-                }
-            }
-        }
-
         private void HandleMovementInput(Node targetNode)
         {
             if (CurrentState != CurrentState.ConfirmingMove &&
@@ -259,7 +212,8 @@ namespace CT6GAMAI
             {
                 CurrentState = CurrentState.ConfirmingMove;
                 _activeUnit.IsAwaitingMoveConfirmation = true;
-                _gameManager.UIManager.SpawnBattleForecast(_activeUnit.UnitData, targetNode.NodeManager.StoodUnit.UnitData);
+                //_gameManager.UIManager.SpawnBattleForecast(_activeUnit.UnitData, targetNode.NodeManager.StoodUnit.UnitData);
+                _gameManager.UIManager.BattleForecastManager.SpawnBattleForecast(_activeUnit, targetNode.NodeManager.StoodUnit);
             }
         }
 

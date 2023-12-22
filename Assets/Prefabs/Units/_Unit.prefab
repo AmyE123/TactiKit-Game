@@ -3239,6 +3239,7 @@ GameObject:
   - component: {fileID: 7592517802941822380}
   - component: {fileID: 5666932915701534253}
   - component: {fileID: 7294320862941142420}
+  - component: {fileID: 3125740389746824907}
   m_Layer: 0
   m_Name: _Unit
   m_TagString: Unit
@@ -3277,6 +3278,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _movementRange: {fileID: 5666932915701534253}
   _unitAnimationManager: {fileID: 7294320862941142420}
+  _unitStatsManager: {fileID: 3125740389746824907}
   _unitData: {fileID: 11400000, guid: 3af0ba63208365148b0bb586b0328a73, type: 2}
   _stoodNode: {fileID: 0}
   _updatedStoodNode: {fileID: 0}
@@ -3285,6 +3287,7 @@ MonoBehaviour:
   normalMaterial: {fileID: 2100000, guid: 29ce18bc4497ee445a38759f8cfc848a, type: 2}
   modelBaseObject: {fileID: 126320786744525254}
   AllRenderers: []
+  IsAwaitingMoveConfirmation: 0
 --- !u!114 &5666932915701534253
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3299,6 +3302,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gridManager: {fileID: 0}
   _reachableNodes: []
+  _rangeNodes: []
 --- !u!114 &7294320862941142420
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3314,6 +3318,20 @@ MonoBehaviour:
   _unitManager: {fileID: 7592517802941822380}
   _animator: {fileID: 2889186292050570900}
   _gridCursor: {fileID: 0}
+--- !u!114 &3125740389746824907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8445902401575187227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a0a5ded53eabc541b60685eaedb2eee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _unitManager: {fileID: 7592517802941822380}
+  _healthPoints: 0
 --- !u!1 &8580508073901243422
 GameObject:
   m_ObjectHideFlags: 0

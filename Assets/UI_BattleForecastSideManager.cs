@@ -19,12 +19,14 @@ namespace CT6GAMAI
         [SerializeField] private Image _equippedWeaponImage;
         [SerializeField] private TMP_Text _currentHPValueText;
         [SerializeField] private TMP_Text _attackStatValueText;
+        [SerializeField] private GameObject _doubleAttackGO;
         [SerializeField] private TMP_Text[] _hitStatValueTexts;
         [SerializeField] private TMP_Text _critStatValueText;
         [SerializeField] private TMP_Text _predictedRemainingHPValueText;
         [SerializeField] private Image[] _predictedRemainingHPAreaImages;
         [SerializeField] private Image _healthBarFill;
         [SerializeField] private Image _healthBarFillDamage;
+        [SerializeField] private RectTransform _damageIndicatorRectTransform;
  
         [SerializeField] private Color32 _deadUIColour;
         [SerializeField] private Color32 _aliveUIColour;       
@@ -38,12 +40,19 @@ namespace CT6GAMAI
             FlashingDamage();
         }
 
-        public void ToggleBattleForecastSide(UnitData unit)
-        {
-            _forecastToggled = !_forecastToggled;
+        //public void ToggleBattleForecastSide(UnitData unit)
+        //{
+        //    _forecastToggled = !_forecastToggled;
 
-            ToggleUISide();
-            PopulateBattleForecastSide(unit);            
+        //    ToggleUISide();
+        //    PopulateBattleForecastSide(unit);            
+        //}
+
+        public void SpawnBattleForecastSide()
+        {
+            _forecastToggled = true;
+
+            OpenUISide();
         }
 
         public void CancelBattleForecast()
@@ -53,8 +62,10 @@ namespace CT6GAMAI
             CancelUISide();
         }
 
-        private void PopulateBattleForecastSide(UnitData unit)
+        public void PopulateBattleForecastData(UnitData unit, int attackValue, bool canDoubleAttack, int hitValue, int critValue, int currentHP, int forecastedHP)
         {
+            _doubleAttackGO.SetActive(canDoubleAttack);
+
             _unitNameValueText.text = unit.UnitName;
             _unitImage.sprite = unit.UnitPortrait;
 
@@ -65,21 +76,20 @@ namespace CT6GAMAI
             // TODO: Like health bar fill image (damage) value, set this to the current value of HP (before damage)
             _currentHPValueText.text = unit.HealthPointsBaseValue.ToString();
 
-            _attackStatValueText.text = "0";
+            _attackStatValueText.text = attackValue.ToString();
 
             foreach (TMP_Text hitStat in _hitStatValueTexts)
             {
-                hitStat.text = "000%";
+                hitStat.text = hitValue.ToString() + "%";
             }
 
-            _critStatValueText.text = "000%";
+            _critStatValueText.text = critValue.ToString() + "%";
 
-            var remainingHP = 10;
-            _predictedRemainingHPValueText.text = remainingHP.ToString();
+            _predictedRemainingHPValueText.text = forecastedHP.ToString();
 
             foreach (Image remHPImg in _predictedRemainingHPAreaImages)
             {
-                if (remainingHP < 0)
+                if (forecastedHP <= 0)
                 {
                     _predictedRemainingHPValueText.text = "X";
                     remHPImg.color = _deadUIColour;
@@ -90,30 +100,56 @@ namespace CT6GAMAI
                 }
             }
 
+            float healthFillAmount = CalculateHealthPercentage(forecastedHP, unit.HealthPointsBaseValue);
+            _damageIndicatorRectTransform.DOAnchorPosX(CalculateXPosition(forecastedHP, unit.HealthPointsBaseValue), 0.1f);
+
+            float damageFillAmount = CalculateHealthPercentage(currentHP, unit.HealthPointsBaseValue);
+
             // TODO: Calculate prediction of health loss. Loss % of total health and then normalized to a floating point value between 0 and 1.
-            _healthBarFill.fillAmount = 0.5f;
+            _healthBarFill.fillAmount = healthFillAmount;
 
             // TODO: This is what the player had before.
-            _healthBarFillDamage.fillAmount = 0.9f;
+            _healthBarFillDamage.fillAmount = damageFillAmount;
         }
 
-        private void ToggleUISide()
-        {            
-            if (_forecastToggled)
-            {                
-                _areaRT.DOAnchorPosX(0, 0.3f).SetEase(Ease.Linear);
+        private float CalculateHealthPercentage(int currentHealth, int maxHealth)
+        {
+            return (float)currentHealth / maxHealth;
+        }
+
+        private float CalculateXPosition(int currentHealth, int maxHealth)
+        {
+            if (_side == BattleForecastSide.Right)
+            {
+                float healthPercentage = (float)currentHealth / maxHealth;
+                float xPos = (1 - healthPercentage) * 200;
+
+                if (xPos > 200)
+                {
+                    xPos = 200;
+                }
+
+                return xPos;
             }
+
             else
             {
-                if (_side == BattleForecastSide.Left)
+                float healthPercentage = (float)currentHealth / maxHealth;
+                float xPos = healthPercentage * 200;
+
+                if (xPos < 0)
                 {
-                    _areaRT.DOAnchorPosX(Constants.BATTLE_FORECAST_LEFT_X_POS_TO, 0.3f).SetEase(Ease.Linear);
+                    xPos = 0;
                 }
-                else
-                {
-                    _areaRT.DOAnchorPosX(Constants.BATTLE_FORECAST_RIGHT_X_POS_TO, 0.3f).SetEase(Ease.Linear);
-                }
-            }            
+
+                return xPos;
+            }
+
+        }
+
+        private void OpenUISide()
+        {
+            _areaRT.DOAnchorPosX(0, 0.3f).SetEase(Ease.Linear);
         }
 
         private void CancelUISide()
@@ -130,7 +166,7 @@ namespace CT6GAMAI
 
         private void FlashingDamage()
         {
-            _healthBarFillDamage.DOColor(Color.white, 1f).SetLoops(-1, LoopType.Yoyo);           
+            _healthBarFillDamage.DOColor(Color.white, 0.6f).SetLoops(-1, LoopType.Yoyo);           
         }
     }
 }

@@ -14,6 +14,7 @@ namespace CT6GAMAI
     {
         [SerializeField] private MovementRange _movementRange;
         [SerializeField] private UnitAnimationManager _unitAnimationManager;
+        [SerializeField] private UnitStatsManager _unitStatsManager;
 
         [SerializeField] private UnitData _unitData;
         [SerializeField] private NodeManager _stoodNode;
@@ -48,6 +49,7 @@ namespace CT6GAMAI
 
         public MovementRange MovementRange => _movementRange;
         public UnitAnimationManager UnitAnimationManager => _unitAnimationManager;
+        public UnitStatsManager UnitStatsManager => _unitStatsManager;
 
         private void Start()
         {

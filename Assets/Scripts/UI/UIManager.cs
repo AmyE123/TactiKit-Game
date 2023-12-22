@@ -12,6 +12,7 @@ namespace CT6GAMAI
         [SerializeField] private UI_ActionItemsManager _actionItemsManager;
         [SerializeField] private GameObject[] _uiObjectsToDisableForActions;
         [SerializeField] private GameObject[] _uiObjectsToDisableForBattles;
+        [SerializeField] private UI_BattleForecastManager _battleForecastManager;
 
         [SerializeField] private Image _vignette;
 
@@ -23,7 +24,8 @@ namespace CT6GAMAI
         public UI_TileInfoManager TileInfoManager => _tileInfoManager;
         public UI_UnitInfoManager UnitInfoManager => _unitInfoManager;
         public UI_BattleForecastSideManager[] BattleForecastManagers => _battleForecastManagers;
-        public UI_ActionItemsManager ActionItemsManager => _actionItemsManager;    
+        public UI_ActionItemsManager ActionItemsManager => _actionItemsManager; 
+        public UI_BattleForecastManager BattleForecastManager => _battleForecastManager;
         
         public bool AreBattleForecastsToggled => _areBattleForecastsToggled;
 
@@ -48,21 +50,21 @@ namespace CT6GAMAI
         }
 
         // TODO: Could THIS be in it's own class? UI_BattleForecastManager?
-        public void SpawnBattleForecast(UnitData unitA, UnitData unitB)
-        {
-            _battleForecastManagers[0].ToggleBattleForecastSide(unitA);
-            _battleForecastManagers[1].ToggleBattleForecastSide(unitB);
+        //public void SpawnBattleForecast(UnitData unitA, UnitData unitB)
+        //{
+        //    _battleForecastManagers[0].ToggleBattleForecastSide(unitA);
+        //    _battleForecastManagers[1].ToggleBattleForecastSide(unitB);
 
-            _areBattleForecastsToggled = _battleForecastManagers[0].IsForecastToggled;
-        }
+        //    _areBattleForecastsToggled = _battleForecastManagers[0].IsForecastToggled;
+        //}
 
-        public void CancelBattleForecast()
-        {
-            _battleForecastManagers[0].CancelBattleForecast();
-            _battleForecastManagers[1].CancelBattleForecast();
+        //public void CancelBattleForecast()
+        //{
+        //    _battleForecastManagers[0].CancelBattleForecast();
+        //    _battleForecastManagers[1].CancelBattleForecast();
 
-            _areBattleForecastsToggled = false;
-        }
+        //    _areBattleForecastsToggled = false;
+        //}
 
         public void SetVignette(bool isActive)
         {
@@ -89,11 +91,11 @@ namespace CT6GAMAI
 
         private void UpdateAllUIForBattle()
         {
-            SetVignette(_areBattleForecastsToggled);
+            SetVignette(BattleForecastManager.AreBattleForecastsToggled);
 
             foreach (GameObject go in _uiObjectsToDisableForBattles)
             {
-                go.SetActive(!_areBattleForecastsToggled);
+                go.SetActive(!BattleForecastManager.AreBattleForecastsToggled);
             }
         }
 
