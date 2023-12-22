@@ -53,7 +53,6 @@ namespace CT6GAMAI
             unit.FinalizeMovementValues(_gridManager.MovementPath.Count - 1);
             unit.IsAwaitingMoveConfirmation = false;
             _uiManager.ActionItemsManager.HideActionItems();
-            //_gridManager._currentState = GridManager.CurrentState.Idle;
         }
     }
 }

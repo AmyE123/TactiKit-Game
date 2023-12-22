@@ -217,7 +217,7 @@ namespace CT6GAMAI
             _gameManager.UIManager.ActionItemsManager.ShowActionItems();
             var unit = _gameManager.UnitsManager.ActiveUnit;
             unit.ClearStoodUnit();
-            StartCoroutine(unit.MoveToEndPoint());
+            StartCoroutine(unit.MoveToEndPoint(0));
         }
 
         private void HandleInvalidPath(Node targetNode)
@@ -226,6 +226,8 @@ namespace CT6GAMAI
             {
                 CurrentState = CurrentState.ConfirmingMove;
                 _activeUnit.IsAwaitingMoveConfirmation = true;
+                var unit = _gameManager.UnitsManager.ActiveUnit;
+                StartCoroutine(unit.MoveToEndPoint(1));
                 _gameManager.UIManager.BattleForecastManager.SpawnBattleForecast(_activeUnit, targetNode.NodeManager.StoodUnit);
                 StartCoroutine(BattleTransition());
             }

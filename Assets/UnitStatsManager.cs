@@ -52,6 +52,7 @@ namespace CT6GAMAI
             if (_healthPoints <= 0)
             {
                 Debug.Log("[BATTLE]: Unit death! HP at 0");
+                _unitManager.Death();
                 return UnitHealthState.Dead;
             }
             else

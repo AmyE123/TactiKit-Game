@@ -149,7 +149,7 @@ namespace CT6GAMAI
             attackingUnit.Animator.SetInteger(ATTACKING_ANIM_IDX_PARAM, Random.Range(1, 4));
             attackingUnit.Animator.SetTrigger(ATTACKING_ANIM_PARAM);
 
-            if (defendingUnit.UnitStatsManager.CheckHealthState() == UnitHealthState.Alive)
+            if (defendingUnit.UnitStatsManager.CheckHealthState() != UnitHealthState.Dead)
             {
                 defendingUnit.Animator.SetInteger(HIT_ANIM_IDX_PARAM, Random.Range(1, 2));
                 defendingUnit.Animator.SetTrigger(HIT_ANIM_PARAM);
@@ -157,16 +157,14 @@ namespace CT6GAMAI
             else
             {
                 defendingUnit.Animator.SetInteger(DEAD_ANIM_IDX_PARAM, Random.Range(1, 2));
-                defendingUnit.Animator.SetTrigger(DEAD_ANIM_PARAM);
+                defendingUnit.Animator.SetBool(DEAD_ANIM_PARAM, true);
 
-                _currentBattleState = BattleSequenceStates.BattleEnd;
+                StartCoroutine(DeathDelay(2f));
             }      
         }
 
         private void AttackSequence(BattleUnitManager attackingUnit, BattleUnitManager defendingUnit)
         {
-            PlayAttackAnimation(attackingUnit, defendingUnit);
-
             if (DoesUnitHit(attackingUnit))
             {
                 ApplyAttackDamage(attackingUnit, defendingUnit);
@@ -175,6 +173,8 @@ namespace CT6GAMAI
             {
                 Debug.Log("[BATTLE]: Unit doesn't Hit!!");
             }
+
+            PlayAttackAnimation(attackingUnit, defendingUnit);
         }
 
         private bool DoesUnitHit(BattleUnitManager attackingUnit)
@@ -204,7 +204,19 @@ namespace CT6GAMAI
             }
 
             defendingUnit.UnitStatsManager.AdjustHealthPoints(attackDeduction);
+            //CheckForOpponentDeath(defendingUnit);
         }
+
+        //private void CheckForOpponentDeath(BattleUnitManager defendingUnit)
+        //{
+        //    if (defendingUnit.UnitStatsManager.CheckHealthState() == UnitHealthState.Dead)
+        //    {
+        //        defendingUnit.Animator.SetInteger(DEAD_ANIM_IDX_PARAM, Random.Range(1, 2));
+        //        defendingUnit.Animator.SetBool(DEAD_ANIM_PARAM, true);
+
+        //        StartCoroutine(DeathDelay(2f));
+        //    }
+        //}
 
         IEnumerator BattleBeginDelay(float delaySeconds, Team initiator)
         {
@@ -243,6 +255,14 @@ namespace CT6GAMAI
                     ProcessBattleState();
                 }
             }
+        }
+
+        IEnumerator DeathDelay(float delaySeconds)
+        {
+            Debug.Log("[BATTLE]: Unit death!!");
+            yield return new WaitForSeconds(delaySeconds);
+
+            _currentBattleState = BattleSequenceStates.BattleEnd;
         }
 
         private void MoveUnitBack(BattleUnitManager unit)

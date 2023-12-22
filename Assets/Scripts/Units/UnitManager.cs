@@ -145,6 +145,11 @@ namespace CT6GAMAI
             }
         }
 
+        public void Death()
+        {
+            gameObject.SetActive(false);
+        }
+
         public void FinalizeMovementValues(int pathIndex)
         {
             _gridManager.CurrentState = CurrentState.ActionSelected;
@@ -218,12 +223,12 @@ namespace CT6GAMAI
         /// <summary>
         /// Move the unit to their selected end point
         /// </summary>
-        public IEnumerator MoveToEndPoint()
+        public IEnumerator MoveToEndPoint(int modificationAmount)
         {
             _isMoving = true;
             _gridManager.CurrentState = CurrentState.Moving;
 
-            for (int i = 1; i < _gridManager.MovementPath.Count; i++)
+            for (int i = 1; i < _gridManager.MovementPath.Count - modificationAmount; i++)
             {
                 Node n = _gridManager.MovementPath[i];
 
@@ -233,7 +238,7 @@ namespace CT6GAMAI
 
                 yield return new WaitForSeconds(MOVEMENT_DELAY);
 
-                if (i == _gridManager.MovementPath.Count - 1)
+                if (i == (_gridManager.MovementPath.Count - 1) - modificationAmount)
                 {
                     IsAwaitingMoveConfirmation = true;
                     _gridManager.CurrentState = CurrentState.ConfirmingMove;

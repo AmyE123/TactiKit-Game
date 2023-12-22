@@ -62,6 +62,13 @@ namespace CT6GAMAI
         {
             _cameraManager.SwitchCamera(_cameraManager.Cameras[0]);
             _isBattleActive = false;
+
+            var unit = _gameManager.UnitsManager.ActiveUnit;
+
+            unit.FinalizeMovementValues(_gameManager.GridManager.MovementPath.Count - 1);
+            unit.IsAwaitingMoveConfirmation = false;
+            _gameManager.UIManager.ActionItemsManager.HideActionItems();
+            _gameManager.UIManager.BattleForecastManager.CancelBattleForecast();
         }
 
         public void CalculateValuesForBattleForecast(UnitManager unitA, UnitManager unitB)
