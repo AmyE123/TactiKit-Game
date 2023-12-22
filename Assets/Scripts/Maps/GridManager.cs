@@ -20,6 +20,7 @@ namespace CT6GAMAI
         private GameManager _gameManager;
         private bool _cursorWithinRange;
         private bool _gridInitialized = false;
+        [SerializeField] private bool _canSwitchToBattle = false;
 
         /// <summary>
         /// The current state of the grid cursor in regards to unit actions.
@@ -75,12 +76,18 @@ namespace CT6GAMAI
                     {
                         if (_gameManager.UIManager.BattleForecastManager.AreBattleForecastsToggled)
                         {
-                            //_gameManager.UIManager.CancelBattleForecast();
                             _gameManager.UIManager.BattleForecastManager.CancelBattleForecast();
                         }
 
                         unit.CancelMove();
                         unit.IsAwaitingMoveConfirmation = false;
+                    }
+
+                    if (_canSwitchToBattle && Input.GetKeyDown(KeyCode.Space))
+                    {
+                        Debug.Log("[BATTLE]: GO INTO BATTLE!!");
+                        _gameManager.BattleManager.SwitchToBattle();
+                        _canSwitchToBattle = false;
                     }
                 }
             }
@@ -95,6 +102,12 @@ namespace CT6GAMAI
         {
             yield return new WaitForSeconds(IDLE_DELAY);
             CurrentState = CurrentState.Idle;
+        }
+
+        private IEnumerator BattleTransition()
+        {
+            yield return new WaitForSeconds(0.1f);
+            _canSwitchToBattle = true;
         }
 
         private void UpdateUnitReferences()
@@ -190,7 +203,7 @@ namespace CT6GAMAI
 
             if (validPath)
             {
-                PerformValidPathMovement();
+                PerformValidPathMovement();              
             }
             else
             {
@@ -212,8 +225,8 @@ namespace CT6GAMAI
             {
                 CurrentState = CurrentState.ConfirmingMove;
                 _activeUnit.IsAwaitingMoveConfirmation = true;
-                //_gameManager.UIManager.SpawnBattleForecast(_activeUnit.UnitData, targetNode.NodeManager.StoodUnit.UnitData);
                 _gameManager.UIManager.BattleForecastManager.SpawnBattleForecast(_activeUnit, targetNode.NodeManager.StoodUnit);
+                StartCoroutine(BattleTransition());
             }
         }
 

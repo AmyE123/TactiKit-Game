@@ -7,6 +7,12 @@ namespace CT6GAMAI
     /// </summary>
     public static class Constants
     {
+        #region Game Flow
+
+        public enum GameStates { Map, Battle }
+
+        #endregion // Game Flow
+
         #region Nodes
         /// <summary>
         /// Enumerations representing the different visual states of a node.
@@ -149,6 +155,18 @@ namespace CT6GAMAI
         /// </summary>
         public const string READY_ANIM_PARAM = "Ready";
 
+        public const string ATTACKING_ANIM_PARAM = "Attacking";
+
+        public const string ATTACKING_ANIM_IDX_PARAM = "AttackingAnimIndex";
+
+        public const string HIT_ANIM_PARAM = "Hit";
+
+        public const string HIT_ANIM_IDX_PARAM = "HitAnimIndex";
+
+        public const string DEAD_ANIM_PARAM = "Dead";
+
+        public const string DEAD_ANIM_IDX_PARAM = "DeadAnimIndex";
+
         #endregion // Animation Parameter Strings
 
         #region User Interface
@@ -177,6 +195,16 @@ namespace CT6GAMAI
         /// The speed that it takes for the vignette for UI to fade in/out
         /// </summary>
         public const float VIGNETTE_FADE_SPEED = 0.5f;
+
+        /// <summary>
+        /// The number of priority for the active camera
+        /// </summary>
+        public const int ACTIVE_CAMERA_PRIORITY = 10;
+
+        /// <summary>
+        /// The number of priority for the inactive camera
+        /// </summary>
+        public const int INACTIVE_CAMERA_PRIORITY = 0;
 
         #endregion // User Interface
     }

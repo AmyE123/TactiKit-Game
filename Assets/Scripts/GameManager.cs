@@ -19,6 +19,8 @@ namespace CT6GAMAI
         [SerializeField] private GridManager _gridManager;
         [SerializeField] private AudioManager _audioManager;
         [SerializeField] private UIManager _uiManager;
+        [SerializeField] private CameraManager _cameraManager;
+        [SerializeField] private BattleManager _battleManager;
 
         #endregion // Private Manager References
 
@@ -43,6 +45,16 @@ namespace CT6GAMAI
         /// Public getter for UIManager
         /// </summary>
         public UIManager UIManager => _uiManager;
+
+        /// <summary>
+        /// Public getter for CameraManager
+        /// </summary>
+        public CameraManager CameraManager => _cameraManager;
+
+        /// <summary>
+        /// Public getter for BattleManager
+        /// </summary>
+        public BattleManager BattleManager => _battleManager;
 
         #endregion // Public Manager References
 

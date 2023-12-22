@@ -211,19 +211,22 @@ namespace CT6GAMAI
 
         private void HandleUnitSelection()
         {
-            bool isConfirmPressed = Input.GetKeyDown(KeyCode.Space);
-            bool isActionSelected = _gameManager.GridManager.CurrentState == CurrentState.ActionSelected;
-
-            if (isConfirmPressed && !isActionSelected)
+            if(_gameManager.GridManager.CurrentState != CurrentState.ConfirmingMove)
             {
-                // Checks if we are pathing and the cursor unit is not on the active unit.
-                bool isCursorUnitValid = _pathing && 
-                    _gameManager.UnitsManager.CursorUnit != null && 
-                    _gameManager.UnitsManager.CursorUnit != _gameManager.UnitsManager.ActiveUnit;
+                bool isConfirmPressed = Input.GetKeyDown(KeyCode.Space);
+                bool isActionSelected = _gameManager.GridManager.CurrentState == CurrentState.ActionSelected;
 
-                if(!isCursorUnitValid)
+                if (isConfirmPressed && !isActionSelected)
                 {
-                    ToggleUnitSelection();
+                    // Checks if we are pathing and the cursor unit is not on the active unit.
+                    bool isCursorUnitValid = _pathing &&
+                        _gameManager.UnitsManager.CursorUnit != null &&
+                        _gameManager.UnitsManager.CursorUnit != _gameManager.UnitsManager.ActiveUnit;
+
+                    if (!isCursorUnitValid)
+                    {
+                        ToggleUnitSelection();
+                    }
                 }
             }
         }

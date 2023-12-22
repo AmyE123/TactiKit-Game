@@ -11,7 +11,8 @@ namespace CT6GAMAI
         [SerializeField] private UI_BattleForecastSideManager[] _battleForecastManagers;
         [SerializeField] private UI_ActionItemsManager _actionItemsManager;
         [SerializeField] private GameObject[] _uiObjectsToDisableForActions;
-        [SerializeField] private GameObject[] _uiObjectsToDisableForBattles;
+        [SerializeField] private GameObject[] _uiObjectsToDisableForBattleForecasts;
+        [SerializeField] private GameObject[] _uiObjectsToDisableForBattleAnimations;
         [SerializeField] private UI_BattleForecastManager _battleForecastManager;
 
         [SerializeField] private Image _vignette;
@@ -40,6 +41,7 @@ namespace CT6GAMAI
             if (_gameManager != null)
             {
                 UpdateAllUIForActionItems();
+                UpdateAllUIForBattleForecast();
                 UpdateAllUIForBattle();
             }
             
@@ -89,13 +91,26 @@ namespace CT6GAMAI
             }
         }
 
-        private void UpdateAllUIForBattle()
+        private void UpdateAllUIForBattleForecast()
         {
             SetVignette(BattleForecastManager.AreBattleForecastsToggled);
 
-            foreach (GameObject go in _uiObjectsToDisableForBattles)
+            foreach (GameObject go in _uiObjectsToDisableForBattleForecasts)
             {
                 go.SetActive(!BattleForecastManager.AreBattleForecastsToggled);
+            }
+        }
+
+        private void UpdateAllUIForBattle()
+        {          
+            if (_gameManager.BattleManager.IsBattleActive)
+            {
+                SetVignette(true);
+
+                foreach (GameObject go in _uiObjectsToDisableForBattleAnimations)
+                {
+                    go.SetActive(false);
+                }
             }
         }
 
