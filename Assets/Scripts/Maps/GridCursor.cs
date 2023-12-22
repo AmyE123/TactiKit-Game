@@ -175,8 +175,9 @@ namespace CT6GAMAI
             bool IsAnyUnitMoving = _gameManager.UnitsManager.IsAnyUnitMoving();
             bool IsActionItemsActive = _gameManager.UIManager.ActionItemsManager.IsActionItemsActive;
             bool IsUnitConfirmingMove = _gameManager.GridManager.CurrentState == CurrentState.ConfirmingMove;
+            bool IsBattleActive = _gameManager.CameraManager.CameraState == CameraStates.Battle;
 
-            return !IsAnyUnitMoving && !IsActionItemsActive && !IsUnitConfirmingMove;
+            return !IsAnyUnitMoving && !IsActionItemsActive && !IsUnitConfirmingMove && !IsBattleActive;
         }
 
         private void MoveCursor(Direction direction)
@@ -211,7 +212,7 @@ namespace CT6GAMAI
 
         private void HandleUnitSelection()
         {
-            if(_gameManager.GridManager.CurrentState != CurrentState.ConfirmingMove)
+            if(_gameManager.GridManager.CurrentState != CurrentState.ConfirmingMove && _gameManager.CameraManager.CameraState != CameraStates.Battle)
             {
                 bool isConfirmPressed = Input.GetKeyDown(KeyCode.Space);
                 bool isActionSelected = _gameManager.GridManager.CurrentState == CurrentState.ActionSelected;

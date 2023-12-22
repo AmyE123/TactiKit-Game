@@ -11,6 +11,21 @@ namespace CT6GAMAI
 
         public enum GameStates { Map, Battle }
 
+        public enum CameraStates { Map, Battle }
+
+        public enum BattleSequenceStates
+        {
+            PreBattle,
+            PlayerMoveForward,
+            PlayerAttack,
+            PlayerMoveBack,
+            EnemyMoveForward,
+            EnemyAttack,
+            EnemyMoveBack,
+            CheckAdditionalAttacks,
+            BattleEnd
+        }
+
         #endregion // Game Flow
 
         #region Nodes
@@ -78,6 +93,13 @@ namespace CT6GAMAI
         public enum Team { Player, Enemy };
 
         /// <summary>
+        /// What side a team is on in the battle map
+        /// </summary>
+        public enum Side { Left, Right };
+
+        public enum UnitHealthState { Alive, Dead }
+
+        /// <summary>
         /// The different types of weapons
         /// </summary>
         public enum WeaponType { Sword, Lance, Axe, Tome }
@@ -143,6 +165,14 @@ namespace CT6GAMAI
         public const float UNIT_Y_ADJUSTMENT_SPEED = 0.1f;
         #endregion //Units                           
 
+        #region Animation Values
+
+        public const float BATTLE_SEQUENCE_ANIM_DELAY = 0.5f;
+
+        public const float BATTLE_SEQUENCE_MOVEMENT_SPEED = 0.2f;
+
+        #endregion // Animation Values
+
         #region Animation Parameter Strings
 
         /// <summary>
@@ -155,7 +185,7 @@ namespace CT6GAMAI
         /// </summary>
         public const string READY_ANIM_PARAM = "Ready";
 
-        public const string ATTACKING_ANIM_PARAM = "Attacking";
+        public const string ATTACKING_ANIM_PARAM = "Attack";
 
         public const string ATTACKING_ANIM_IDX_PARAM = "AttackingAnimIndex";
 

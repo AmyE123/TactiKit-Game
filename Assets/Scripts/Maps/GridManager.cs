@@ -66,7 +66,7 @@ namespace CT6GAMAI
                 InitializeGrid();
             }
 
-            if (CurrentState == CurrentState.ConfirmingMove)
+            if (CurrentState == CurrentState.ConfirmingMove && _gameManager.CameraManager.CameraState != CameraStates.Battle)
             {
                 var unit = _gameManager.UnitsManager.ActiveUnit;
 
@@ -190,6 +190,7 @@ namespace CT6GAMAI
         {
             if (CurrentState != CurrentState.ConfirmingMove &&
                 CurrentState != CurrentState.Moving &&
+                _gameManager.CameraManager.CameraState != CameraStates.Battle &&
                 Input.GetKeyDown(KeyCode.Space))
             {
                 ProcessUnitMovement(targetNode);

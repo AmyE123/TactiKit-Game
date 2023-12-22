@@ -4,6 +4,8 @@ namespace CT6GAMAI
 
     public class BattleManager : MonoBehaviour
     {
+        [SerializeField] private BattleSequenceManager _battleSequenceManager;
+
         private GameManager _gameManager;
         private CameraManager _cameraManager;
         private UIManager _uiManager;
@@ -23,6 +25,7 @@ namespace CT6GAMAI
         {
             _cameraManager.SwitchCamera(_cameraManager.Cameras[1]);
             _isBattleActive = true;
+            _battleSequenceManager.StartBattle(_gameManager.UnitsManager.ActiveUnit.UnitData.UnitTeam);
         }
 
         public void SwitchToMap()

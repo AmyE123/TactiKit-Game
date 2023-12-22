@@ -2,9 +2,10 @@ namespace CT6GAMAI
 {
     using UnityEngine;
     using UnityEngine.UI;
+    using static CT6GAMAI.Constants;
 
     public class UnitStatsManager : MonoBehaviour
-    {
+    {        
         [SerializeField] private UnitManager _unitManager;
 
         [SerializeField] private int _healthPoints;
@@ -29,16 +30,21 @@ namespace CT6GAMAI
         {
             // Add the value to current health points and clamp it within the valid range
             _healthPoints = Mathf.Clamp(_healthPoints + value, 0, _unitBaseData.HealthPointsBaseValue);
-            CheckHealthStatus();
+            CheckHealthState();
 
             return _healthPoints;
         }
 
-        public void CheckHealthStatus()
+        public UnitHealthState CheckHealthState()
         {
             if (_healthPoints <= 0)
             {
                 Debug.Log("[BATTLE]: Unit death! HP at 0");
+                return UnitHealthState.Dead;
+            }
+            else
+            {
+                return UnitHealthState.Alive;
             }
         }
 

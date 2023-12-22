@@ -3,23 +3,38 @@ namespace CT6GAMAI
     using UnityEngine;
     using Cinemachine;
     using System.Linq;
+    using static CT6GAMAI.Constants;
 
     public class CameraManager : MonoBehaviour
     {
-        [SerializeField] private CinemachineVirtualCamera[] _cameras;                                            
-        [SerializeField] private CinemachineVirtualCamera _startCamera;
+        [SerializeField] private CameraStates _cameraState;
+
+        [SerializeField] private CinemachineVirtualCamera[] _cameras;
         [SerializeField] private CinemachineVirtualCamera _currentCamera;
-        
+
+        [SerializeField] private CinemachineVirtualCamera _mapCamera;
+        [SerializeField] private CinemachineVirtualCamera _battleCamera;
+
         public CinemachineVirtualCamera[] Cameras => _cameras;
+        public CameraStates CameraState => _cameraState;
 
         private void Start()
         {
-            SetActiveCamera(_startCamera ?? _cameras.FirstOrDefault());
+            SetActiveCamera(_mapCamera);
         }
 
         public void SwitchCamera(CinemachineVirtualCamera newCamera)
         {
             SetActiveCamera(newCamera);
+
+            if (newCamera == _mapCamera)
+            {
+                _cameraState = CameraStates.Map;
+            }
+            if (newCamera == _battleCamera)
+            {
+                _cameraState = CameraStates.Battle;
+            }
         }
 
         private void SetActiveCamera(CinemachineVirtualCamera newCamera)
@@ -28,11 +43,11 @@ namespace CT6GAMAI
 
             if (_currentCamera != null)
             {
-                _currentCamera.Priority = Constants.INACTIVE_CAMERA_PRIORITY;
+                _currentCamera.Priority = INACTIVE_CAMERA_PRIORITY;
             }
 
             _currentCamera = newCamera;
-            _currentCamera.Priority = Constants.ACTIVE_CAMERA_PRIORITY;
+            _currentCamera.Priority = ACTIVE_CAMERA_PRIORITY;
         }
     }
 }
