@@ -30,14 +30,23 @@ namespace CT6GAMAI
         [SerializeField] private bool _leftTakenTurn;
         [SerializeField] private bool _rightTakenTurn;
 
+        private GameManager _gameManager;
+        private BattleManager _battleManager;
+
         public void Start()
         {
+            _gameManager = GameManager.Instance;
+            _battleManager = _gameManager.BattleManager;
             _currentBattleState = BattleSequenceStates.PreBattle;
         }
 
-        public void StartBattle(Team initiator)
+        public void StartBattle(Team initiator, UnitManager unitA, UnitManager unitB)
         {
             _initiatingTeam = initiator;
+            _gameManager.UIManager.BattleSequenceManager.GetValuesForBattleSequenceUI(unitA, unitB);
+
+            _leftUnit.SetUnitReferences(unitA.UnitStatsManager, unitA);
+            _rightUnit.SetUnitReferences(unitB.UnitStatsManager, unitA);
 
             ProcessBattleState();       
         }
@@ -56,7 +65,7 @@ namespace CT6GAMAI
                     break;
 
                 case BattleSequenceStates.PlayerAttack:
-                    PlayAttackAnimation(_leftUnit, _rightUnit);
+                    AttackSequence(_leftUnit, _rightUnit);
                     StartCoroutine(AttackDelay(1f, Side.Left));                   
                     break;
 
@@ -71,7 +80,7 @@ namespace CT6GAMAI
                     break;
 
                 case BattleSequenceStates.EnemyAttack:
-                    PlayAttackAnimation(_rightUnit, _leftUnit);
+                    AttackSequence(_rightUnit, _leftUnit);
                     StartCoroutine(AttackDelay(1f, Side.Right));
                     break;
 
@@ -141,6 +150,28 @@ namespace CT6GAMAI
 
                 _currentBattleState = BattleSequenceStates.BattleEnd;
             }      
+        }
+
+        private void AttackSequence(BattleUnitManager attackingUnit, BattleUnitManager defendingUnit)
+        {
+            PlayAttackAnimation(attackingUnit, defendingUnit);
+            if (DoesUnitHit(attackingUnit))
+            {
+                ApplyAttackDamage(attackingUnit, defendingUnit);
+            }          
+        }
+
+        private bool DoesUnitHit(BattleUnitManager attackingUnit)
+        {
+            var hit = attackingUnit.UnitStatsManager.Hit;
+            var doesHit = BattleCalculator.HitRoll(hit);
+
+            return doesHit;
+        }
+
+        private void ApplyAttackDamage(BattleUnitManager attackingUnit, BattleUnitManager defendingUnit)
+        {
+            defendingUnit.UnitStatsManager.AdjustHealthPoints(-attackingUnit.UnitStatsManager.Atk);
         }
 
         IEnumerator BattleBeginDelay(float delaySeconds, Team initiator)
@@ -216,11 +247,18 @@ namespace CT6GAMAI
         private void EndBattle()
         {
             Debug.Log("[BATTLE]: End the battle");
+            _gameManager.BattleManager.SwitchToMap();
+            ResetBattle();
         }
 
         private void ResetBattle()
         {
             _currentBattleState = BattleSequenceStates.PreBattle;
+            _battleBegin = false;
+            _leftUnit.SetUnitCompleteAttacks(false);
+            _rightUnit.SetUnitCompleteAttacks(false);
+            _rightTakenTurn = false; 
+            _leftTakenTurn = false;
         }
     }
 }

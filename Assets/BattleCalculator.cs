@@ -191,5 +191,49 @@ namespace CT6GAMAI
         {
             return (unit.SpeedBaseValue * 2) + unit.LuckBaseValue;
         }
+
+        public static int CalculateRemainingHPForecast(UnitManager unit, int attackAmount, bool canDoubleAttack)
+        {
+            var attackValue = attackAmount;
+
+            if (canDoubleAttack)
+            {
+                attackValue *= 2;
+            }
+
+            return unit.UnitStatsManager.HealthPoints - attackValue;
+        }
+
+        public static bool CriticalRoll(int criticalPercentage)
+        {
+            bool critHit = Roll(criticalPercentage);
+
+            if (critHit)
+            {
+                Debug.Log("[BATTLE]: Got crit hit!");
+            }
+
+            return critHit;
+        }
+
+        public static bool HitRoll(int hitPercentage)
+        {
+            bool hit = Roll(hitPercentage);
+
+            if (hit)
+            {
+                Debug.Log("[BATTLE]: Got hit!");
+            }
+
+            return hit;
+        }
+
+        public static bool Roll(int percentage)
+        {
+            var roll = Random.Range(0, 100);
+
+            return roll <= percentage;
+        }
+
     }
 }

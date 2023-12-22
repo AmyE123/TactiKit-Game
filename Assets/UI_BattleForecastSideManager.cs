@@ -40,14 +40,6 @@ namespace CT6GAMAI
             FlashingDamage();
         }
 
-        //public void ToggleBattleForecastSide(UnitData unit)
-        //{
-        //    _forecastToggled = !_forecastToggled;
-
-        //    ToggleUISide();
-        //    PopulateBattleForecastSide(unit);            
-        //}
-
         public void SpawnBattleForecastSide()
         {
             _forecastToggled = true;

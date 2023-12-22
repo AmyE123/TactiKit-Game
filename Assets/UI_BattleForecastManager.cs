@@ -6,6 +6,8 @@ namespace CT6GAMAI
     {
         [SerializeField] private UI_BattleForecastSideManager[] _battleForecastManagers;
 
+        private GameManager _gameManager;
+
         private bool _areBattleForecastsToggled;
 
         public bool AreBattleForecastsToggled => _areBattleForecastsToggled;
@@ -22,23 +24,20 @@ namespace CT6GAMAI
         public int CritRateB;
         public int RemainingHPB;
 
-        public void CalculateValuesForBattleForecast(UnitManager unitA, UnitManager unitB)
+        private void Start()
         {
-            AttackA = BattleCalculator.CalculateAttackPower(unitA, unitB);
-            CanDoubleAttackA = BattleCalculator.CanDoubleAttack(unitA, unitB);
-            HitRateA = BattleCalculator.CalculateHitRatePercentage(unitA, unitB);
-            CritRateA = BattleCalculator.CalculateCriticalRatePercentage(unitA, unitB);         
+            _gameManager = GameManager.Instance;
+        }
 
-            AttackB = BattleCalculator.CalculateAttackPower(unitB, unitA);
-            CanDoubleAttackB = BattleCalculator.CanDoubleAttack(unitB, unitA);
-            HitRateB = BattleCalculator.CalculateHitRatePercentage(unitB, unitA);
-            CritRateB = BattleCalculator.CalculateCriticalRatePercentage(unitB, unitA);
+        public void GetValuesForBattleForecast(UnitManager unitA, UnitManager unitB)
+        {
+            var battleManager = _gameManager.BattleManager;
 
-            RemainingHPA = CalculateRemainingHPForecast(unitA, AttackB, CanDoubleAttackB);
-            RemainingHPB = CalculateRemainingHPForecast(unitB, AttackA, CanDoubleAttackA);
-
-            PopulateBattleForecastValues(0, unitA, AttackA, CanDoubleAttackA, HitRateA, CritRateA, RemainingHPA);
-            PopulateBattleForecastValues(1, unitB, AttackB, CanDoubleAttackB, HitRateB, CritRateB, RemainingHPB);
+            battleManager.SetBattleStats(unitA, AttackA, CanDoubleAttackA, HitRateA, CritRateA, RemainingHPA, unitB, AttackB, CanDoubleAttackB, HitRateB, CritRateB, RemainingHPB);
+            battleManager.CalculateValuesForBattleForecast(unitA, unitB);
+            
+            PopulateBattleForecastValues(0, unitA, battleManager.AttackA, battleManager.CanDoubleAttackA, battleManager.HitRateA, battleManager.CritRateA, battleManager.RemainingHPA);
+            PopulateBattleForecastValues(1, unitB, battleManager.AttackB, battleManager.CanDoubleAttackB, battleManager.HitRateB, battleManager.CritRateB, battleManager.RemainingHPB);
         }
 
         public void PopulateBattleForecastValues(int sideIdx, UnitManager unit, int attack, bool canDoubleAttack, int hitRate, int critRate, int remainingHP)
@@ -48,7 +47,7 @@ namespace CT6GAMAI
 
         public void SpawnBattleForecast(UnitManager unitA, UnitManager unitB)
         {
-            CalculateValuesForBattleForecast(unitA, unitB);
+            GetValuesForBattleForecast(unitA, unitB);
 
             _battleForecastManagers[0].SpawnBattleForecastSide();
             _battleForecastManagers[1].SpawnBattleForecastSide();
@@ -62,18 +61,6 @@ namespace CT6GAMAI
             _battleForecastManagers[1].CancelBattleForecast();
 
             _areBattleForecastsToggled = false;
-        }
-
-        private int CalculateRemainingHPForecast(UnitManager unit, int attackAmount, bool canDoubleAttack)
-        {
-            var attackValue = attackAmount;
-
-            if (canDoubleAttack)
-            {
-                attackValue *= 2;
-            }
-
-            return unit.UnitStatsManager.HealthPoints - attackValue;
         }
     }
 

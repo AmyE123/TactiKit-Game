@@ -11,9 +11,19 @@ namespace CT6GAMAI
         [SerializeField] private int _healthPoints;
         [SerializeField] private Image _healthBarFill;
 
+        [SerializeField] private int _atk;
+        [SerializeField] private bool _dblAtk;
+        [SerializeField] private int _hit;
+        [SerializeField] private int _crit;
+
         private UnitData _unitBaseData;
 
         public int HealthPoints => _healthPoints;
+
+        public int Atk => _atk;
+        public bool DblAtk => _dblAtk;
+        public int Hit => _hit;
+        public int Crit => _crit;
 
         public void Start()
         {
@@ -46,6 +56,14 @@ namespace CT6GAMAI
             {
                 return UnitHealthState.Alive;
             }
+        }
+
+        public void SetUnitStats(int atk, bool dblAtk, int hit, int crit)
+        {
+            _atk = atk;
+            _dblAtk = dblAtk;
+            _hit = hit;
+            _crit = crit;
         }
 
         private float CalculateHealthPercentage(int currentHealth, int maxHealth)
