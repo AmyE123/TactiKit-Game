@@ -18,6 +18,8 @@ namespace CT6GAMAI
 
         private UnitData _unitBaseData;
 
+        public UnitData UnitBaseData => _unitBaseData;
+
         public int HealthPoints => _healthPoints;
 
         public int Atk => _atk;

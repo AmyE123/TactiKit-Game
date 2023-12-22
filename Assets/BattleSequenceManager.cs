@@ -166,10 +166,15 @@ namespace CT6GAMAI
         private void AttackSequence(BattleUnitManager attackingUnit, BattleUnitManager defendingUnit)
         {
             PlayAttackAnimation(attackingUnit, defendingUnit);
+
             if (DoesUnitHit(attackingUnit))
             {
                 ApplyAttackDamage(attackingUnit, defendingUnit);
-            }          
+            }
+            else
+            {
+                Debug.Log("[BATTLE]: Unit doesn't Hit!!");
+            }
         }
 
         private bool DoesUnitHit(BattleUnitManager attackingUnit)
@@ -180,9 +185,25 @@ namespace CT6GAMAI
             return doesHit;
         }
 
+        private bool DoesUnitCrit(BattleUnitManager attackingUnit)
+        {
+            var crit = attackingUnit.UnitStatsManager.Crit;
+            var doesCrit = BattleCalculator.CriticalRoll(crit);
+
+            return doesCrit;
+        }
+
         private void ApplyAttackDamage(BattleUnitManager attackingUnit, BattleUnitManager defendingUnit)
         {
-            defendingUnit.UnitStatsManager.AdjustHealthPoints(-attackingUnit.UnitStatsManager.Atk);
+            var attackDeduction = -attackingUnit.UnitStatsManager.Atk;
+
+            if (DoesUnitCrit(attackingUnit))
+            {
+                Debug.Log("[BATTLE]: Unit does Crit!!");
+                attackDeduction *= 3;
+            }
+
+            defendingUnit.UnitStatsManager.AdjustHealthPoints(attackDeduction);
         }
 
         IEnumerator BattleBeginDelay(float delaySeconds, Team initiator)

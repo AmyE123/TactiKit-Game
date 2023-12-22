@@ -8,7 +8,6 @@ namespace CT6GAMAI
     public class UI_BattleSequenceSideManager : MonoBehaviour
     {
         [SerializeField] private Constants.Side _side;
-        [SerializeField] private bool _battleSequenceToggled;
 
         [SerializeField] private TMP_Text _equippedWeaponValueText;
         [SerializeField] private Image _equippedWeaponImage;
@@ -19,15 +18,27 @@ namespace CT6GAMAI
         [SerializeField] private TMP_Text _critStatValueText;
         [SerializeField] private Image _healthBarFill;
 
-        public void PopulateBattleSequenceUIData(UnitData unit, int attackValue, int hitValue, int critValue, int currentHP)
+        [SerializeField] private UnitManager _activeUnitManager;
+
+        private void Update()
         {
-            _unitNameValueText.text = unit.UnitName;
+            if (_activeUnitManager != null)
+            {
+                UpdateHealthFill(_activeUnitManager);
+            }
+        }
 
-            var formattedWeaponName = Regex.Replace(unit.EquippedWeapon.WeaponName.ToString(), "(\\B[A-Z])", " $1");
+        public void PopulateBattleSequenceUIData(UnitManager unit, int attackValue, int hitValue, int critValue)
+        {
+            _activeUnitManager = unit;
+
+            _unitNameValueText.text = unit.UnitData.UnitName;
+
+            var formattedWeaponName = Regex.Replace(unit.UnitData.EquippedWeapon.WeaponName.ToString(), "(\\B[A-Z])", " $1");
             _equippedWeaponValueText.text = formattedWeaponName;
-            _equippedWeaponImage.sprite = unit.EquippedWeapon.WeaponSprite;
+            _equippedWeaponImage.sprite = unit.UnitData.EquippedWeapon.WeaponSprite;
 
-            _currentHPValueText.text = currentHP.ToString();
+            _currentHPValueText.text = unit.UnitStatsManager.HealthPoints.ToString();
 
             _attackStatValueText.text = attackValue.ToString();
 
@@ -35,7 +46,16 @@ namespace CT6GAMAI
 
             _critStatValueText.text = critValue.ToString() + "%";
 
-            float healthFillAmount = CalculateHealthPercentage(currentHP, unit.HealthPointsBaseValue);
+            float healthFillAmount = CalculateHealthPercentage(unit.UnitStatsManager.HealthPoints, unit.UnitData.HealthPointsBaseValue);
+
+            _healthBarFill.fillAmount = healthFillAmount;
+        }
+
+        private void UpdateHealthFill(UnitManager unit)
+        {
+            _currentHPValueText.text = unit.UnitStatsManager.HealthPoints.ToString();
+
+            float healthFillAmount = CalculateHealthPercentage(unit.UnitStatsManager.HealthPoints, unit.UnitData.HealthPointsBaseValue);
 
             _healthBarFill.fillAmount = healthFillAmount;
         }

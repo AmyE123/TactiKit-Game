@@ -10,13 +10,13 @@ namespace CT6GAMAI
 
         public void GetValuesForBattleSequenceUI(UnitManager unitA, UnitManager unitB)
         {           
-            PopulateBattleSequenceUIValues(0, unitA, _battleManager.AttackA, _battleManager.CanDoubleAttackA, _battleManager.HitRateA, _battleManager.CritRateA, _battleManager.RemainingHPA);
-            PopulateBattleSequenceUIValues(1, unitB, _battleManager.AttackB, _battleManager.CanDoubleAttackB, _battleManager.HitRateB, _battleManager.CritRateB, _battleManager.RemainingHPB);            
+            PopulateBattleSequenceUIValues(0, unitA, _battleManager.AttackA, _battleManager.CanDoubleAttackA, _battleManager.HitRateA, _battleManager.CritRateA);
+            PopulateBattleSequenceUIValues(1, unitB, _battleManager.AttackB, _battleManager.CanDoubleAttackB, _battleManager.HitRateB, _battleManager.CritRateB);            
         }
 
-        public void PopulateBattleSequenceUIValues(int sideIdx, UnitManager unit, int attack, bool canDoubleAttack, int hitRate, int critRate, int remainingHP)
+        public void PopulateBattleSequenceUIValues(int sideIdx, UnitManager unit, int attack, bool canDoubleAttack, int hitRate, int critRate)
         {
-            _battleSequenceSideManagers[sideIdx].PopulateBattleSequenceUIData(unit.UnitData, attack, hitRate, critRate, remainingHP);
+            _battleSequenceSideManagers[sideIdx].PopulateBattleSequenceUIData(unit, attack, hitRate, critRate);
         }
     }
 }

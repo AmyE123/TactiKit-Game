@@ -28,6 +28,7 @@ namespace CT6GAMAI
         {
             _unitStatsManagerRef = unitStats;
             _unitManagerRef = unitManager;
+            _canUnitAttackAgain = _unitStatsManagerRef.DblAtk;
         }
     }
 }
