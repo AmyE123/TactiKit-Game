@@ -3332,6 +3332,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _unitManager: {fileID: 7592517802941822380}
   _healthPoints: 0
+  _healthBarFill: {fileID: 3732158697526137488}
 --- !u!1 &8580508073901243422
 GameObject:
   m_ObjectHideFlags: 0
@@ -3402,7 +3403,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 0
-  m_FillAmount: 0.654
+  m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 1
   m_UseSpriteMesh: 0
