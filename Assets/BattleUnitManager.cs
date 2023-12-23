@@ -1,6 +1,5 @@
 namespace CT6GAMAI
 {
-    using UnityEditor;
     using UnityEngine;
     using static CT6GAMAI.Constants;
 
