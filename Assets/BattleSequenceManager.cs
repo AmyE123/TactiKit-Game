@@ -2,6 +2,7 @@ namespace CT6GAMAI
 {
     using DG.Tweening;
     using System.Collections;
+    using System.ComponentModel;
     using UnityEngine;
     using static CT6GAMAI.Constants;
 
@@ -13,10 +14,10 @@ namespace CT6GAMAI
         [Header("Battle State")]
         [SerializeField] private BattleSequenceStates _currentBattleState = BattleSequenceStates.PreBattle;
         [SerializeField] private Team _initiatingTeam;
-
+        
         [Header("Units")]
-        [SerializeField] private BattleUnitManager _leftUnit;
-        [SerializeField] private BattleUnitManager _rightUnit;
+        [SerializeField] private BattleUnitManager _attackerUnit;
+        [SerializeField] private BattleUnitManager _defenderUnit;
 
         [Header("Positions - Attack")]
         [SerializeField] private Transform _attackPositionLeft;
@@ -27,8 +28,8 @@ namespace CT6GAMAI
         [SerializeField] private Transform _dodgePositionRight;
 
         [Header("Sequence Turn Management")]
-        [SerializeField] private bool _leftTakenTurn;
-        [SerializeField] private bool _rightTakenTurn;
+        [SerializeField] private bool _attackerTakenTurn;
+        [SerializeField] private bool _defenderTakenTurn;
 
         private bool _isBattleEnding = false;
         private GameManager _gameManager;
@@ -57,28 +58,28 @@ namespace CT6GAMAI
                     HandlePreBattle();
                     break;
 
-                case BattleSequenceStates.PlayerMoveForward:
-                    HandlePlayerMoveForward();
+                case BattleSequenceStates.AttackerMoveForward:
+                    HandleAttackerMoveForward();
                     break;
 
-                case BattleSequenceStates.PlayerAttack:
-                    HandlePlayerAttack();
+                case BattleSequenceStates.AttackerAttack:
+                    HandleAttackerAttack();
                     break;
 
-                case BattleSequenceStates.PlayerMoveBack:
-                    HandlePlayerMoveBack();
+                case BattleSequenceStates.AttackerMoveBack:
+                    HandleAttackerMoveBack();
                     break;
 
-                case BattleSequenceStates.EnemyMoveForward:
-                    HandleEnemyMoveForward();
+                case BattleSequenceStates.DefenderMoveForward:
+                    HandleDefenderMoveForward();
                     break;
 
-                case BattleSequenceStates.EnemyAttack:
-                    HandleEnemyAttack();
+                case BattleSequenceStates.DefenderAttack:
+                    HandleDefenderAttack();
                     break;
 
-                case BattleSequenceStates.EnemyMoveBack:
-                    HandleEnemyMoveBack();
+                case BattleSequenceStates.DefenderMoveBack:
+                    HandleDefenderMoveBack();
                     break;
 
                 case BattleSequenceStates.CheckAdditionalAttacks:
@@ -95,76 +96,96 @@ namespace CT6GAMAI
 
         private void HandlePreBattle()
         {
-            StartCoroutine(BattleBeginDelay(1f, _initiatingTeam));
+            StartCoroutine(BattleBeginDelay(BATTLE_SEQUENCE_DELAY, _initiatingTeam));
         }
 
-        private void HandlePlayerMoveForward()
+        private void HandleAttackerMoveForward()
         {
-            MoveUnitForward(_leftUnit);
+            MoveUnitForward(_attackerUnit);
         }
 
-        private void HandlePlayerAttack()
+        private void HandleAttackerAttack()
         {
-            if (!_leftTakenTurn)
+            if (!_attackerTakenTurn)
             {
-                AttackSequence(_leftUnit, _rightUnit);
-                StartCoroutine(AttackDelay(1f, Side.Left));
+                AttackSequence(_attackerUnit, _defenderUnit);
+                StartCoroutine(AttackDelay(BATTLE_SEQUENCE_DELAY, Side.Left));
             }
         }
 
-        private void HandlePlayerMoveBack()
+        private void HandleAttackerMoveBack()
         {
-            MoveUnitsBack(_leftUnit, _rightUnit);
-            StartCoroutine(SwitchSidesDelay(1f));
+            MoveUnitsBack(_attackerUnit, _defenderUnit);
+            StartCoroutine(SwitchSidesDelay(BATTLE_SEQUENCE_DELAY));
         }
 
-        private void HandleEnemyMoveForward()
+        private void HandleDefenderMoveForward()
         {
-            MoveUnitForward(_rightUnit);
+            MoveUnitForward(_defenderUnit);
         }
 
-        private void HandleEnemyAttack()
+        private void HandleDefenderAttack()
         {
-            if (!_rightTakenTurn)
+            if (!_defenderTakenTurn)
             {
-                AttackSequence(_rightUnit, _leftUnit);
-                StartCoroutine(AttackDelay(1f, Side.Right));
+                AttackSequence(_defenderUnit, _attackerUnit);
+                StartCoroutine(AttackDelay(BATTLE_SEQUENCE_DELAY, Side.Right));
             }
         }
 
-        private void HandleEnemyMoveBack()
+        private void HandleDefenderMoveBack()
         {
-            MoveUnitsBack(_rightUnit, _leftUnit);
-            StartCoroutine(SwitchSidesDelay(1f));
+            MoveUnitsBack(_defenderUnit, _attackerUnit);
+            StartCoroutine(SwitchSidesDelay(BATTLE_SEQUENCE_DELAY));
         }
 
         private void HandleCheckAdditionalAttacks()
         {
-            if (_leftUnit.CanUnitAttackAgain && !_leftUnit.UnitCompleteAttacks)
+            if (_attackerUnit.CanUnitAttackAgain && !_attackerUnit.UnitCompleteAttacks)
             {
-                _leftTakenTurn = false;
-                _leftUnit.SetUnitCompleteAttacks(true);
-                _currentBattleState = BattleSequenceStates.PlayerMoveForward;
-                ProcessBattleState();
+                ResetAttacker();
             }
-            else if (_rightUnit.CanUnitAttackAgain && !_rightUnit.UnitCompleteAttacks)
+            else if (_defenderUnit.CanUnitAttackAgain && !_defenderUnit.UnitCompleteAttacks)
             {
-                _rightTakenTurn = false;
-                _rightUnit.SetUnitCompleteAttacks(true);
-                _currentBattleState = BattleSequenceStates.EnemyMoveForward;
-                ProcessBattleState();
+                ResetDefender();
             }
             else
             {
-                _leftUnit.SetUnitCompleteAttacks(true);
-                _rightUnit.SetUnitCompleteAttacks(true);
-                _currentBattleState = BattleSequenceStates.BattleEnd;
-                ProcessBattleState();
+                EndBattleSequence();
             }
         }
 
         #endregion // Battle State Handler Functions
 
+        private void ChangeBattleSequenceState(BattleSequenceStates newState)
+        {
+            _currentBattleState = newState;
+            ProcessBattleState();
+        }
+
+        private void ResetAttacker()
+        {
+            _attackerTakenTurn = false;
+            _attackerUnit.SetUnitCompleteAttacks(true);
+
+            ChangeBattleSequenceState(BattleSequenceStates.AttackerMoveForward);
+        }
+
+        private void ResetDefender()
+        {
+            _defenderTakenTurn = false;
+            _defenderUnit.SetUnitCompleteAttacks(true);
+
+            ChangeBattleSequenceState(BattleSequenceStates.DefenderMoveForward);
+        }
+
+        private void EndBattleSequence()
+        {
+            _attackerUnit.SetUnitCompleteAttacks(true);
+            _defenderUnit.SetUnitCompleteAttacks(true);
+
+            ChangeBattleSequenceState(BattleSequenceStates.BattleEnd);
+        }
 
         private void CheckForDeadUnits(BattleUnitManager defendingUnit)
         {
@@ -181,26 +202,25 @@ namespace CT6GAMAI
             // Wait for a second or two before ending the battle
             yield return new WaitForSeconds(2f);
 
-            _currentBattleState = BattleSequenceStates.BattleEnd;
-            ProcessBattleState();
+            ChangeBattleSequenceState(BattleSequenceStates.BattleEnd);
         }
-
-        // Methods for MoveUnitForward, PlayAttackAnimation, EndBattle, etc., go here
 
         private void MoveUnitForward(BattleUnitManager unit)
         {
             if (unit.UnitSide == Side.Left)
             {
                 unit.transform.DOMoveX(_attackPositionRight.position.x, BATTLE_SEQUENCE_MOVEMENT_SPEED);
-                _currentBattleState = BattleSequenceStates.PlayerAttack;
+                //_currentBattleState = BattleSequenceStates.Attacker_Attack;
+                ChangeBattleSequenceState(BattleSequenceStates.AttackerAttack);
             }
             else
             {
                 unit.transform.DOMoveX(_attackPositionLeft.position.x, BATTLE_SEQUENCE_MOVEMENT_SPEED);
-                _currentBattleState = BattleSequenceStates.EnemyAttack;
+                //_currentBattleState = BattleSequenceStates.Defender_Attack;
+                ChangeBattleSequenceState(BattleSequenceStates.DefenderAttack);
             }
 
-            ProcessBattleState();
+            //ProcessBattleState();
         }
 
         private void PlayAttackAnimation(BattleUnitManager attackingUnit)
@@ -308,13 +328,11 @@ namespace CT6GAMAI
 
             if (initiator == Team.Player)
             {
-                _currentBattleState = BattleSequenceStates.PlayerMoveForward;
-                ProcessBattleState();
+                ChangeBattleSequenceState(BattleSequenceStates.AttackerMoveForward);
             }
             else
             {
-                _currentBattleState = BattleSequenceStates.EnemyMoveForward;
-                ProcessBattleState();
+                ChangeBattleSequenceState(BattleSequenceStates.DefenderMoveForward);
             }
         }
 
@@ -327,13 +345,11 @@ namespace CT6GAMAI
             {
                 if (side == Side.Left)
                 {
-                    _currentBattleState = BattleSequenceStates.PlayerMoveBack;
-                    ProcessBattleState();
+                    ChangeBattleSequenceState(BattleSequenceStates.AttackerMoveBack);
                 }
                 else
                 {
-                    _currentBattleState = BattleSequenceStates.EnemyMoveBack;
-                    ProcessBattleState();
+                    ChangeBattleSequenceState(BattleSequenceStates.DefenderMoveBack);
                 }
             }
         }
@@ -343,23 +359,8 @@ namespace CT6GAMAI
             Debug.Log("[BATTLE]: Unit death!!");
             yield return new WaitForSeconds(delaySeconds);
 
-            _currentBattleState = BattleSequenceStates.BattleEnd;
-            ProcessBattleState();
+            ChangeBattleSequenceState(BattleSequenceStates.BattleEnd);
 
-        }
-
-        private void MoveUnitBack(BattleUnitManager unit)
-        {
-            if (unit.UnitSide == Side.Left)
-            {
-                unit.transform.DOMoveX(1, BATTLE_SEQUENCE_MOVEMENT_SPEED);
-                _leftTakenTurn = true;
-            }
-            else
-            {
-                unit.transform.DOMoveX(-1, BATTLE_SEQUENCE_MOVEMENT_SPEED);
-                _rightTakenTurn = true;
-            }
         }
 
         private void MoveUnitsBack(BattleUnitManager unitA, BattleUnitManager unitB)
@@ -368,13 +369,13 @@ namespace CT6GAMAI
             {
                 unitA.transform.DOMoveX(1, BATTLE_SEQUENCE_MOVEMENT_SPEED);
                 unitB.transform.DOMoveX(-1, BATTLE_SEQUENCE_MOVEMENT_SPEED);
-                _leftTakenTurn = true;
+                _attackerTakenTurn = true;
             }
             else
             {
                 unitA.transform.DOMoveX(-1, BATTLE_SEQUENCE_MOVEMENT_SPEED);
                 unitB.transform.DOMoveX(1, BATTLE_SEQUENCE_MOVEMENT_SPEED);
-                _rightTakenTurn = true;
+                _defenderTakenTurn = true;
             }
         }
 
@@ -383,21 +384,18 @@ namespace CT6GAMAI
             Debug.Log("[BATTLE]: Switching sides!!");
             yield return new WaitForSeconds(delaySeconds);
 
-            if (_initiatingTeam == Team.Player && !_rightTakenTurn)
+            if (_initiatingTeam == Team.Player && !_defenderTakenTurn)
             {
-                _currentBattleState = BattleSequenceStates.EnemyMoveForward;
-                ProcessBattleState();
+                ChangeBattleSequenceState(BattleSequenceStates.DefenderMoveForward);
             }
-            else if (_initiatingTeam == Team.Enemy && !_leftTakenTurn)
+            else if (_initiatingTeam == Team.Enemy && !_attackerTakenTurn)
             {
-                _currentBattleState = BattleSequenceStates.PlayerMoveForward;
-                ProcessBattleState();
+                ChangeBattleSequenceState(BattleSequenceStates.AttackerMoveForward);
             }
 
-            if (_rightTakenTurn && _leftTakenTurn)
+            if (_defenderTakenTurn && _attackerTakenTurn)
             {
-                _currentBattleState = BattleSequenceStates.CheckAdditionalAttacks;
-                ProcessBattleState();
+                ChangeBattleSequenceState(BattleSequenceStates.CheckAdditionalAttacks);
             }
         }
 
@@ -420,8 +418,8 @@ namespace CT6GAMAI
             _initiatingTeam = attacker.UnitData.UnitTeam;
             _gameManager.UIManager.BattleSequenceManager.GetValuesForBattleSequenceUI(attacker, defender);
 
-            _leftUnit.SetUnitReferences(attacker.UnitStatsManager, attacker);
-            _rightUnit.SetUnitReferences(defender.UnitStatsManager, defender);
+            _attackerUnit.SetUnitReferences(attacker.UnitStatsManager, attacker);
+            _defenderUnit.SetUnitReferences(defender.UnitStatsManager, defender);
 
             ProcessBattleState();
         }
@@ -431,10 +429,10 @@ namespace CT6GAMAI
             _isBattleEnding = false;
 
             _currentBattleState = BattleSequenceStates.PreBattle;
-            _leftUnit.SetUnitCompleteAttacks(false);
-            _rightUnit.SetUnitCompleteAttacks(false);
-            _rightTakenTurn = false;
-            _leftTakenTurn = false;
+            _attackerUnit.SetUnitCompleteAttacks(false);
+            _defenderUnit.SetUnitCompleteAttacks(false);
+            _defenderTakenTurn = false;
+            _attackerTakenTurn = false;
         }
     }
 }

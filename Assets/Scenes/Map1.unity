@@ -20376,20 +20376,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c33a986d883cf8c48929bb6d57d3895f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _unitA: {fileID: 0}
-  _attackA: 0
-  _canDoubleAttackA: 0
-  _hitRateA: 0
-  _critRateA: 0
-  _remainingHPA: 0
-  _unitB: {fileID: 0}
-  _attackB: 0
-  _canDoubleAttackB: 0
-  _hitRateB: 0
-  _critRateB: 0
-  _remainingHPB: 0
   _battleSequenceManager: {fileID: 1258330833}
-  _unitModel: {fileID: 0}
+  _attackerUnit: {fileID: 0}
+  _attackerAtk: 0
+  _attackerDblAtk: 0
+  _attackerHit: 0
+  _attackerCrit: 0
+  _attackerRemainingHP: 0
+  _defenderUnit: {fileID: 0}
+  _defenderAtk: 0
+  _defenderDblAtk: 0
+  _defenderHit: 0
+  _defenderCrit: 0
+  _defenderRemainingHP: 0
 --- !u!4 &1181283394
 Transform:
   m_ObjectHideFlags: 0
@@ -21107,7 +21106,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1223340195}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.0000000098647766, y: 0.9436284, z: -0.33100694, w: -0.000000028122319}
+  m_LocalRotation: {x: 2.0641513e-15, y: 0.9436283, z: -0.33100694, w: 1.5760844e-15}
   m_LocalPosition: {x: 0, y: -11, z: -23.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -24387,6 +24386,7 @@ MonoBehaviour:
   _activeUnits: []
   _cursorUnit: {fileID: 2082227955}
   _activeUnit: {fileID: 2082227955}
+  _lastSelectedPlayerUnit: {fileID: 0}
 --- !u!114 &1427844807
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -16,15 +16,17 @@ namespace CT6GAMAI
         public enum BattleSequenceStates
         {
             PreBattle,
-            PlayerMoveForward,
-            PlayerAttack,
-            PlayerMoveBack,
-            EnemyMoveForward,
-            EnemyAttack,
-            EnemyMoveBack,
+            AttackerMoveForward,
+            AttackerAttack,
+            AttackerMoveBack,
+            DefenderMoveForward,
+            DefenderAttack,
+            DefenderMoveBack,
             CheckAdditionalAttacks,
             BattleEnd
         }
+
+        public static float BATTLE_SEQUENCE_DELAY = 1.5f;
 
         #endregion // Game Flow
 

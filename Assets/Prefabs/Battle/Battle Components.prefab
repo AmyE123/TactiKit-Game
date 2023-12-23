@@ -223,15 +223,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _currentBattleState: 0
   _initiatingTeam: 0
-  _leftUnit: {fileID: 9009783193747441241}
-  _rightUnit: {fileID: 3064866801207249066}
+  _attackerUnit: {fileID: 9009783193747441241}
+  _defenderUnit: {fileID: 3064866801207249066}
   _attackPositionLeft: {fileID: 8000620369180224038}
   _attackPositionRight: {fileID: 7860182123561607751}
   _dodgePositionLeft: {fileID: 3062307163659779509}
   _dodgePositionRight: {fileID: 6854656947748207162}
-  _battleBegin: 0
-  _leftTakenTurn: 0
-  _rightTakenTurn: 0
+  _attackerTakenTurn: 0
+  _defenderTakenTurn: 0
 --- !u!1 &6138853021740896924
 GameObject:
   m_ObjectHideFlags: 0
