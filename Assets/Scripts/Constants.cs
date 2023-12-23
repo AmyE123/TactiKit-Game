@@ -9,10 +9,19 @@ namespace CT6GAMAI
     {
         #region Game Flow
 
+        /// <summary>
+        /// A value representing the states which the overall game can be in
+        /// </summary>
         public enum GameStates { Map, Battle }
 
+        /// <summary>
+        /// A value representing the states which the camera can be in
+        /// </summary>
         public enum CameraStates { Map, Battle }
 
+        /// <summary>
+        /// A value representing the states which the battle sequence can be in
+        /// </summary>
         public enum BattleSequenceStates
         {
             PreBattle,
@@ -122,14 +131,17 @@ namespace CT6GAMAI
         public enum Team { Player, Enemy };
 
         /// <summary>
-        /// What side a team is on in the battle map
+        /// What side a team is on in the battle map.
         /// </summary>
         public enum Side { Left, Right };
 
+        /// <summary>
+        /// The health states a unit can be in.
+        /// </summary>
         public enum UnitHealthState { Alive, Dead }
 
         /// <summary>
-        /// The different types of weapons
+        /// The different types of weapons.
         /// </summary>
         public enum WeaponType { Sword, Lance, Axe, Tome }
 
@@ -196,12 +208,24 @@ namespace CT6GAMAI
 
         #region Animation Values
 
+        /// <summary>
+        /// The delay between general transitions in the battle sequence.
+        /// </summary>
         public static float BATTLE_SEQUENCE_DELAY = 1.5f;
 
+        /// <summary>
+        /// The delay transitioning out of the battle sequence after a unit has died.
+        /// </summary>
         public static float BATTLE_SEQUENCE_DEATH_DELAY = 2f;
 
+        /// <summary>
+        /// The speed units move in the battle sequence.
+        /// </summary>
         public const float BATTLE_SEQUENCE_MOVEMENT_SPEED = 0.2f;
 
+        /// <summary>
+        /// The height a unit jumps when dodging during a battle sequence.
+        /// </summary>
         public const float DODGE_TWEEN_JUMP_HEIGHT = 0.2f;
 
         #endregion // Animation Values
@@ -209,33 +233,63 @@ namespace CT6GAMAI
         #region Animation Parameter Strings
 
         /// <summary>
-        /// The string value for the moving parameter in the animator
+        /// The string value for the moving parameter in the animator.
         /// </summary>
         public const string MOVING_ANIM_PARAM = "Moving";
 
         /// <summary>
-        /// The string value for the ready parameter in the animator
+        /// The string value for the ready parameter in the animator.
         /// </summary>
         public const string READY_ANIM_PARAM = "Ready";
 
+        /// <summary>
+        /// The string value for the attack parameter in the animator.
+        /// </summary>
         public const string ATTACKING_ANIM_PARAM = "Attack";
 
+        /// <summary>
+        /// The string value for the attack index parameter in the animator.
+        /// </summary>
         public const string ATTACKING_ANIM_IDX_PARAM = "AttackingAnimIndex";
 
+        /// <summary>
+        /// The integer value for the amount of attack animations in the animator.
+        /// </summary>
         public const int ATTACKING_ANIM_IDX_COUNT = 4;
 
+        /// <summary>
+        /// The string value for the hit parameter in the animator.
+        /// </summary>
         public const string HIT_ANIM_PARAM = "Hit";
 
+        /// <summary>
+        /// The string value for the attack index parameter in the animator.
+        /// </summary>
         public const string HIT_ANIM_IDX_PARAM = "HitAnimIndex";
 
+        /// <summary>
+        /// The integer value for the amount of hit animations in the animator.
+        /// </summary>
         public const int HIT_ANIM_IDX_COUNT = 2;
 
+        /// <summary>
+        /// The string value for the dodge parameter in the animator.
+        /// </summary>
         public const string DODGE_ANIM_PARAM = "Dodge";
 
+        /// <summary>
+        /// The string value for the death parameter in the animator.
+        /// </summary>
         public const string DEAD_ANIM_PARAM = "Dead";
 
+        /// <summary>
+        /// The string value for the death index parameter in the animator.
+        /// </summary>
         public const string DEAD_ANIM_IDX_PARAM = "DeadAnimIndex";
 
+        /// <summary>
+        /// The integer value for the amount of death animations in the animator.
+        /// </summary>
         public const int DEAD_ANIM_IDX_COUNT = 2;
 
         #endregion // Animation Parameter Strings
