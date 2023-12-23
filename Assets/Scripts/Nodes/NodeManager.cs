@@ -215,5 +215,13 @@ namespace CT6GAMAI
                 }
             }
         }
+
+        /// <summary>
+        /// Clears the stood unit.
+        /// </summary>
+        public void ClearStoodUnit()
+        {
+            StoodUnit = null;
+        }
     }
 }

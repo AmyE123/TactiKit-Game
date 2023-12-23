@@ -10,6 +10,7 @@ namespace CT6GAMAI
     {
         [SerializeField] private GridManager _gridManager;
         [SerializeField] private List<Node> _reachableNodes = new List<Node>();
+        [SerializeField] private List<Node> _rangeNodes = new List<Node>();
 
         private GameManager _gameManager;
 
@@ -18,6 +19,11 @@ namespace CT6GAMAI
         /// This list is only populated when the unit has been selected.
         /// </summary>
         public List<Node> ReachableNodes => _reachableNodes;
+
+        /// <summary>
+        /// A list of nodes within the units range for their weapon.
+        /// </summary>
+        public List<Node> RangeNodes => _rangeNodes;
 
         private void Start()
         {
@@ -38,6 +44,14 @@ namespace CT6GAMAI
             if (!_reachableNodes.Contains(node))
             {
                 _reachableNodes.Add(node);
+            }
+        }
+
+        private void AddNodeToRange(Node node)
+        {
+            if (!_rangeNodes.Contains(node))
+            {
+                _rangeNodes.Add(node);
             }
         }
 
@@ -110,7 +124,7 @@ namespace CT6GAMAI
             var startingNode = unit.StoodNode.Node;
             var movementPoints = unit.UnitData.MovementBaseValue;
 
-            return CalculateMovementRange(startingNode, movementPoints);
+            return CalculateMovementRange(startingNode, movementPoints, unit.UnitData.EquippedWeapon.WeaponMaxRange);
         }
 
         /// <summary>
@@ -159,6 +173,56 @@ namespace CT6GAMAI
         }
 
         /// <summary>
+        /// Calculates the movement range of a unit using Dijkstra's Algorithm.
+        /// </summary>
+        /// <param name="startingNode">The starting node.</param>
+        /// <param name="movementPoints">The maximum movement points of the unit.</param>
+        /// <returns>A list of nodes representing the reachable area.</returns>
+        public List<Node> CalculateMovementRange(Node startingNode, int movementPoints, int weaponRange)
+        {
+            InitializeNodes();
+
+            // Initialize the starting node's distance to 0
+            startingNode.Distance = 0;
+
+            // Priority queue to select the node with the smallest distance
+            var queue = new PriorityQueue<Node>();
+            queue.Enqueue(startingNode, startingNode.Distance);
+
+            AddNodeToReachable(startingNode);
+
+            while (!queue.IsEmpty())
+            {
+                // Get the node with the smallest distance
+                Node current = queue.Dequeue();
+
+                if (current.Visited)
+                {
+                    continue;
+                }
+
+                current.Visited = true;
+
+                // If the current node is within movement points, add to reachable nodes
+                if (current.Distance <= movementPoints)
+                {
+                    AddNodeToReachable(current);
+                }
+
+                if (current.Distance <= weaponRange)
+                {
+                    AddNodeToRange(current);
+                }
+
+                EnqueueNeighbours(current, queue);
+            }
+
+            ResetNodeStates();
+
+            return _reachableNodes;
+        }
+
+        /// <summary>
         /// Reconstructs the path from a start node to a target node.
         /// </summary>
         /// <param name="start">The starting node.</param>
@@ -187,6 +251,7 @@ namespace CT6GAMAI
         public void ResetNodes()
         {
             _reachableNodes.Clear();
+            _rangeNodes.Clear();
         }
     }
 }

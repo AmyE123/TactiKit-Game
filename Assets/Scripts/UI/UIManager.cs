@@ -6,31 +6,41 @@ namespace CT6GAMAI
 
     public class UIManager : MonoBehaviour
     {
+        [Header("Information Managers")]
         [SerializeField] private UI_TileInfoManager _tileInfoManager;
         [SerializeField] private UI_UnitInfoManager _unitInfoManager;
-        [SerializeField] private UI_BattleForecastSideManager[] _battleForecastManagers;
+
+        [Header("Battle Forecast UI Management")]
+        [SerializeField] private UI_BattleForecastManager _battleForecastManager;
+        [SerializeField] private UI_BattleForecastSideManager[] _battleForecastSideManagers;
+        [SerializeField] private GameObject[] _uiObjectsToDisableForBattleForecasts;
+
+        [Header("Battle Sequence UI Management")]
+        [SerializeField] private UI_BattleSequenceManager _battleSequenceManager;
+        [SerializeField] private GameObject _battleAnimationUI;
+        [SerializeField] private GameObject[] _uiObjectsToDisableForBattleAnimations;                   
+
+        [Header("Action UI Management")]
         [SerializeField] private UI_ActionItemsManager _actionItemsManager;
         [SerializeField] private GameObject[] _uiObjectsToDisableForActions;
-        [SerializeField] private GameObject[] _uiObjectsToDisableForBattles;
 
+        [Header("General UI Elements")]
         [SerializeField] private Image _vignette;
 
         private bool _areBattleForecastsToggled;
         private GameManager _gameManager;
-        private GlobalUnitsManager _unitsManager;
-        private bool _vignetteEnabled;
 
         public UI_TileInfoManager TileInfoManager => _tileInfoManager;
         public UI_UnitInfoManager UnitInfoManager => _unitInfoManager;
-        public UI_BattleForecastSideManager[] BattleForecastManagers => _battleForecastManagers;
-        public UI_ActionItemsManager ActionItemsManager => _actionItemsManager;    
-        
+        public UI_BattleForecastSideManager[] BattleForecastManagers => _battleForecastSideManagers;
+        public UI_ActionItemsManager ActionItemsManager => _actionItemsManager; 
+        public UI_BattleForecastManager BattleForecastManager => _battleForecastManager;
+        public UI_BattleSequenceManager BattleSequenceManager => _battleSequenceManager;       
         public bool AreBattleForecastsToggled => _areBattleForecastsToggled;
 
         private void Start()
         {
             _gameManager = GameManager.Instance;
-            _unitsManager = _gameManager.UnitsManager;
         }
 
         private void Update()
@@ -38,41 +48,13 @@ namespace CT6GAMAI
             if (_gameManager != null)
             {
                 UpdateAllUIForActionItems();
+                UpdateAllUIForBattleForecast();
                 UpdateAllUIForBattle();
             }
             
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 _actionItemsManager.HideActionItems();
-            }
-        }
-
-        // TODO: Could THIS be in it's own class? UI_BattleForecastManager?
-        public void SpawnBattleForecast(UnitData unitA, UnitData unitB)
-        {
-            _battleForecastManagers[0].ToggleBattleForecastSide(unitA);
-            _battleForecastManagers[1].ToggleBattleForecastSide(unitB);
-
-            _areBattleForecastsToggled = _battleForecastManagers[0].IsForecastToggled;
-        }
-
-        public void CancelBattleForecast()
-        {
-            _battleForecastManagers[0].CancelBattleForecast();
-            _battleForecastManagers[1].CancelBattleForecast();
-
-            _areBattleForecastsToggled = false;
-        }
-
-        public void SetVignette(bool isActive)
-        {
-            if (!isActive)
-            {
-                _vignette.DOFade(0, Constants.VIGNETTE_FADE_SPEED);
-            }
-            else
-            {
-                _vignette.DOFade(1, Constants.VIGNETTE_FADE_SPEED);
             }
         }
 
@@ -87,13 +69,28 @@ namespace CT6GAMAI
             }
         }
 
+        private void UpdateAllUIForBattleForecast()
+        {
+            SetVignette(BattleForecastManager.AreBattleForecastsToggled);
+
+            foreach (GameObject go in _uiObjectsToDisableForBattleForecasts)
+            {
+                go.SetActive(!BattleForecastManager.AreBattleForecastsToggled);
+            }
+        }
+
         private void UpdateAllUIForBattle()
         {
-            SetVignette(_areBattleForecastsToggled);
+            _battleAnimationUI.SetActive(_gameManager.BattleManager.IsBattleActive);
 
-            foreach (GameObject go in _uiObjectsToDisableForBattles)
-            {
-                go.SetActive(!_areBattleForecastsToggled);
+            if (_gameManager.BattleManager.IsBattleActive)
+            {               
+                SetVignette(true);               
+
+                foreach (GameObject go in _uiObjectsToDisableForBattleAnimations)
+                {
+                    go.SetActive(false);
+                }
             }
         }
 
@@ -103,27 +100,46 @@ namespace CT6GAMAI
 
             if (gridCursor != null) 
             {
-                var cursorStateManager = gridCursor.SelectedNodeState.CursorStateManager;
-                var visualsStateManager = gridCursor.SelectedNodeState.VisualStateManager;
-
-                if (isDisabled)
+                if (gridCursor.SelectedNodeState != null)
                 {
-                    cursorStateManager.SetDisabled();
+                    var cursorStateManager = gridCursor.SelectedNodeState.CursorStateManager;
+                    var visualsStateManager = gridCursor.SelectedNodeState.VisualStateManager;
 
-                    foreach (NodeManager NM in _gameManager.GridManager.AllNodes)
+                    if (isDisabled)
                     {
-                        NM.NodeState.VisualStateManager.SetDisabled();
-                    }
-                }
-                else
-                {
-                    cursorStateManager.SetEnabled();
+                        cursorStateManager.SetDisabled();
 
-                    foreach (NodeManager NM in _gameManager.GridManager.AllNodes)
-                    {
-                        NM.NodeState.VisualStateManager.SetEnabled();
+                        foreach (NodeManager NM in _gameManager.GridManager.AllNodes)
+                        {
+                            NM.NodeState.VisualStateManager.SetDisabled();
+                        }
                     }
-                }
+                    else
+                    {
+                        cursorStateManager.SetEnabled();
+
+                        foreach (NodeManager NM in _gameManager.GridManager.AllNodes)
+                        {
+                            NM.NodeState.VisualStateManager.SetEnabled();
+                        }
+                    }
+                }                
+            }
+        }
+
+        /// <summary>
+        /// Sets the vignette active/inactive.
+        /// </summary>
+        /// <param name="isActive">Value to set the vignette.</param>
+        public void SetVignette(bool isActive)
+        {
+            if (!isActive)
+            {
+                _vignette.DOFade(0, Constants.VIGNETTE_FADE_SPEED);
+            }
+            else
+            {
+                _vignette.DOFade(1, Constants.VIGNETTE_FADE_SPEED);
             }
         }
     }

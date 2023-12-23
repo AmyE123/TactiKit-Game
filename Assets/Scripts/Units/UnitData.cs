@@ -32,12 +32,7 @@ namespace CT6GAMAI
         /// <summary>
         /// Unit's equipped weapon.
         /// </summary>
-        public Constants.Weapons EquippedWeapon = Constants.Weapons.BronzeSword;
-
-        /// <summary>
-        /// Unit's equipped weapon sprite.
-        /// </summary>
-        public Sprite EquippedWeaponImage;
+        public WeaponData EquippedWeapon;
 
         /// <summary>
         /// Shows how seasoned a unit is in his or her current class.

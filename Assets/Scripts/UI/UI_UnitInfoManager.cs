@@ -11,7 +11,7 @@ namespace CT6GAMAI
         [SerializeField] private TMP_Text _levelValueText;
         [SerializeField] private TMP_Text _equippedValueText;
         [SerializeField] private Image _equippedValueImage;
-        [SerializeField] private Image _teamColourImage;
+        [SerializeField] private Image[] _teamColourImages;
         [SerializeField] private GameObject _areaGO;
 
         private UnitData _previousUnitData;
@@ -30,9 +30,9 @@ namespace CT6GAMAI
                 _levelValueText.text = "LV " + ActiveUnitData.ClassLevel.ToString();
 
                 // TODO: Unit Inventory System
-                var formattedWeaponName = Regex.Replace(ActiveUnitData.EquippedWeapon.ToString(), "(\\B[A-Z])", " $1");
+                var formattedWeaponName = Regex.Replace(ActiveUnitData.EquippedWeapon.WeaponName.ToString(), "(\\B[A-Z])", " $1");
                 _equippedValueText.text = formattedWeaponName;
-                _equippedValueImage.sprite = ActiveUnitData.EquippedWeaponImage;
+                _equippedValueImage.sprite = ActiveUnitData.EquippedWeapon.WeaponSprite;
             }
         }
 
@@ -40,11 +40,17 @@ namespace CT6GAMAI
         {
             if (ActiveUnitData.UnitTeam == Constants.Team.Player)
             {
-                _teamColourImage.color = Constants.UI_PlayerColour;
+                foreach (Image teamColImg in _teamColourImages)
+                {
+                    teamColImg.color = Constants.UI_PlayerColour;
+                }
             }
             else
             {
-                _teamColourImage.color = Constants.UI_EnemyColour;
+                foreach (Image teamColImg in _teamColourImages)
+                {
+                    teamColImg.color = Constants.UI_EnemyColour;
+                }
             }
         }
 

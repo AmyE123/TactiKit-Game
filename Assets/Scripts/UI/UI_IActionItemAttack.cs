@@ -15,7 +15,7 @@ namespace CT6GAMAI
             set { _action = value; }
         }
 
-        public override bool IsActive 
+        public override bool IsActive
         {
             get { return _isActive; }
             set { _isActive = value; }
@@ -36,7 +36,6 @@ namespace CT6GAMAI
 
         public override void ActionEvent()
         {
-            Debug.Log("[Event Action] - Attack");
         }
     }
 }

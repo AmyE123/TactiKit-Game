@@ -9,15 +9,22 @@ namespace CT6GAMAI
     /// </summary>
     public class GridCursor : MonoBehaviour
     {
-        [SerializeField] private AudioSource _cursorAudioSource;
-        [SerializeField] private CursorAudioClips _cursorAudioClips;
-
         private GameManager _gameManager;
         private GridManager _gridManager;
         private AudioManager _audioManager;
         private UnitManager _lastSelectedUnit;
         private bool _pathing = false;
 
+        /// <summary>
+        /// Indicates whether pathing mode is active.
+        /// </summary>
+        public bool Pathing => _pathing;
+
+        [Header("Audio")]
+        [SerializeField] private AudioSource _cursorAudioSource;
+        [SerializeField] private CursorAudioClips _cursorAudioClips;
+
+        [Header("Node Selection")]
         /// <summary>
         /// The currently selected node.
         /// </summary>
@@ -28,17 +35,18 @@ namespace CT6GAMAI
         /// </summary>
         public NodeState SelectedNodeState;
 
+        [Header("Unit Interaction")]
         /// <summary>
         /// Indicates whether a unit is currently pressed (selected).
         /// </summary>
         public bool UnitPressed = false;
 
-        /// <summary>
-        /// Indicates whether pathing mode is active.
-        /// </summary>
-        public bool Pathing => _pathing;
-
         private void Start()
+        {
+            InitializeValues();
+        }
+
+        private void InitializeValues()
         {
             _gameManager = GameManager.Instance;
             _gridManager = _gameManager.GridManager;
@@ -101,43 +109,65 @@ namespace CT6GAMAI
 
             if (SelectedNode.StoodUnit != null)
             {
-                _gameManager.UIManager.UnitInfoManager.SetUnitType(SelectedNode.StoodUnit.UnitData);
-
-                if (!_pathing || _gameManager.UnitsManager.ActiveUnit == null)
-                {
-                    _gameManager.UnitsManager.SetActiveUnit(SelectedNode.StoodUnit);
-
-                    ResetHighlightedNodes();
-                    SelectedNode.HighlightRangeArea(SelectedNode.StoodUnit, SelectedNodeState.VisualStateManager.IsPressed);
-                }
+                ManageUnitSelection();
 
                 if (_pathing)
                 {
-                    if (_gameManager.UnitsManager.CursorUnit.UnitData.UnitTeam == Team.Enemy)
-                    {
-                        Debug.Log("[GAME]: UI Here for 'Enemy selected!'");
-                        SelectedNode.NodeState.CursorStateManager.SetEnemySelected();
-                    }
-                    else if (_gameManager.UnitsManager.CursorUnit.UnitData.UnitTeam == Team.Player)
-                    {
-                        Debug.Log("[GAME]: UI Here for 'Player selected!'");
-                        SelectedNode.NodeState.CursorStateManager.SetPlayerSelected();
-                    }
-                    else
-                    {
-                        SelectedNode.NodeState.CursorStateManager.SetDefaultSelected();
-                    }
+                    HandlePathingInteraction();
                 }
             }
             else
-            {
-                _gameManager.UIManager.UnitInfoManager.SetUnitInfoUIInactive();
+            { 
+                ResetUnitAndUI();
+            }
+        }
 
-                if (!UnitPressed)
-                {
-                    _gameManager.UnitsManager.SetActiveUnit(null);
-                    ResetHighlightedNodes();
-                }
+        private void ManageUnitSelection()
+        {
+            _gameManager.UIManager.UnitInfoManager.SetUnitType(SelectedNode.StoodUnit.UnitData);
+
+            if (!_pathing || _gameManager.UnitsManager.ActiveUnit == null)
+            {
+                _gameManager.UnitsManager.SetActiveUnit(SelectedNode.StoodUnit);
+                HandlePlayerUnitSelection();
+            }
+        }
+
+        private void HandlePlayerUnitSelection()
+        {
+            if (SelectedNode.StoodUnit.UnitData.UnitTeam != Team.Enemy)
+            {
+                _gameManager.UnitsManager.SetLastSelectedPlayerUnit(_gameManager.UnitsManager.ActiveUnit);
+            }
+
+            ResetHighlightedNodes();
+            SelectedNode.HighlightRangeArea(SelectedNode.StoodUnit, SelectedNodeState.VisualStateManager.IsPressed);
+        }
+
+        private void HandlePathingInteraction()
+        {
+            if (_gameManager.UnitsManager.CursorUnit.UnitData.UnitTeam == Team.Enemy)
+            {
+                SelectedNode.NodeState.CursorStateManager.SetEnemySelected();
+            }
+            else if (_gameManager.UnitsManager.CursorUnit.UnitData.UnitTeam == Team.Player)
+            {
+                SelectedNode.NodeState.CursorStateManager.SetPlayerSelected();
+            }
+            else
+            {
+                SelectedNode.NodeState.CursorStateManager.SetDefaultSelected();
+            }
+        }
+
+        private void ResetUnitAndUI()
+        {
+            _gameManager.UIManager.UnitInfoManager.SetUnitInfoUIInactive();
+
+            if (!UnitPressed)
+            {
+                _gameManager.UnitsManager.SetActiveUnit(null);
+                ResetHighlightedNodes();
             }
         }
 
@@ -175,8 +205,9 @@ namespace CT6GAMAI
             bool IsAnyUnitMoving = _gameManager.UnitsManager.IsAnyUnitMoving();
             bool IsActionItemsActive = _gameManager.UIManager.ActionItemsManager.IsActionItemsActive;
             bool IsUnitConfirmingMove = _gameManager.GridManager.CurrentState == CurrentState.ConfirmingMove;
+            bool IsBattleActive = _gameManager.CameraManager.CameraState == CameraStates.Battle;
 
-            return !IsAnyUnitMoving && !IsActionItemsActive && !IsUnitConfirmingMove;
+            return !IsAnyUnitMoving && !IsActionItemsActive && !IsUnitConfirmingMove && !IsBattleActive;
         }
 
         private void MoveCursor(Direction direction)
@@ -211,21 +242,42 @@ namespace CT6GAMAI
 
         private void HandleUnitSelection()
         {
+            if (CheckGameStateConditions())
+            {
+                ProcessConfirmPress();
+            }
+        }
+
+        private bool CheckGameStateConditions()
+        {
+            bool isConfirmingMove = _gameManager.GridManager.CurrentState == CurrentState.ConfirmingMove;
+            bool isCameraInBattle = _gameManager.CameraManager.CameraState == CameraStates.Battle;
+
+            return !isConfirmingMove && !isCameraInBattle;
+        }
+
+        private void ProcessConfirmPress()
+        {
             bool isConfirmPressed = Input.GetKeyDown(KeyCode.Space);
             bool isActionSelected = _gameManager.GridManager.CurrentState == CurrentState.ActionSelected;
 
             if (isConfirmPressed && !isActionSelected)
             {
-                // Checks if we are pathing and the cursor unit is not on the active unit.
-                bool isCursorUnitValid = _pathing && 
-                    _gameManager.UnitsManager.CursorUnit != null && 
-                    _gameManager.UnitsManager.CursorUnit != _gameManager.UnitsManager.ActiveUnit;
-
-                if(!isCursorUnitValid)
+                bool isCursorUnitValid = CheckCursorUnitValidity();
+                if (!isCursorUnitValid)
                 {
                     ToggleUnitSelection();
                 }
             }
+        }
+
+        private bool CheckCursorUnitValidity()
+        {
+            bool isPathing = _pathing;
+            bool isCursorActive = _gameManager.UnitsManager.CursorUnit != null;
+            bool isCursorOnActiveUnit = _gameManager.UnitsManager.CursorUnit == _gameManager.UnitsManager.ActiveUnit;
+
+            return isPathing && isCursorActive && !isCursorOnActiveUnit;
         }
 
         private void ToggleUnitSelection()

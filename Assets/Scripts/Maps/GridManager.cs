@@ -20,11 +20,12 @@ namespace CT6GAMAI
         private GameManager _gameManager;
         private bool _cursorWithinRange;
         private bool _gridInitialized = false;
+        [SerializeField] private bool _canSwitchToBattle = false;
 
         /// <summary>
         /// The current state of the grid cursor in regards to unit actions.
         /// </summary>
-        public Constants.CurrentState CurrentState;
+        public CurrentState CurrentState;
 
         /// <summary>
         /// A reference to the grid cursor class.
@@ -65,7 +66,7 @@ namespace CT6GAMAI
                 InitializeGrid();
             }
 
-            if (CurrentState == CurrentState.ConfirmingMove)
+            if (CurrentState == CurrentState.ConfirmingMove && _gameManager.CameraManager.CameraState != CameraStates.Battle)
             {
                 var unit = _gameManager.UnitsManager.ActiveUnit;
 
@@ -73,13 +74,20 @@ namespace CT6GAMAI
                 {
                     if (Input.GetKeyDown(KeyCode.Escape))
                     {
-                        if (_gameManager.UIManager.AreBattleForecastsToggled)
+                        if (_gameManager.UIManager.BattleForecastManager.AreBattleForecastsToggled)
                         {
-                            _gameManager.UIManager.CancelBattleForecast();
+                            _gameManager.UIManager.BattleForecastManager.CancelBattleForecast();
                         }
 
                         unit.CancelMove();
                         unit.IsAwaitingMoveConfirmation = false;
+                        _canSwitchToBattle = false;
+                    }
+
+                    if (_canSwitchToBattle && Input.GetKeyDown(KeyCode.Space))
+                    {
+                        _gameManager.BattleManager.SwitchToBattle();
+                        _canSwitchToBattle = false;
                     }
                 }
             }
@@ -94,6 +102,12 @@ namespace CT6GAMAI
         {
             yield return new WaitForSeconds(IDLE_DELAY);
             CurrentState = CurrentState.Idle;
+        }
+
+        private IEnumerator BattleTransition()
+        {
+            yield return new WaitForSeconds(0.1f);
+            _canSwitchToBattle = true;
         }
 
         private void UpdateUnitReferences()
@@ -160,22 +174,26 @@ namespace CT6GAMAI
 
         private void ProcessMovementPath()
         {
-            Node startNode = _gameManager.UnitsManager.ActiveUnit.StoodNode.Node;
-            Node targetNode = _gridCursor.SelectedNode.Node;
-
-            if (!_cursorWithinRange)
+            if (_gameManager.UnitsManager.ActiveUnit.StoodNode != null)
             {
-                return;
-            }
+                Node startNode = _gameManager.UnitsManager.ActiveUnit.StoodNode.Node;
+                Node targetNode = _gridCursor.SelectedNode.Node;
 
-            _movementPath = _activeUnit.MovementRange.ReconstructPath(startNode, targetNode);
-            HandleMovementInput(targetNode);
+                if (!_cursorWithinRange)
+                {
+                    return;
+                }
+
+                _movementPath = _activeUnit.MovementRange.ReconstructPath(startNode, targetNode);
+                HandleMovementInput(targetNode);
+            }
         }
 
         private void HandleMovementInput(Node targetNode)
         {
             if (CurrentState != CurrentState.ConfirmingMove &&
                 CurrentState != CurrentState.Moving &&
+                _gameManager.CameraManager.CameraState != CameraStates.Battle &&
                 Input.GetKeyDown(KeyCode.Space))
             {
                 ProcessUnitMovement(targetNode);
@@ -211,7 +229,19 @@ namespace CT6GAMAI
             {
                 CurrentState = CurrentState.ConfirmingMove;
                 _activeUnit.IsAwaitingMoveConfirmation = true;
-                _gameManager.UIManager.SpawnBattleForecast(_activeUnit.UnitData, targetNode.NodeManager.StoodUnit.UnitData);
+                var unit = _gameManager.UnitsManager.ActiveUnit;
+                if (_gameManager.GridManager.MovementPath.Count > 2)
+                {
+                    StartCoroutine(unit.MoveToEndPoint(1));
+                }
+                else
+                {
+                    _activeUnit.IsAwaitingMoveConfirmation = true;
+                    _gameManager.GridManager.CurrentState = CurrentState.ConfirmingMove;
+                }
+
+                _gameManager.UIManager.BattleForecastManager.SpawnBattleForecast(_activeUnit, targetNode.NodeManager.StoodUnit);
+                StartCoroutine(BattleTransition());
             }
         }
 

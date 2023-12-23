@@ -26,8 +26,8 @@ namespace CT6GAMAI
             set { _isActive = value; }
         }
 
-        public override bool IsSelected 
-        {  
+        public override bool IsSelected
+        {
             get { return _isSelected; }
             set { _isSelected = value; }
         }
@@ -47,13 +47,10 @@ namespace CT6GAMAI
 
         public override void ActionEvent()
         {
-            Debug.Log("[Event Action] - Wait");          
-
             var unit = _unitsManager.ActiveUnit;
-            unit.FinalizeMovementValues(_gridManager.MovementPath.Count - 1);
+            unit.FinalizeMovementValues();
             unit.IsAwaitingMoveConfirmation = false;
             _uiManager.ActionItemsManager.HideActionItems();
-            //_gridManager._currentState = GridManager.CurrentState.Idle;
         }
     }
 }

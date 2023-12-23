@@ -14,6 +14,8 @@ namespace CT6GAMAI
     {
         [SerializeField] private MovementRange _movementRange;
         [SerializeField] private UnitAnimationManager _unitAnimationManager;
+        [SerializeField] private UnitStatsManager _unitStatsManager;
+        [SerializeField] private GameObject _battleUnit;
 
         [SerializeField] private UnitData _unitData;
         [SerializeField] private NodeManager _stoodNode;
@@ -30,6 +32,7 @@ namespace CT6GAMAI
         private List<SkinnedMeshRenderer> _allSMRRenderers;
         private List<MeshRenderer> _allMRRenderers;
         private bool _isSelected = false;
+        private bool _unitDead = false;
 
         public Material inactiveMaterial;
         public Material normalMaterial;
@@ -48,6 +51,9 @@ namespace CT6GAMAI
 
         public MovementRange MovementRange => _movementRange;
         public UnitAnimationManager UnitAnimationManager => _unitAnimationManager;
+        public UnitStatsManager UnitStatsManager => _unitStatsManager;
+        public GameObject BattleUnit => _battleUnit;
+        public bool UnitDead => _unitDead;
 
         private void Start()
         {
@@ -97,7 +103,7 @@ namespace CT6GAMAI
             }
             else
             {
-                Debug.Log("[ERROR]: Cast hit nothing");
+                Debug.LogWarning("[WARNING]: Cast hit nothing");
                 return null;
             }
         }
@@ -110,7 +116,7 @@ namespace CT6GAMAI
             }
             else
             {
-                Debug.Log("[ERROR]: Cast hit non-node object - " + _stoodNodeRayHit.transform.gameObject.name);
+                Debug.LogWarning("[ERROR]: Cast hit non-node object - " + _stoodNodeRayHit.transform.gameObject.name);
                 return null;
             }
         }
@@ -143,23 +149,47 @@ namespace CT6GAMAI
             }
         }
 
-        public void FinalizeMovementValues(int pathIndex)
+        private void ResetUnitState()
         {
             _gridManager.CurrentState = CurrentState.ActionSelected;
-
-            // TODO: This can be cleaned up
-            _gridManager.OccupiedNodes[0] = _gridManager.MovementPath[pathIndex].NodeManager;
 
             _isMoving = false;
             _isSelected = false;
             _gridCursor.UnitPressed = false;
             _gameManager.UnitsManager.SetActiveUnit(null);
+
+            _gridManager.MovementPath.Clear();
+        }
+
+        /// <summary>
+        /// Handles the death of the unit.
+        /// </summary>
+        public void Death()
+        {
+            ResetUnitState();
+
+            _unitDead = true;
+
+            ClearStoodUnit();
+            _stoodNode.ClearStoodUnit();
+            gameObject.SetActive(false);
+        }
+
+        /// <summary>
+        /// Finalizes the movement values of the unit after movement.
+        /// </summary>
+        public void FinalizeMovementValues()
+        {
+            ResetUnitState();
+
             _stoodNode = DetectStoodNode();
             _updatedStoodNode = _stoodNode;
-            _gridManager.MovementPath.Clear();            
             UpdateStoodNode(this);
         }
 
+        /// <summary>
+        /// Cancels the units movement.
+        /// </summary>
         public void CancelMove()
         {
             _gridManager.CurrentState = CurrentState.ActionSelected;
@@ -167,15 +197,7 @@ namespace CT6GAMAI
             // Move the unit back to the original position
             StartCoroutine(MoveBackToPoint(_gridManager.MovementPath[0]));
 
-            // Reset the state
-            _isMoving = false;
-            _isSelected = false;
-            _gridCursor.UnitPressed = false;
-            _gameManager.UnitsManager.SetActiveUnit(null);
-            _stoodNode = DetectStoodNode();
-            _updatedStoodNode = _stoodNode;
-            _gridManager.MovementPath.Clear();
-            UpdateStoodNode(this);            
+            FinalizeMovementValues();
         }
 
         /// <summary>
@@ -216,12 +238,15 @@ namespace CT6GAMAI
         /// <summary>
         /// Move the unit to their selected end point
         /// </summary>
-        public IEnumerator MoveToEndPoint()
+        /// <param name="modificationAmount">A value to take away from the end of the movement path. 
+        /// Used for stopping before going into an enemy unit's node when battling.</param>
+        /// <returns></returns>
+        public IEnumerator MoveToEndPoint(int modificationAmount = 0)
         {
             _isMoving = true;
             _gridManager.CurrentState = CurrentState.Moving;
 
-            for (int i = 1; i < _gridManager.MovementPath.Count; i++)
+            for (int i = 1; i < _gridManager.MovementPath.Count - modificationAmount; i++)
             {
                 Node n = _gridManager.MovementPath[i];
 
@@ -231,7 +256,7 @@ namespace CT6GAMAI
 
                 yield return new WaitForSeconds(MOVEMENT_DELAY);
 
-                if (i == _gridManager.MovementPath.Count - 1)
+                if (i == (_gridManager.MovementPath.Count - 1) - modificationAmount)
                 {
                     IsAwaitingMoveConfirmation = true;
                     _gridManager.CurrentState = CurrentState.ConfirmingMove;
@@ -243,7 +268,7 @@ namespace CT6GAMAI
         /// Move the unit instantly to an end point. Used for when cancelling movement.
         /// </summary>
         public IEnumerator MoveBackToPoint(Node targetNode)
-        {      
+        {
             var endPointPos = targetNode.UnitTransform.transform.position;
 
             transform.position = endPointPos;

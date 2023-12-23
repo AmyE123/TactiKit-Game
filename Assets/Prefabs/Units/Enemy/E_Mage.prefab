@@ -167,7 +167,7 @@ Animator:
   m_GameObject: {fileID: 3964570416540853922}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 2d506686a87e0cd4998524e819886931, type: 2}
+  m_Controller: {fileID: 9100000, guid: 4d0486e16dbaf334090f0503644a2170, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -227,6 +227,10 @@ PrefabInstance:
       propertyPath: normalMat
       value: 
       objectReference: {fileID: -6565442159171177796, guid: a54a7c95344f634498480e5236a3ea62, type: 3}
+    - target: {fileID: 7592517802941822380, guid: b0cf7274a78f12d43910a5c79373d142, type: 3}
+      propertyPath: _battleUnit
+      value: 
+      objectReference: {fileID: 1909677688569355988, guid: fdf0e4e29bf9d9f46a99635eedcdc1bc, type: 3}
     - target: {fileID: 7592517802941822380, guid: b0cf7274a78f12d43910a5c79373d142, type: 3}
       propertyPath: knightBaseObj
       value: 

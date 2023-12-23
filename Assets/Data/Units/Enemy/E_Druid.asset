@@ -16,8 +16,7 @@ MonoBehaviour:
   UnitPortrait: {fileID: 21300000, guid: 719099743fd8d8846aefa2f18cd2e900, type: 3}
   UnitTeam: 1
   UnitClass: 1
-  EquippedWeapon: 3
-  EquippedWeaponImage: {fileID: 21300000, guid: 86cb1380c20bbd843ab4b958b01f6fab, type: 3}
+  EquippedWeapon: {fileID: 11400000, guid: 7295dc0abbd902b489e54a0180ace594, type: 2}
   ClassLevel: 2
   HealthPointsBaseValue: 16
   MovementBaseValue: 5
