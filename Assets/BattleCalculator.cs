@@ -8,28 +8,22 @@ namespace CT6GAMAI
     /// </summary>
     public class BattleCalculator : MonoBehaviour
     {
-        private static int CalculatePhysicalAttackPower(UnitManager unitA, UnitManager unitB)
+        private static int CalculatePhysicalAttackPower(UnitManager attacker, UnitManager defender)
         {
-            int attackPower = (unitA.UnitData.StrengthBaseValue + unitA.UnitData.EquippedWeapon.WeaponMight) - (unitB.UnitData.DefenseBaseValue + CalculateTerrainDefenseBonus(unitB));
+            int attackStrength = attacker.UnitData.StrengthBaseValue + attacker.UnitData.EquippedWeapon.WeaponMight;
+            int defenseStrength = defender.UnitData.DefenseBaseValue + CalculateTerrainDefenseBonus(defender);
 
-            if (CanDoubleAttack(unitA, unitB))
-            {
-                Debug.Log("[BATTLE]: Unit can double attack!");
-                //attackPower *= 2;
-            }
+            int attackPower = attackStrength - defenseStrength;
 
             return attackPower;
         }
 
-        private static int CalculateMagicAttackPower(UnitManager unitA, UnitManager unitB)
+        private static int CalculateMagicAttackPower(UnitManager attacker, UnitManager defender)
         {
-            int attackPower = (unitA.UnitData.MagicBaseValue + unitA.UnitData.EquippedWeapon.WeaponMight) - (unitB.UnitData.ResistanceBaseValue + CalculateTerrainDefenseBonus(unitB));
+            int attackStrength = attacker.UnitData.MagicBaseValue + attacker.UnitData.EquippedWeapon.WeaponMight;
+            int defenseStrength = defender.UnitData.ResistanceBaseValue + CalculateTerrainDefenseBonus(defender);
 
-            if (CanDoubleAttack(unitA, unitB))
-            {
-                Debug.Log("[BATTLE]: Unit can double attack!");
-                //attackPower *= 2;
-            }
+            int attackPower = attackStrength - defenseStrength;
 
             return attackPower;
         }
@@ -44,103 +38,29 @@ namespace CT6GAMAI
             var unitA_WeaponType = unitA.EquippedWeapon.WeaponType;
             var unitB_WeaponType = unitB.EquippedWeapon.WeaponType;
 
-            if (unitA_WeaponType == WeaponType.Axe)
+            return (unitA_WeaponType, unitB_WeaponType) switch
             {
-                if (unitB_WeaponType == WeaponType.Axe)
-                {
-                    // Axe vs Axe. Hit rate 0
-                    return 0;
-                }
-                if (unitB_WeaponType == WeaponType.Lance)
-                {
-                    // Axe beats Lance. Hit rate +5
-                    return +5;
-                }
-                if (unitB_WeaponType == WeaponType.Sword)
-                {
-                    // Axe loses against Sword. Hit rate -5
-                    return -5;
-                }
-                if (unitB_WeaponType == WeaponType.Tome)
-                {
-                    // Axe loses against Tome. Hit rate -5
-                    return -5;
-                }
-            }
+                // Axe bonuses
+                (WeaponType.Axe, WeaponType.Lance) => +5,
+                (WeaponType.Axe, WeaponType.Sword) => -5,
+                (WeaponType.Axe, WeaponType.Tome) => -5,
 
-            if (unitA_WeaponType == WeaponType.Lance)
-            {
-                if (unitB_WeaponType == WeaponType.Axe)
-                {
-                    // Lance loses against Axe. Hit rate -5
-                    return -5;
-                }
-                if (unitB_WeaponType == WeaponType.Lance)
-                {
-                    // Lance vs Lance. Hit rate 0
-                    return 0;
-                }
-                if (unitB_WeaponType == WeaponType.Sword)
-                {
-                    // Lance beats Sword. Hit rate +5
-                    return 5;
-                }
-                if (unitB_WeaponType == WeaponType.Tome)
-                {
-                    // Lance beats Tome. Hit rate +5
-                    return 5;
-                }
-            }
+                // Lance bonuses
+                (WeaponType.Lance, WeaponType.Axe) => -5,
+                (WeaponType.Lance, WeaponType.Sword) => +5,
+                (WeaponType.Lance, WeaponType.Tome) => +5,
 
-            if (unitA_WeaponType == WeaponType.Sword)
-            {
-                if (unitB_WeaponType == WeaponType.Axe)
-                {
-                    // Sword beats Axe. Hit rate +5
-                    return 5;
-                }
-                if (unitB_WeaponType == WeaponType.Lance)
-                {
-                    // Sword loses against Lance. Hit rate -5
-                    return -5;
-                }
-                if (unitB_WeaponType == WeaponType.Sword)
-                {
-                    // Sword vs Sword. Hit rate 0
-                    return 0;
-                }
-                if (unitB_WeaponType == WeaponType.Tome)
-                {
-                    // Sword vs Tome. Hit rate 0
-                    return 0;
-                }
-            }
+                // Sword bonuses
+                (WeaponType.Sword, WeaponType.Axe) => +5,
+                (WeaponType.Sword, WeaponType.Lance) => -5,
 
-            if (unitA_WeaponType == WeaponType.Tome)
-            {
-                if (unitB_WeaponType == WeaponType.Axe)
-                {
-                    // Tome beats Axe. Hit rate +5
-                    return 5;
-                }
-                if (unitB_WeaponType == WeaponType.Lance)
-                {
-                    // Tome loses against Lance. Hit rate -5
-                    return -5;
-                }
-                if (unitB_WeaponType == WeaponType.Sword)
-                {
-                    // Tome vs Sword. Hit rate 0
-                    return 0;
-                }
-                if (unitB_WeaponType == WeaponType.Tome)
-                {
-                    // Tome vs Tome. Hit rate 0
-                    return 0;
-                }
-            }
+                // Tome bonuses
+                (WeaponType.Tome, WeaponType.Axe) => +5,
+                (WeaponType.Tome, WeaponType.Lance) => -5,
 
-            return 0;
+                // Default for same weapon types
+                _ => 0
+            };
         }
 
         public static bool CanDoubleAttack(UnitManager unitA, UnitManager unitB)
@@ -230,7 +150,7 @@ namespace CT6GAMAI
 
         public static bool Roll(int percentage)
         {
-            var roll = Random.Range(0, 100);
+            var roll = UnityEngine.Random.Range(0, 100);
 
             return roll <= percentage;
         }
