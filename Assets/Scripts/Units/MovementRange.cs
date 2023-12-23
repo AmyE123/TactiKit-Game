@@ -20,6 +20,9 @@ namespace CT6GAMAI
         /// </summary>
         public List<Node> ReachableNodes => _reachableNodes;
 
+        /// <summary>
+        /// A list of nodes within the units range for their weapon.
+        /// </summary>
         public List<Node> RangeNodes => _rangeNodes;
 
         private void Start()

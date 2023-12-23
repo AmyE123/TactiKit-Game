@@ -12,19 +12,21 @@ namespace CT6GAMAI
         private GameManager _gameManager;
         private bool _areBattleForecastsToggled;
 
-        public bool AreBattleForecastsToggled => _areBattleForecastsToggled;
-
+        [Header("Attacker Battle Values")]       
         public int AttackA;
         public bool CanDoubleAttackA;
         public int HitRateA;
         public int CritRateA;
         public int RemainingHPA;
 
+        [Header("Defender Battle Values")]
         public int AttackB;
         public bool CanDoubleAttackB;
         public int HitRateB;
         public int CritRateB;
         public int RemainingHPB;
+
+        public bool AreBattleForecastsToggled => _areBattleForecastsToggled;
 
         private void Start()
         {

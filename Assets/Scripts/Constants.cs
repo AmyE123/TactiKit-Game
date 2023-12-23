@@ -312,7 +312,7 @@ namespace CT6GAMAI
         public const float BATTLE_FORECAST_RIGHT_X_POS_TO = 400;
 
         /// <summary>
-        /// The speed that the cursor pointer on the actions list should point
+        /// The speed that the cursor pointer on the actions list should point.
         /// </summary>
         public const float POINTER_X_YOYO_SPEED = 0.5f;
 
@@ -322,19 +322,34 @@ namespace CT6GAMAI
         public const float IDLE_DELAY = 0.5f;
 
         /// <summary>
-        /// The speed that it takes for the vignette for UI to fade in/out
+        /// The speed that it takes for the vignette for UI to fade in/out.
         /// </summary>
         public const float VIGNETTE_FADE_SPEED = 0.5f;
 
         /// <summary>
-        /// The number of priority for the active camera
+        /// The number of priority for the active camera.
         /// </summary>
         public const int ACTIVE_CAMERA_PRIORITY = 10;
 
         /// <summary>
-        /// The number of priority for the inactive camera
+        /// The number of priority for the inactive camera.
         /// </summary>
         public const int INACTIVE_CAMERA_PRIORITY = 0;
+
+        /// <summary>
+        /// The maximum value of the X axis for the damage indicator on Battle Forecast UI.
+        /// </summary>
+        public const int DAMAGE_INDICATOR_X_MAX = 200;
+
+        /// <summary>
+        /// The speed which the battle forecast UI slides onto the screen.
+        /// </summary>
+        public const float BATTLE_FORECAST_UI_SPEED = 0.3f;
+
+        /// <summary>
+        /// The speed that the damaged HP flashes on the battle forecast.
+        /// </summary>
+        public const float DAMAGED_HP_FLASH_SPEED = 0.6f;
 
         #endregion // User Interface
     }

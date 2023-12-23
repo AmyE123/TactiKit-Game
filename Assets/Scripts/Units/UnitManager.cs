@@ -149,27 +149,6 @@ namespace CT6GAMAI
             }
         }
 
-        public void Death()
-        {
-            ResetUnitState();
-
-            _unitDead = true;
-            Debug.Log("Die");
-
-            ClearStoodUnit();
-            _stoodNode.ClearStoodUnit();
-            gameObject.SetActive(false);
-        }
-
-        public void FinalizeMovementValues()
-        {
-            ResetUnitState();
-
-            _stoodNode = DetectStoodNode();
-            _updatedStoodNode = _stoodNode;
-            UpdateStoodNode(this);
-        }
-
         private void ResetUnitState()
         {
             _gridManager.CurrentState = CurrentState.ActionSelected;
@@ -182,6 +161,36 @@ namespace CT6GAMAI
             _gridManager.MovementPath.Clear();
         }
 
+        /// <summary>
+        /// Handles the death of the unit.
+        /// </summary>
+        public void Death()
+        {
+            ResetUnitState();
+
+            _unitDead = true;
+            Debug.Log("Die");
+
+            ClearStoodUnit();
+            _stoodNode.ClearStoodUnit();
+            gameObject.SetActive(false);
+        }
+
+        /// <summary>
+        /// Finalizes the movement values of the unit after movement.
+        /// </summary>
+        public void FinalizeMovementValues()
+        {
+            ResetUnitState();
+
+            _stoodNode = DetectStoodNode();
+            _updatedStoodNode = _stoodNode;
+            UpdateStoodNode(this);
+        }
+
+        /// <summary>
+        /// Cancels the units movement.
+        /// </summary>
         public void CancelMove()
         {
             _gridManager.CurrentState = CurrentState.ActionSelected;

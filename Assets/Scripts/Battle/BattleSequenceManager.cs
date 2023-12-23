@@ -95,6 +95,7 @@ namespace CT6GAMAI
 
         private void HandlePreBattle()
         {
+            MoveUnitsBackToOriginalPos(_attackerUnit, _defenderUnit);
             StartCoroutine(BattleBeginDelay(BATTLE_SEQUENCE_DELAY));
         }
 
@@ -114,7 +115,7 @@ namespace CT6GAMAI
 
         private void HandleAttackerMoveBack()
         {
-            MoveUnitsBackToOriginalPos(_attackerUnit, _defenderUnit);
+            MoveUnitsBack(_attackerUnit, _defenderUnit);
             StartCoroutine(SwitchSidesDelay(BATTLE_SEQUENCE_DELAY));
         }
 
@@ -134,7 +135,7 @@ namespace CT6GAMAI
 
         private void HandleDefenderMoveBack()
         {
-            MoveUnitsBackToOriginalPos(_defenderUnit, _attackerUnit);
+            MoveUnitsBack(_defenderUnit, _attackerUnit);
             StartCoroutine(SwitchSidesDelay(BATTLE_SEQUENCE_DELAY));
         }
 
@@ -282,7 +283,7 @@ namespace CT6GAMAI
             defendingUnit.UnitStatsManager.AdjustHealthPoints(-attackPower);
         }
 
-        private void MoveUnitsBackToOriginalPos(BattleUnitManager unitA, BattleUnitManager unitB)
+        private void MoveUnitsBack(BattleUnitManager unitA, BattleUnitManager unitB)
         {
             if (unitA.UnitSide == Side.Left)
             {
@@ -295,6 +296,20 @@ namespace CT6GAMAI
                 unitA.transform.DOMoveX(-1, BATTLE_SEQUENCE_MOVEMENT_SPEED);
                 unitB.transform.DOMoveX(1, BATTLE_SEQUENCE_MOVEMENT_SPEED);
                 _defenderTakenTurn = true;
+            }
+        }
+
+        private void MoveUnitsBackToOriginalPos(BattleUnitManager unitA, BattleUnitManager unitB)
+        {
+            if (unitA.UnitSide == Side.Left)
+            {
+                unitA.transform.DOMoveX(1, BATTLE_SEQUENCE_MOVEMENT_SPEED);
+                unitB.transform.DOMoveX(-1, BATTLE_SEQUENCE_MOVEMENT_SPEED);
+            }
+            else
+            {
+                unitA.transform.DOMoveX(-1, BATTLE_SEQUENCE_MOVEMENT_SPEED);
+                unitB.transform.DOMoveX(1, BATTLE_SEQUENCE_MOVEMENT_SPEED);
             }
         }
 

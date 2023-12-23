@@ -5,10 +5,15 @@ namespace CT6GAMAI
     using UnityEngine;
     using UnityEngine.UI;
 
+    /// <summary>
+    /// Manages the UI components for one side of the battle sequence display.
+    /// </summary>
     public class UI_BattleSequenceSideManager : MonoBehaviour
     {
+        [Header("UI Configuration")]
         [SerializeField] private Constants.Side _side;
 
+        [Header("UI Elements")]
         [SerializeField] private TMP_Text _equippedWeaponValueText;
         [SerializeField] private Image _equippedWeaponImage;
         [SerializeField] private TMP_Text _unitNameValueText;
@@ -18,6 +23,7 @@ namespace CT6GAMAI
         [SerializeField] private TMP_Text _critStatValueText;
         [SerializeField] private Image _healthBarFill;
 
+        [Header("Unit Reference")]
         [SerializeField] private UnitManager _activeUnitManager;
 
         private void Update()
@@ -28,6 +34,33 @@ namespace CT6GAMAI
             }
         }
 
+        /// <summary>
+        /// Updates the health bar based on the units current health.
+        /// </summary>
+        /// <param name="unit">The unit to update the health bar for.</param>
+        private void UpdateHealthFill(UnitManager unit)
+        {
+            _currentHPValueText.text = unit.UnitStatsManager.HealthPoints.ToString();
+
+            float healthFillAmount = CalculateHealthPercentage(unit.UnitStatsManager.HealthPoints, unit.UnitData.HealthPointsBaseValue);
+
+            _healthBarFill.fillAmount = healthFillAmount;
+        }
+
+        /// <summary>
+        /// Calculates the health percentage for the health bar based on current and maximum health.
+        /// </summary>
+        /// <param name="currentHealth">The current health of the unit.</param>
+        /// <param name="maxHealth">The maximum health of the unit.</param>
+        /// <returns>The calculated health percentage.</returns>
+        private float CalculateHealthPercentage(int currentHealth, int maxHealth)
+        {
+            return (float)currentHealth / maxHealth;
+        }
+
+        /// <summary>
+        /// Populates the UI with data from a unit for the battle sequence.
+        /// </summary>
         public void PopulateBattleSequenceUIData(UnitManager unit, int attackValue, int hitValue, int critValue)
         {
             _activeUnitManager = unit;
@@ -50,20 +83,5 @@ namespace CT6GAMAI
 
             _healthBarFill.fillAmount = healthFillAmount;
         }
-
-        private void UpdateHealthFill(UnitManager unit)
-        {
-            _currentHPValueText.text = unit.UnitStatsManager.HealthPoints.ToString();
-
-            float healthFillAmount = CalculateHealthPercentage(unit.UnitStatsManager.HealthPoints, unit.UnitData.HealthPointsBaseValue);
-
-            _healthBarFill.fillAmount = healthFillAmount;
-        }
-
-        private float CalculateHealthPercentage(int currentHealth, int maxHealth)
-        {
-            return (float)currentHealth / maxHealth;
-        }
     }
-
 }

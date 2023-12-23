@@ -5,6 +5,7 @@ namespace CT6GAMAI
     using TMPro;
     using UnityEngine;
     using UnityEngine.UI;
+    using static CT6GAMAI.Constants;
 
     public class UI_BattleForecastSideManager : MonoBehaviour
     {
@@ -40,6 +41,66 @@ namespace CT6GAMAI
             FlashingDamage();
         }
 
+        private float CalculateHealthPercentage(int currentHealth, int maxHealth)
+        {
+            return (float)currentHealth / maxHealth;
+        }
+
+        private float CalculateXPosition(int currentHealth, int maxHealth)
+        {
+            if (_side == BattleForecastSide.Right)
+            {
+                float healthPercentage = (float)currentHealth / maxHealth;
+                float xPos = (1 - healthPercentage) * DAMAGE_INDICATOR_X_MAX;
+
+                if (xPos > DAMAGE_INDICATOR_X_MAX)
+                {
+                    xPos = DAMAGE_INDICATOR_X_MAX;
+                }
+
+                return xPos;
+            }
+
+            else
+            {
+                float healthPercentage = (float)currentHealth / maxHealth;
+                float xPos = healthPercentage * DAMAGE_INDICATOR_X_MAX;
+
+                if (xPos < 0)
+                {
+                    xPos = 0;
+                }
+
+                return xPos;
+            }
+
+        }
+
+        private void OpenUISide()
+        {
+            _areaRT.DOAnchorPosX(0, BATTLE_FORECAST_UI_SPEED).SetEase(Ease.Linear);
+        }
+
+        private void CancelUISide()
+        {
+            if (_side == BattleForecastSide.Left)
+            {
+                _areaRT.DOAnchorPosX(BATTLE_FORECAST_LEFT_X_POS_TO, BATTLE_FORECAST_UI_SPEED).SetEase(Ease.Linear);
+            }
+            else
+            {
+                _areaRT.DOAnchorPosX(BATTLE_FORECAST_RIGHT_X_POS_TO, BATTLE_FORECAST_UI_SPEED).SetEase(Ease.Linear);
+            }
+        }
+
+        private void FlashingDamage()
+        {
+            _healthBarFillDamage.DOColor(Color.white, DAMAGED_HP_FLASH_SPEED).SetLoops(-1, LoopType.Yoyo);
+        }
+
+        /// <summary>
+        /// Spawns the battle forecast UI side.
+        /// </summary>
         public void SpawnBattleForecastSide()
         {
             _forecastToggled = true;
@@ -47,6 +108,9 @@ namespace CT6GAMAI
             OpenUISide();
         }
 
+        /// <summary>
+        /// Cancels the battle forecast UI side.
+        /// </summary>
         public void CancelBattleForecast()
         {
             _forecastToggled = false;
@@ -54,6 +118,9 @@ namespace CT6GAMAI
             CancelUISide();
         }
 
+        /// <summary>
+        /// Populates the data on the battle forecast UI.
+        /// </summary>
         public void PopulateBattleForecastData(UnitData unit, int attackValue, bool canDoubleAttack, int hitValue, int critValue, int currentHP, int forecastedHP)
         {
             _doubleAttackGO.SetActive(canDoubleAttack);
@@ -65,7 +132,6 @@ namespace CT6GAMAI
             _equippedWeaponValueText.text = formattedWeaponName;
             _equippedWeaponImage.sprite = unit.EquippedWeapon.WeaponSprite;
 
-            // TODO: Like health bar fill image (damage) value, set this to the current value of HP (before damage)
             _currentHPValueText.text = unit.HealthPointsBaseValue.ToString();
 
             _attackStatValueText.text = attackValue.ToString();
@@ -97,68 +163,10 @@ namespace CT6GAMAI
 
             float damageFillAmount = CalculateHealthPercentage(currentHP, unit.HealthPointsBaseValue);
 
-            // TODO: Calculate prediction of health loss. Loss % of total health and then normalized to a floating point value between 0 and 1.
             _healthBarFill.fillAmount = healthFillAmount;
-
-            // TODO: This is what the player had before.
             _healthBarFillDamage.fillAmount = damageFillAmount;
         }
 
-        private float CalculateHealthPercentage(int currentHealth, int maxHealth)
-        {
-            return (float)currentHealth / maxHealth;
-        }
 
-        private float CalculateXPosition(int currentHealth, int maxHealth)
-        {
-            if (_side == BattleForecastSide.Right)
-            {
-                float healthPercentage = (float)currentHealth / maxHealth;
-                float xPos = (1 - healthPercentage) * 200;
-
-                if (xPos > 200)
-                {
-                    xPos = 200;
-                }
-
-                return xPos;
-            }
-
-            else
-            {
-                float healthPercentage = (float)currentHealth / maxHealth;
-                float xPos = healthPercentage * 200;
-
-                if (xPos < 0)
-                {
-                    xPos = 0;
-                }
-
-                return xPos;
-            }
-
-        }
-
-        private void OpenUISide()
-        {
-            _areaRT.DOAnchorPosX(0, 0.3f).SetEase(Ease.Linear);
-        }
-
-        private void CancelUISide()
-        {
-            if (_side == BattleForecastSide.Left)
-            {
-                _areaRT.DOAnchorPosX(Constants.BATTLE_FORECAST_LEFT_X_POS_TO, 0.3f).SetEase(Ease.Linear);
-            }
-            else
-            {
-                _areaRT.DOAnchorPosX(Constants.BATTLE_FORECAST_RIGHT_X_POS_TO, 0.3f).SetEase(Ease.Linear);
-            }
-        }
-
-        private void FlashingDamage()
-        {
-            _healthBarFillDamage.DOColor(Color.white, 0.6f).SetLoops(-1, LoopType.Yoyo);           
-        }
     }
 }

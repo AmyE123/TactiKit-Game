@@ -4,6 +4,9 @@ namespace CT6GAMAI
     using UnityEngine.UI;
     using static CT6GAMAI.Constants;
 
+    /// <summary>
+    /// Manages the live stats of a unit.
+    /// </summary>
     public class UnitStatsManager : MonoBehaviour
     {        
         [SerializeField] private UnitManager _unitManager;
@@ -18,26 +21,57 @@ namespace CT6GAMAI
 
         private UnitData _unitBaseData;
 
+        /// <summary>
+        /// Gets the base data of the unit.
+        /// </summary>
         public UnitData UnitBaseData => _unitBaseData;
 
+        /// <summary>
+        /// Gets the current health points of the unit.
+        /// </summary>
         public int HealthPoints => _healthPoints;
 
+        /// <summary>
+        /// Gets the attack stat of the unit.
+        /// </summary>
         public int Atk => _atk;
+
+        /// <summary>
+        /// Gets whether the unit can perform a double attack.
+        /// </summary>
         public bool DblAtk => _dblAtk;
+
+        /// <summary>
+        /// Gets the hit stat of the unit.
+        /// </summary>
         public int Hit => _hit;
+
+        /// <summary>
+        /// Gets the critical hit stat of the unit.
+        /// </summary>
         public int Crit => _crit;
 
-        public void Start()
+        private void Start()
         {
             _unitBaseData = _unitManager.UnitData;
             _healthPoints = _unitBaseData.HealthPointsBaseValue;
         }
 
-        public void Update() 
+        private void Update() 
         {
             _healthBarFill.fillAmount = CalculateHealthPercentage(_healthPoints, _unitBaseData.HealthPointsBaseValue);
         }
 
+        private float CalculateHealthPercentage(int currentHealth, int maxHealth)
+        {
+            return (float)currentHealth / maxHealth;
+        }
+
+        /// <summary>
+        /// Adjusts the health points of the unit and checks the unit's health state.
+        /// </summary>
+        /// <param name="value">The value to adjust the health points by.</param>
+        /// <returns>The updated health points after adjustment.</returns>
         public int AdjustHealthPoints(int value)
         {
             // Add the value to current health points and clamp it within the valid range
@@ -47,6 +81,10 @@ namespace CT6GAMAI
             return _healthPoints;
         }
 
+        /// <summary>
+        /// Checks and returns the current health state of the unit.
+        /// </summary>
+        /// <returns>The current health state of the unit.</returns>
         public UnitHealthState CheckHealthState()
         {
             if (_healthPoints <= 0)
@@ -60,17 +98,15 @@ namespace CT6GAMAI
             }
         }
 
+        /// <summary>
+        /// Sets the stats for the unit.
+        /// </summary>
         public void SetUnitStats(int atk, bool dblAtk, int hit, int crit)
         {
             _atk = atk;
             _dblAtk = dblAtk;
             _hit = hit;
             _crit = crit;
-        }
-
-        private float CalculateHealthPercentage(int currentHealth, int maxHealth)
-        {
-            return (float)currentHealth / maxHealth;
         }
     }
 }

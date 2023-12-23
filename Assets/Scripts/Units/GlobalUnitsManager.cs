@@ -33,6 +33,9 @@ namespace CT6GAMAI
         /// </summary>
         public UnitManager ActiveUnit => _activeUnit;
 
+        /// <summary>
+        /// Gets the last selected player unit.
+        /// </summary>
         public UnitManager LastSelectedPlayerUnit => _lastSelectedPlayerUnit;
 
         /// <summary>
@@ -89,6 +92,10 @@ namespace CT6GAMAI
             _activeUnit = unit;           
         }
 
+        /// <summary>
+        /// Setter for the last selected player unit.
+        /// </summary>
+        /// <param name="unit">The unit you want to set as last selected.</param>
         public void SetLastSelectedPlayerUnit(UnitManager unit)
         {
             _lastSelectedPlayerUnit = unit;
