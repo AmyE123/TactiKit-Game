@@ -118,7 +118,7 @@ namespace CT6GAMAI
         {
             _cameraManager.SwitchCamera(_cameraManager.Cameras[(int)CameraStates.Battle]);
             _isBattleActive = true;
-            _battleSequenceManager.StartBattle(_gameManager.UnitsManager.ActiveUnit.UnitData.UnitTeam, _attackerUnit, _defenderUnit);
+            _battleSequenceManager.StartBattle(_attackerUnit, _defenderUnit);
         }
 
         /// <summary>
