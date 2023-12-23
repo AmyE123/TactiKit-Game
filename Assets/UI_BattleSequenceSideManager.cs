@@ -42,7 +42,7 @@ namespace CT6GAMAI
 
             _attackStatValueText.text = attackValue.ToString();
 
-            _hitStatValueText.text = hitValue.ToString();
+            _hitStatValueText.text = hitValue.ToString() + "%";
 
             _critStatValueText.text = critValue.ToString() + "%";
 
