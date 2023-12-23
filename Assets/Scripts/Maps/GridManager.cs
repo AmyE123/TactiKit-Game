@@ -174,16 +174,19 @@ namespace CT6GAMAI
 
         private void ProcessMovementPath()
         {
-            Node startNode = _gameManager.UnitsManager.ActiveUnit.StoodNode.Node;
-            Node targetNode = _gridCursor.SelectedNode.Node;
-
-            if (!_cursorWithinRange)
+            if (_gameManager.UnitsManager.ActiveUnit.StoodNode != null)
             {
-                return;
+                Node startNode = _gameManager.UnitsManager.ActiveUnit.StoodNode.Node;
+                Node targetNode = _gridCursor.SelectedNode.Node;
+
+                if (!_cursorWithinRange)
+                {
+                    return;
+                }
+
+                _movementPath = _activeUnit.MovementRange.ReconstructPath(startNode, targetNode);
+                HandleMovementInput(targetNode);
             }
-            
-            _movementPath = _activeUnit.MovementRange.ReconstructPath(startNode, targetNode);
-            HandleMovementInput(targetNode);
         }
 
         private void HandleMovementInput(Node targetNode)

@@ -149,15 +149,17 @@ namespace CT6GAMAI
 
         public void Death()
         {
+            ClearStoodUnit();
+            _isSelected = false;
+            _gridCursor.UnitPressed = false;
+            _gameManager.UnitsManager.SetActiveUnit(null); 
+            _gridManager.MovementPath.Clear();
             gameObject.SetActive(false);
         }
 
         public void FinalizeMovementValues(int pathIndex)
         {
             _gridManager.CurrentState = CurrentState.ActionSelected;
-
-            // TODO: This can be cleaned up
-            _gridManager.OccupiedNodes[0] = _gridManager.MovementPath[pathIndex].NodeManager;
 
             _isMoving = false;
             _isSelected = false;

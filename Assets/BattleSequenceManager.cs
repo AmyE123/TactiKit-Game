@@ -26,6 +26,9 @@ namespace CT6GAMAI
         [SerializeField] private Transform _attackPositionLeft;
         [SerializeField] private Transform _attackPositionRight;
 
+        [SerializeField] private Transform _dodgePositionLeft;
+        [SerializeField] private Transform _dodgePositionRight;
+
         [SerializeField] private bool _battleBegin = false;
         [SerializeField] private bool _leftTakenTurn;
         [SerializeField] private bool _rightTakenTurn;
@@ -72,7 +75,7 @@ namespace CT6GAMAI
                     break;
 
                 case BattleSequenceStates.PlayerMoveBack:
-                    MoveUnitBack(_leftUnit);
+                    MoveUnitsBack(_leftUnit, _rightUnit);
                     StartCoroutine(SwitchSidesDelay(1f));
                     break;
 
@@ -89,7 +92,7 @@ namespace CT6GAMAI
                     break;
 
                 case BattleSequenceStates.EnemyMoveBack:
-                    MoveUnitBack(_rightUnit);
+                    MoveUnitsBack(_rightUnit, _leftUnit);
                     StartCoroutine(SwitchSidesDelay(1f));
                     break;     
                     
@@ -148,7 +151,10 @@ namespace CT6GAMAI
         {
             attackingUnit.Animator.SetInteger(ATTACKING_ANIM_IDX_PARAM, Random.Range(1, 4));
             attackingUnit.Animator.SetTrigger(ATTACKING_ANIM_PARAM);
+        }
 
+        private void PlayDamageAnimation(BattleUnitManager defendingUnit)
+        {
             if (defendingUnit.UnitStatsManager.CheckHealthState() != UnitHealthState.Dead)
             {
                 defendingUnit.Animator.SetInteger(HIT_ANIM_IDX_PARAM, Random.Range(1, 2));
@@ -160,21 +166,53 @@ namespace CT6GAMAI
                 defendingUnit.Animator.SetBool(DEAD_ANIM_PARAM, true);
 
                 StartCoroutine(DeathDelay(2f));
-            }      
+            }
+        }
+
+        private void PlayDodgeAnimation(BattleUnitManager defendingUnit)
+        {
+            defendingUnit.Animator.SetTrigger(DODGE_ANIM_PARAM);
+
+            float jumpHeight = 0.2f;
+
+            if (defendingUnit.UnitSide == Side.Left)
+            {
+                defendingUnit.transform.DOJump(
+                new Vector3(_dodgePositionLeft.position.x, defendingUnit.transform.position.y, defendingUnit.transform.position.z),
+                jumpHeight,
+                1,
+                BATTLE_SEQUENCE_MOVEMENT_SPEED + 0.2f
+                );
+
+            }
+            else
+            {
+                defendingUnit.transform.DOJump(
+                new Vector3(_dodgePositionRight.position.x, defendingUnit.transform.position.y, defendingUnit.transform.position.z),
+                jumpHeight,
+                1,
+                BATTLE_SEQUENCE_MOVEMENT_SPEED + 0.2f
+                );
+
+            }
         }
 
         private void AttackSequence(BattleUnitManager attackingUnit, BattleUnitManager defendingUnit)
         {
+            PlayAttackAnimation(attackingUnit, defendingUnit);
+
             if (DoesUnitHit(attackingUnit))
             {
                 ApplyAttackDamage(attackingUnit, defendingUnit);
+                PlayDamageAnimation(defendingUnit);
             }
             else
             {
                 Debug.Log("[BATTLE]: Unit doesn't Hit!!");
+                PlayDodgeAnimation(defendingUnit);
             }
 
-            PlayAttackAnimation(attackingUnit, defendingUnit);
+            
         }
 
         private bool DoesUnitHit(BattleUnitManager attackingUnit)
@@ -275,6 +313,22 @@ namespace CT6GAMAI
             else
             {
                 unit.transform.DOMoveX(-1, BATTLE_SEQUENCE_MOVEMENT_SPEED);
+                _rightTakenTurn = true;
+            }
+        }
+
+        private void MoveUnitsBack(BattleUnitManager unitA, BattleUnitManager unitB)
+        {
+            if (unitA.UnitSide == Side.Left)
+            {
+                unitA.transform.DOMoveX(1, BATTLE_SEQUENCE_MOVEMENT_SPEED);
+                unitB.transform.DOMoveX(-1, BATTLE_SEQUENCE_MOVEMENT_SPEED);
+                _leftTakenTurn = true;
+            }
+            else
+            {
+                unitA.transform.DOMoveX(-1, BATTLE_SEQUENCE_MOVEMENT_SPEED);
+                unitB.transform.DOMoveX(1, BATTLE_SEQUENCE_MOVEMENT_SPEED);
                 _rightTakenTurn = true;
             }
         }

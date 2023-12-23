@@ -193,6 +193,8 @@ namespace CT6GAMAI
 
         public const string HIT_ANIM_IDX_PARAM = "HitAnimIndex";
 
+        public const string DODGE_ANIM_PARAM = "Dodge";
+
         public const string DEAD_ANIM_PARAM = "Dead";
 
         public const string DEAD_ANIM_IDX_PARAM = "DeadAnimIndex";

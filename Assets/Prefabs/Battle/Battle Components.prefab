@@ -30,13 +30,46 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8000620369180224038}
+  - {fileID: 3062307163659779509}
   - {fileID: 7860182123561607751}
+  - {fileID: 6854656947748207162}
   - {fileID: 2320056956762004028}
   - {fileID: 213894944875924467}
   - {fileID: 1554151575405560019}
   - {fileID: 5152385515734037078}
   - {fileID: 8954429098911575020}
   m_Father: {fileID: 6451818592233211011}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3370661981292622720
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6854656947748207162}
+  m_Layer: 0
+  m_Name: Dodge Position Right
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6854656947748207162
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3370661981292622720}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -1.5, y: 0, z: 0}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2630829664185730164}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4115500566636095095
 GameObject:
@@ -194,9 +227,42 @@ MonoBehaviour:
   _rightUnit: {fileID: 3064866801207249066}
   _attackPositionLeft: {fileID: 8000620369180224038}
   _attackPositionRight: {fileID: 7860182123561607751}
+  _dodgePositionLeft: {fileID: 3062307163659779509}
+  _dodgePositionRight: {fileID: 6854656947748207162}
   _battleBegin: 0
   _leftTakenTurn: 0
   _rightTakenTurn: 0
+--- !u!1 &6138853021740896924
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3062307163659779509}
+  m_Layer: 0
+  m_Name: Dodge Position Left
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3062307163659779509
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6138853021740896924}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.5, y: 0, z: 0}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2630829664185730164}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6375376985630280465
 GameObject:
   m_ObjectHideFlags: 0
