@@ -8,11 +8,10 @@ namespace CT6GAMAI
     /// </summary>
     public class BattleManager : MonoBehaviour
     {
-        [Header("Other Components")]
         [SerializeField] private BattleSequenceManager _battleSequenceManager;
 
         [Header("Current Battle Stats - Attacker (Initiator)")]
-        [SerializeField] private UnitManager _unitAttacker;
+        [SerializeField] private UnitManager _attackerUnit;
         [SerializeField] private int _attackerAtk;
         [SerializeField] private bool _attackerDblAtk;
         [SerializeField] private int _attackerHit;
@@ -20,7 +19,7 @@ namespace CT6GAMAI
         [SerializeField] private int _attackerRemainingHP;
 
         [Header("Current Battle Stats - Defender (Opponent)")]
-        [SerializeField] private UnitManager _unitDefender;
+        [SerializeField] private UnitManager _defenderUnit;
         [SerializeField] private int _defenderAtk;
         [SerializeField] private bool _defenderDblAtk;
         [SerializeField] private int _defenderHit;
@@ -34,7 +33,7 @@ namespace CT6GAMAI
         /// <summary>
         /// The attacking unit for the current battle stats.
         /// </summary>
-        public UnitManager UnitAttacker => _unitAttacker;
+        public UnitManager AttackerUnit => _attackerUnit;
 
         /// <summary>
         /// The attack amount from the attacker for the current battle stats.
@@ -64,7 +63,7 @@ namespace CT6GAMAI
         /// <summary>
         /// The defending unit for the current battle stats.
         /// </summary>
-        public UnitManager UnitDefender => _unitDefender;
+        public UnitManager DefenderUnit => _defenderUnit;
 
         /// <summary>
         /// The attack amount from the defender for the current battle stats.
@@ -119,7 +118,7 @@ namespace CT6GAMAI
         {
             _cameraManager.SwitchCamera(_cameraManager.Cameras[(int)CameraStates.Battle]);
             _isBattleActive = true;
-            _battleSequenceManager.StartBattle(_gameManager.UnitsManager.ActiveUnit.UnitData.UnitTeam, _unitAttacker, _unitDefender);
+            _battleSequenceManager.StartBattle(_gameManager.UnitsManager.ActiveUnit.UnitData.UnitTeam, _attackerUnit, _defenderUnit);
         }
 
         /// <summary>
@@ -178,7 +177,7 @@ namespace CT6GAMAI
         /// <param name="remainingHPB">Remaining HP for the defending unit.</param>
         public void SetBattleStats(UnitManager unitA, int atkA, bool dblAtkA, int hitA, int critA, int remainingHPA, UnitManager unitB, int atkB, bool dblAtkB, int hitB, int critB, int remainingHPB)
         {
-            _unitAttacker = unitA;
+            _attackerUnit = unitA;
             _attackerAtk = atkA;
             _attackerDblAtk = dblAtkA;
             _attackerHit = hitA;
@@ -186,7 +185,7 @@ namespace CT6GAMAI
             _attackerRemainingHP = remainingHPA;
             SetUnitStats(unitA.UnitStatsManager, atkA, dblAtkA, hitA, critA);
 
-            _unitDefender = unitB;
+            _defenderUnit = unitB;
             _defenderAtk = atkB;
             _defenderDblAtk = dblAtkB;
             _defenderHit = hitB;
