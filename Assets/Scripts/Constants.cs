@@ -10,6 +10,11 @@ namespace CT6GAMAI
         #region Game Flow
 
         /// <summary>
+        /// A value representing the different phases for the turn based game
+        /// </summary>
+        public enum Phases { PlayerPhase, EnemyPhase }
+
+        /// <summary>
         /// A value representing the states which the overall game can be in
         /// </summary>
         public enum GameStates { Map, Battle }

@@ -24328,6 +24328,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1427844805}
   - component: {fileID: 1427844808}
+  - component: {fileID: 1427844809}
   - component: {fileID: 1427844804}
   - component: {fileID: 1427844807}
   - component: {fileID: 1427844806}
@@ -24350,6 +24351,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2eaf0acf1fb17cb4baca879a50cd7c27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _enablePlayerInput: 0
   _cursorAudioSource: {fileID: 1477759378}
   _cursorAudioClips: {fileID: 11400000, guid: b4474895abaaab64f88935b79665c08f, type: 2}
   SelectedNode: {fileID: 2034517191}
@@ -24823,6 +24825,20 @@ MonoBehaviour:
   _uiManager: {fileID: 2144415475}
   _cameraManager: {fileID: 962508122}
   _battleManager: {fileID: 1181283393}
+  _turnManager: {fileID: 1427844809}
+--- !u!114 &1427844809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1427844803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4a3e95a5787fe24ab9be6919d38d79b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _activePhase: 0
 --- !u!1001 &1432514573
 PrefabInstance:
   m_ObjectHideFlags: 0

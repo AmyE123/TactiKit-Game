@@ -24,6 +24,7 @@ namespace CT6GAMAI
 
         private GameManager _gameManager;
         private GridManager _gridManager;
+        private TurnManager _turnManager;
 
         private RaycastHit _stoodNodeRayHit;
         private GridCursor _gridCursor;
@@ -33,11 +34,15 @@ namespace CT6GAMAI
         private List<MeshRenderer> _allMRRenderers;
         private bool _isSelected = false;
         private bool _unitDead = false;
+        private bool _hasActedThisTurn;
+        private bool _canActThisTurn;
+
 
         public Material inactiveMaterial;
         public Material normalMaterial;
         public GameObject modelBaseObject;
         public List<Renderer> AllRenderers;
+        public bool IsAwaitingMoveConfirmation;
 
         public bool IsSelected { get { return _isSelected; } set { _isSelected = value; } }
 
@@ -47,18 +52,18 @@ namespace CT6GAMAI
         public UnitData UnitData => _unitData;
         public Animator Animator => _animator;
         public bool IsUnitInactive => _isUnitInactive;
-        public bool IsAwaitingMoveConfirmation;
-
         public MovementRange MovementRange => _movementRange;
         public UnitAnimationManager UnitAnimationManager => _unitAnimationManager;
         public UnitStatsManager UnitStatsManager => _unitStatsManager;
         public GameObject BattleUnit => _battleUnit;
         public bool UnitDead => _unitDead;
+        public bool HasActedThisTurn => _hasActedThisTurn;
 
         private void Start()
         {
             _gameManager = GameManager.Instance;
             _gridManager = _gameManager.GridManager;
+            _turnManager = _gameManager.TurnManager;
 
             _stoodNode = DetectStoodNode();
             _stoodNode.StoodUnit = this;
@@ -68,6 +73,16 @@ namespace CT6GAMAI
 
             // TODO: Cleanup of gridcursor stuff
             _gridCursor = FindObjectOfType<GridCursor>();
+        }
+
+        private void Update()
+        {
+            if (IsPlayerUnit())
+            {
+                SetUnitInactiveState(_hasActedThisTurn);
+            }
+            
+            UpdateTurnBasedState();
         }
 
         private void GetAllRenderers()
@@ -161,6 +176,50 @@ namespace CT6GAMAI
             _gridManager.MovementPath.Clear();
         }
 
+        private bool IsPlayerUnit()
+        {
+            return _unitData.UnitTeam == Team.Player;
+        }
+
+        /// <summary>
+        /// Updates the unit's ability to act based on the current turn phase.
+        /// </summary>
+        public void UpdateTurnBasedState()
+        {
+            if (_turnManager.ActivePhase == Phases.PlayerPhase && IsPlayerUnit())
+            {
+                EnableActions();
+            }
+            else
+            {
+                DisableActions();
+            }
+        }
+
+        /// <summary>
+        /// Enables the units actions for the current turn.
+        /// </summary>
+        private void EnableActions()
+        {
+            _canActThisTurn = true;          
+        }
+
+        /// <summary>
+        /// Disables the units actions outside of its turn.
+        /// </summary>
+        private void DisableActions()
+        {
+            _canActThisTurn = false;            
+        }
+
+        /// <summary>
+        /// Finalizes the unit's actions at the end of its turn.
+        /// </summary>
+        public void FinalizeTurn()
+        {
+            _hasActedThisTurn = true;           
+        }
+
         /// <summary>
         /// Handles the death of the unit.
         /// </summary>
@@ -178,13 +237,19 @@ namespace CT6GAMAI
         /// <summary>
         /// Finalizes the movement values of the unit after movement.
         /// </summary>
-        public void FinalizeMovementValues()
+        public void FinalizeMovementValues(bool shouldFinalizeTurn = true)
         {
             ResetUnitState();
 
             _stoodNode = DetectStoodNode();
             _updatedStoodNode = _stoodNode;
             UpdateStoodNode(this);
+
+            if (shouldFinalizeTurn)
+            {
+                FinalizeTurn();
+            }
+            
         }
 
         /// <summary>
@@ -197,7 +262,7 @@ namespace CT6GAMAI
             // Move the unit back to the original position
             StartCoroutine(MoveBackToPoint(_gridManager.MovementPath[0]));
 
-            FinalizeMovementValues();
+            FinalizeMovementValues(false);
         }
 
         /// <summary>

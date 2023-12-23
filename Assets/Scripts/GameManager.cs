@@ -13,6 +13,7 @@ namespace CT6GAMAI
         [SerializeField] private UIManager _uiManager;
         [SerializeField] private CameraManager _cameraManager;
         [SerializeField] private BattleManager _battleManager;
+        [SerializeField] private TurnManager _turnManager;
 
         #region Public Manager Getter References
 
@@ -45,6 +46,11 @@ namespace CT6GAMAI
         /// Public getter for BattleManager
         /// </summary>
         public BattleManager BattleManager => _battleManager;
+
+        /// <summary>
+        /// Public getter for TurnManager
+        /// </summary>
+        public TurnManager TurnManager => _turnManager;
 
         #endregion // Public Manager Getter References
 
