@@ -28,6 +28,30 @@ namespace CT6GAMAI
 
         #endregion // Game Flow
 
+        #region Battle Calculator Values
+
+        /// <summary>
+        /// A value representing the speed advantage required to do a double attack.
+        /// </summary>
+        public static int DOUBLE_ATK_SPEED_THRESHOLD = 5;
+
+        /// <summary>
+        /// A value representing what to multiply attack by when calculating double attack damage.
+        /// </summary>
+        public static int DOUBLE_ATK_MULTIPLIER = 2;
+
+        /// <summary>
+        /// A value representing the 'Skill' divider when skill is added to critical strength for when critical rate is calculated.
+        /// </summary>
+        public static int CRIT_SKILL_DIVIDER = 2;
+
+        /// <summary>
+        /// A value representing the 'Speed' multiplier when speed is added to avoid rate when calculated.
+        /// </summary>
+        public static int AVOID_SPEED_MULTIPLIER = 2;
+
+        #endregion // Battle Calculator Values
+
         #region Nodes
         /// <summary>
         /// Enumerations representing the different visual states of a node.

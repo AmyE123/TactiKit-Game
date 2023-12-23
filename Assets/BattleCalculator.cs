@@ -33,10 +33,10 @@ namespace CT6GAMAI
             return unit.StoodNode.NodeData.TerrainType.DefenseBoost;
         }
 
-        private static int CalculateWeaponTriangeFactor(UnitData unitA, UnitData unitB)
+        private static int CalculateWeaponTriangeFactor(UnitData attacker, UnitData defender)
         {
-            var unitA_WeaponType = unitA.EquippedWeapon.WeaponType;
-            var unitB_WeaponType = unitB.EquippedWeapon.WeaponType;
+            var unitA_WeaponType = attacker.EquippedWeapon.WeaponType;
+            var unitB_WeaponType = defender.EquippedWeapon.WeaponType;
 
             return (unitA_WeaponType, unitB_WeaponType) switch
             {
@@ -63,63 +63,54 @@ namespace CT6GAMAI
             };
         }
 
-        public static bool CanDoubleAttack(UnitManager unitA, UnitManager unitB)
+        public static bool CanDoubleAttack(UnitManager attacker, UnitManager defender)
         {
-            return (unitB.UnitData.SpeedBaseValue + 5) <= unitA.UnitData.SpeedBaseValue;
+            return (defender.UnitData.SpeedBaseValue + DOUBLE_ATK_SPEED_THRESHOLD) <= attacker.UnitData.SpeedBaseValue;
         }
 
-        public static int CalculateAttackPower(UnitManager unitA, UnitManager unitB)
+        public static int CalculateAttackPower(UnitManager attacker, UnitManager defender)
         {
-            var weaponType = unitA.UnitData.EquippedWeapon.WeaponType;
+            var weaponType = attacker.UnitData.EquippedWeapon.WeaponType;
 
             if (weaponType == WeaponType.Tome)
             {
-                return CalculateMagicAttackPower(unitA, unitB);
+                return CalculateMagicAttackPower(attacker, defender);
             }
-            else
-            {
-                return CalculatePhysicalAttackPower(unitA, unitB);
-            }
+
+            return CalculatePhysicalAttackPower(attacker, defender);
         }
 
-        public static int CalculateCriticalRatePercentage(UnitManager unitA, UnitManager unitB)
-        {           
-            var critRate = (unitA.UnitData.CriticalRateBaseValue + (unitA.UnitData.SkillBaseValue / 2)) - unitB.UnitData.LuckBaseValue;
+        public static int CalculateCriticalRatePercentage(UnitManager attacker, UnitManager defender)
+        {
+            int criticalStrength = attacker.UnitData.CriticalRateBaseValue + (attacker.UnitData.SkillBaseValue / CRIT_SKILL_DIVIDER);
+            int defenseStrength = defender.UnitData.LuckBaseValue;
 
-            if (critRate < 0)
-            {
-                critRate = 0;
-            }
+            int critRate = criticalStrength - defenseStrength;
+            critRate = Mathf.Clamp(critRate, 0, 100);
 
             return critRate;
         }
 
-        public static int CalculateHitRatePercentage(UnitManager unitA, UnitManager unitB)
+        public static int CalculateHitRatePercentage(UnitManager attacker, UnitManager defender)
         {
-            int weaponTriangleFactor = CalculateWeaponTriangeFactor(unitA.UnitData, unitB.UnitData);
-            int hitRate = (unitA.UnitData.HitRateBaseValue + weaponTriangleFactor) - unitB.UnitData.AvoidRateBaseValue;
+            int weaponTriangleFactor = CalculateWeaponTriangeFactor(attacker.UnitData, defender.UnitData);
+            int hitStrength = attacker.UnitData.HitRateBaseValue + weaponTriangleFactor;
+            int defenseStrength = defender.UnitData.AvoidRateBaseValue;
 
-            if (hitRate > 100)
-            {
-                hitRate = 100;
-            }
+            int hitRate = hitStrength - defenseStrength;
+            hitRate = Mathf.Clamp(hitRate, 0, 100);
 
             return hitRate;
         }
 
         public static int CalculateAvoidRate(UnitData unit)
         {
-            return (unit.SpeedBaseValue * 2) + unit.LuckBaseValue;
+            return (unit.SpeedBaseValue * AVOID_SPEED_MULTIPLIER) + unit.LuckBaseValue;
         }
 
         public static int CalculateRemainingHPForecast(UnitManager unit, int attackAmount, bool canDoubleAttack)
         {
-            var attackValue = attackAmount;
-
-            if (canDoubleAttack)
-            {
-                attackValue *= 2;
-            }
+            int attackValue = canDoubleAttack ? attackAmount * DOUBLE_ATK_MULTIPLIER : attackAmount;
 
             return unit.UnitStatsManager.HealthPoints - attackValue;
         }
@@ -128,11 +119,6 @@ namespace CT6GAMAI
         {
             bool critHit = Roll(criticalPercentage);
 
-            if (critHit)
-            {
-                Debug.Log("[BATTLE]: Got crit hit!");
-            }
-
             return critHit;
         }
 
@@ -140,20 +126,14 @@ namespace CT6GAMAI
         {
             bool hit = Roll(hitPercentage);
 
-            if (hit)
-            {
-                Debug.Log("[BATTLE]: Got hit!");
-            }
-
             return hit;
         }
 
         public static bool Roll(int percentage)
         {
-            var roll = UnityEngine.Random.Range(0, 100);
+            int roll = Random.Range(0, 100);
 
             return roll <= percentage;
         }
-
     }
 }
