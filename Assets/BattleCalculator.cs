@@ -63,11 +63,23 @@ namespace CT6GAMAI
             };
         }
 
+        /// <summary>
+        /// Determines whether the attacker can do a double attack on the defender.
+        /// </summary>
+        /// <param name="attacker">The attacking unit.</param>
+        /// <param name="defender">The defending unit.</param>
+        /// <returns>True if the attacker can double attack.</returns>
         public static bool CanDoubleAttack(UnitManager attacker, UnitManager defender)
         {
             return (defender.UnitData.SpeedBaseValue + DOUBLE_ATK_SPEED_THRESHOLD) <= attacker.UnitData.SpeedBaseValue;
         }
 
+        /// <summary>
+        /// Calculates the attack power of a unit against another unit.
+        /// </summary>
+        /// <param name="attacker">The attacking unit.</param>
+        /// <param name="defender">The defending unit.</param>
+        /// <returns>The calculated attack power.</returns>
         public static int CalculateAttackPower(UnitManager attacker, UnitManager defender)
         {
             var weaponType = attacker.UnitData.EquippedWeapon.WeaponType;
@@ -80,6 +92,12 @@ namespace CT6GAMAI
             return CalculatePhysicalAttackPower(attacker, defender);
         }
 
+        /// <summary>
+        /// Calculates the critical rate of an attacker against a defender.
+        /// </summary>
+        /// <param name="attacker">The attacking unit.</param>
+        /// <param name="defender">The defending unit.</param>
+        /// <returns>The critical rate percentage.</returns>
         public static int CalculateCriticalRatePercentage(UnitManager attacker, UnitManager defender)
         {
             int criticalStrength = attacker.UnitData.CriticalRateBaseValue + (attacker.UnitData.SkillBaseValue / CRIT_SKILL_DIVIDER);
@@ -91,6 +109,12 @@ namespace CT6GAMAI
             return critRate;
         }
 
+        /// <summary>
+        /// Calculates the hit rate percentage of an attacker against a defender, taking the weapon triangle into account.
+        /// </summary>
+        /// <param name="attacker">The attacking unit.</param>
+        /// <param name="defender">The defending unit.</param>
+        /// <returns>The hit rate percentage.</returns>
         public static int CalculateHitRatePercentage(UnitManager attacker, UnitManager defender)
         {
             int weaponTriangleFactor = CalculateWeaponTriangeFactor(attacker.UnitData, defender.UnitData);
@@ -103,11 +127,24 @@ namespace CT6GAMAI
             return hitRate;
         }
 
+        /// <summary>
+        /// Calculates the avoid rate of a unit.
+        /// </summary>
+        /// <param name="unit">The unit for which to calculate the avoid rate.</param>
+        /// <returns>The calculated avoid rate.</returns>
         public static int CalculateAvoidRate(UnitData unit)
         {
+            // TODO: Implement other calculations for other stats. This isn't currently used.
             return (unit.SpeedBaseValue * AVOID_SPEED_MULTIPLIER) + unit.LuckBaseValue;
         }
 
+        /// <summary>
+        /// Calculates the remaining health points of a unit after an attack for the forecast UI.
+        /// </summary>
+        /// <param name="unit">The unit to calculate the remaining health for.</param>
+        /// <param name="attackAmount">The amount of the attack.</param>
+        /// <param name="canDoubleAttack">Indicates whether a double attack can occur.</param>
+        /// <returns>The forecasted remaining HP.</returns>
         public static int CalculateRemainingHPForecast(UnitManager unit, int attackAmount, bool canDoubleAttack)
         {
             int attackValue = canDoubleAttack ? attackAmount * DOUBLE_ATK_MULTIPLIER : attackAmount;
@@ -115,6 +152,11 @@ namespace CT6GAMAI
             return unit.UnitStatsManager.HealthPoints - attackValue;
         }
 
+        /// <summary>
+        /// Does a critical hit roll.
+        /// </summary>
+        /// <param name="criticalPercentage">The critical hit percentage chance.</param>
+        /// <returns>True if a critical hit happens.</returns>
         public static bool CriticalRoll(int criticalPercentage)
         {
             bool critHit = Roll(criticalPercentage);
@@ -122,6 +164,11 @@ namespace CT6GAMAI
             return critHit;
         }
 
+        /// <summary>
+        /// Does a hit roll. Determines whether a unit can land the attack.
+        /// </summary>
+        /// <param name="hitPercentage">The hit percentage chance.</param>
+        /// <returns>True if a hit happens.</returns>
         public static bool HitRoll(int hitPercentage)
         {
             bool hit = Roll(hitPercentage);
@@ -129,6 +176,11 @@ namespace CT6GAMAI
             return hit;
         }
 
+        /// <summary>
+        /// Does a percentage-based roll based off values 0 to 100.
+        /// </summary>
+        /// <param name="percentage">The percentage chance for the roll to succeed.</param>
+        /// <returns>True if the roll is successful.</returns>
         public static bool Roll(int percentage)
         {
             int roll = Random.Range(0, 100);
