@@ -1,5 +1,6 @@
 namespace CT6GAMAI
 {
+    using UnityEditor;
     using UnityEngine;
     using static CT6GAMAI.Constants;
 
@@ -50,25 +51,48 @@ namespace CT6GAMAI
         /// </summary>
         public bool UnitCompleteAttacks => _unitCompleteAttacks;
 
+        private void ClearExistingChildren()
+        {
+            int children = transform.childCount;
+
+            for (int i = children - 1; i >= 0; i--)
+            {
+                DestroyImmediate(transform.GetChild(i).gameObject);
+            }
+        }
+
+        private void SetUnitStatsAndReferences(UnitStatsManager unitStats, UnitManager unitManager)
+        {
+            _unitStatsManagerRef = unitStats;
+            _unitManagerRef = unitManager;
+            _canUnitAttackAgain = _unitStatsManagerRef.DblAtk;
+        }
+
+        private void InstantiateBattleUnit()
+        {
+            GameObject battleGO = Instantiate(_unitManagerRef.BattleUnit, transform);
+            _animator = battleGO.GetComponentInChildren<Animator>();
+        }
+
+        /// <summary>
+        /// Sets the status for whether the unit has completed all of its attacks.
+        /// </summary>
+        /// <param name="value">The value to set.</param>
         public void SetUnitCompleteAttacks(bool value)
         {
             _unitCompleteAttacks = value;
         }
 
+        /// <summary>
+        /// Sets the references for the unit's statistics and manager, and initializes the unit for battle.
+        /// </summary>
+        /// <param name="unitStats">The UnitStatsManager reference.</param>
+        /// <param name="unitManager">The UnitManager reference.</param>
         public void SetUnitReferences(UnitStatsManager unitStats, UnitManager unitManager)
         {
-            int nbChildren = transform.childCount;
-
-            for (int i = nbChildren - 1; i >= 0; i--)
-            {
-                DestroyImmediate(transform.GetChild(i).gameObject);
-            }
-
-            _unitStatsManagerRef = unitStats;
-            _unitManagerRef = unitManager;
-            _canUnitAttackAgain = _unitStatsManagerRef.DblAtk;
-            var battleGO = Instantiate(_unitManagerRef.BattleUnit, transform);
-            _animator = battleGO.GetComponentInChildren<Animator>();
+            ClearExistingChildren();
+            SetUnitStatsAndReferences(unitStats, unitManager);
+            InstantiateBattleUnit();
         }
     }
 }
