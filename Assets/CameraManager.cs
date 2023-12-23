@@ -3,7 +3,9 @@ namespace CT6GAMAI
     using UnityEngine;
     using Cinemachine;
     using System.Linq;
+    using DG.Tweening;
     using static CT6GAMAI.Constants;
+    using System.Collections;
 
     public class CameraManager : MonoBehaviour
     {
@@ -17,6 +19,7 @@ namespace CT6GAMAI
 
         public CinemachineVirtualCamera[] Cameras => _cameras;
         public CameraStates CameraState => _cameraState;
+        
 
         private void Start()
         {

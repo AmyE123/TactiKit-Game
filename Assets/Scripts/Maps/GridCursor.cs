@@ -115,12 +115,10 @@ namespace CT6GAMAI
                 {
                     if (_gameManager.UnitsManager.CursorUnit.UnitData.UnitTeam == Team.Enemy)
                     {
-                        Debug.Log("[GAME]: UI Here for 'Enemy selected!'");
                         SelectedNode.NodeState.CursorStateManager.SetEnemySelected();
                     }
                     else if (_gameManager.UnitsManager.CursorUnit.UnitData.UnitTeam == Team.Player)
                     {
-                        Debug.Log("[GAME]: UI Here for 'Player selected!'");
                         SelectedNode.NodeState.CursorStateManager.SetPlayerSelected();
                     }
                     else

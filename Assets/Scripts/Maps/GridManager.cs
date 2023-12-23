@@ -227,7 +227,16 @@ namespace CT6GAMAI
                 CurrentState = CurrentState.ConfirmingMove;
                 _activeUnit.IsAwaitingMoveConfirmation = true;
                 var unit = _gameManager.UnitsManager.ActiveUnit;
-                StartCoroutine(unit.MoveToEndPoint(1));
+                if (_gameManager.GridManager.MovementPath.Count > 2)
+                {
+                    StartCoroutine(unit.MoveToEndPoint(1));
+                }
+                else
+                {
+                    _activeUnit.IsAwaitingMoveConfirmation = true;
+                    _gameManager.GridManager.CurrentState = CurrentState.ConfirmingMove;
+                }
+                
                 _gameManager.UIManager.BattleForecastManager.SpawnBattleForecast(_activeUnit, targetNode.NodeManager.StoodUnit);
                 StartCoroutine(BattleTransition());
             }
