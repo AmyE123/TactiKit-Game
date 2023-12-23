@@ -60,7 +60,7 @@ namespace CT6GAMAI
         private void Update()
         {
             UpdateUnitReferences();
-            
+
             if (!_gridInitialized)
             {
                 InitializeGrid();
@@ -207,7 +207,7 @@ namespace CT6GAMAI
 
             if (validPath)
             {
-                PerformValidPathMovement();              
+                PerformValidPathMovement();
             }
             else
             {
@@ -239,7 +239,7 @@ namespace CT6GAMAI
                     _activeUnit.IsAwaitingMoveConfirmation = true;
                     _gameManager.GridManager.CurrentState = CurrentState.ConfirmingMove;
                 }
-                
+
                 _gameManager.UIManager.BattleForecastManager.SpawnBattleForecast(_activeUnit, targetNode.NodeManager.StoodUnit);
                 StartCoroutine(BattleTransition());
             }
@@ -304,9 +304,9 @@ namespace CT6GAMAI
         /// Processes pathing for the selected unit, including movement and path highlighting.
         /// </summary>
         public void ProcessPathing()
-        {           
+        {
             ProcessMovementPath();
-            HighlightPath();           
+            HighlightPath();
         }
     }
 }
