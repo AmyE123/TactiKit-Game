@@ -41,22 +41,22 @@ namespace CT6GAMAI
             return (unitA_WeaponType, unitB_WeaponType) switch
             {
                 // Axe bonuses
-                (WeaponType.Axe, WeaponType.Lance) => +5,
-                (WeaponType.Axe, WeaponType.Sword) => -5,
-                (WeaponType.Axe, WeaponType.Tome) => -5,
+                (WeaponType.Axe, WeaponType.Lance) => +WEAPON_TRIANGLE_BONUS,
+                (WeaponType.Axe, WeaponType.Sword) => -WEAPON_TRIANGLE_BONUS,
+                (WeaponType.Axe, WeaponType.Tome) => -WEAPON_TRIANGLE_BONUS,
 
                 // Lance bonuses
-                (WeaponType.Lance, WeaponType.Axe) => -5,
-                (WeaponType.Lance, WeaponType.Sword) => +5,
-                (WeaponType.Lance, WeaponType.Tome) => +5,
+                (WeaponType.Lance, WeaponType.Axe) => -WEAPON_TRIANGLE_BONUS,
+                (WeaponType.Lance, WeaponType.Sword) => +WEAPON_TRIANGLE_BONUS,
+                (WeaponType.Lance, WeaponType.Tome) => +WEAPON_TRIANGLE_BONUS,
 
                 // Sword bonuses
-                (WeaponType.Sword, WeaponType.Axe) => +5,
-                (WeaponType.Sword, WeaponType.Lance) => -5,
+                (WeaponType.Sword, WeaponType.Axe) => +WEAPON_TRIANGLE_BONUS,
+                (WeaponType.Sword, WeaponType.Lance) => -WEAPON_TRIANGLE_BONUS,
 
                 // Tome bonuses
-                (WeaponType.Tome, WeaponType.Axe) => +5,
-                (WeaponType.Tome, WeaponType.Lance) => -5,
+                (WeaponType.Tome, WeaponType.Axe) => +WEAPON_TRIANGLE_BONUS,
+                (WeaponType.Tome, WeaponType.Lance) => -WEAPON_TRIANGLE_BONUS,
 
                 // Default for same weapon types
                 _ => 0

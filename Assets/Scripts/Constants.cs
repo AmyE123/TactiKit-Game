@@ -64,6 +64,11 @@ namespace CT6GAMAI
         /// </summary>
         public static int AVOID_SPEED_MULTIPLIER = 2;
 
+        /// <summary>
+        /// A value representing the bonus you can get if your opponent has a weaker weapon on the triangle. The negative bonus is - this value.
+        /// </summary>
+        public static int WEAPON_TRIANGLE_BONUS = 5;
+
         #endregion // Battle Calculator Values
 
         #region Nodes
