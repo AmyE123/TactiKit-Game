@@ -6,37 +6,41 @@ namespace CT6GAMAI
 
     public class UIManager : MonoBehaviour
     {
+        [Header("Information Managers")]
         [SerializeField] private UI_TileInfoManager _tileInfoManager;
         [SerializeField] private UI_UnitInfoManager _unitInfoManager;
-        [SerializeField] private UI_BattleForecastSideManager[] _battleForecastManagers;
+
+        [Header("Battle Forecast UI Management")]
+        [SerializeField] private UI_BattleForecastManager _battleForecastManager;
+        [SerializeField] private UI_BattleForecastSideManager[] _battleForecastSideManagers;
+        [SerializeField] private GameObject[] _uiObjectsToDisableForBattleForecasts;
+
+        [Header("Battle Sequence UI Management")]
+        [SerializeField] private UI_BattleSequenceManager _battleSequenceManager;
+        [SerializeField] private GameObject _battleAnimationUI;
+        [SerializeField] private GameObject[] _uiObjectsToDisableForBattleAnimations;                   
+
+        [Header("Action UI Management")]
         [SerializeField] private UI_ActionItemsManager _actionItemsManager;
         [SerializeField] private GameObject[] _uiObjectsToDisableForActions;
-        [SerializeField] private GameObject[] _uiObjectsToDisableForBattleForecasts;
-        [SerializeField] private GameObject[] _uiObjectsToDisableForBattleAnimations;
-        [SerializeField] private GameObject _battleAnimationUI;
-        [SerializeField] private UI_BattleForecastManager _battleForecastManager;
-        [SerializeField] private UI_BattleSequenceManager _battleSequenceManager;
 
+        [Header("General UI Elements")]
         [SerializeField] private Image _vignette;
 
         private bool _areBattleForecastsToggled;
         private GameManager _gameManager;
-        private GlobalUnitsManager _unitsManager;
-        private bool _vignetteEnabled;
 
         public UI_TileInfoManager TileInfoManager => _tileInfoManager;
         public UI_UnitInfoManager UnitInfoManager => _unitInfoManager;
-        public UI_BattleForecastSideManager[] BattleForecastManagers => _battleForecastManagers;
+        public UI_BattleForecastSideManager[] BattleForecastManagers => _battleForecastSideManagers;
         public UI_ActionItemsManager ActionItemsManager => _actionItemsManager; 
         public UI_BattleForecastManager BattleForecastManager => _battleForecastManager;
-        public UI_BattleSequenceManager BattleSequenceManager => _battleSequenceManager;
-        
+        public UI_BattleSequenceManager BattleSequenceManager => _battleSequenceManager;       
         public bool AreBattleForecastsToggled => _areBattleForecastsToggled;
 
         private void Start()
         {
             _gameManager = GameManager.Instance;
-            _unitsManager = _gameManager.UnitsManager;
         }
 
         private void Update()

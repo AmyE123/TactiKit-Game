@@ -36176,23 +36176,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _tileInfoManager: {fileID: 215202171}
   _unitInfoManager: {fileID: 614180135}
-  _battleForecastManagers:
+  _battleForecastManager: {fileID: 1733640007}
+  _battleForecastSideManagers:
   - {fileID: 1919895753378585340}
   - {fileID: 1919895753378585339}
-  _actionItemsManager: {fileID: 919506526}
-  _uiObjectsToDisableForActions:
-  - {fileID: 777465248}
-  - {fileID: 1807525997}
   _uiObjectsToDisableForBattleForecasts:
   - {fileID: 777465248}
   - {fileID: 1066116224}
+  _battleSequenceManager: {fileID: 6874829678376750958}
+  _battleAnimationUI: {fileID: 6877134383268552197}
   _uiObjectsToDisableForBattleAnimations:
   - {fileID: 777465248}
   - {fileID: 1807525997}
   - {fileID: 1066116224}
-  _battleAnimationUI: {fileID: 6877134383268552197}
-  _battleForecastManager: {fileID: 1733640007}
-  _battleSequenceManager: {fileID: 6874829678376750958}
+  _actionItemsManager: {fileID: 919506526}
+  _uiObjectsToDisableForActions:
+  - {fileID: 777465248}
+  - {fileID: 1807525997}
   _vignette: {fileID: 8726243931585865105}
 --- !u!4 &2144415476
 Transform:
@@ -37476,7 +37476,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2171967306734135978, guid: fc7dd2885660380439c9ff8d9d8d79f0, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 195
+      value: 205
       objectReference: {fileID: 0}
     - target: {fileID: 2171967306734135978, guid: fc7dd2885660380439c9ff8d9d8d79f0, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -37656,7 +37656,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5954930513079574926, guid: fc7dd2885660380439c9ff8d9d8d79f0, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 200.00002
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 5954930513079574926, guid: fc7dd2885660380439c9ff8d9d8d79f0, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -38064,7 +38064,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9072990881710638151, guid: fc7dd2885660380439c9ff8d9d8d79f0, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 600.00006
+      value: 600
       objectReference: {fileID: 0}
     - target: {fileID: 9072990881710638151, guid: fc7dd2885660380439c9ff8d9d8d79f0, type: 3}
       propertyPath: m_AnchoredPosition.y
