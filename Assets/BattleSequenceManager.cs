@@ -96,7 +96,7 @@ namespace CT6GAMAI
 
         private void HandlePreBattle()
         {
-            StartCoroutine(BattleBeginDelay(BATTLE_SEQUENCE_DELAY, _initiatingTeam));
+            StartCoroutine(BattleBeginDelay(BATTLE_SEQUENCE_DELAY));
         }
 
         private void HandleAttackerMoveForward()
@@ -115,7 +115,7 @@ namespace CT6GAMAI
 
         private void HandleAttackerMoveBack()
         {
-            MoveUnitsBack(_attackerUnit, _defenderUnit);
+            MoveUnitsBackToOriginalPos(_attackerUnit, _defenderUnit);
             StartCoroutine(SwitchSidesDelay(BATTLE_SEQUENCE_DELAY));
         }
 
@@ -135,7 +135,7 @@ namespace CT6GAMAI
 
         private void HandleDefenderMoveBack()
         {
-            MoveUnitsBack(_defenderUnit, _attackerUnit);
+            MoveUnitsBackToOriginalPos(_defenderUnit, _attackerUnit);
             StartCoroutine(SwitchSidesDelay(BATTLE_SEQUENCE_DELAY));
         }
 
@@ -163,6 +163,9 @@ namespace CT6GAMAI
             ProcessBattleState();
         }
 
+        /// <summary>
+        /// A reset for when the attacker initiates a double attack.
+        /// </summary>
         private void ResetAttacker()
         {
             _attackerTakenTurn = false;
@@ -171,6 +174,9 @@ namespace CT6GAMAI
             ChangeBattleSequenceState(BattleSequenceStates.AttackerMoveForward);
         }
 
+        /// <summary>
+        /// A reset for when the defender initiates a double attack.
+        /// </summary>
         private void ResetDefender()
         {
             _defenderTakenTurn = false;
@@ -195,12 +201,11 @@ namespace CT6GAMAI
             }
         }
 
-        IEnumerator HandleUnitDeath()
+        private IEnumerator HandleUnitDeath()
         {
             _isBattleEnding = true;
 
-            // Wait for a second or two before ending the battle
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(BATTLE_SEQUENCE_DEATH_DELAY);
 
             ChangeBattleSequenceState(BattleSequenceStates.BattleEnd);
         }
@@ -210,85 +215,74 @@ namespace CT6GAMAI
             if (unit.UnitSide == Side.Left)
             {
                 unit.transform.DOMoveX(_attackPositionRight.position.x, BATTLE_SEQUENCE_MOVEMENT_SPEED);
-                //_currentBattleState = BattleSequenceStates.Attacker_Attack;
                 ChangeBattleSequenceState(BattleSequenceStates.AttackerAttack);
             }
             else
             {
                 unit.transform.DOMoveX(_attackPositionLeft.position.x, BATTLE_SEQUENCE_MOVEMENT_SPEED);
-                //_currentBattleState = BattleSequenceStates.Defender_Attack;
                 ChangeBattleSequenceState(BattleSequenceStates.DefenderAttack);
             }
-
-            //ProcessBattleState();
         }
 
-        private void PlayAttackAnimation(BattleUnitManager attackingUnit)
+        private void TriggerAttackAnimation(BattleUnitManager attackingUnit)
         {
-            attackingUnit.Animator.SetInteger(ATTACKING_ANIM_IDX_PARAM, Random.Range(1, 4));
+            attackingUnit.Animator.SetInteger(ATTACKING_ANIM_IDX_PARAM, Random.Range(1, ATTACKING_ANIM_IDX_COUNT));
             attackingUnit.Animator.SetTrigger(ATTACKING_ANIM_PARAM);
         }
 
-        private void PlayDamageAnimation(BattleUnitManager defendingUnit)
+        private void TriggerDamageAnimation(BattleUnitManager defendingUnit)
         {
             if (defendingUnit.UnitStatsManager.CheckHealthState() != UnitHealthState.Dead)
             {
-                defendingUnit.Animator.SetInteger(HIT_ANIM_IDX_PARAM, Random.Range(1, 2));
+                defendingUnit.Animator.SetInteger(HIT_ANIM_IDX_PARAM, Random.Range(1, HIT_ANIM_IDX_COUNT));
                 defendingUnit.Animator.SetTrigger(HIT_ANIM_PARAM);
             }
             else
             {
-                defendingUnit.Animator.SetInteger(DEAD_ANIM_IDX_PARAM, Random.Range(1, 2));
+                defendingUnit.Animator.SetInteger(DEAD_ANIM_IDX_PARAM, Random.Range(1, DEAD_ANIM_IDX_COUNT));
                 defendingUnit.Animator.SetBool(DEAD_ANIM_PARAM, true);
 
-                StartCoroutine(DeathDelay(2f));
+                StartCoroutine(DeathDelay(BATTLE_SEQUENCE_DEATH_DELAY));
             }
         }
 
-        private void PlayDodgeAnimation(BattleUnitManager defendingUnit)
+        private void TriggerDodgeAnimation(BattleUnitManager unit)
         {
-            defendingUnit.Animator.SetTrigger(DODGE_ANIM_PARAM);
+            unit.Animator.SetTrigger(DODGE_ANIM_PARAM);
 
-            float jumpHeight = 0.2f;
-
-            if (defendingUnit.UnitSide == Side.Left)
+            if (unit.UnitSide == Side.Left)
             {
-                defendingUnit.transform.DOJump(
-                new Vector3(_dodgePositionLeft.position.x, defendingUnit.transform.position.y, defendingUnit.transform.position.z),
-                jumpHeight,
-                1,
-                BATTLE_SEQUENCE_MOVEMENT_SPEED + 0.2f
-                );
-
+                DodgeAnimation(_dodgePositionLeft, unit);
             }
             else
             {
-                defendingUnit.transform.DOJump(
-                new Vector3(_dodgePositionRight.position.x, defendingUnit.transform.position.y, defendingUnit.transform.position.z),
-                jumpHeight,
-                1,
-                BATTLE_SEQUENCE_MOVEMENT_SPEED + 0.2f
-                );
-
+                DodgeAnimation(_dodgePositionRight, unit);
             }
+        }
+
+        private void DodgeAnimation(Transform dodgeTransform, BattleUnitManager unit)
+        {
+            unit.transform.DOJump(
+            new Vector3(dodgeTransform.position.x, unit.transform.position.y, unit.transform.position.z),
+            DODGE_TWEEN_JUMP_HEIGHT,
+            1,
+            BATTLE_SEQUENCE_MOVEMENT_SPEED * 2
+            );
         }
 
         private void AttackSequence(BattleUnitManager attackingUnit, BattleUnitManager defendingUnit)
         {
-            PlayAttackAnimation(attackingUnit);
+            TriggerAttackAnimation(attackingUnit);
 
             if (DoesUnitHit(attackingUnit))
             {
                 ApplyAttackDamage(attackingUnit, defendingUnit);
-                PlayDamageAnimation(defendingUnit);
-
-                // Check if the defending unit is dead right after an attack
+                TriggerDamageAnimation(defendingUnit);
                 CheckForDeadUnits(defendingUnit);
             }
             else
             {
-                Debug.Log("[BATTLE]: Unit doesn't Hit!!");
-                PlayDodgeAnimation(defendingUnit);
+                TriggerDodgeAnimation(defendingUnit);
             }
         }
 
@@ -310,23 +304,21 @@ namespace CT6GAMAI
 
         private void ApplyAttackDamage(BattleUnitManager attackingUnit, BattleUnitManager defendingUnit)
         {
-            var attackDeduction = -attackingUnit.UnitStatsManager.Atk;
+            var attackPower = attackingUnit.UnitStatsManager.Atk;
 
             if (DoesUnitCrit(attackingUnit))
             {
-                Debug.Log("[BATTLE]: Unit does Crit!!");
-                attackDeduction *= 3;
+                attackPower *= CRIT_HIT_MULTIPLIER;
             }
 
-            defendingUnit.UnitStatsManager.AdjustHealthPoints(attackDeduction);
+            defendingUnit.UnitStatsManager.AdjustHealthPoints(-attackPower);
         }
 
-        IEnumerator BattleBeginDelay(float delaySeconds, Team initiator)
+        private IEnumerator BattleBeginDelay(float delaySeconds)
         {
-            Debug.Log("[BATTLE]: Starting!!");
             yield return new WaitForSeconds(delaySeconds);
 
-            if (initiator == Team.Player)
+            if (_initiatingTeam == Team.Player)
             {
                 ChangeBattleSequenceState(BattleSequenceStates.AttackerMoveForward);
             }
@@ -336,9 +328,8 @@ namespace CT6GAMAI
             }
         }
 
-        IEnumerator AttackDelay(float delaySeconds, Side side)
+        private IEnumerator AttackDelay(float delaySeconds, Side side)
         {
-            Debug.Log("[BATTLE]: Attacking!!");
             yield return new WaitForSeconds(delaySeconds);
 
             if (_currentBattleState != BattleSequenceStates.BattleEnd)
@@ -354,16 +345,14 @@ namespace CT6GAMAI
             }
         }
 
-        IEnumerator DeathDelay(float delaySeconds)
+        private IEnumerator DeathDelay(float delaySeconds)
         {
-            Debug.Log("[BATTLE]: Unit death!!");
             yield return new WaitForSeconds(delaySeconds);
 
             ChangeBattleSequenceState(BattleSequenceStates.BattleEnd);
-
         }
 
-        private void MoveUnitsBack(BattleUnitManager unitA, BattleUnitManager unitB)
+        private void MoveUnitsBackToOriginalPos(BattleUnitManager unitA, BattleUnitManager unitB)
         {
             if (unitA.UnitSide == Side.Left)
             {
@@ -379,9 +368,8 @@ namespace CT6GAMAI
             }
         }
 
-        IEnumerator SwitchSidesDelay(float delaySeconds)
+        private IEnumerator SwitchSidesDelay(float delaySeconds)
         {
-            Debug.Log("[BATTLE]: Switching sides!!");
             yield return new WaitForSeconds(delaySeconds);
 
             if (_initiatingTeam == Team.Player && !_defenderTakenTurn)
@@ -401,8 +389,6 @@ namespace CT6GAMAI
 
         private void EndBattle()
         {
-            Debug.Log("[BATTLE]: End the battle");
-
             ResetBattle();
             _gameManager.BattleManager.SwitchToMap();
 
@@ -424,6 +410,9 @@ namespace CT6GAMAI
             ProcessBattleState();
         }
 
+        /// <summary>
+        /// Reset the battle so it is ready for the next one.
+        /// </summary>
         public void ResetBattle()
         {
             _isBattleEnding = false;

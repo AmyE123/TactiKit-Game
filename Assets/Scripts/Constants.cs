@@ -26,8 +26,6 @@ namespace CT6GAMAI
             BattleEnd
         }
 
-        public static float BATTLE_SEQUENCE_DELAY = 1.5f;
-
         #endregion // Game Flow
 
         #region Battle Calculator Values
@@ -46,6 +44,11 @@ namespace CT6GAMAI
         /// A value representing the 'Skill' divider when skill is added to critical strength for when critical rate is calculated.
         /// </summary>
         public static int CRIT_SKILL_DIVIDER = 2;
+
+        /// <summary>
+        /// A value representing how much a hit is multiplied if it rolls a critical.
+        /// </summary>
+        public static int CRIT_HIT_MULTIPLIER = 3;
 
         /// <summary>
         /// A value representing the 'Speed' multiplier when speed is added to avoid rate when calculated.
@@ -193,9 +196,13 @@ namespace CT6GAMAI
 
         #region Animation Values
 
-        public const float BATTLE_SEQUENCE_ANIM_DELAY = 0.5f;
+        public static float BATTLE_SEQUENCE_DELAY = 1.5f;
+
+        public static float BATTLE_SEQUENCE_DEATH_DELAY = 2f;
 
         public const float BATTLE_SEQUENCE_MOVEMENT_SPEED = 0.2f;
+
+        public const float DODGE_TWEEN_JUMP_HEIGHT = 0.2f;
 
         #endregion // Animation Values
 
@@ -215,15 +222,21 @@ namespace CT6GAMAI
 
         public const string ATTACKING_ANIM_IDX_PARAM = "AttackingAnimIndex";
 
+        public const int ATTACKING_ANIM_IDX_COUNT = 4;
+
         public const string HIT_ANIM_PARAM = "Hit";
 
         public const string HIT_ANIM_IDX_PARAM = "HitAnimIndex";
+
+        public const int HIT_ANIM_IDX_COUNT = 2;
 
         public const string DODGE_ANIM_PARAM = "Dodge";
 
         public const string DEAD_ANIM_PARAM = "Dead";
 
         public const string DEAD_ANIM_IDX_PARAM = "DeadAnimIndex";
+
+        public const int DEAD_ANIM_IDX_COUNT = 2;
 
         #endregion // Animation Parameter Strings
 

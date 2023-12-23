@@ -86,7 +86,6 @@ namespace CT6GAMAI
 
                     if (_canSwitchToBattle && Input.GetKeyDown(KeyCode.Space))
                     {
-                        Debug.Log("[BATTLE]: GO INTO BATTLE!!");
                         _gameManager.BattleManager.SwitchToBattle();
                         _canSwitchToBattle = false;
                     }
