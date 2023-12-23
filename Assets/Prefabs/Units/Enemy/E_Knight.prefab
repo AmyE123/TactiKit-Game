@@ -103,7 +103,7 @@ PrefabInstance:
     - target: {fileID: 7592517802941822380, guid: b0cf7274a78f12d43910a5c79373d142, type: 3}
       propertyPath: inactiveMaterial
       value: 
-      objectReference: {fileID: 2100000, guid: 367aeed8e3ead204aa797e611abff1d3, type: 2}
+      objectReference: {fileID: 2100000, guid: d4b9e0d79a92dcd4d8e5abe8eadfff49, type: 2}
     - target: {fileID: 8445902401575187227, guid: b0cf7274a78f12d43910a5c79373d142, type: 3}
       propertyPath: m_Name
       value: E_Knight
