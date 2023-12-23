@@ -58,18 +58,6 @@ namespace CT6GAMAI
             }
         }
 
-        public void SetVignette(bool isActive)
-        {
-            if (!isActive)
-            {
-                _vignette.DOFade(0, Constants.VIGNETTE_FADE_SPEED);
-            }
-            else
-            {
-                _vignette.DOFade(1, Constants.VIGNETTE_FADE_SPEED);
-            }
-        }
-
         private void UpdateAllUIForActionItems()
         {
             SetCursorState(ActionItemsManager.IsActionItemsActive);
@@ -136,6 +124,22 @@ namespace CT6GAMAI
                         }
                     }
                 }                
+            }
+        }
+
+        /// <summary>
+        /// Sets the vignette active/inactive.
+        /// </summary>
+        /// <param name="isActive">Value to set the vignette.</param>
+        public void SetVignette(bool isActive)
+        {
+            if (!isActive)
+            {
+                _vignette.DOFade(0, Constants.VIGNETTE_FADE_SPEED);
+            }
+            else
+            {
+                _vignette.DOFade(1, Constants.VIGNETTE_FADE_SPEED);
             }
         }
     }
