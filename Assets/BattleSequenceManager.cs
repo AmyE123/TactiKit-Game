@@ -13,7 +13,7 @@ namespace CT6GAMAI
         [Header("Battle State")]
         [SerializeField] private BattleSequenceStates _currentBattleState = BattleSequenceStates.PreBattle;
         [SerializeField] private Team _initiatingTeam;
-        
+
         [Header("Units")]
         [SerializeField] private BattleUnitManager _attackerUnit;
         [SerializeField] private BattleUnitManager _defenderUnit;
@@ -162,28 +162,6 @@ namespace CT6GAMAI
             ProcessBattleState();
         }
 
-        /// <summary>
-        /// A reset for when the attacker initiates a double attack.
-        /// </summary>
-        private void ResetAttacker()
-        {
-            _attackerTakenTurn = false;
-            _attackerUnit.SetUnitCompleteAttacks(true);
-
-            ChangeBattleSequenceState(BattleSequenceStates.AttackerMoveForward);
-        }
-
-        /// <summary>
-        /// A reset for when the defender initiates a double attack.
-        /// </summary>
-        private void ResetDefender()
-        {
-            _defenderTakenTurn = false;
-            _defenderUnit.SetUnitCompleteAttacks(true);
-
-            ChangeBattleSequenceState(BattleSequenceStates.DefenderMoveForward);
-        }
-
         private void EndBattleSequence()
         {
             _attackerUnit.SetUnitCompleteAttacks(true);
@@ -198,15 +176,6 @@ namespace CT6GAMAI
             {
                 StartCoroutine(HandleUnitDeath());
             }
-        }
-
-        private IEnumerator HandleUnitDeath()
-        {
-            _isBattleEnding = true;
-
-            yield return new WaitForSeconds(BATTLE_SEQUENCE_DEATH_DELAY);
-
-            ChangeBattleSequenceState(BattleSequenceStates.BattleEnd);
         }
 
         private void MoveUnitForward(BattleUnitManager unit)
@@ -313,6 +282,29 @@ namespace CT6GAMAI
             defendingUnit.UnitStatsManager.AdjustHealthPoints(-attackPower);
         }
 
+        private void MoveUnitsBackToOriginalPos(BattleUnitManager unitA, BattleUnitManager unitB)
+        {
+            if (unitA.UnitSide == Side.Left)
+            {
+                unitA.transform.DOMoveX(1, BATTLE_SEQUENCE_MOVEMENT_SPEED);
+                unitB.transform.DOMoveX(-1, BATTLE_SEQUENCE_MOVEMENT_SPEED);
+                _attackerTakenTurn = true;
+            }
+            else
+            {
+                unitA.transform.DOMoveX(-1, BATTLE_SEQUENCE_MOVEMENT_SPEED);
+                unitB.transform.DOMoveX(1, BATTLE_SEQUENCE_MOVEMENT_SPEED);
+                _defenderTakenTurn = true;
+            }
+        }
+
+        private void EndBattle()
+        {
+            ResetBattle();
+            _gameManager.BattleManager.SwitchToMap();
+
+        }
+
         private IEnumerator BattleBeginDelay(float delaySeconds)
         {
             yield return new WaitForSeconds(delaySeconds);
@@ -344,27 +336,20 @@ namespace CT6GAMAI
             }
         }
 
+        private IEnumerator HandleUnitDeath()
+        {
+            _isBattleEnding = true;
+
+            yield return new WaitForSeconds(BATTLE_SEQUENCE_DEATH_DELAY);
+
+            ChangeBattleSequenceState(BattleSequenceStates.BattleEnd);
+        }
+
         private IEnumerator DeathDelay(float delaySeconds)
         {
             yield return new WaitForSeconds(delaySeconds);
 
             ChangeBattleSequenceState(BattleSequenceStates.BattleEnd);
-        }
-
-        private void MoveUnitsBackToOriginalPos(BattleUnitManager unitA, BattleUnitManager unitB)
-        {
-            if (unitA.UnitSide == Side.Left)
-            {
-                unitA.transform.DOMoveX(1, BATTLE_SEQUENCE_MOVEMENT_SPEED);
-                unitB.transform.DOMoveX(-1, BATTLE_SEQUENCE_MOVEMENT_SPEED);
-                _attackerTakenTurn = true;
-            }
-            else
-            {
-                unitA.transform.DOMoveX(-1, BATTLE_SEQUENCE_MOVEMENT_SPEED);
-                unitB.transform.DOMoveX(1, BATTLE_SEQUENCE_MOVEMENT_SPEED);
-                _defenderTakenTurn = true;
-            }
         }
 
         private IEnumerator SwitchSidesDelay(float delaySeconds)
@@ -386,11 +371,26 @@ namespace CT6GAMAI
             }
         }
 
-        private void EndBattle()
+        /// <summary>
+        /// A reset for when the attacker initiates a double attack.
+        /// </summary>
+        private void ResetAttacker()
         {
-            ResetBattle();
-            _gameManager.BattleManager.SwitchToMap();
+            _attackerTakenTurn = false;
+            _attackerUnit.SetUnitCompleteAttacks(true);
 
+            ChangeBattleSequenceState(BattleSequenceStates.AttackerMoveForward);
+        }
+
+        /// <summary>
+        /// A reset for when the defender initiates a double attack.
+        /// </summary>
+        private void ResetDefender()
+        {
+            _defenderTakenTurn = false;
+            _defenderUnit.SetUnitCompleteAttacks(true);
+
+            ChangeBattleSequenceState(BattleSequenceStates.DefenderMoveForward);
         }
 
         /// <summary>
