@@ -81,6 +81,7 @@ namespace CT6GAMAI
 
                         unit.CancelMove();
                         unit.IsAwaitingMoveConfirmation = false;
+                        _canSwitchToBattle = false;
                     }
 
                     if (_canSwitchToBattle && Input.GetKeyDown(KeyCode.Space))
