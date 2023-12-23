@@ -1,6 +1,7 @@
 namespace CT6GAMAI
 {
     using System;
+    using System.Collections.Generic;
     using UnityEngine;
     using static CT6GAMAI.Constants;
 
@@ -18,15 +19,36 @@ namespace CT6GAMAI
         /// </summary>
         public Phases ActivePhase => _activePhase;
 
+        private bool _isPhaseStarted = false;
+
         private void Start()
         {
             _gameManager = GameManager.Instance;
             SetPhase(Phases.PlayerPhase);
         }
 
+        private void StartPhase()
+        {
+            foreach (var unit in _gameManager.UnitsManager.ActivePlayerUnits)
+            {
+                unit.ResetTurn();
+            }
+            _isPhaseStarted = true;
+        }
+
         private void Update()
         {
-            if(Input.GetKeyDown(KeyCode.Alpha1))
+            if (!_isPhaseStarted)
+            {
+                StartPhase();
+            }
+            else if (CheckAllTurnsHaveBeenTaken(ActivePhase))
+            {
+                SwitchPhase();
+                _isPhaseStarted = false;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha1))
             {
                 _activePhase = Phases.PlayerPhase;
                 SetPhase(_activePhase);
@@ -36,6 +58,21 @@ namespace CT6GAMAI
                 _activePhase = Phases.EnemyPhase;
                 SetPhase(_activePhase);
             }
+        }
+
+        private bool CheckAllTurnsHaveBeenTaken(Phases turn)
+        {
+            List<UnitManager> units = turn == Phases.PlayerPhase ? _gameManager.UnitsManager.ActivePlayerUnits : _gameManager.UnitsManager.ActiveEnemyUnits;
+
+            foreach (UnitManager unit in units)
+            {
+                if (!unit.HasActedThisTurn)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -55,6 +92,20 @@ namespace CT6GAMAI
                 case Phases.EnemyPhase:
                     StartEnemyPhase();
                     break;
+            }
+        }
+
+        public void SwitchPhase()
+        {
+            Debug.Log("Switching Phases");
+
+            if (ActivePhase == Phases.PlayerPhase)
+            {
+                SetPhase(Phases.EnemyPhase);
+            }
+            else
+            {
+                SetPhase(Phases.PlayerPhase);
             }
         }
 

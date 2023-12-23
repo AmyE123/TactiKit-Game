@@ -79,6 +79,10 @@ namespace CT6GAMAI
                 HandleUnitSelection();
                 HandleUnitPathing();
             }
+            else
+            {
+                ResetHighlightedNodes();
+            }
         }
 
         private void UpdateUnitReferences()

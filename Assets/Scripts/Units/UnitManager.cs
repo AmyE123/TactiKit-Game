@@ -34,8 +34,8 @@ namespace CT6GAMAI
         private List<MeshRenderer> _allMRRenderers;
         private bool _isSelected = false;
         private bool _unitDead = false;
-        private bool _hasActedThisTurn;
-        private bool _canActThisTurn;
+        private bool _hasActedThisTurn = false;
+        private bool _canActThisTurn = false;
 
 
         public Material inactiveMaterial;
@@ -220,6 +220,11 @@ namespace CT6GAMAI
             _hasActedThisTurn = true;           
         }
 
+        public void ResetTurn()
+        {
+            _hasActedThisTurn = false;
+        }
+
         /// <summary>
         /// Handles the death of the unit.
         /// </summary>
@@ -232,6 +237,7 @@ namespace CT6GAMAI
             ClearStoodUnit();
             _stoodNode.ClearStoodUnit();
             gameObject.SetActive(false);
+            _gameManager.UnitsManager.UpdateAllUnits();
         }
 
         /// <summary>

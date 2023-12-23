@@ -2,6 +2,7 @@ namespace CT6GAMAI
 {
     using System.Collections.Generic;
     using System.Linq;
+    using Unity.VisualScripting;
     using UnityEngine;
 
     /// <summary>
@@ -11,6 +12,8 @@ namespace CT6GAMAI
     {
         [SerializeField] private List<UnitManager> _allUnits;
         [SerializeField] private List<UnitManager> _activeUnits;
+        [SerializeField] private List<UnitManager> _activePlayerUnits;
+        [SerializeField] private List<UnitManager> _activeEnemyUnits;
 
         [SerializeField] private UnitManager _cursorUnit;
         [SerializeField] private UnitManager _activeUnit;
@@ -43,6 +46,10 @@ namespace CT6GAMAI
         /// </summary>
         public UnitManager CursorUnit => _cursorUnit;
 
+        public List<UnitManager> ActivePlayerUnits => _activePlayerUnits;
+
+        public List<UnitManager> ActiveEnemyUnits => _activeEnemyUnits;
+
         private void Update()
         {           
             if (!_unitsInitalized)
@@ -65,6 +72,32 @@ namespace CT6GAMAI
         {
             _allUnits = FindObjectsOfType<UnitManager>().ToList();
             _activeUnits = _allUnits;
+            UpdateAllUnits();
+        }
+
+        /// <summary>
+        /// Updates the state of all units in the game
+        /// </summary>
+        public void UpdateAllUnits()
+        {
+            foreach (UnitManager unit in _activeUnits)
+            {
+                if (!unit.gameObject.activeSelf)
+                {
+                    _activeUnits.Remove(unit);
+                }
+                else
+                {
+                    if (unit.UnitData.UnitTeam == Constants.Team.Player)
+                    {
+                        _activePlayerUnits.Add(unit);
+                    }
+                    else
+                    {
+                        _activeEnemyUnits.Add(unit);
+                    }
+                }
+            }
         }
 
         /// <summary>
