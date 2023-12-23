@@ -131,7 +131,11 @@ namespace CT6GAMAI
 
             UnitManager unit = _gameManager.UnitsManager.LastSelectedPlayerUnit;
 
-            unit.FinalizeMovementValues(_gameManager.GridManager.MovementPath.Count - 1);
+            if (!unit.UnitDead)
+            {
+                unit.FinalizeMovementValues();              
+            }
+
             unit.IsAwaitingMoveConfirmation = false;
             _gameManager.UIManager.ActionItemsManager.HideActionItems();
             _gameManager.UIManager.BattleForecastManager.CancelBattleForecast();

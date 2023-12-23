@@ -50,7 +50,7 @@ namespace CT6GAMAI
             Debug.Log("[Event Action] - Wait");          
 
             var unit = _unitsManager.ActiveUnit;
-            unit.FinalizeMovementValues(_gridManager.MovementPath.Count - 1);
+            unit.FinalizeMovementValues();
             unit.IsAwaitingMoveConfirmation = false;
             _uiManager.ActionItemsManager.HideActionItems();
         }

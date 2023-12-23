@@ -32,6 +32,7 @@ namespace CT6GAMAI
         private List<SkinnedMeshRenderer> _allSMRRenderers;
         private List<MeshRenderer> _allMRRenderers;
         private bool _isSelected = false;
+        private bool _unitDead = false;
 
         public Material inactiveMaterial;
         public Material normalMaterial;
@@ -52,6 +53,7 @@ namespace CT6GAMAI
         public UnitAnimationManager UnitAnimationManager => _unitAnimationManager;
         public UnitStatsManager UnitStatsManager => _unitStatsManager;
         public GameObject BattleUnit => _battleUnit;
+        public bool UnitDead => _unitDead;
 
         private void Start()
         {
@@ -149,15 +151,26 @@ namespace CT6GAMAI
 
         public void Death()
         {
+            ResetUnitState();
+
+            _unitDead = true;
+            Debug.Log("Die");
+
             ClearStoodUnit();
-            _isSelected = false;
-            _gridCursor.UnitPressed = false;
-            _gameManager.UnitsManager.SetActiveUnit(null); 
-            _gridManager.MovementPath.Clear();
+            _stoodNode.ClearStoodUnit();
             gameObject.SetActive(false);
         }
 
-        public void FinalizeMovementValues(int pathIndex)
+        public void FinalizeMovementValues()
+        {
+            ResetUnitState();
+
+            _stoodNode = DetectStoodNode();
+            _updatedStoodNode = _stoodNode;
+            UpdateStoodNode(this);
+        }
+
+        private void ResetUnitState()
         {
             _gridManager.CurrentState = CurrentState.ActionSelected;
 
@@ -165,10 +178,8 @@ namespace CT6GAMAI
             _isSelected = false;
             _gridCursor.UnitPressed = false;
             _gameManager.UnitsManager.SetActiveUnit(null);
-            _stoodNode = DetectStoodNode();
-            _updatedStoodNode = _stoodNode;
-            _gridManager.MovementPath.Clear();            
-            UpdateStoodNode(this);
+
+            _gridManager.MovementPath.Clear();
         }
 
         public void CancelMove()
@@ -178,15 +189,7 @@ namespace CT6GAMAI
             // Move the unit back to the original position
             StartCoroutine(MoveBackToPoint(_gridManager.MovementPath[0]));
 
-            // Reset the state
-            _isMoving = false;
-            _isSelected = false;
-            _gridCursor.UnitPressed = false;
-            _gameManager.UnitsManager.SetActiveUnit(null);
-            _stoodNode = DetectStoodNode();
-            _updatedStoodNode = _stoodNode;
-            _gridManager.MovementPath.Clear();
-            UpdateStoodNode(this);            
+            FinalizeMovementValues();
         }
 
         /// <summary>
