@@ -1,6 +1,5 @@
 namespace CT6GAMAI
 {
-    using DG.Tweening;
     using UnityEngine;
 
     /// <summary>
@@ -8,13 +7,6 @@ namespace CT6GAMAI
     /// </summary>
     public class GameManager : MonoBehaviour
     {
-        /// <summary>
-        /// Singleton instance of GameManager.
-        /// </summary>
-        public static GameManager Instance;
-
-        #region Private Manager References
-
         [SerializeField] private GlobalUnitsManager _unitsManager;
         [SerializeField] private GridManager _gridManager;
         [SerializeField] private AudioManager _audioManager;
@@ -22,9 +14,7 @@ namespace CT6GAMAI
         [SerializeField] private CameraManager _cameraManager;
         [SerializeField] private BattleManager _battleManager;
 
-        #endregion // Private Manager References
-
-        #region Public Manager References
+        #region Public Manager Getter References
 
         /// <summary>
         /// Public getter for GlobalUnitsManager.
@@ -56,7 +46,12 @@ namespace CT6GAMAI
         /// </summary>
         public BattleManager BattleManager => _battleManager;
 
-        #endregion // Public Manager References
+        #endregion // Public Manager Getter References
+
+        /// <summary>
+        /// Singleton instance of GameManager.
+        /// </summary>
+        public static GameManager Instance;
 
         void Awake()
         {
