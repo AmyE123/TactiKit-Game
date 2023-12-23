@@ -2,12 +2,14 @@ namespace CT6GAMAI
 {
     using UnityEngine;
 
+    /// <summary>
+    /// A class for managing the UI for the battle forecast.
+    /// </summary>
     public class UI_BattleForecastManager : MonoBehaviour
     {
         [SerializeField] private UI_BattleForecastSideManager[] _battleForecastManagers;
 
         private GameManager _gameManager;
-
         private bool _areBattleForecastsToggled;
 
         public bool AreBattleForecastsToggled => _areBattleForecastsToggled;

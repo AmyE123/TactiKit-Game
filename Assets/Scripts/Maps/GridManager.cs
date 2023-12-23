@@ -220,7 +220,7 @@ namespace CT6GAMAI
             _gameManager.UIManager.ActionItemsManager.ShowActionItems();
             var unit = _gameManager.UnitsManager.ActiveUnit;
             unit.ClearStoodUnit();
-            StartCoroutine(unit.MoveToEndPoint(0));
+            StartCoroutine(unit.MoveToEndPoint());
         }
 
         private void HandleInvalidPath(Node targetNode)

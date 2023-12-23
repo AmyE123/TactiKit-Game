@@ -227,7 +227,10 @@ namespace CT6GAMAI
         /// <summary>
         /// Move the unit to their selected end point
         /// </summary>
-        public IEnumerator MoveToEndPoint(int modificationAmount)
+        /// <param name="modificationAmount">A value to take away from the end of the movement path. 
+        /// Used for stopping before going into an enemy unit's node when battling.</param>
+        /// <returns></returns>
+        public IEnumerator MoveToEndPoint(int modificationAmount = 0)
         {
             _isMoving = true;
             _gridManager.CurrentState = CurrentState.Moving;
