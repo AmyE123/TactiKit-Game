@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7592517802941822380, guid: b0cf7274a78f12d43910a5c79373d142, type: 3}
+      propertyPath: _battleUnit
+      value: 
+      objectReference: {fileID: 1909677688569355988, guid: 602851dd7748f6c45ad8dd9dde0661f1, type: 3}
     - target: {fileID: 8445902401575187227, guid: b0cf7274a78f12d43910a5c79373d142, type: 3}
       propertyPath: m_Name
       value: Knight

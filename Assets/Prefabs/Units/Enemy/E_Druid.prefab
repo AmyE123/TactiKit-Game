@@ -1289,7 +1289,7 @@ Animator:
   m_GameObject: {fileID: 4369591426675650393}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 65b65a8e2b1733b47997ae3ba7e237f8, type: 2}
+  m_Controller: {fileID: 9100000, guid: 5cc96293736d71c4c9b61b03a9a0b77c, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -2367,6 +2367,10 @@ PrefabInstance:
       propertyPath: _unitData
       value: 
       objectReference: {fileID: 11400000, guid: 7705bb68bf47c194ebe946f3c00438e7, type: 2}
+    - target: {fileID: 7592517802941822380, guid: b0cf7274a78f12d43910a5c79373d142, type: 3}
+      propertyPath: _battleUnit
+      value: 
+      objectReference: {fileID: 1909677688569355988, guid: 89aeef2df17ee58468dfa71c1673628f, type: 3}
     - target: {fileID: 7592517802941822380, guid: b0cf7274a78f12d43910a5c79373d142, type: 3}
       propertyPath: normalMaterial
       value: 

@@ -93,6 +93,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2100000, guid: b7379f2e41aed2b40a759e135cfa89df, type: 2}
     - target: {fileID: 7592517802941822380, guid: b0cf7274a78f12d43910a5c79373d142, type: 3}
+      propertyPath: _battleUnit
+      value: 
+      objectReference: {fileID: 1909677688569355988, guid: bb61e6107aee1184cb28e8baa5b8862d, type: 3}
+    - target: {fileID: 7592517802941822380, guid: b0cf7274a78f12d43910a5c79373d142, type: 3}
       propertyPath: normalMaterial
       value: 
       objectReference: {fileID: 2100000, guid: b7379f2e41aed2b40a759e135cfa89df, type: 2}

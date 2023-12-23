@@ -3279,6 +3279,7 @@ MonoBehaviour:
   _movementRange: {fileID: 5666932915701534253}
   _unitAnimationManager: {fileID: 7294320862941142420}
   _unitStatsManager: {fileID: 3125740389746824907}
+  _battleUnit: {fileID: 2197323998782439430, guid: 16f638d80ef40b24087664555223d2d7, type: 3}
   _unitData: {fileID: 11400000, guid: 3af0ba63208365148b0bb586b0328a73, type: 2}
   _stoodNode: {fileID: 0}
   _updatedStoodNode: {fileID: 0}
@@ -3333,6 +3334,10 @@ MonoBehaviour:
   _unitManager: {fileID: 7592517802941822380}
   _healthPoints: 0
   _healthBarFill: {fileID: 3732158697526137488}
+  _atk: 0
+  _dblAtk: 0
+  _hit: 0
+  _crit: 0
 --- !u!1 &8580508073901243422
 GameObject:
   m_ObjectHideFlags: 0

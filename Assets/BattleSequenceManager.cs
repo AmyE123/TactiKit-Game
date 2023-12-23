@@ -46,7 +46,7 @@ namespace CT6GAMAI
             _gameManager.UIManager.BattleSequenceManager.GetValuesForBattleSequenceUI(unitA, unitB);
 
             _leftUnit.SetUnitReferences(unitA.UnitStatsManager, unitA);
-            _rightUnit.SetUnitReferences(unitB.UnitStatsManager, unitA);
+            _rightUnit.SetUnitReferences(unitB.UnitStatsManager, unitB);
 
             ProcessBattleState();       
         }
