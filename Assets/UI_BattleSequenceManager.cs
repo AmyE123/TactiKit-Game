@@ -10,8 +10,8 @@ namespace CT6GAMAI
 
         public void GetValuesForBattleSequenceUI(UnitManager unitA, UnitManager unitB)
         {           
-            PopulateBattleSequenceUIValues(0, unitA, _battleManager.AttackA, _battleManager.CanDoubleAttackA, _battleManager.HitRateA, _battleManager.CritRateA);
-            PopulateBattleSequenceUIValues(1, unitB, _battleManager.AttackB, _battleManager.CanDoubleAttackB, _battleManager.HitRateB, _battleManager.CritRateB);            
+            PopulateBattleSequenceUIValues(0, unitA, _battleManager.AttackerAtk, _battleManager.AttackerDblAtk, _battleManager.AttackerHit, _battleManager.AttackerCrit);
+            PopulateBattleSequenceUIValues(1, unitB, _battleManager.DefenderAtk, _battleManager.DefenderDblAtk, _battleManager.DefenderHit, _battleManager.DefenderCrit);            
         }
 
         public void PopulateBattleSequenceUIValues(int sideIdx, UnitManager unit, int attack, bool canDoubleAttack, int hitRate, int critRate)

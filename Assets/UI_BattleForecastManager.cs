@@ -36,8 +36,8 @@ namespace CT6GAMAI
             battleManager.SetBattleStats(unitA, AttackA, CanDoubleAttackA, HitRateA, CritRateA, RemainingHPA, unitB, AttackB, CanDoubleAttackB, HitRateB, CritRateB, RemainingHPB);
             battleManager.CalculateValuesForBattleForecast(unitA, unitB);
             
-            PopulateBattleForecastValues(0, unitA, battleManager.AttackA, battleManager.CanDoubleAttackA, battleManager.HitRateA, battleManager.CritRateA, battleManager.RemainingHPA);
-            PopulateBattleForecastValues(1, unitB, battleManager.AttackB, battleManager.CanDoubleAttackB, battleManager.HitRateB, battleManager.CritRateB, battleManager.RemainingHPB);
+            PopulateBattleForecastValues(0, unitA, battleManager.AttackerAtk, battleManager.AttackerDblAtk, battleManager.AttackerHit, battleManager.AttackerCrit, battleManager.AttackerRemainingHP);
+            PopulateBattleForecastValues(1, unitB, battleManager.DefenderAtk, battleManager.DefenderDblAtk, battleManager.DefenderHit, battleManager.DefenderCrit, battleManager.DefenderRemainingHP);
         }
 
         public void PopulateBattleForecastValues(int sideIdx, UnitManager unit, int attack, bool canDoubleAttack, int hitRate, int critRate, int remainingHP)
