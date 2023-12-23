@@ -33,6 +33,8 @@ namespace CT6GAMAI
         [SerializeField] private bool _leftTakenTurn;
         [SerializeField] private bool _rightTakenTurn;
 
+        private bool _isBattleEnding = false;
+
         private GameManager _gameManager;
         private BattleManager _battleManager;
 
@@ -56,6 +58,11 @@ namespace CT6GAMAI
 
         private void ProcessBattleState()
         {
+            if (_isBattleEnding && _currentBattleState != BattleSequenceStates.BattleEnd)
+            {
+                return;
+            }
+
             switch (_currentBattleState)
             {
                 case BattleSequenceStates.PreBattle:
@@ -124,9 +131,25 @@ namespace CT6GAMAI
                     EndBattle();
                     return;
             }
+        }
 
-            // Call this method again after a delay or at the end of an animation event
-            //Invoke("ProcessBattleState", BATTLE_SEQUENCE_ANIM_DELAY);
+        private void CheckForDeadUnits(BattleUnitManager defendingUnit)
+        {
+            if (defendingUnit.UnitStatsManager.CheckHealthState() == UnitHealthState.Dead)
+            {
+                StartCoroutine(HandleUnitDeath());
+            }
+        }
+
+        IEnumerator HandleUnitDeath()
+        {
+            _isBattleEnding = true;
+
+            // Wait for a second or two before ending the battle
+            yield return new WaitForSeconds(2f);
+
+            _currentBattleState = BattleSequenceStates.BattleEnd;
+            ProcessBattleState();
         }
 
         // Methods for MoveUnitForward, PlayAttackAnimation, EndBattle, etc., go here
@@ -147,7 +170,7 @@ namespace CT6GAMAI
             ProcessBattleState();
         }
 
-        private void PlayAttackAnimation(BattleUnitManager attackingUnit, BattleUnitManager defendingUnit)
+        private void PlayAttackAnimation(BattleUnitManager attackingUnit)
         {
             attackingUnit.Animator.SetInteger(ATTACKING_ANIM_IDX_PARAM, Random.Range(1, 4));
             attackingUnit.Animator.SetTrigger(ATTACKING_ANIM_PARAM);
@@ -199,20 +222,21 @@ namespace CT6GAMAI
 
         private void AttackSequence(BattleUnitManager attackingUnit, BattleUnitManager defendingUnit)
         {
-            PlayAttackAnimation(attackingUnit, defendingUnit);
+            PlayAttackAnimation(attackingUnit);
 
             if (DoesUnitHit(attackingUnit))
             {
                 ApplyAttackDamage(attackingUnit, defendingUnit);
                 PlayDamageAnimation(defendingUnit);
+
+                // Check if the defending unit is dead right after an attack
+                CheckForDeadUnits(defendingUnit);
             }
             else
             {
                 Debug.Log("[BATTLE]: Unit doesn't Hit!!");
                 PlayDodgeAnimation(defendingUnit);
-            }
-
-            
+            }           
         }
 
         private bool DoesUnitHit(BattleUnitManager attackingUnit)
@@ -242,19 +266,7 @@ namespace CT6GAMAI
             }
 
             defendingUnit.UnitStatsManager.AdjustHealthPoints(attackDeduction);
-            //CheckForOpponentDeath(defendingUnit);
         }
-
-        //private void CheckForOpponentDeath(BattleUnitManager defendingUnit)
-        //{
-        //    if (defendingUnit.UnitStatsManager.CheckHealthState() == UnitHealthState.Dead)
-        //    {
-        //        defendingUnit.Animator.SetInteger(DEAD_ANIM_IDX_PARAM, Random.Range(1, 2));
-        //        defendingUnit.Animator.SetBool(DEAD_ANIM_PARAM, true);
-
-        //        StartCoroutine(DeathDelay(2f));
-        //    }
-        //}
 
         IEnumerator BattleBeginDelay(float delaySeconds, Team initiator)
         {
@@ -301,6 +313,8 @@ namespace CT6GAMAI
             yield return new WaitForSeconds(delaySeconds);
 
             _currentBattleState = BattleSequenceStates.BattleEnd;
+            ProcessBattleState();
+            
         }
 
         private void MoveUnitBack(BattleUnitManager unit)
@@ -359,12 +373,16 @@ namespace CT6GAMAI
         private void EndBattle()
         {
             Debug.Log("[BATTLE]: End the battle");
-            _gameManager.BattleManager.SwitchToMap();
+
             ResetBattle();
+            _gameManager.BattleManager.SwitchToMap();
+            
         }
 
-        private void ResetBattle()
+        public void ResetBattle()
         {
+            _isBattleEnding = false;
+
             _currentBattleState = BattleSequenceStates.PreBattle;
             _battleBegin = false;
             _leftUnit.SetUnitCompleteAttacks(false);

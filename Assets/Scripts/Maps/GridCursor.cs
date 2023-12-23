@@ -106,6 +106,12 @@ namespace CT6GAMAI
                 if (!_pathing || _gameManager.UnitsManager.ActiveUnit == null)
                 {
                     _gameManager.UnitsManager.SetActiveUnit(SelectedNode.StoodUnit);
+                    
+
+                    if (SelectedNode.StoodUnit.UnitData.UnitTeam != Team.Enemy)
+                    {
+                        _gameManager.UnitsManager.SetLastSelectedPlayerUnit(_gameManager.UnitsManager.ActiveUnit);
+                    }
 
                     ResetHighlightedNodes();
                     SelectedNode.HighlightRangeArea(SelectedNode.StoodUnit, SelectedNodeState.VisualStateManager.IsPressed);
