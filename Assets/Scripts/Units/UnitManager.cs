@@ -103,7 +103,7 @@ namespace CT6GAMAI
             }
             else
             {
-                Debug.Log("[ERROR]: Cast hit nothing");
+                Debug.LogWarning("[WARNING]: Cast hit nothing");
                 return null;
             }
         }
@@ -116,7 +116,7 @@ namespace CT6GAMAI
             }
             else
             {
-                Debug.Log("[ERROR]: Cast hit non-node object - " + _stoodNodeRayHit.transform.gameObject.name);
+                Debug.LogWarning("[ERROR]: Cast hit non-node object - " + _stoodNodeRayHit.transform.gameObject.name);
                 return null;
             }
         }
@@ -169,7 +169,6 @@ namespace CT6GAMAI
             ResetUnitState();
 
             _unitDead = true;
-            Debug.Log("Die");
 
             ClearStoodUnit();
             _stoodNode.ClearStoodUnit();
@@ -269,7 +268,7 @@ namespace CT6GAMAI
         /// Move the unit instantly to an end point. Used for when cancelling movement.
         /// </summary>
         public IEnumerator MoveBackToPoint(Node targetNode)
-        {      
+        {
             var endPointPos = targetNode.UnitTransform.transform.position;
 
             transform.position = endPointPos;
