@@ -105,7 +105,7 @@ namespace CT6GAMAI
         /// <summary>
         /// Enumerations representing different terrain types.
         /// </summary>
-        public enum Terrain { Plain, Forest, River, Fort }
+        public enum Terrain { Plain, Forest, River, Fort, Unwalkable }
 
         /// <summary>
         /// Enumerations representing the current state of the grid cursor in regards to unit actions.

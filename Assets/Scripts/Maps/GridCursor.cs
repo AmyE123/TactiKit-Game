@@ -348,6 +348,14 @@ namespace CT6GAMAI
             _gridManager.HandleUnitPathing();
         }
 
+        public void MoveCursorTo(Node node)
+        {
+            SelectedNodeState.CursorStateManager.SetInactive();
+
+            node.NodeManager.NodeState.CursorStateManager.SetDefaultSelected();           
+            SelectedNode = node.NodeManager;
+        }
+
         /// <summary>
         /// Sets the player input. Used for the turn based system.
         /// </summary>

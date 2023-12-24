@@ -82,12 +82,12 @@ namespace CT6GAMAI
         {
             foreach (UnitManager unit in _activeUnits)
             {
-                if (!unit.gameObject.activeSelf)
-                {
-                    _activeUnits.Remove(unit);
-                }
-                else
-                {
+                //if (!unit.gameObject.activeSelf)
+                //{
+                //    _activeUnits.Remove(unit);
+                //}
+                //else
+                //{
                     if (unit.UnitData.UnitTeam == Constants.Team.Player)
                     {
                         _activePlayerUnits.Add(unit);
@@ -96,7 +96,7 @@ namespace CT6GAMAI
                     {
                         _activeEnemyUnits.Add(unit);
                     }
-                }
+                //}
             }
         }
 

@@ -1,6 +1,7 @@
 namespace CT6GAMAI
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using UnityEngine;
     using static CT6GAMAI.Constants;
@@ -8,6 +9,8 @@ namespace CT6GAMAI
     public class TurnManager : MonoBehaviour
     {
         [SerializeField] private Phases _activePhase;
+        [SerializeField] private UI_PhaseManager _uiPhaseManager;
+        [SerializeField] private TurnMusicManager _turnMusicManager;
 
         private GameManager _gameManager;
 
@@ -29,11 +32,18 @@ namespace CT6GAMAI
 
         private void StartPhase()
         {
-            foreach (var unit in _gameManager.UnitsManager.ActivePlayerUnits)
+            if (!_isPhaseStarted)
             {
-                unit.ResetTurn();
+                if (ActivePhase == Phases.PlayerPhase)
+                {
+                    foreach (var unit in _gameManager.UnitsManager.ActivePlayerUnits)
+                    {
+                        unit.ResetTurn();
+                    }
+                }
+
+                _isPhaseStarted = true;
             }
-            _isPhaseStarted = true;
         }
 
         private void Update()
@@ -50,13 +60,8 @@ namespace CT6GAMAI
 
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                _activePhase = Phases.PlayerPhase;
-                SetPhase(_activePhase);
-            }
-            if (Input.GetKeyDown(KeyCode.Alpha2))
-            {
-                _activePhase = Phases.EnemyPhase;
-                SetPhase(_activePhase);
+                SwitchPhase();
+                _isPhaseStarted = false;
             }
         }
 
@@ -93,19 +98,35 @@ namespace CT6GAMAI
                     StartEnemyPhase();
                     break;
             }
+
+            _isPhaseStarted = false;
         }
 
         public void SwitchPhase()
-        {
+        {            
             Debug.Log("Switching Phases");
 
-            if (ActivePhase == Phases.PlayerPhase)
+            Phases nextPhase = ActivePhase == Phases.PlayerPhase ? Phases.EnemyPhase : Phases.PlayerPhase;
+
+            _uiPhaseManager.DisplayPhaseUI(nextPhase);
+            StartCoroutine(TransitionToNextPhase(nextPhase, 1.0f));
+        }
+
+        private IEnumerator TransitionToNextPhase(Phases nextPhase, float delay)
+        {            
+            UpdatePlayerInput(nextPhase);
+
+            // Here you might play an animation or transition effect
+            yield return new WaitForSeconds(delay);
+
+            SetPhase(nextPhase);
+        }
+
+        private void UpdatePlayerInput(Phases nextPhase)
+        {
+            if (nextPhase == Phases.EnemyPhase)
             {
-                SetPhase(Phases.EnemyPhase);
-            }
-            else
-            {
-                SetPhase(Phases.PlayerPhase);
+                _gameManager.GridManager.GridCursor.SetPlayerInput(false);
             }
         }
 
@@ -113,14 +134,17 @@ namespace CT6GAMAI
         {
             // Enable player input
             _gameManager.GridManager.GridCursor.SetPlayerInput(true);
+            _turnMusicManager.PlayPlayerPhaseMusic();
         }
 
         private void StartEnemyPhase()
         {
             // Disable player input
-            _gameManager.GridManager.GridCursor.SetPlayerInput(false);
+            //_gameManager.GridManager.GridCursor.SetPlayerInput(false);
 
             // Run AI actions
+            _gameManager.GridManager.GridCursor.MoveCursorTo(_gameManager.UnitsManager.ActiveEnemyUnits[0].StoodNode.Node);
+            _turnMusicManager.PlayEnemyPhaseMusic();
         }
     }
 }

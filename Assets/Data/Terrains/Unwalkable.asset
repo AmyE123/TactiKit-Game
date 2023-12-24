@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69b8993e186056f4c8b3b4857a8d063a, type: 3}
   m_Name: Unwalkable
   m_EditorClassIdentifier: 
-  TerrainType: 2
-  MovementCost: 2147483647
+  TerrainType: 4
+  MovementCost: 20000
   DefenseBoost: 0
   AvoidRateBoost: 0
   HealPercentageBoost: 0
