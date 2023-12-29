@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Unwalkable
   m_EditorClassIdentifier: 
   Coordinates: {x: 0, y: 0, z: 0}
-  TerrainType: {fileID: 11400000, guid: 2c5fc6d54f4069b4c9c68910a49f9058, type: 2}
+  TerrainType: {fileID: 11400000, guid: dd9e041a5c56d28489228058bce69413, type: 2}

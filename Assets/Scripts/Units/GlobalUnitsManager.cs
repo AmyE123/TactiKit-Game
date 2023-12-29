@@ -11,6 +11,8 @@ namespace CT6GAMAI
     {
         [SerializeField] private List<UnitManager> _allUnits;
         [SerializeField] private List<UnitManager> _activeUnits;
+        [SerializeField] private List<UnitManager> _activePlayerUnits;
+        [SerializeField] private List<UnitManager> _activeEnemyUnits;
 
         [SerializeField] private UnitManager _cursorUnit;
         [SerializeField] private UnitManager _activeUnit;
@@ -43,6 +45,16 @@ namespace CT6GAMAI
         /// </summary>
         public UnitManager CursorUnit => _cursorUnit;
 
+        /// <summary>
+        /// The active player units in the current game.
+        /// </summary>
+        public List<UnitManager> ActivePlayerUnits => _activePlayerUnits;
+
+        /// <summary>
+        /// The active enemy units in the current game.
+        /// </summary>
+        public List<UnitManager> ActiveEnemyUnits => _activeEnemyUnits;
+
         private void Update()
         {           
             if (!_unitsInitalized)
@@ -65,6 +77,48 @@ namespace CT6GAMAI
         {
             _allUnits = FindObjectsOfType<UnitManager>().ToList();
             _activeUnits = _allUnits;
+            UpdateAllUnits();
+        }
+
+        /// <summary>
+        /// Updates the state of all units in the game
+        /// </summary>
+        public void UpdateAllUnits()
+        {
+            _activeEnemyUnits.Clear();
+            _activePlayerUnits.Clear();
+
+            List<UnitManager> unitsToRemove = new List<UnitManager>();
+
+            foreach (UnitManager unit in _activeUnits)
+            {
+                if (!unit.gameObject.activeSelf)
+                {
+                    unitsToRemove.Add(unit);
+                    continue;
+                }
+
+                if (unit.UnitData.UnitTeam == Constants.Team.Player)
+                {
+                    if (!_activePlayerUnits.Contains(unit) && unit.gameObject.activeSelf)
+                    {
+                        _activePlayerUnits.Add(unit);
+                    }
+                }
+                else
+                {
+                    if (!_activeEnemyUnits.Contains(unit) && unit.gameObject.activeSelf)
+                    {
+                        _activeEnemyUnits.Add(unit);
+                    }
+                }
+            }
+
+            // Remove the inactive units
+            foreach (UnitManager unit in unitsToRemove)
+            {
+                _activeUnits.Remove(unit);
+            }
         }
 
         /// <summary>

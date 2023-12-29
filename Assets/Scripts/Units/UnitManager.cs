@@ -12,53 +12,109 @@ namespace CT6GAMAI
     /// </summary>
     public class UnitManager : MonoBehaviour
     {
+        [Header("Unit Components")]
         [SerializeField] private MovementRange _movementRange;
         [SerializeField] private UnitAnimationManager _unitAnimationManager;
         [SerializeField] private UnitStatsManager _unitStatsManager;
         [SerializeField] private GameObject _battleUnit;
 
+        [Header("Unit State")]
         [SerializeField] private UnitData _unitData;
         [SerializeField] private NodeManager _stoodNode;
         [SerializeField] private NodeManager _updatedStoodNode;
         [SerializeField] private Animator _animator;
+        [SerializeField] private bool _isAwaitingMoveConfirmation;
+
+        [Header("Unit Visuals")]
+        [SerializeField] private Material _inactiveMaterial;
+        [SerializeField] private Material _activeMaterial;
+        [SerializeField] private GameObject _modelBaseObject;
+        [SerializeField] private List<Renderer> _allRenderers;
 
         private GameManager _gameManager;
         private GridManager _gridManager;
-
+        private TurnManager _turnManager;
         private RaycastHit _stoodNodeRayHit;
         private GridCursor _gridCursor;
         private bool _isMoving = false;
-        private bool _isUnitInactive;
         private List<SkinnedMeshRenderer> _allSMRRenderers;
         private List<MeshRenderer> _allMRRenderers;
         private bool _isSelected = false;
         private bool _unitDead = false;
+        private bool _hasActedThisTurn = false;
+        private bool _canActThisTurn = false;
 
-        public Material inactiveMaterial;
-        public Material normalMaterial;
-        public GameObject modelBaseObject;
-        public List<Renderer> AllRenderers;
-
+        /// <summary>
+        /// Whether this unit has been selected by the cursor or not.
+        /// </summary>
         public bool IsSelected { get { return _isSelected; } set { _isSelected = value; } }
 
-        public bool IsMoving => _isMoving;
-        public NodeManager StoodNode => _stoodNode;
-        public NodeManager UpdatedStoodNode => _updatedStoodNode;
-        public UnitData UnitData => _unitData;
-        public Animator Animator => _animator;
-        public bool IsUnitInactive => _isUnitInactive;
-        public bool IsAwaitingMoveConfirmation;
+        /// <summary>
+        /// Whether this unit is awaiting a move confirmation.
+        /// </summary>
+        public bool IsAwaitingMoveConfirmation { get { return _isAwaitingMoveConfirmation; } set { _isAwaitingMoveConfirmation = value; } }
 
+        /// <summary>
+        /// Gets a bool indicating whether the unit is currently moving or not.
+        /// </summary>
+        public bool IsMoving => _isMoving;
+
+        /// <summary>
+        /// The node that the unit is stood on.
+        /// </summary>
+        public NodeManager StoodNode => _stoodNode;
+
+        /// <summary>
+        /// The node that the unit is currently over. Updated all the time.
+        /// </summary>
+        public NodeManager UpdatedStoodNode => _updatedStoodNode;
+
+        /// <summary>
+        /// The units data.
+        /// </summary>
+        public UnitData UnitData => _unitData;
+
+        /// <summary>
+        /// The units animator component.
+        /// </summary>
+        public Animator Animator => _animator;
+
+        /// <summary>
+        /// The movement range of the unit.
+        /// </summary>
         public MovementRange MovementRange => _movementRange;
+
+        /// <summary>
+        /// The animation manager for the unit.
+        /// </summary>
         public UnitAnimationManager UnitAnimationManager => _unitAnimationManager;
+
+        /// <summary>
+        /// The stats manager for the unit.
+        /// </summary>
         public UnitStatsManager UnitStatsManager => _unitStatsManager;
+
+        /// <summary>
+        /// The corresponding battle unit for the unit. 
+        /// The battle unit is what is spawned during battle animations.
+        /// </summary>
         public GameObject BattleUnit => _battleUnit;
+
+        /// <summary>
+        /// A bool indicating whether this unit is dead or not.
+        /// </summary>
         public bool UnitDead => _unitDead;
+
+        /// <summary>
+        /// A bool indicating whether the unit has acted this turn.
+        /// </summary>
+        public bool HasActedThisTurn => _hasActedThisTurn;
 
         private void Start()
         {
             _gameManager = GameManager.Instance;
             _gridManager = _gameManager.GridManager;
+            _turnManager = _gameManager.TurnManager;
 
             _stoodNode = DetectStoodNode();
             _stoodNode.StoodUnit = this;
@@ -70,26 +126,36 @@ namespace CT6GAMAI
             _gridCursor = FindObjectOfType<GridCursor>();
         }
 
+        private void Update()
+        {
+            if (IsPlayerUnit())
+            {
+                SetUnitInactiveState(_hasActedThisTurn);
+            }
+            
+            UpdateTurnBasedState();
+        }
+
         private void GetAllRenderers()
         {
-            _allSMRRenderers = modelBaseObject.GetComponentsInChildren<SkinnedMeshRenderer>().ToList();
-            _allMRRenderers = modelBaseObject.GetComponentsInChildren<MeshRenderer>().ToList();
+            _allSMRRenderers = _modelBaseObject.GetComponentsInChildren<SkinnedMeshRenderer>().ToList();
+            _allMRRenderers = _modelBaseObject.GetComponentsInChildren<MeshRenderer>().ToList();
 
-            AllRenderers.AddRange(_allSMRRenderers.Cast<Renderer>());
-            AllRenderers.AddRange(_allMRRenderers.Cast<Renderer>());
+            _allRenderers.AddRange(_allSMRRenderers.Cast<Renderer>());
+            _allRenderers.AddRange(_allMRRenderers.Cast<Renderer>());
         }
 
         // TODO: Cleanup this messy 'Inactive' setting
         private void SetUnitInactiveState(bool isInactive)
         {
-            if (AllRenderers.Count == 0)
+            if (_allRenderers.Count == 0)
             {
                 GetAllRenderers();
             }
 
-            Material matToSet = isInactive ? inactiveMaterial : normalMaterial;
+            Material matToSet = isInactive ? _inactiveMaterial : _activeMaterial;
 
-            foreach (Renderer renderer in AllRenderers)
+            foreach (Renderer renderer in _allRenderers)
             {
                 renderer.material = matToSet;
             }
@@ -136,16 +202,16 @@ namespace CT6GAMAI
         private void AdjustTransformValuesForNodeEndpoint(Quaternion lookRot, Node endPoint)
         {
             // Make the unit look toward where they're moving
-            modelBaseObject.transform.DORotateQuaternion(lookRot, LOOK_ROTATION_SPEED);
+            _modelBaseObject.transform.DORotateQuaternion(lookRot, LOOK_ROTATION_SPEED);
 
             // Adjust the unit's Y height if they go into a river
             if (endPoint.NodeManager.NodeData.TerrainType.TerrainType == Constants.Terrain.River)
             {
-                modelBaseObject.transform.DOLocalMoveY(UNIT_Y_VALUE_RIVER, UNIT_Y_ADJUSTMENT_SPEED);
+                _modelBaseObject.transform.DOLocalMoveY(UNIT_Y_VALUE_RIVER, UNIT_Y_ADJUSTMENT_SPEED);
             }
             else
             {
-                modelBaseObject.transform.DOLocalMoveY(UNIT_Y_VALUE_LAND, UNIT_Y_ADJUSTMENT_SPEED);
+                _modelBaseObject.transform.DOLocalMoveY(UNIT_Y_VALUE_LAND, UNIT_Y_ADJUSTMENT_SPEED);
             }
         }
 
@@ -161,11 +227,61 @@ namespace CT6GAMAI
             _gridManager.MovementPath.Clear();
         }
 
+        private bool IsPlayerUnit()
+        {
+            return _unitData.UnitTeam == Team.Player;
+        }
+
+        /// <summary>
+        /// Updates the unit's ability to act based on the current turn phase.
+        /// </summary>
+        public void UpdateTurnBasedState()
+        {
+            if (_turnManager.ActivePhase == Phases.PlayerPhase && IsPlayerUnit())
+            {
+                EnableActions();
+            }
+            else
+            {
+                DisableActions();
+            }
+        }
+
+        /// <summary>
+        /// Enables the units actions for the current turn.
+        /// </summary>
+        private void EnableActions()
+        {
+            _canActThisTurn = true;          
+        }
+
+        /// <summary>
+        /// Disables the units actions outside of its turn.
+        /// </summary>
+        private void DisableActions()
+        {
+            _canActThisTurn = false;            
+        }
+
+        /// <summary>
+        /// Finalizes the unit's actions at the end of its turn.
+        /// </summary>
+        public void FinalizeTurn()
+        {
+            _hasActedThisTurn = true;           
+        }
+
+        public void ResetTurn()
+        {
+            _hasActedThisTurn = false;
+        }
+
         /// <summary>
         /// Handles the death of the unit.
         /// </summary>
         public void Death()
         {
+            _turnManager.TurnMusicManager.PlayDeathMusic();
             ResetUnitState();
 
             _unitDead = true;
@@ -173,18 +289,25 @@ namespace CT6GAMAI
             ClearStoodUnit();
             _stoodNode.ClearStoodUnit();
             gameObject.SetActive(false);
+            _gameManager.UnitsManager.UpdateAllUnits();
         }
 
         /// <summary>
         /// Finalizes the movement values of the unit after movement.
         /// </summary>
-        public void FinalizeMovementValues()
+        public void FinalizeMovementValues(bool shouldFinalizeTurn = true)
         {
             ResetUnitState();
 
             _stoodNode = DetectStoodNode();
             _updatedStoodNode = _stoodNode;
             UpdateStoodNode(this);
+
+            if (shouldFinalizeTurn)
+            {
+                FinalizeTurn();
+            }
+            
         }
 
         /// <summary>
@@ -197,7 +320,7 @@ namespace CT6GAMAI
             // Move the unit back to the original position
             StartCoroutine(MoveBackToPoint(_gridManager.MovementPath[0]));
 
-            FinalizeMovementValues();
+            FinalizeMovementValues(false);
         }
 
         /// <summary>
@@ -258,7 +381,7 @@ namespace CT6GAMAI
 
                 if (i == (_gridManager.MovementPath.Count - 1) - modificationAmount)
                 {
-                    IsAwaitingMoveConfirmation = true;
+                    _isAwaitingMoveConfirmation = true;
                     _gridManager.CurrentState = CurrentState.ConfirmingMove;
                 }
             }

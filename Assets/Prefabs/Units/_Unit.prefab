@@ -3284,11 +3284,11 @@ MonoBehaviour:
   _stoodNode: {fileID: 0}
   _updatedStoodNode: {fileID: 0}
   _animator: {fileID: 2889186292050570900}
-  inactiveMaterial: {fileID: 2100000, guid: c0c425919b8d8b340bc45c8b43f48c49, type: 2}
-  normalMaterial: {fileID: 2100000, guid: 29ce18bc4497ee445a38759f8cfc848a, type: 2}
-  modelBaseObject: {fileID: 126320786744525254}
-  AllRenderers: []
-  IsAwaitingMoveConfirmation: 0
+  _inactiveMaterial: {fileID: 2100000, guid: d4b9e0d79a92dcd4d8e5abe8eadfff49, type: 2}
+  _activeMaterial: {fileID: 2100000, guid: 29ce18bc4497ee445a38759f8cfc848a, type: 2}
+  _modelBaseObject: {fileID: 126320786744525254}
+  _allRenderers: []
+  _isAwaitingMoveConfirmation: 0
 --- !u!114 &5666932915701534253
 MonoBehaviour:
   m_ObjectHideFlags: 0

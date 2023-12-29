@@ -364,6 +364,8 @@ namespace CT6GAMAI
         {
             yield return new WaitForSeconds(delaySeconds);
 
+            _gameManager.TurnManager.TurnMusicManager.ResumeLastPhaseMusic();
+
             ChangeBattleSequenceState(BattleSequenceStates.BattleEnd);
         }
 

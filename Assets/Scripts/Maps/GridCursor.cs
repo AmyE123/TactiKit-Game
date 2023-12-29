@@ -15,10 +15,8 @@ namespace CT6GAMAI
         private UnitManager _lastSelectedUnit;
         private bool _pathing = false;
 
-        /// <summary>
-        /// Indicates whether pathing mode is active.
-        /// </summary>
-        public bool Pathing => _pathing;
+        [Header("Cursor Configuration")]
+        [SerializeField] private bool _enablePlayerInput;
 
         [Header("Audio")]
         [SerializeField] private AudioSource _cursorAudioSource;
@@ -41,6 +39,20 @@ namespace CT6GAMAI
         /// </summary>
         public bool UnitPressed = false;
 
+        #region Public Getters
+
+        /// <summary>
+        /// Indicates whether pathing mode is active.
+        /// </summary>
+        public bool Pathing => _pathing;
+
+        /// <summary>
+        /// Indicated whether player input is enabled or not.
+        /// </summary>
+        public bool EnablePlayerInput => _enablePlayerInput;
+
+        #endregion // Public Getters
+
         private void Start()
         {
             InitializeValues();
@@ -59,11 +71,18 @@ namespace CT6GAMAI
         {
             _pathing = UnitPressed;
 
-            UpdateSelectedNode();
-            HandleNodeUnitInteraction();
-            HandleGridNavigation();
-            HandleUnitSelection();
-            HandleUnitPathing();
+            if (_enablePlayerInput)
+            {
+                UpdateSelectedNode();
+                HandleNodeUnitInteraction();
+                HandleGridNavigation();
+                HandleUnitSelection();
+                HandleUnitPathing();
+            }
+            else
+            {
+                ResetHighlightedNodes();
+            }
         }
 
         private void UpdateUnitReferences()
@@ -117,7 +136,7 @@ namespace CT6GAMAI
                 }
             }
             else
-            { 
+            {
                 ResetUnitAndUI();
             }
         }
@@ -282,9 +301,11 @@ namespace CT6GAMAI
 
         private void ToggleUnitSelection()
         {
-            if (SelectedNode.StoodUnit != null)
+            bool hasUnitActedThisTurn = _gameManager.UnitsManager.ActiveUnit.HasActedThisTurn;
+
+            if (SelectedNode.StoodUnit != null && !hasUnitActedThisTurn)
             {
-                UnitPressed = !UnitPressed;               
+                UnitPressed = !UnitPressed;
 
                 _audioManager.PlayToggleUnitSound(UnitPressed);
 
@@ -325,6 +346,27 @@ namespace CT6GAMAI
             }
 
             _gridManager.HandleUnitPathing();
+        }
+
+        /// <summary>
+        /// Moves the cursor to a specified place. Used for enemy AI.
+        /// </summary>
+        /// <param name="node">The node you want to move the cursor to.</param>
+        public void MoveCursorTo(Node node)
+        {
+            SelectedNodeState.CursorStateManager.SetInactive();
+
+            node.NodeManager.NodeState.CursorStateManager.SetDefaultSelected();
+            SelectedNode = node.NodeManager;
+        }
+
+        /// <summary>
+        /// Sets the player input. Used for the turn based system.
+        /// </summary>
+        /// <param name="value">the value you want to set the player input to</param>
+        public void SetPlayerInput(bool value)
+        {
+            _enablePlayerInput = value;
         }
 
         /// <summary>

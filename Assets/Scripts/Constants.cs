@@ -10,6 +10,11 @@ namespace CT6GAMAI
         #region Game Flow
 
         /// <summary>
+        /// A value representing the different phases for the turn based game
+        /// </summary>
+        public enum Phases { PlayerPhase, EnemyPhase }
+
+        /// <summary>
         /// A value representing the states which the overall game can be in
         /// </summary>
         public enum GameStates { Map, Battle }
@@ -36,6 +41,12 @@ namespace CT6GAMAI
         }
 
         #endregion // Game Flow
+
+        #region Music Values
+
+        public const float CROSSFADE_DURATION = 0.5f;
+
+        #endregion // Music Values
 
         #region Battle Calculator Values
 
@@ -100,7 +111,7 @@ namespace CT6GAMAI
         /// <summary>
         /// Enumerations representing different terrain types.
         /// </summary>
-        public enum Terrain { Plain, Forest, River, Fort }
+        public enum Terrain { Plain, Forest, River, Fort, Unwalkable }
 
         /// <summary>
         /// Enumerations representing the current state of the grid cursor in regards to unit actions.
@@ -221,7 +232,7 @@ namespace CT6GAMAI
         /// <summary>
         /// The delay transitioning out of the battle sequence after a unit has died.
         /// </summary>
-        public static float BATTLE_SEQUENCE_DEATH_DELAY = 2f;
+        public static float BATTLE_SEQUENCE_DEATH_DELAY = 4f;
 
         /// <summary>
         /// The speed units move in the battle sequence.
@@ -350,6 +361,16 @@ namespace CT6GAMAI
         /// The speed that the damaged HP flashes on the battle forecast.
         /// </summary>
         public const float DAMAGED_HP_FLASH_SPEED = 0.6f;
+
+        /// <summary>
+        /// A delay for switching phases in the game.
+        /// </summary>
+        public const float PHASE_SWITCH_DELAY = 1f;
+
+        /// <summary>
+        /// A delay for the phase UI.
+        /// </summary>
+        public const float PHASE_UI_DELAY = 2f;
 
         #endregion // User Interface
     }
