@@ -226,7 +226,7 @@ namespace CT6GAMAI
         /// <summary>
         /// The delay transitioning out of the battle sequence after a unit has died.
         /// </summary>
-        public static float BATTLE_SEQUENCE_DEATH_DELAY = 2f;
+        public static float BATTLE_SEQUENCE_DEATH_DELAY = 4f;
 
         /// <summary>
         /// The speed units move in the battle sequence.

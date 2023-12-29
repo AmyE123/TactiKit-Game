@@ -22,6 +22,8 @@ namespace CT6GAMAI
         /// </summary>
         public Phases ActivePhase => _activePhase;
 
+        public TurnMusicManager TurnMusicManager => _turnMusicManager;
+
         private bool _isPhaseStarted = false;
 
         private void Start()

@@ -9,21 +9,36 @@ namespace CT6GAMAI
         [SerializeField] private AudioClip _enemyPhaseMusic;
         [SerializeField] private AudioClip _playerPhaseMusic;
         [SerializeField] private AudioClip _deathMusic;
+        [SerializeField] private bool _isPlayerMusic;
         [SerializeField] private float crossFadeDuration = 2.0f; // Duration of the crossfade
 
         public void PlayPlayerPhaseMusic()
         {
+            _isPlayerMusic = true;
             StartCoroutine(CrossfadeMusic(_playerPhaseMusic));
         }
 
         public void PlayEnemyPhaseMusic()
         {
+            _isPlayerMusic = false;
             StartCoroutine(CrossfadeMusic(_enemyPhaseMusic));
         }
 
         public void PlayDeathMusic()
         {
             StartCoroutine(CrossfadeMusic(_deathMusic));
+        }
+
+        public void ResumeLastMusic()
+        {
+            if (_isPlayerMusic)
+            {
+                PlayPlayerPhaseMusic();
+            }
+            else
+            {
+                PlayEnemyPhaseMusic();
+            }
         }
 
         private IEnumerator CrossfadeMusic(AudioClip newClip)

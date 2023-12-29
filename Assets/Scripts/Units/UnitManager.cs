@@ -230,6 +230,7 @@ namespace CT6GAMAI
         /// </summary>
         public void Death()
         {
+            _turnManager.TurnMusicManager.PlayDeathMusic();
             ResetUnitState();
 
             _unitDead = true;
