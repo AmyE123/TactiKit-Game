@@ -82,6 +82,7 @@ namespace CT6GAMAI
             else
             {
                 ResetHighlightedNodes();
+                HandleNodeUnitInteraction();
             }
         }
 
@@ -236,8 +237,8 @@ namespace CT6GAMAI
             NodeState adjacentNodeState = GetAdjacentNodeState(direction);
             if (adjacentNodeState != null)
             {
+                ResetCursors();
                 adjacentNodeState.CursorStateManager.SetDefaultSelected();
-                SelectedNodeState.CursorStateManager.SetInactive();
             }
         }
 
@@ -348,13 +349,22 @@ namespace CT6GAMAI
             _gridManager.HandleUnitPathing();
         }
 
+        private void ResetCursors()
+        {
+            var nodes = _gridManager.AllNodes;
+            foreach (NodeManager n in nodes)
+            {
+                n.NodeState.CursorStateManager.SetInactive();
+            }
+        }
+
         /// <summary>
         /// Moves the cursor to a specified place. Used for enemy AI.
         /// </summary>
         /// <param name="node">The node you want to move the cursor to.</param>
         public void MoveCursorTo(Node node)
         {
-            SelectedNodeState.CursorStateManager.SetInactive();
+            ResetCursors();
 
             node.NodeManager.NodeState.CursorStateManager.SetDefaultSelected();
             SelectedNode = node.NodeManager;

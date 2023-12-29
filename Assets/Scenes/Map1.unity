@@ -24966,6 +24966,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1294072677}
+  - {fileID: 1713367468}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1427844806
@@ -25424,6 +25425,7 @@ MonoBehaviour:
   _cameraManager: {fileID: 962508122}
   _battleManager: {fileID: 1181283393}
   _turnManager: {fileID: 1294072679}
+  _aiManager: {fileID: 1713367469}
 --- !u!1001 &1432514573
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -29566,6 +29568,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a40c64957c296f4684535e3fd329216, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1713367467
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1713367468}
+  - component: {fileID: 1713367469}
+  m_Layer: 0
+  m_Name: AI Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1713367468
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1713367467}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1427844805}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1713367469
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1713367467}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c559384b8e6482747badd564e449badd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _aiUnits: []
 --- !u!1001 &1724459378
 PrefabInstance:
   m_ObjectHideFlags: 0

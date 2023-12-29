@@ -6,6 +6,7 @@ namespace CT6GAMAI
     using System.Collections.Generic;
     using System.Linq;
     using static CT6GAMAI.Constants;
+    using UnityEditor.Experimental.GraphView;
 
     /// <summary>
     /// Manager for the singular unit.
@@ -132,7 +133,7 @@ namespace CT6GAMAI
             {
                 SetUnitInactiveState(_hasActedThisTurn);
             }
-            
+
             UpdateTurnBasedState();
         }
 
@@ -252,7 +253,7 @@ namespace CT6GAMAI
         /// </summary>
         private void EnableActions()
         {
-            _canActThisTurn = true;          
+            _canActThisTurn = true;
         }
 
         /// <summary>
@@ -260,7 +261,7 @@ namespace CT6GAMAI
         /// </summary>
         private void DisableActions()
         {
-            _canActThisTurn = false;            
+            _canActThisTurn = false;
         }
 
         /// <summary>
@@ -268,9 +269,12 @@ namespace CT6GAMAI
         /// </summary>
         public void FinalizeTurn()
         {
-            _hasActedThisTurn = true;           
+            _hasActedThisTurn = true;
         }
 
+        /// <summary>
+        /// Resets the unit's turn.
+        /// </summary>
         public void ResetTurn()
         {
             _hasActedThisTurn = false;
@@ -307,7 +311,7 @@ namespace CT6GAMAI
             {
                 FinalizeTurn();
             }
-            
+
         }
 
         /// <summary>
@@ -357,6 +361,71 @@ namespace CT6GAMAI
             }
         }
 
+        /// <summary>
+        /// Move the unit to a specific node if it's within range.
+        /// </summary>
+        /// <param name="targetNode">The node to move to.</param>
+        public void MoveUnitToNode(Node targetNode)
+        {
+            if (IsNodeWithinRange(targetNode))
+            {
+                StartCoroutine(MoveToEndPoint(targetNode));
+            }
+            else
+            {
+                Debug.LogWarning("[AI]: Target node is out of range");
+            }
+        }
+
+        /// <summary>
+        /// Checks if a given node is within the movement range of the unit.
+        /// </summary>
+        /// <param name="node">The node to check.</param>
+        /// <returns>True if the node is within range, false otherwise.</returns>
+        private bool IsNodeWithinRange(Node node)
+        {
+            return _movementRange.ReachableNodes.Contains(node);
+        }
+
+        /// <summary>
+        /// Coroutine to move the unit to a node.
+        /// </summary>
+        /// <param name="targetNode">The target node to move to.</param>
+        /// <returns></returns>
+        private IEnumerator MoveToEndPoint(Node targetNode)
+        {
+            _isMoving = true;
+            _gridManager.CurrentState = CurrentState.Moving;
+
+            if (_stoodNode.Node != targetNode)
+            {
+                List<Node> path = MovementRange.ReconstructPath(_stoodNode.Node, targetNode);
+                ClearStoodUnit();
+
+                for (int i = 1; i < path.Count; i++)
+                {
+                    Node node = path[i];
+                    MoveToNextNode(node);
+                    _gridCursor.MoveCursorTo(node);
+                    _updatedStoodNode = DetectStoodNode();
+                    yield return new WaitForSeconds(MOVEMENT_DELAY);
+
+                    if (i == path.Count - 1)
+                    {
+                        _isAwaitingMoveConfirmation = true;
+                        _gridManager.CurrentState = CurrentState.ConfirmingMove;
+                    }
+                }
+
+                FinalizeMovementValues();
+            }
+            else
+            {
+                Debug.LogError("[AI]: Start & End node are causing issues.");
+            }
+
+            
+        }
 
         /// <summary>
         /// Move the unit to their selected end point

@@ -3237,6 +3237,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8517126878481087917}
   - component: {fileID: 7592517802941822380}
+  - component: {fileID: 2542182330287400739}
   - component: {fileID: 5666932915701534253}
   - component: {fileID: 7294320862941142420}
   - component: {fileID: 3125740389746824907}
@@ -3284,11 +3285,24 @@ MonoBehaviour:
   _stoodNode: {fileID: 0}
   _updatedStoodNode: {fileID: 0}
   _animator: {fileID: 2889186292050570900}
+  _isAwaitingMoveConfirmation: 0
   _inactiveMaterial: {fileID: 2100000, guid: d4b9e0d79a92dcd4d8e5abe8eadfff49, type: 2}
   _activeMaterial: {fileID: 2100000, guid: 29ce18bc4497ee445a38759f8cfc848a, type: 2}
   _modelBaseObject: {fileID: 126320786744525254}
   _allRenderers: []
-  _isAwaitingMoveConfirmation: 0
+--- !u!114 &2542182330287400739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8445902401575187227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62ee29cd2c0317645a7af2a3004b6ad6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _unitManager: {fileID: 7592517802941822380}
 --- !u!114 &5666932915701534253
 MonoBehaviour:
   m_ObjectHideFlags: 0
