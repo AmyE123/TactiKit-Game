@@ -80,23 +80,39 @@ namespace CT6GAMAI
         /// </summary>
         public void UpdateAllUnits()
         {
+            _activeEnemyUnits.Clear();
+            _activePlayerUnits.Clear();
+
+            List<UnitManager> unitsToRemove = new List<UnitManager>();
+
             foreach (UnitManager unit in _activeUnits)
             {
-                //if (!unit.gameObject.activeSelf)
-                //{
-                //    _activeUnits.Remove(unit);
-                //}
-                //else
-                //{
-                    if (unit.UnitData.UnitTeam == Constants.Team.Player)
+                if (!unit.gameObject.activeSelf)
+                {
+                    unitsToRemove.Add(unit);
+                    continue;
+                }
+
+                if (unit.UnitData.UnitTeam == Constants.Team.Player)
+                {
+                    if (!_activePlayerUnits.Contains(unit) && unit.gameObject.activeSelf)
                     {
                         _activePlayerUnits.Add(unit);
                     }
-                    else
+                }
+                else
+                {
+                    if (!_activeEnemyUnits.Contains(unit) && unit.gameObject.activeSelf)
                     {
                         _activeEnemyUnits.Add(unit);
                     }
-                //}
+                }
+            }
+
+            // Remove the inactive units
+            foreach (UnitManager unit in unitsToRemove)
+            {
+                _activeUnits.Remove(unit);
             }
         }
 
