@@ -172,7 +172,15 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2100000, guid: 625583b056492ca489fec00cec8e34e8, type: 2}
     - target: {fileID: 7592517802941822380, guid: b0cf7274a78f12d43910a5c79373d142, type: 3}
+      propertyPath: _activeMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 625583b056492ca489fec00cec8e34e8, type: 2}
+    - target: {fileID: 7592517802941822380, guid: b0cf7274a78f12d43910a5c79373d142, type: 3}
       propertyPath: modelBaseObject
+      value: 
+      objectReference: {fileID: 3964570416540853922}
+    - target: {fileID: 7592517802941822380, guid: b0cf7274a78f12d43910a5c79373d142, type: 3}
+      propertyPath: _modelBaseObject
       value: 
       objectReference: {fileID: 3964570416540853922}
     - target: {fileID: 7592517802941822380, guid: b0cf7274a78f12d43910a5c79373d142, type: 3}

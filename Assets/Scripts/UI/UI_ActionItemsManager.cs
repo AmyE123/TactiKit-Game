@@ -75,7 +75,7 @@ namespace CT6GAMAI
 
                 var unit = _unitsManager.ActiveUnit;
 
-                if (unit != null && unit._isAwaitingMoveConfirmation)
+                if (unit != null && unit.IsAwaitingMoveConfirmation)
                 {
                     if (Input.GetKeyDown(KeyCode.Space))
                     {

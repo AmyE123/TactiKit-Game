@@ -136,7 +136,7 @@ namespace CT6GAMAI
                 unit.FinalizeMovementValues();              
             }
 
-            unit._isAwaitingMoveConfirmation = false;
+            unit.IsAwaitingMoveConfirmation = false;
             _gameManager.UIManager.ActionItemsManager.HideActionItems();
             _gameManager.UIManager.BattleForecastManager.CancelBattleForecast();
         }

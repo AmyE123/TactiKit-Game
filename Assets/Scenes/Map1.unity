@@ -22801,8 +22801,8 @@ MonoBehaviour:
   _audioSource: {fileID: 1157105233}
   _enemyPhaseMusic: {fileID: 8300000, guid: 236f2d9c6def05748aeddae70a47fc59, type: 3}
   _playerPhaseMusic: {fileID: 8300000, guid: 709330e177abc6642aa38e8d1582b84b, type: 3}
-  _deathMusic: {fileID: 0}
-  crossFadeDuration: 2
+  _deathMusic: {fileID: 8300000, guid: 513ced5731b2d834bafe95313f810e42, type: 3}
+  _isPlayerMusic: 0
 --- !u!114 &1294072679
 MonoBehaviour:
   m_ObjectHideFlags: 0
