@@ -234,6 +234,21 @@ namespace CT6GAMAI
         }
 
         /// <summary>
+        /// Applies any terrain effects.
+        /// </summary>
+        public void ApplyTerrainEffects()
+        {
+            // We currently only have fort healing effects.
+            if (StoodNode.NodeData.TerrainType.TerrainType == Constants.Terrain.Fort)
+            {
+                var percentage = StoodNode.NodeData.TerrainType.HealPercentageBoost;
+                var healAmount = (UnitData.HealthPointsBaseValue * percentage) / 100;
+
+                UnitStatsManager.AdjustHealthPoints(+healAmount);
+            }
+        }
+
+        /// <summary>
         /// Updates the unit's ability to act based on the current turn phase.
         /// </summary>
         public void UpdateTurnBasedState()

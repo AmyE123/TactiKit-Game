@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 64ee23ab112615a438e7ca5001f6ffef, type: 3}
-  m_Name: NodeData
+  m_Name: Plain
   m_EditorClassIdentifier: 
   Coordinates: {x: 0, y: 0, z: 0}
   TerrainType: {fileID: 11400000, guid: 84261c56e48c46847a6f6522b0b09157, type: 2}

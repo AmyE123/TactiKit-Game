@@ -75,6 +75,16 @@ namespace CT6GAMAI
         }
 
         /// <summary>
+        /// Returns the units power amount. Used for Utility Theory.
+        /// </summary>
+        /// <param name="unit"></param>
+        /// <returns></returns>
+        public static int CalculatePower(UnitManager unit)
+        {
+            return unit.UnitData.AttackBaseValue + unit.UnitData.EquippedWeapon.WeaponMight;
+        }
+
+        /// <summary>
         /// Calculates the attack power of a unit against another unit.
         /// </summary>
         /// <param name="attacker">The attacking unit.</param>

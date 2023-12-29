@@ -132,7 +132,12 @@ namespace CT6GAMAI
         }
 
         public void StartPlayerTurn()
-        {           
+        {
+            foreach (UnitManager unit in _gameManager.UnitsManager.ActivePlayerUnits)
+            {
+                unit.ApplyTerrainEffects();
+            }
+
             if (_gameManager.UnitsManager.ActivePlayerUnits.Count > 0)
             {
                 var firstPlayer = _gameManager.UnitsManager.ActivePlayerUnits[0];
