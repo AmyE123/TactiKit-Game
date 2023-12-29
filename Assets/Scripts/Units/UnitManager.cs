@@ -12,24 +12,31 @@ namespace CT6GAMAI
     /// </summary>
     public class UnitManager : MonoBehaviour
     {
+        [Header("Unit Components")]
         [SerializeField] private MovementRange _movementRange;
         [SerializeField] private UnitAnimationManager _unitAnimationManager;
         [SerializeField] private UnitStatsManager _unitStatsManager;
         [SerializeField] private GameObject _battleUnit;
 
+        [Header("Unit State")]
         [SerializeField] private UnitData _unitData;
         [SerializeField] private NodeManager _stoodNode;
         [SerializeField] private NodeManager _updatedStoodNode;
         [SerializeField] private Animator _animator;
+        [SerializeField] private bool _isAwaitingMoveConfirmation;
+
+        [Header("Unit Visuals")]
+        [SerializeField] private Material _inactiveMaterial;
+        [SerializeField] private Material _activeMaterial;
+        [SerializeField] private GameObject _modelBaseObject;
+        [SerializeField] private List<Renderer> _allRenderers;
 
         private GameManager _gameManager;
         private GridManager _gridManager;
         private TurnManager _turnManager;
-
         private RaycastHit _stoodNodeRayHit;
         private GridCursor _gridCursor;
         private bool _isMoving = false;
-        private bool _isUnitInactive;
         private List<SkinnedMeshRenderer> _allSMRRenderers;
         private List<MeshRenderer> _allMRRenderers;
         private bool _isSelected = false;
@@ -37,26 +44,70 @@ namespace CT6GAMAI
         private bool _hasActedThisTurn = false;
         private bool _canActThisTurn = false;
 
-
-        public Material inactiveMaterial;
-        public Material normalMaterial;
-        public GameObject modelBaseObject;
-        public List<Renderer> AllRenderers;
-        public bool IsAwaitingMoveConfirmation;
-
+        /// <summary>
+        /// Whether this unit has been selected by the cursor or not.
+        /// </summary>
         public bool IsSelected { get { return _isSelected; } set { _isSelected = value; } }
 
+        /// <summary>
+        /// Whether this unit is awaiting a move confirmation.
+        /// </summary>
+        public bool IsAwaitingMoveConfirmation { get { return _isAwaitingMoveConfirmation; } set { _isAwaitingMoveConfirmation = value; } }
+
+        /// <summary>
+        /// Gets a bool indicating whether the unit is currently moving or not.
+        /// </summary>
         public bool IsMoving => _isMoving;
+
+        /// <summary>
+        /// The node that the unit is stood on.
+        /// </summary>
         public NodeManager StoodNode => _stoodNode;
+
+        /// <summary>
+        /// The node that the unit is currently over. Updated all the time.
+        /// </summary>
         public NodeManager UpdatedStoodNode => _updatedStoodNode;
+
+        /// <summary>
+        /// The units data.
+        /// </summary>
         public UnitData UnitData => _unitData;
+
+        /// <summary>
+        /// The units animator component.
+        /// </summary>
         public Animator Animator => _animator;
-        public bool IsUnitInactive => _isUnitInactive;
+
+        /// <summary>
+        /// The movement range of the unit.
+        /// </summary>
         public MovementRange MovementRange => _movementRange;
+
+        /// <summary>
+        /// The animation manager for the unit.
+        /// </summary>
         public UnitAnimationManager UnitAnimationManager => _unitAnimationManager;
+
+        /// <summary>
+        /// The stats manager for the unit.
+        /// </summary>
         public UnitStatsManager UnitStatsManager => _unitStatsManager;
+
+        /// <summary>
+        /// The corresponding battle unit for the unit. 
+        /// The battle unit is what is spawned during battle animations.
+        /// </summary>
         public GameObject BattleUnit => _battleUnit;
+
+        /// <summary>
+        /// A bool indicating whether this unit is dead or not.
+        /// </summary>
         public bool UnitDead => _unitDead;
+
+        /// <summary>
+        /// A bool indicating whether the unit has acted this turn.
+        /// </summary>
         public bool HasActedThisTurn => _hasActedThisTurn;
 
         private void Start()
@@ -87,24 +138,24 @@ namespace CT6GAMAI
 
         private void GetAllRenderers()
         {
-            _allSMRRenderers = modelBaseObject.GetComponentsInChildren<SkinnedMeshRenderer>().ToList();
-            _allMRRenderers = modelBaseObject.GetComponentsInChildren<MeshRenderer>().ToList();
+            _allSMRRenderers = _modelBaseObject.GetComponentsInChildren<SkinnedMeshRenderer>().ToList();
+            _allMRRenderers = _modelBaseObject.GetComponentsInChildren<MeshRenderer>().ToList();
 
-            AllRenderers.AddRange(_allSMRRenderers.Cast<Renderer>());
-            AllRenderers.AddRange(_allMRRenderers.Cast<Renderer>());
+            _allRenderers.AddRange(_allSMRRenderers.Cast<Renderer>());
+            _allRenderers.AddRange(_allMRRenderers.Cast<Renderer>());
         }
 
         // TODO: Cleanup this messy 'Inactive' setting
         private void SetUnitInactiveState(bool isInactive)
         {
-            if (AllRenderers.Count == 0)
+            if (_allRenderers.Count == 0)
             {
                 GetAllRenderers();
             }
 
-            Material matToSet = isInactive ? inactiveMaterial : normalMaterial;
+            Material matToSet = isInactive ? _inactiveMaterial : _activeMaterial;
 
-            foreach (Renderer renderer in AllRenderers)
+            foreach (Renderer renderer in _allRenderers)
             {
                 renderer.material = matToSet;
             }
@@ -151,16 +202,16 @@ namespace CT6GAMAI
         private void AdjustTransformValuesForNodeEndpoint(Quaternion lookRot, Node endPoint)
         {
             // Make the unit look toward where they're moving
-            modelBaseObject.transform.DORotateQuaternion(lookRot, LOOK_ROTATION_SPEED);
+            _modelBaseObject.transform.DORotateQuaternion(lookRot, LOOK_ROTATION_SPEED);
 
             // Adjust the unit's Y height if they go into a river
             if (endPoint.NodeManager.NodeData.TerrainType.TerrainType == Constants.Terrain.River)
             {
-                modelBaseObject.transform.DOLocalMoveY(UNIT_Y_VALUE_RIVER, UNIT_Y_ADJUSTMENT_SPEED);
+                _modelBaseObject.transform.DOLocalMoveY(UNIT_Y_VALUE_RIVER, UNIT_Y_ADJUSTMENT_SPEED);
             }
             else
             {
-                modelBaseObject.transform.DOLocalMoveY(UNIT_Y_VALUE_LAND, UNIT_Y_ADJUSTMENT_SPEED);
+                _modelBaseObject.transform.DOLocalMoveY(UNIT_Y_VALUE_LAND, UNIT_Y_ADJUSTMENT_SPEED);
             }
         }
 
@@ -330,7 +381,7 @@ namespace CT6GAMAI
 
                 if (i == (_gridManager.MovementPath.Count - 1) - modificationAmount)
                 {
-                    IsAwaitingMoveConfirmation = true;
+                    _isAwaitingMoveConfirmation = true;
                     _gridManager.CurrentState = CurrentState.ConfirmingMove;
                 }
             }

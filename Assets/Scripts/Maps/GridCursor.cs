@@ -8,7 +8,7 @@ namespace CT6GAMAI
     /// This includes handling node selection, grid navigation, unit selection, and pathing.
     /// </summary>
     public class GridCursor : MonoBehaviour
-    {        
+    {
         private GameManager _gameManager;
         private GridManager _gridManager;
         private AudioManager _audioManager;
@@ -136,7 +136,7 @@ namespace CT6GAMAI
                 }
             }
             else
-            { 
+            {
                 ResetUnitAndUI();
             }
         }
@@ -305,7 +305,7 @@ namespace CT6GAMAI
 
             if (SelectedNode.StoodUnit != null && !hasUnitActedThisTurn)
             {
-                UnitPressed = !UnitPressed;               
+                UnitPressed = !UnitPressed;
 
                 _audioManager.PlayToggleUnitSound(UnitPressed);
 
@@ -348,11 +348,15 @@ namespace CT6GAMAI
             _gridManager.HandleUnitPathing();
         }
 
+        /// <summary>
+        /// Moves the cursor to a specified place. Used for enemy AI.
+        /// </summary>
+        /// <param name="node">The node you want to move the cursor to.</param>
         public void MoveCursorTo(Node node)
         {
             SelectedNodeState.CursorStateManager.SetInactive();
 
-            node.NodeManager.NodeState.CursorStateManager.SetDefaultSelected();           
+            node.NodeManager.NodeState.CursorStateManager.SetDefaultSelected();
             SelectedNode = node.NodeManager;
         }
 

@@ -42,6 +42,12 @@ namespace CT6GAMAI
 
         #endregion // Game Flow
 
+        #region Music Values
+
+        public const float CROSSFADE_DURATION = 0.5f;
+
+        #endregion // Music Values
+
         #region Battle Calculator Values
 
         /// <summary>
@@ -355,6 +361,16 @@ namespace CT6GAMAI
         /// The speed that the damaged HP flashes on the battle forecast.
         /// </summary>
         public const float DAMAGED_HP_FLASH_SPEED = 0.6f;
+
+        /// <summary>
+        /// A delay for switching phases in the game.
+        /// </summary>
+        public const float PHASE_SWITCH_DELAY = 1f;
+
+        /// <summary>
+        /// A delay for the phase UI.
+        /// </summary>
+        public const float PHASE_UI_DELAY = 2f;
 
         #endregion // User Interface
     }

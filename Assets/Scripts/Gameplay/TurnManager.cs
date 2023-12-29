@@ -6,6 +6,9 @@ namespace CT6GAMAI
     using UnityEngine;
     using static CT6GAMAI.Constants;
 
+    /// <summary>
+    /// Manages the turn based mechanics, controlling the transition between different phases.
+    /// </summary>
     public class TurnManager : MonoBehaviour
     {
         [SerializeField] private Phases _activePhase;
@@ -13,8 +16,11 @@ namespace CT6GAMAI
         [SerializeField] private TurnMusicManager _turnMusicManager;
 
         private GameManager _gameManager;
+        private bool _isPhaseStarted = false;
 
-        // Event that can be used to notify other parts of the game when the phase changes
+        /// <summary>
+        /// An event that can be used to update other parts of the game when the phase changes
+        /// </summary>
         public event Action<Phases> OnPhaseChanged;
 
         /// <summary>
@@ -22,9 +28,10 @@ namespace CT6GAMAI
         /// </summary>
         public Phases ActivePhase => _activePhase;
 
+        /// <summary>
+        /// The music manager for turns
+        /// </summary>
         public TurnMusicManager TurnMusicManager => _turnMusicManager;
-
-        private bool _isPhaseStarted = false;
 
         private void Start()
         {
@@ -82,43 +89,10 @@ namespace CT6GAMAI
             return true;
         }
 
-        /// <summary>
-        /// Sets the phase to a new phase.
-        /// </summary>
-        /// <param name="newPhase">The new phase you want to transition to.</param>
-        public void SetPhase(Phases newPhase)
-        {
-            _activePhase = newPhase;
-            OnPhaseChanged?.Invoke(_activePhase);
-
-            switch (_activePhase)
-            {
-                case Phases.PlayerPhase:
-                    StartPlayerPhase();
-                    break;
-                case Phases.EnemyPhase:
-                    StartEnemyPhase();
-                    break;
-            }
-
-            _isPhaseStarted = false;
-        }
-
-        public void SwitchPhase()
-        {            
-            Debug.Log("Switching Phases");
-
-            Phases nextPhase = ActivePhase == Phases.PlayerPhase ? Phases.EnemyPhase : Phases.PlayerPhase;
-
-            _uiPhaseManager.DisplayPhaseUI(nextPhase);
-            StartCoroutine(TransitionToNextPhase(nextPhase, 1.0f));
-        }
-
         private IEnumerator TransitionToNextPhase(Phases nextPhase, float delay)
         {            
             UpdatePlayerInput(nextPhase);
 
-            // Here you might play an animation or transition effect
             yield return new WaitForSeconds(delay);
 
             SetPhase(nextPhase);
@@ -141,12 +115,43 @@ namespace CT6GAMAI
 
         private void StartEnemyPhase()
         {
-            // Disable player input
-            //_gameManager.GridManager.GridCursor.SetPlayerInput(false);
-
-            // Run AI actions
             _gameManager.GridManager.GridCursor.MoveCursorTo(_gameManager.UnitsManager.ActiveEnemyUnits[0].StoodNode.Node);
             _turnMusicManager.PlayEnemyPhaseMusic();
+        }
+
+        /// <summary>
+        /// Sets the phase to a new phase.
+        /// </summary>
+        /// <param name="newPhase">The new phase you want to transition to.</param>
+        public void SetPhase(Phases newPhase)
+        {
+            _activePhase = newPhase;
+            OnPhaseChanged?.Invoke(_activePhase);
+
+            switch (_activePhase)
+            {
+                case Phases.PlayerPhase:
+                    StartPlayerPhase();
+                    break;
+                case Phases.EnemyPhase:
+                    StartEnemyPhase();
+                    break;
+            }
+
+            _isPhaseStarted = false;
+        }
+
+        /// <summary>
+        /// Switches the game to the next phase.
+        /// </summary>
+        public void SwitchPhase()
+        {
+            Debug.Log("Switching Phases");
+
+            Phases nextPhase = ActivePhase == Phases.PlayerPhase ? Phases.EnemyPhase : Phases.PlayerPhase;
+
+            _uiPhaseManager.DisplayPhaseUI(nextPhase);
+            StartCoroutine(TransitionToNextPhase(nextPhase, PHASE_SWITCH_DELAY));
         }
     }
 }

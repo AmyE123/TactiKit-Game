@@ -18,7 +18,7 @@ namespace CT6GAMAI
         [Header("Battle Sequence UI Management")]
         [SerializeField] private UI_BattleSequenceManager _battleSequenceManager;
         [SerializeField] private GameObject _battleAnimationUI;
-        [SerializeField] private GameObject[] _uiObjectsToDisableForBattleAnimations;                   
+        [SerializeField] private GameObject[] _uiObjectsToDisableForBattleAnimations;
 
         [Header("Action UI Management")]
         [SerializeField] private UI_ActionItemsManager _actionItemsManager;
@@ -27,16 +27,14 @@ namespace CT6GAMAI
         [Header("General UI Elements")]
         [SerializeField] private Image _vignette;
 
-        private bool _areBattleForecastsToggled;
         private GameManager _gameManager;
 
         public UI_TileInfoManager TileInfoManager => _tileInfoManager;
         public UI_UnitInfoManager UnitInfoManager => _unitInfoManager;
         public UI_BattleForecastSideManager[] BattleForecastManagers => _battleForecastSideManagers;
-        public UI_ActionItemsManager ActionItemsManager => _actionItemsManager; 
+        public UI_ActionItemsManager ActionItemsManager => _actionItemsManager;
         public UI_BattleForecastManager BattleForecastManager => _battleForecastManager;
-        public UI_BattleSequenceManager BattleSequenceManager => _battleSequenceManager;       
-        public bool AreBattleForecastsToggled => _areBattleForecastsToggled;
+        public UI_BattleSequenceManager BattleSequenceManager => _battleSequenceManager;
 
         private void Start()
         {
@@ -51,7 +49,7 @@ namespace CT6GAMAI
                 UpdateAllUIForBattleForecast();
                 UpdateAllUIForBattle();
             }
-            
+
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 _actionItemsManager.HideActionItems();
@@ -84,8 +82,8 @@ namespace CT6GAMAI
             _battleAnimationUI.SetActive(_gameManager.BattleManager.IsBattleActive);
 
             if (_gameManager.BattleManager.IsBattleActive)
-            {               
-                SetVignette(true);               
+            {
+                SetVignette(true);
 
                 foreach (GameObject go in _uiObjectsToDisableForBattleAnimations)
                 {
@@ -98,7 +96,7 @@ namespace CT6GAMAI
         {
             var gridCursor = _gameManager.GridManager.GridCursor;
 
-            if (gridCursor != null) 
+            if (gridCursor != null)
             {
                 if (gridCursor.SelectedNodeState != null)
                 {
@@ -123,7 +121,7 @@ namespace CT6GAMAI
                             NM.NodeState.VisualStateManager.SetEnabled();
                         }
                     }
-                }                
+                }
             }
         }
 

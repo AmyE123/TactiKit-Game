@@ -18,17 +18,16 @@ namespace CT6GAMAI
             if(_previousTerrainData != ActiveTerrainData)
             {
                 _previousTerrainData = ActiveTerrainData;
+                _terrainValueText.text = ActiveTerrainData.TerrainType.ToString();
 
                 if (ActiveTerrainData.TerrainType == Constants.Terrain.Unwalkable)
-                {
-                    _terrainValueText.text = ActiveTerrainData.TerrainType.ToString();
+                {                    
                     _defenseValueText.text = "X";
                     _movementValueText.text = "X";
                     _healthBuffValueText.text = "X";
                 }
                 else
                 {
-                    _terrainValueText.text = ActiveTerrainData.TerrainType.ToString();
                     _defenseValueText.text = ActiveTerrainData.DefenseBoost.ToString();
                     _movementValueText.text = ActiveTerrainData.MovementCost.ToString();
                     _healthBuffValueText.text = ActiveTerrainData.HealPercentageBoost.ToString();

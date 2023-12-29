@@ -8,17 +8,14 @@ namespace CT6GAMAI
     using UnityEngine.UI;
     using static CT6GAMAI.Constants;
 
+    /// <summary>
+    /// Manages the UI for different phases.
+    /// </summary>
     public class UI_PhaseManager : MonoBehaviour
     {
         [SerializeField] private CanvasGroup _canvasGroup;
         [SerializeField] private TMP_Text _phaseText;
         [SerializeField] private Image _vignette;
-
-        public void DisplayPhaseUI(Phases phase)
-        {
-            PopulatePhaseUI(phase);
-            StartCoroutine(AnimatePhaseUI(2f));
-        }
 
         private void PopulatePhaseUI(Phases phase)
         {
@@ -56,6 +53,15 @@ namespace CT6GAMAI
         {
             _canvasGroup.DOFade(0, 1f);
         }
-    }
 
+        /// <summary>
+        /// Displays the UI for a phase.
+        /// </summary>
+        /// <param name="phase">The phase to display in the UI.</param>
+        public void DisplayPhaseUI(Phases phase)
+        {
+            PopulatePhaseUI(phase);
+            StartCoroutine(AnimatePhaseUI(PHASE_UI_DELAY));
+        }
+    }
 }

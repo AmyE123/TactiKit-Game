@@ -49,7 +49,7 @@ namespace CT6GAMAI
         {
             var unit = _unitsManager.ActiveUnit;
             unit.FinalizeMovementValues();
-            unit.IsAwaitingMoveConfirmation = false;
+            unit._isAwaitingMoveConfirmation = false;
             _uiManager.ActionItemsManager.HideActionItems();
         }
     }

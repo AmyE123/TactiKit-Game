@@ -2,7 +2,6 @@ namespace CT6GAMAI
 {
     using System.Collections.Generic;
     using System.Linq;
-    using Unity.VisualScripting;
     using UnityEngine;
 
     /// <summary>
@@ -46,8 +45,14 @@ namespace CT6GAMAI
         /// </summary>
         public UnitManager CursorUnit => _cursorUnit;
 
+        /// <summary>
+        /// The active player units in the current game.
+        /// </summary>
         public List<UnitManager> ActivePlayerUnits => _activePlayerUnits;
 
+        /// <summary>
+        /// The active enemy units in the current game.
+        /// </summary>
         public List<UnitManager> ActiveEnemyUnits => _activeEnemyUnits;
 
         private void Update()
