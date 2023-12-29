@@ -42,7 +42,6 @@ namespace CT6GAMAI
         {
             ShowPhaseUI();
 
-            // Here you might play an animation or transition effect
             yield return new WaitForSeconds(delay);
 
             HidePhaseUI();
