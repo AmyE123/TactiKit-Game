@@ -3,6 +3,7 @@ namespace CT6GAMAI
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Linq;
     using UnityEngine;
 
     public class UnitAIManager : MonoBehaviour
@@ -62,7 +63,32 @@ namespace CT6GAMAI
 
             _gameManager.UIManager.UI_DebugDesirabilityManager.PopulateDebugDesirability(this);
 
+            Wait();
             yield return new WaitForSeconds(2);
+        }
+
+        private void MoveUnitToNearestFort()
+        {
+            _unitManager.MoveUnitToNode(GetNearestFort());
+        }
+
+        private void RetreatUnit()
+        {
+            _unitManager.MoveUnitToNode(GetBestSafeSpot());
+        }
+
+        private void AttackClosestPlayer()
+        {
+            UnitManager nearestPlayer = GetNearestPlayer();
+            _unitManager.MoveUnitToNode(GetPlayerValidAttackSpot(nearestPlayer));
+
+            _gameManager.BattleManager.CalculateValuesForBattleForecast(_unitManager, nearestPlayer);
+            _gameManager.BattleManager.SwitchToBattle();
+        }
+
+        private void Wait()
+        {
+            _unitManager.FinalizeMovementValues();
         }
 
         private void MoveUnitToRandomValidNodeWithinRange()
@@ -188,6 +214,35 @@ namespace CT6GAMAI
             return closestDistance;
         }
 
+        private Node GetNearestUniqueTerrainNode(Constants.Terrain terrainTarget)
+        {
+            List<VisibleTerrainDetails> allTerrain = GetVisibleUniqueTerrain();
+            List<VisibleTerrainDetails> uniqueTerrain = new List<VisibleTerrainDetails>();
+            Node closestNode = null;
+
+            foreach (VisibleTerrainDetails terrainDetails in allTerrain)
+            {
+                Constants.Terrain terrainType = terrainDetails.TerrainNode.NodeData.TerrainType.TerrainType;
+                if (terrainType == terrainTarget)
+                {
+                    uniqueTerrain.Add(terrainDetails);
+                }
+            }
+
+            float closestDistance = Constants.MAX_NODE_COST;
+            
+            foreach (VisibleTerrainDetails terrain in uniqueTerrain)
+            {
+                if (terrain.Distance < closestDistance)
+                {
+                    closestDistance = terrain.Distance;
+                    closestNode = terrain.TerrainNode.Node;
+                }
+            }
+
+            return closestNode;
+        }
+
         public float GetDistanceToBestSafeSpot()
         {
             GetVisiblePlayerUnits();
@@ -219,6 +274,37 @@ namespace CT6GAMAI
             return furthestNode != null ? maxMinDistanceToPlayer : -1;
         }
 
+        public Node GetBestSafeSpot()
+        {
+            GetVisiblePlayerUnits();
+            List<Node> movementRange = _unitManager.MovementRange.ReachableNodes;
+            float maxMinDistanceToPlayer = 0;
+            Node furthestNode = null;
+
+            foreach (Node node in movementRange)
+            {
+                float minDistanceToPlayer = float.MaxValue;
+
+                foreach (VisibleUnitDetails playerUnitDetails in _visibleUnitsDetails)
+                {
+                    float distanceToPlayer = GetDistanceToUnit(playerUnitDetails.Unit, node);
+
+                    if (distanceToPlayer < minDistanceToPlayer)
+                    {
+                        minDistanceToPlayer = distanceToPlayer;
+                    }
+                }
+
+                if (minDistanceToPlayer > maxMinDistanceToPlayer)
+                {
+                    maxMinDistanceToPlayer = minDistanceToPlayer;
+                    furthestNode = node;
+                }
+            }
+
+            return furthestNode;
+        }
+
         private int GetDistanceToUnit(UnitManager unit, Node fromNode)
         {
             Node startNode = fromNode;
@@ -235,6 +321,11 @@ namespace CT6GAMAI
         public float GetDistanceToNearestFort()
         {
             return GetDistanceToNearestUniqueTerrainType(Constants.Terrain.Fort);
+        }
+
+        public Node GetNearestFort()
+        {
+            return GetNearestUniqueTerrainNode(Constants.Terrain.Fort);
         }
 
         /// <summary>
@@ -274,6 +365,31 @@ namespace CT6GAMAI
             }
 
             return closestUnit;
+        }
+
+        public Node GetPlayerValidAttackSpot(UnitManager player)
+        {
+            List<Node> movementRange = _unitManager.MovementRange.ReachableNodes;
+            List<Node> attackSpots = new List<Node>();
+            List<Node> validAttackSpots = new List<Node>();
+
+            attackSpots.Add(player.StoodNode.NorthNode.Node);
+            attackSpots.Add(player.StoodNode.EastNode.Node);
+            attackSpots.Add(player.StoodNode.SouthNode.Node);
+            attackSpots.Add(player.StoodNode.WestNode.Node);
+
+            foreach (Node n in attackSpots)
+            {
+                if (movementRange.Contains(n))
+                {
+                    if (n.NodeManager.StoodUnit == null)
+                    {
+                        validAttackSpots.Add(n);
+                    }                    
+                }
+            }
+
+            return validAttackSpots[UnityEngine.Random.Range(0, validAttackSpots.Count)];
         }
 
         public bool ArePlayersVisible()

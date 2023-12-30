@@ -181,6 +181,7 @@ namespace CT6GAMAI
         /// <param name="remainingHPB">Remaining HP for the defending unit.</param>
         public void SetBattleStats(UnitManager unitA, int atkA, bool dblAtkA, int hitA, int critA, int remainingHPA, UnitManager unitB, int atkB, bool dblAtkB, int hitB, int critB, int remainingHPB)
         {
+            _battleSequenceManager.InitiatingTeam = unitA.UnitStatsManager.UnitBaseData.UnitTeam;
             _attackerUnit = unitA;
             _attackerAtk = atkA;
             _attackerDblAtk = dblAtkA;

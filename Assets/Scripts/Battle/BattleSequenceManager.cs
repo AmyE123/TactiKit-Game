@@ -33,6 +33,8 @@ namespace CT6GAMAI
         private bool _isBattleEnding = false;
         private GameManager _gameManager;
 
+        public Team InitiatingTeam { get { return _initiatingTeam; } set { _initiatingTeam = value; } }
+
         private void Start()
         {
             InitializeValues();
