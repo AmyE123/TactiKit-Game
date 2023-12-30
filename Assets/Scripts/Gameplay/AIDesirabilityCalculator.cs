@@ -160,7 +160,16 @@ namespace CT6GAMAI
 
         public static int CalculateWaitDesirability(UnitAIManager unit)
         {
-            return unit.ArePlayersVisible() ? 0 : 100;
+            bool hasTakenAnyDamage = unit.UnitCurrentHealth < unit.UnitStatsManager.UnitBaseData.HealthPointsBaseValue;
+
+            if (hasTakenAnyDamage && CalculateFortDesirability(unit) > 0)
+            { 
+                return 0;
+            }
+            else
+            {
+                return unit.ArePlayersVisible() ? 0 : 100;
+            }            
         }
 
         public static float Normalize(float value, float minValue, float maxValue)

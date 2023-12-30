@@ -14,8 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Playstyle: 0
   HealthWeight: 0.3
-  DistanceWeight: 0.7
-  ProximityWeight: 1
+  DistanceWeight: 0.6
+  PlayerDistanceWeight: 1
   PowerDifferenceWeight: 0.5
   EscapeWeight: 0.2
-  StrategicWeight: 0.3

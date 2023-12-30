@@ -232,6 +232,7 @@ namespace CT6GAMAI
                 var unit = _gameManager.UnitsManager.ActiveUnit;
                 if (_gameManager.GridManager.MovementPath.Count > 2)
                 {
+                    unit.ClearStoodUnit();
                     StartCoroutine(unit.MoveToEndPoint(1));
                 }
                 else

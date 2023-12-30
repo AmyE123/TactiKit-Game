@@ -190,27 +190,25 @@ namespace CT6GAMAI
 
         public float GetDistanceToBestSafeSpot()
         {
+            GetVisiblePlayerUnits();
             List<Node> movementRange = _unitManager.MovementRange.ReachableNodes;
-            float maxMinDistanceToPlayer = 0; // Store the maximum of the minimum distances to players
-            Node furthestNode = null; // This will store the node furthest from any player
+            float maxMinDistanceToPlayer = 0;
+            Node furthestNode = null;
 
             foreach (Node node in movementRange)
             {
-                float minDistanceToPlayer = float.MaxValue; // Initialize with a large value
+                float minDistanceToPlayer = float.MaxValue;
 
                 foreach (VisibleUnitDetails playerUnitDetails in _visibleUnitsDetails)
                 {
-                    // Calculate distance from the current node to this player unit
                     float distanceToPlayer = GetDistanceToUnit(playerUnitDetails.Unit, node);
 
-                    // Update the minimum distance for this node
                     if (distanceToPlayer < minDistanceToPlayer)
                     {
                         minDistanceToPlayer = distanceToPlayer;
                     }
                 }
 
-                // Update the furthest node if this node is more distant than current furthest
                 if (minDistanceToPlayer > maxMinDistanceToPlayer)
                 {
                     maxMinDistanceToPlayer = minDistanceToPlayer;
@@ -218,7 +216,7 @@ namespace CT6GAMAI
                 }
             }
 
-            return furthestNode != null ? maxMinDistanceToPlayer : -1; // Return -1 if no safe spot is found
+            return furthestNode != null ? maxMinDistanceToPlayer : -1;
         }
 
         private int GetDistanceToUnit(UnitManager unit, Node fromNode)
@@ -280,6 +278,7 @@ namespace CT6GAMAI
 
         public bool ArePlayersVisible()
         {
+            GetVisiblePlayerUnits();
             return _visibleUnitsDetails.Count > 0;
         }
 

@@ -15,7 +15,6 @@ MonoBehaviour:
   Playstyle: 2
   HealthWeight: 0.8
   DistanceWeight: 0.3
-  ProximityWeight: 0.4
+  PlayerDistanceWeight: 0.4
   PowerDifferenceWeight: 0.8
-  EscapeWeight: 0.8
-  StrategicWeight: 0.4
+  EscapeWeight: 0.6
