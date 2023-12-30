@@ -24,6 +24,9 @@ namespace CT6GAMAI
         [SerializeField] private UI_ActionItemsManager _actionItemsManager;
         [SerializeField] private GameObject[] _uiObjectsToDisableForActions;
 
+        [Header("Debug UI Managers")]
+        [SerializeField] private UI_DebugDesirabilityManager _debugDesirabilityManager;
+
         [Header("General UI Elements")]
         [SerializeField] private Image _vignette;
 
@@ -35,6 +38,7 @@ namespace CT6GAMAI
         public UI_ActionItemsManager ActionItemsManager => _actionItemsManager;
         public UI_BattleForecastManager BattleForecastManager => _battleForecastManager;
         public UI_BattleSequenceManager BattleSequenceManager => _battleSequenceManager;
+        public UI_DebugDesirabilityManager UI_DebugDesirabilityManager => _debugDesirabilityManager;
 
         private void Start()
         {

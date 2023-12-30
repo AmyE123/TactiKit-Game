@@ -152,6 +152,11 @@ namespace CT6GAMAI
         public enum Side { Left, Right };
 
         /// <summary>
+        /// What playstyle an AI is. Impacts desirability calculations.
+        /// </summary>
+        public enum Playstyle { Aggressive, Normal, Easy };
+
+        /// <summary>
         /// The health states a unit can be in.
         /// </summary>
         public enum UnitHealthState { Alive, Dead }

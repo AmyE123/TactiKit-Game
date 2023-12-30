@@ -222,21 +222,24 @@ namespace CT6GAMAI
             return _reachableNodes;
         }
 
-        /// <summary>
-        /// Reconstructs the path from a start node to a target node.
-        /// </summary>
-        /// <param name="start">The starting node.</param>
-        /// <param name="target">The target node.</param>
-        /// <returns>A list of nodes representing the path from start to target.</returns>
         public List<Node> ReconstructPath(Node start, Node target)
         {
             List<Node> path = new List<Node>();
             Node current = target;
 
-            while (current != null && current != start)
+            int safetyCounter = 0;
+            int maxIterations = 1000;
+
+            while (current != null && current != start && safetyCounter < maxIterations)
             {
                 path.Add(current);
                 current = current.Predecessor;
+                safetyCounter++;
+            }
+
+            if (safetyCounter >= maxIterations)
+            {
+                return new List<Node>();
             }
 
             path.Add(start); // Add the start node

@@ -3303,6 +3303,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _unitManager: {fileID: 7592517802941822380}
+  _playstyle: {fileID: 11400000, guid: 9862acec9d1896243aa3ce7eff438508, type: 2}
+  _unitPowerAmount: 0
+  _unitCurrentHealth: 0
+  _visibleUnitsDetails: []
+  _visibleUniqueTerrainDetails: []
 --- !u!114 &5666932915701534253
 MonoBehaviour:
   m_ObjectHideFlags: 0
