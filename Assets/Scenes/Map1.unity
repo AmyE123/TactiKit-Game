@@ -26587,6 +26587,7 @@ GameObject:
   - component: {fileID: 1427844804}
   - component: {fileID: 1427844807}
   - component: {fileID: 1427844806}
+  - component: {fileID: 1427844809}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -27086,6 +27087,18 @@ MonoBehaviour:
   _battleManager: {fileID: 1181283393}
   _turnManager: {fileID: 1294072679}
   _aiManager: {fileID: 1713367469}
+--- !u!114 &1427844809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1427844803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a9948231aea5674daa5bffa73636187, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1432514573
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -38978,6 +38991,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1010305954}
     m_Modifications:
+    - target: {fileID: 2135250464085236561, guid: 91a91b20b6197f247b2c18400977a2a4, type: 3}
+      propertyPath: _playstyle
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2135250464085236561, guid: 91a91b20b6197f247b2c18400977a2a4, type: 3}
+      propertyPath: _unitManager
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5247998011468677599, guid: 91a91b20b6197f247b2c18400977a2a4, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.5

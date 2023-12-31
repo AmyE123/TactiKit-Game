@@ -1,14 +1,19 @@
 namespace CT6GAMAI
 {
+    using CT6GAMAI.BehaviourTrees;
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Linq;
     using UnityEngine;
+    using static CT6GAMAI.Constants;
 
     public class UnitAIManager : MonoBehaviour
     {
         [SerializeField] private UnitManager _unitManager;
+
+        [Header("AI Information")]
+        [SerializeField] private UnitManager _targetUnit;
+        public bool IsMoving;
 
         [Header("Utility Theory Information")]
         [SerializeField] private AIPlaystyleWeighting _playstyle;
@@ -23,24 +28,77 @@ namespace CT6GAMAI
         [SerializeField] private int _attackDesirability;
         [SerializeField] private int _waitDesirability;
 
+        private BTNode _topNode;
         private GameManager _gameManager;
         private UnitStatsManager _unitStatsManager;
+        
+        public bool HasAttacked { get; set; } = false;
 
+        /// <summary>
+        /// The AI's playstyle. Aggressive, Normal, Easy, etc.
+        /// </summary>
         public AIPlaystyleWeighting Playstyle => _playstyle;
+
+        /// <summary>
+        /// The amount of power this unit has. Useful when determining attack desirability.
+        /// </summary>
         public int UnitPowerAmount => _unitPowerAmount;
+
+        /// <summary>
+        /// The current health this unit has. Useful when determining desirabilities based on health.
+        /// </summary>
         public int UnitCurrentHealth => _unitCurrentHealth;
+
+        /// <summary>
+        /// The unit which this AI unit is currently targetting. This is always updated even if the unit doesn't have a desire to attack.
+        /// </summary>
+        public UnitManager TargetUnit => _targetUnit;
+
+        /// <summary>
+        /// A reference to unit manager.
+        /// </summary>
+        public UnitManager UnitManager => _unitManager;
+
+        /// <summary>
+        /// A reference to unit stats.
+        /// </summary>
         public UnitStatsManager UnitStatsManager => _unitStatsManager;
+
         
         private void Start()
         {
             _gameManager = GameManager.Instance;
             _unitPowerAmount = BattleCalculator.CalculatePower(_unitManager);
             _unitStatsManager = _unitManager.UnitStatsManager;
+
+            ConstructBehaviourTree();
+        }
+
+        private void ConstructBehaviourTree()
+        {
+            MoveToSafeSpaceNode moveToSafeSpaceNode = new MoveToSafeSpaceNode(this);
+            MoveToAttackPositionNode moveToAttackPositionNode = new MoveToAttackPositionNode(this);
+            MoveToFortNode moveToFortNode = new MoveToFortNode(this);
+            AttackTargetNode attackTargetNode = new AttackTargetNode(this);
+            WaitNode waitNode = new WaitNode(this);
+
+            CheckAttackDesirabilityNode checkAttackDesirabilityNode = new CheckAttackDesirabilityNode(this);
+            CheckFortDesirabilityNode checkFortDesirabilityNode = new CheckFortDesirabilityNode(this);
+            CheckRetreatDesirabilityNode checkRetreatDesirabilityNode = new CheckRetreatDesirabilityNode(this);
+            CheckWaitDesirabilityNode checkWaitDesirabilityNode = new CheckWaitDesirabilityNode(this);
+
+            Sequence waitSequence = new Sequence(new List<BTNode> { checkWaitDesirabilityNode, waitNode });
+            Sequence attackSequence = new Sequence(new List<BTNode> { checkAttackDesirabilityNode, moveToAttackPositionNode, attackTargetNode });
+            Sequence fortSequence = new Sequence(new List<BTNode> { checkFortDesirabilityNode, moveToFortNode });
+            Sequence retreatSequence = new Sequence(new List<BTNode> { checkRetreatDesirabilityNode, moveToSafeSpaceNode });
+
+            _topNode = new Selector(new List<BTNode> { retreatSequence, fortSequence, attackSequence, waitSequence });
         }
 
         private void Update() 
-        {
+        {           
             _unitCurrentHealth = _unitManager.UnitStatsManager.HealthPoints;
+            GetBestUnitToAttack();
         }
 
         public IEnumerator BeginEnemyAI()
@@ -50,7 +108,9 @@ namespace CT6GAMAI
         }
 
         private IEnumerator EnemyAITurn()
-        {            
+        {
+            HasAttacked = false;
+            _unitManager.IsInBattle = false;
             yield return new WaitForSeconds(2);
 
             GetVisiblePlayerUnits();
@@ -61,10 +121,18 @@ namespace CT6GAMAI
             _attackDesirability = AIDesirabilityCalculator.CalculateAttackDesirability(this);
             _waitDesirability = AIDesirabilityCalculator.CalculateWaitDesirability(this);
 
-            _gameManager.UIManager.UI_DebugDesirabilityManager.PopulateDebugDesirability(this);
+            _gameManager.UIManager.UI_DebugDesirabilityManager.PopulateDebugDesirability(this);          
 
-            Wait();
-            yield return new WaitForSeconds(2);
+            // Loop to continuously evaluate the behaviour tree
+            BTNodeState state = _topNode.Evaluate();
+
+            Debug.Log("[AI - BT]: NODE State: " + state);
+            while (state == BTNodeState.RUNNING)
+            {
+                Debug.Log("[AI - BT]: RUNNING!");
+                yield return null; // Wait for the next frame
+                state = _topNode.Evaluate(); // Re-evaluate the tree
+            }
         }
 
         private void MoveUnitToNearestFort()
@@ -83,12 +151,18 @@ namespace CT6GAMAI
             _unitManager.MoveUnitToNode(GetPlayerValidAttackSpot(nearestPlayer));
 
             _gameManager.BattleManager.CalculateValuesForBattleForecast(_unitManager, nearestPlayer);
-            _gameManager.BattleManager.SwitchToBattle();
+            _gameManager.BattleManager.SwitchToBattle(Team.Enemy);
         }
 
-        private void Wait()
+        public bool IsOnNode(Node node)
+        {
+            return _unitManager.StoodNode == node;
+        }
+
+        public bool Wait()
         {
             _unitManager.FinalizeMovementValues();
+            return true;
         }
 
         private void MoveUnitToRandomValidNodeWithinRange()
@@ -233,7 +307,7 @@ namespace CT6GAMAI
             
             foreach (VisibleTerrainDetails terrain in uniqueTerrain)
             {
-                if (terrain.Distance < closestDistance)
+                if (terrain.Distance < closestDistance && terrain.TerrainNode.Node.NodeManager.StoodUnit == null)
                 {
                     closestDistance = terrain.Distance;
                     closestNode = terrain.TerrainNode.Node;
@@ -241,6 +315,25 @@ namespace CT6GAMAI
             }
 
             return closestNode;
+        }
+
+        public bool AttackTargetUnit()
+        {
+            if (_targetUnit != null && !HasAttacked)
+            {
+                _unitManager.IsInBattle = true;
+
+                _gameManager.BattleManager.CalculateValuesForBattleForecast(_targetUnit, _unitManager);
+                _gameManager.BattleManager.SwitchToBattle(Team.Enemy);
+                
+                HasAttacked = true; 
+                
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public float GetDistanceToBestSafeSpot()
@@ -295,7 +388,7 @@ namespace CT6GAMAI
                     }
                 }
 
-                if (minDistanceToPlayer > maxMinDistanceToPlayer)
+                if (minDistanceToPlayer > maxMinDistanceToPlayer && node.NodeManager.StoodUnit == null)
                 {
                     maxMinDistanceToPlayer = minDistanceToPlayer;
                     furthestNode = node;
@@ -312,6 +405,58 @@ namespace CT6GAMAI
 
             var path = _unitManager.MovementRange.ReconstructPath(startNode, targetNode);
             return path.Count;
+        }
+
+        public Constants.Action GetHighestDesirabilityAction()
+        {
+            int maxDesirability = _fortDesirability;
+            List<Constants.Action> actions = new List<Constants.Action> { Constants.Action.Fort };
+
+            // Check each desirability, and if it's equal to the current max, add it to the list.
+            // This accounts for when 2 desirabilities values are the same but they're the highest number still.
+            // If it's greater, reset the list and update the maxDesirability.
+            if (_retreatDesirability > maxDesirability)
+            {
+                actions.Clear();
+                maxDesirability = _retreatDesirability;
+                actions.Add(Constants.Action.Retreat);
+            }
+            else if (_retreatDesirability == maxDesirability)
+            {
+                actions.Add(Constants.Action.Retreat);
+            }
+
+            if (_attackDesirability > maxDesirability)
+            {
+                actions.Clear();
+                maxDesirability = _attackDesirability;
+                actions.Add(Constants.Action.Attack);
+            }
+            else if (_attackDesirability == maxDesirability)
+            {
+                actions.Add(Constants.Action.Attack);
+            }
+
+            if (_waitDesirability > maxDesirability)
+            {
+                actions.Clear();
+                maxDesirability = _waitDesirability;
+                actions.Add(Constants.Action.Wait);
+            }
+            else if (_waitDesirability == maxDesirability)
+            {
+                actions.Add(Constants.Action.Wait);
+            }
+
+            // If there's a tie, choose an action at random from the list of highest actions.
+            if (actions.Count > 1)
+            {
+                int randomIndex = UnityEngine.Random.Range(0, actions.Count);
+                return actions[randomIndex];
+            }
+
+            // If there's no tie, return the single highest action.
+            return actions[0];
         }
 
         /// <summary>
@@ -347,6 +492,35 @@ namespace CT6GAMAI
             }
 
             return closestDistance;
+        }        
+
+        public UnitManager GetBestUnitToAttack()
+        {
+            List<VisibleUnitDetails> allUnits = GetVisiblePlayerUnits();
+            List<VisibleUnitDetails> hurtUnits = new List<VisibleUnitDetails>();
+            bool isAnyUnitHurt = false;
+
+            foreach (VisibleUnitDetails unit in allUnits) 
+            {
+                var unitStats = unit.Unit.UnitStatsManager;
+
+                if (unitStats.HealthPoints < unitStats.UnitBaseData.HealthPointsBaseValue)
+                {
+                    hurtUnits.Add(unit);
+                    isAnyUnitHurt = true;                   
+                }
+            }
+
+            if (isAnyUnitHurt)
+            {
+                _targetUnit = GetNearestPlayer(hurtUnits);
+            }
+            else
+            {
+                _targetUnit = GetNearestPlayer();               
+            }
+
+            return _targetUnit;
         }
 
         public UnitManager GetNearestPlayer()
@@ -365,6 +539,65 @@ namespace CT6GAMAI
             }
 
             return closestUnit;
+        }
+
+        public UnitManager GetNearestPlayer(List<VisibleUnitDetails> units)
+        {
+            UnitManager closestUnit = null;
+
+            float closestDistance = Constants.MAX_NODE_COST;
+
+            foreach (VisibleUnitDetails unit in units)
+            {
+                if (unit.Distance < closestDistance)
+                {
+                    closestUnit = unit.Unit;
+                }
+            }
+
+            return closestUnit;
+        }
+
+        public UnitManager FindNextTarget()
+        {
+            if (_visibleUnitsDetails.Count > 1)
+            {
+                foreach (VisibleUnitDetails unit in _visibleUnitsDetails)
+                {
+                    if (unit.Unit != _targetUnit)
+                    {
+                        _targetUnit = unit.Unit;
+                        return _targetUnit;
+                    }
+                }
+            }
+
+            return null;           
+        }
+
+        public bool CanMoveToTargetAttackSpot(UnitManager target)
+        {
+            List<Node> movementRange = _unitManager.MovementRange.ReachableNodes;
+            List<Node> attackSpots = new List<Node>();
+            List<Node> validAttackSpots = new List<Node>();
+
+            attackSpots.Add(target.StoodNode.NorthNode.Node);
+            attackSpots.Add(target.StoodNode.EastNode.Node);
+            attackSpots.Add(target.StoodNode.SouthNode.Node);
+            attackSpots.Add(target.StoodNode.WestNode.Node);
+
+            foreach (Node n in attackSpots)
+            {
+                if (movementRange.Contains(n))
+                {
+                    if (n.NodeManager.StoodUnit == null)
+                    {
+                        validAttackSpots.Add(n);
+                    }
+                }
+            }
+
+            return validAttackSpots.Count > 0;
         }
 
         public Node GetPlayerValidAttackSpot(UnitManager player)
@@ -389,7 +622,7 @@ namespace CT6GAMAI
                 }
             }
 
-            return validAttackSpots[UnityEngine.Random.Range(0, validAttackSpots.Count)];
+            return validAttackSpots[UnityEngine.Random.Range(0, validAttackSpots.Count)];  
         }
 
         public bool ArePlayersVisible()
@@ -412,6 +645,21 @@ namespace CT6GAMAI
             return powerAdvantage;
         }
 
+        public bool MoveUnitTo(Node node)
+        {
+            return _unitManager.MoveUnitToNode(node);
+        }
+
+        public bool MoveUnitTo(Node node, bool shouldFinalize)
+        {
+            return _unitManager.MoveUnitToNode(node, shouldFinalize, this);
+        }
+
+        public void StartMovingTo(Node targetNode)
+        {
+            IsMoving = true;
+            _unitManager.MoveUnitToNode(targetNode, this);
+        }
     }
 
     [Serializable]

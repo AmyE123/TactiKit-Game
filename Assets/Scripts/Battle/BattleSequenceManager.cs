@@ -415,15 +415,15 @@ namespace CT6GAMAI
         /// <summary>
         /// Starts a battle sequence between two units.
         /// </summary>
-        /// <param name="attacker">The attacker/initiator of the battle.</param>
-        /// <param name="defender">The defender/opponent of the battle.</param>
-        public void StartBattle(UnitManager attacker, UnitManager defender)
+        /// <param name="leftUnit">The unit on the left of the battlefield. (Typically player team)</param>
+        /// <param name="rightUnit">The unit on the right of the battlefield. (Typically enemy team)</param>
+        public void StartBattle(UnitManager leftUnit, UnitManager rightUnit, Team initiatingTeam)
         {
-            _initiatingTeam = attacker.UnitData.UnitTeam;
-            _gameManager.UIManager.BattleSequenceManager.GetValuesForBattleSequenceUI(attacker, defender);
+            _initiatingTeam = initiatingTeam;
+            _gameManager.UIManager.BattleSequenceManager.GetValuesForBattleSequenceUI(leftUnit, rightUnit);
 
-            _attackerUnit.SetUnitReferences(attacker.UnitStatsManager, attacker);
-            _defenderUnit.SetUnitReferences(defender.UnitStatsManager, defender);
+            _attackerUnit.SetUnitReferences(leftUnit.UnitStatsManager, leftUnit);
+            _defenderUnit.SetUnitReferences(rightUnit.UnitStatsManager, rightUnit);
 
             ProcessBattleState();
         }

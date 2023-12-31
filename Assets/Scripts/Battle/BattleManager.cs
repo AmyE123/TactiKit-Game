@@ -11,7 +11,7 @@ namespace CT6GAMAI
         [SerializeField] private BattleSequenceManager _battleSequenceManager;
 
         [Header("Current Battle Stats - Attacker (Initiator)")]
-        [SerializeField] private UnitManager _attackerUnit;
+        [SerializeField] private UnitManager _leftUnit;
         [SerializeField] private int _attackerAtk;
         [SerializeField] private bool _attackerDblAtk;
         [SerializeField] private int _attackerHit;
@@ -19,7 +19,7 @@ namespace CT6GAMAI
         [SerializeField] private int _attackerRemainingHP;
 
         [Header("Current Battle Stats - Defender (Opponent)")]
-        [SerializeField] private UnitManager _defenderUnit;
+        [SerializeField] private UnitManager _rightUnit;
         [SerializeField] private int _defenderAtk;
         [SerializeField] private bool _defenderDblAtk;
         [SerializeField] private int _defenderHit;
@@ -33,7 +33,7 @@ namespace CT6GAMAI
         /// <summary>
         /// The attacking unit for the current battle stats.
         /// </summary>
-        public UnitManager AttackerUnit => _attackerUnit;
+        public UnitManager AttackerUnit => _leftUnit;
 
         /// <summary>
         /// The attack amount from the attacker for the current battle stats.
@@ -63,7 +63,7 @@ namespace CT6GAMAI
         /// <summary>
         /// The defending unit for the current battle stats.
         /// </summary>
-        public UnitManager DefenderUnit => _defenderUnit;
+        public UnitManager DefenderUnit => _rightUnit;
 
         /// <summary>
         /// The attack amount from the defender for the current battle stats.
@@ -114,11 +114,14 @@ namespace CT6GAMAI
         /// <summary>
         /// Switches to battle mode when battle is initiated.
         /// </summary>
-        public void SwitchToBattle()
+        public void SwitchToBattle(Team initiatingTeam)
         {
             _cameraManager.SwitchCamera(_cameraManager.Cameras[(int)CameraStates.Battle]);
             _isBattleActive = true;
-            _battleSequenceManager.StartBattle(_attackerUnit, _defenderUnit);
+            _battleSequenceManager.StartBattle(_leftUnit, _rightUnit, initiatingTeam);
+
+            _leftUnit.IsInBattle = true;
+            _rightUnit.IsInBattle = true;
         }
 
         /// <summary>
@@ -129,14 +132,23 @@ namespace CT6GAMAI
             _cameraManager.SwitchCamera(_cameraManager.Cameras[(int)CameraStates.Map]);
             _isBattleActive = false;
 
+            _leftUnit.IsInBattle = false;
+            _rightUnit.IsInBattle = false;
+
             UnitManager unit = _gameManager.UnitsManager.LastSelectedPlayerUnit;
 
-            if (!unit.UnitDead)
+            if (unit != null) 
             {
-                unit.FinalizeMovementValues();              
+                bool isOnPlayerPhase = _gameManager.TurnManager.ActivePhase == Phases.PlayerPhase;
+
+                if (!unit.UnitDead && isOnPlayerPhase)
+                {
+                    unit.FinalizeMovementValues();
+                }
+
+                unit.IsAwaitingMoveConfirmation = false;
             }
 
-            unit.IsAwaitingMoveConfirmation = false;
             _gameManager.UIManager.ActionItemsManager.HideActionItems();
             _gameManager.UIManager.BattleForecastManager.CancelBattleForecast();
         }
@@ -144,24 +156,24 @@ namespace CT6GAMAI
         /// <summary>
         /// Calculates and sets the battle forecast values for the attacker and defender.
         /// </summary>
-        /// <param name="attacker">The attacking unit.</param>
-        /// <param name="defender">The defending unit.</param>
-        public void CalculateValuesForBattleForecast(UnitManager attacker, UnitManager defender)
+        /// <param name="leftUnit">The left unit. (Typically player unit)</param>
+        /// <param name="rightUnit">The right unit. (Typically enemy unit)</param>
+        public void CalculateValuesForBattleForecast(UnitManager leftUnit, UnitManager rightUnit)
         {
-            _attackerAtk = BattleCalculator.CalculateAttackPower(attacker, defender);
-            _attackerDblAtk = BattleCalculator.CanDoubleAttack(attacker, defender);
-            _attackerHit = BattleCalculator.CalculateHitRatePercentage(attacker, defender);
-            _attackerCrit = BattleCalculator.CalculateCriticalRatePercentage(attacker, defender);
+            _attackerAtk = BattleCalculator.CalculateAttackPower(leftUnit, rightUnit);
+            _attackerDblAtk = BattleCalculator.CanDoubleAttack(leftUnit, rightUnit);
+            _attackerHit = BattleCalculator.CalculateHitRatePercentage(leftUnit, rightUnit);
+            _attackerCrit = BattleCalculator.CalculateCriticalRatePercentage(leftUnit, rightUnit);
 
-            _defenderAtk = BattleCalculator.CalculateAttackPower(defender, attacker);
-            _defenderDblAtk = BattleCalculator.CanDoubleAttack(defender, attacker);
-            _defenderHit = BattleCalculator.CalculateHitRatePercentage(defender, attacker);
-            _defenderCrit = BattleCalculator.CalculateCriticalRatePercentage(defender, attacker);
+            _defenderAtk = BattleCalculator.CalculateAttackPower(rightUnit, leftUnit);
+            _defenderDblAtk = BattleCalculator.CanDoubleAttack(rightUnit, leftUnit);
+            _defenderHit = BattleCalculator.CalculateHitRatePercentage(rightUnit, leftUnit);
+            _defenderCrit = BattleCalculator.CalculateCriticalRatePercentage(rightUnit, leftUnit);
 
-            _attackerRemainingHP = BattleCalculator.CalculateRemainingHPForecast(attacker, DefenderAtk, DefenderDblAtk);
-            _defenderRemainingHP = BattleCalculator.CalculateRemainingHPForecast(defender, AttackerAtk, AttackerDblAtk);
+            _attackerRemainingHP = BattleCalculator.CalculateRemainingHPForecast(leftUnit, DefenderAtk, DefenderDblAtk);
+            _defenderRemainingHP = BattleCalculator.CalculateRemainingHPForecast(rightUnit, AttackerAtk, AttackerDblAtk);
 
-            _gameManager.BattleManager.SetBattleStats(attacker, AttackerAtk, AttackerDblAtk, AttackerHit, AttackerCrit, AttackerRemainingHP, defender, DefenderAtk, DefenderDblAtk, DefenderHit, DefenderCrit, DefenderRemainingHP);
+            _gameManager.BattleManager.SetBattleStats(leftUnit, AttackerAtk, AttackerDblAtk, AttackerHit, AttackerCrit, AttackerRemainingHP, rightUnit, DefenderAtk, DefenderDblAtk, DefenderHit, DefenderCrit, DefenderRemainingHP);
         }
 
         /// <summary>
@@ -181,8 +193,7 @@ namespace CT6GAMAI
         /// <param name="remainingHPB">Remaining HP for the defending unit.</param>
         public void SetBattleStats(UnitManager unitA, int atkA, bool dblAtkA, int hitA, int critA, int remainingHPA, UnitManager unitB, int atkB, bool dblAtkB, int hitB, int critB, int remainingHPB)
         {
-            _battleSequenceManager.InitiatingTeam = unitA.UnitStatsManager.UnitBaseData.UnitTeam;
-            _attackerUnit = unitA;
+            _leftUnit = unitA;
             _attackerAtk = atkA;
             _attackerDblAtk = dblAtkA;
             _attackerHit = hitA;
@@ -190,7 +201,7 @@ namespace CT6GAMAI
             _attackerRemainingHP = remainingHPA;
             SetUnitStats(unitA.UnitStatsManager, atkA, dblAtkA, hitA, critA);
 
-            _defenderUnit = unitB;
+            _rightUnit = unitB;
             _defenderAtk = atkB;
             _defenderDblAtk = dblAtkB;
             _defenderHit = hitB;

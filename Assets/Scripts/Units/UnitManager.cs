@@ -44,6 +44,7 @@ namespace CT6GAMAI
         private bool _unitDead = false;
         private bool _hasActedThisTurn = false;
         private bool _canActThisTurn = false;
+        private bool _isInBattle = false;
 
         /// <summary>
         /// Whether this unit has been selected by the cursor or not.
@@ -54,6 +55,11 @@ namespace CT6GAMAI
         /// Whether this unit is awaiting a move confirmation.
         /// </summary>
         public bool IsAwaitingMoveConfirmation { get { return _isAwaitingMoveConfirmation; } set { _isAwaitingMoveConfirmation = value; } }
+
+        /// <summary>
+        /// Whether this unit is currently within a battle animation or not.
+        /// </summary>
+        public bool IsInBattle { get { return _isInBattle; } set { _isInBattle = value; } }
 
         /// <summary>
         /// Gets a bool indicating whether the unit is currently moving or not.
@@ -222,6 +228,7 @@ namespace CT6GAMAI
 
             _isMoving = false;
             _isSelected = false;
+            _isInBattle = false;
             _gridCursor.UnitPressed = false;
             _gameManager.UnitsManager.SetActiveUnit(null);
 
@@ -269,6 +276,7 @@ namespace CT6GAMAI
         private void EnableActions()
         {
             _canActThisTurn = true;
+            _hasActedThisTurn = false;
         }
 
         /// <summary>
@@ -324,6 +332,7 @@ namespace CT6GAMAI
 
             if (shouldFinalizeTurn)
             {
+                Debug.Log("Finalizing Turn!");
                 FinalizeTurn();
             }
 
@@ -380,15 +389,53 @@ namespace CT6GAMAI
         /// Move the unit to a specific node if it's within range.
         /// </summary>
         /// <param name="targetNode">The node to move to.</param>
-        public void MoveUnitToNode(Node targetNode)
+        public bool MoveUnitToNode(Node targetNode)
         {
             if (IsNodeWithinRange(targetNode))
             {
                 StartCoroutine(MoveToEndPoint(targetNode));
+                return true;
             }
             else
             {
                 Debug.LogWarning("[AI]: Target node is out of range");
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Move the unit to a specific node if it's within range.
+        /// </summary>
+        /// <param name="targetNode">The node to move to.</param>
+        public bool MoveUnitToNode(Node targetNode, UnitAIManager ai)
+        {
+            if (IsNodeWithinRange(targetNode))
+            {
+                StartCoroutine(MoveToEndPoint(targetNode, ai));
+                return true;
+            }
+            else
+            {
+                Debug.LogWarning("[AI]: Target node is out of range");
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Move the unit to a specific node if it's within range.
+        /// </summary>
+        /// <param name="targetNode">The node to move to.</param>
+        public bool MoveUnitToNode(Node targetNode, bool shouldFinalize, UnitAIManager ai)
+        {
+            if (IsNodeWithinRange(targetNode))
+            {
+                StartCoroutine(MoveToEndPoint(targetNode, ai, shouldFinalize));
+                return true;
+            }
+            else
+            {
+                Debug.LogWarning("[AI]: Target node is out of range");
+                return false;
             }
         }
 
@@ -422,7 +469,7 @@ namespace CT6GAMAI
                     Node node = path[i];
                     MoveToNextNode(node);
                     _gridCursor.MoveCursorTo(node);
-                    _updatedStoodNode = DetectStoodNode();
+                    _updatedStoodNode = DetectStoodNode();                    
                     yield return new WaitForSeconds(MOVEMENT_DELAY);
 
                     if (i == path.Count - 1)
@@ -437,9 +484,88 @@ namespace CT6GAMAI
             else
             {
                 Debug.LogError("[AI]: Start & End node are causing issues.");
-            }
+            }         
+        }
 
-            
+        /// <summary>
+        /// Coroutine to move the unit to a node.
+        /// </summary>
+        /// <param name="targetNode">The target node to move to.</param>
+        /// <returns></returns>
+        private IEnumerator MoveToEndPoint(Node targetNode, UnitAIManager ai, bool shouldFinalize = true)
+        {
+            _isMoving = true;
+            _gridManager.CurrentState = CurrentState.Moving;
+
+            if (_stoodNode.Node != targetNode)
+            {
+                List<Node> path = MovementRange.ReconstructPath(_stoodNode.Node, targetNode);
+                ClearStoodUnit();
+
+                for (int i = 1; i < path.Count; i++)
+                {
+                    Node node = path[i];
+                    MoveToNextNode(node);
+                    _gridCursor.MoveCursorTo(node);
+                    _updatedStoodNode = DetectStoodNode();
+                    yield return new WaitForSeconds(MOVEMENT_DELAY);
+
+                    if (i == path.Count - 1)
+                    {
+                        _isAwaitingMoveConfirmation = true;
+                        _gridManager.CurrentState = CurrentState.ConfirmingMove;
+                    }
+                }
+
+                ai.IsMoving = false;
+                if (shouldFinalize)
+                {
+                    FinalizeMovementValues();
+                }                
+            }
+            else
+            {
+                Debug.LogError("[AI]: Start & End node are causing issues.");
+            }
+        }
+
+        /// <summary>
+        /// Coroutine to move the unit to a node.
+        /// </summary>
+        /// <param name="targetNode">The target node to move to.</param>
+        /// <returns></returns>
+        private IEnumerator MoveToEndPoint(Node targetNode, UnitAIManager ai)
+        {
+            _isMoving = true;
+            _gridManager.CurrentState = CurrentState.Moving;
+
+            if (_stoodNode.Node != targetNode)
+            {
+                List<Node> path = MovementRange.ReconstructPath(_stoodNode.Node, targetNode);
+                ClearStoodUnit();
+
+                for (int i = 1; i < path.Count; i++)
+                {
+                    Node node = path[i];
+                    MoveToNextNode(node);
+                    _gridCursor.MoveCursorTo(node);
+                    _updatedStoodNode = DetectStoodNode();
+                    yield return new WaitForSeconds(MOVEMENT_DELAY);
+
+                    if (i == path.Count - 1)
+                    {
+                        _isAwaitingMoveConfirmation = true;
+                        _gridManager.CurrentState = CurrentState.ConfirmingMove;
+                    }
+                }
+
+                FinalizeMovementValues();
+                ai.IsMoving = false;
+            }
+            else
+            {
+                Debug.LogError("[AI]: Start & End node are causing issues.");
+            }
         }
 
         /// <summary>

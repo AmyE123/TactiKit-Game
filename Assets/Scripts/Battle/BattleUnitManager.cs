@@ -4,7 +4,7 @@ namespace CT6GAMAI
     using static CT6GAMAI.Constants;
 
     /// <summary>
-    /// Manages the battle properties and behaviors of a unit in the game.
+    /// Manages the battle properties and behaviours of a unit in the game.
     /// </summary>
     public class BattleUnitManager : MonoBehaviour
     {

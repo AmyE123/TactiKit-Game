@@ -7,6 +7,31 @@ namespace CT6GAMAI
     /// </summary>
     public static class Constants
     {
+        #region Behaviour Trees
+
+        /// <summary>
+        /// Enumerations representing the states for a behaviour tree node.
+        /// </summary>
+        public enum BTNodeState
+        {
+            RUNNING,
+            SUCCESS,
+            FAILURE
+        }
+
+        /// <summary>
+        /// Enumerations representing the actions an AI unit can take.
+        /// </summary>
+        public enum Action
+        {
+            Retreat,
+            Fort,
+            Attack,
+            Wait
+        }
+
+        #endregion // Behaviour Trees
+
         #region Game Flow
 
         /// <summary>
