@@ -6,6 +6,7 @@ namespace CT6GAMAI
     using System.Collections.Generic;
     using System.Linq;
     using static CT6GAMAI.Constants;
+    using System.Net;
 
     /// <summary>
     /// Manager for the singular unit.
@@ -628,6 +629,11 @@ namespace CT6GAMAI
             var endPointPos = targetNode.UnitTransform.transform.position;
 
             transform.position = endPointPos;
+
+            var dir = (endPointPos - transform.position).normalized;
+            var lookRot = Quaternion.LookRotation(dir);
+
+            AdjustTransformValuesForNodeEndpoint(lookRot, targetNode);
 
             yield return new WaitForSeconds(MOVEMENT_DELAY_CANCEL);
         }
