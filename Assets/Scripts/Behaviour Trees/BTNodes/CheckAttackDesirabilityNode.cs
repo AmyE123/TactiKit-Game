@@ -25,7 +25,8 @@ namespace CT6GAMAI.BehaviourTrees
         /// </summary>
         /// <returns>The state of the node after evaluation - SUCCESS if attack is desirable, otherwise FAILURE.</returns>
         public override BTNodeState Evaluate()
-        {           
+        {
+            _unitAI.UpdateDebugActiveActionUI(GetType().Name);
             return _unitAI.GetHighestDesirabilityAction() == Action.Attack ? BTNodeState.SUCCESS : BTNodeState.FAILURE;
         }
     }

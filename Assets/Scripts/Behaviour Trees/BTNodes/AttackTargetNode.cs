@@ -27,6 +27,8 @@ namespace CT6GAMAI.BehaviourTrees
         /// <returns>The state of the node after evaluation.</returns>
         public override BTNodeState Evaluate()
         {
+            _unitAI.UpdateDebugActiveActionUI(GetType().Name);
+
             if (!_initiatedAttack)
             {
                 _unitAI.AttackTargetUnit();

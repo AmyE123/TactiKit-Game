@@ -31,7 +31,9 @@ namespace CT6GAMAI.BehaviourTrees
         /// Once the unit reaches the position, it returns SUCCESS.
         /// </returns>
         public override BTNodeState Evaluate()
-        {            
+        {
+            _unitAI.UpdateDebugActiveActionUI(GetType().Name);
+
             if (!_initiatedMovement)
             {
                 if (_unitAI.CanMoveToTargetAttackSpot(_unitAI.TargetUnit))

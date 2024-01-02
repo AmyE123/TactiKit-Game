@@ -29,7 +29,7 @@ namespace CT6GAMAI.BehaviourTrees
         /// </returns>
         public override BTNodeState Evaluate()
         {
-            Debug.Log("[AI - BT]:" + _unitAI.name + "In MoveToSafeSpace Node");
+            _unitAI.UpdateDebugActiveActionUI(GetType().Name);
             return _unitAI.MoveUnitTo(_unitAI.GetBestSafeSpot()) ? BTNodeState.SUCCESS : BTNodeState.FAILURE;
         }
 

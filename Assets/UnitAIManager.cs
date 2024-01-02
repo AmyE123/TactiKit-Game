@@ -87,10 +87,10 @@ namespace CT6GAMAI
             CheckRetreatDesirabilityNode checkRetreatDesirabilityNode = new CheckRetreatDesirabilityNode(this);
             CheckWaitDesirabilityNode checkWaitDesirabilityNode = new CheckWaitDesirabilityNode(this);
 
-            Sequence waitSequence = new Sequence(new List<BTNode> { checkWaitDesirabilityNode, waitNode });
-            Sequence attackSequence = new Sequence(new List<BTNode> { checkAttackDesirabilityNode, moveToAttackPositionNode, attackTargetNode });
-            Sequence fortSequence = new Sequence(new List<BTNode> { checkFortDesirabilityNode, moveToFortNode });
-            Sequence retreatSequence = new Sequence(new List<BTNode> { checkRetreatDesirabilityNode, moveToSafeSpaceNode });
+            Sequence waitSequence = new Sequence(new List<BTNode> { checkWaitDesirabilityNode, waitNode }, this, "Wait Sequence");
+            Sequence attackSequence = new Sequence(new List<BTNode> { checkAttackDesirabilityNode, moveToAttackPositionNode, attackTargetNode }, this, "Attack Sequence");
+            Sequence fortSequence = new Sequence(new List<BTNode> { checkFortDesirabilityNode, moveToFortNode }, this, "Fort Sequence");
+            Sequence retreatSequence = new Sequence(new List<BTNode> { checkRetreatDesirabilityNode, moveToSafeSpaceNode }, this, "Retreat Sequence");
 
             _topNode = new Selector(new List<BTNode> { retreatSequence, fortSequence, attackSequence, waitSequence });
         }
@@ -107,6 +107,26 @@ namespace CT6GAMAI
             yield return StartCoroutine(EnemyAITurn());
         }
 
+        public void UpdateDebugActiveActionUI(string activeAction)
+        {
+            _gameManager.UIManager.UI_DebugBehaviourTree.UpdateActiveAction(activeAction);
+        }
+
+        public void UpdateDebugActiveActionStateUI(BTNodeState activeActionState)
+        {
+            _gameManager.UIManager.UI_DebugBehaviourTree.UpdateActiveActionState(activeActionState);
+        }
+
+        public void UpdateDebugActiveSequenceUI(string activeSequence)
+        {
+            _gameManager.UIManager.UI_DebugBehaviourTree.UpdateActiveSequence(activeSequence);
+        }
+
+        public void UpdateDebugActiveAIUI(string activeAI)
+        {
+            _gameManager.UIManager.UI_DebugBehaviourTree.UpdateActiveAIUnit(activeAI);
+        }
+
         private IEnumerator EnemyAITurn()
         {
             HasAttacked = false;
@@ -121,15 +141,15 @@ namespace CT6GAMAI
             _attackDesirability = AIDesirabilityCalculator.CalculateAttackDesirability(this);
             _waitDesirability = AIDesirabilityCalculator.CalculateWaitDesirability(this);
 
-            _gameManager.UIManager.UI_DebugDesirabilityManager.PopulateDebugDesirability(this);          
+            _gameManager.UIManager.UI_DebugDesirabilityManager.PopulateDebugDesirability(this);
+
+            UpdateDebugActiveAIUI(_unitManager.UnitData.UnitName);
 
             // Loop to continuously evaluate the behaviour tree
             BTNodeState state = _topNode.Evaluate();
 
-            Debug.Log("[AI - BT]: NODE State: " + state);
             while (state == BTNodeState.RUNNING)
             {
-                Debug.Log("[AI - BT]: RUNNING!");
                 yield return null; // Wait for the next frame
                 state = _topNode.Evaluate(); // Re-evaluate the tree
             }

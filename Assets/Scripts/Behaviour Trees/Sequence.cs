@@ -16,6 +16,10 @@ namespace CT6GAMAI.BehaviourTrees
         /// </summary>
         private List<BTNode> _childNodes;
 
+        private UnitAIManager _unitAI;
+
+        private string _name;
+
         /// <summary>
         /// Index of the current node being evaluated.
         /// </summary>
@@ -25,9 +29,11 @@ namespace CT6GAMAI.BehaviourTrees
         /// Initializes the sequence class with its children.
         /// </summary>
         /// <param name="childNodes">The nodes which will be evaluated.</param>
-        public Sequence(List<BTNode> childNodes)
+        public Sequence(List<BTNode> childNodes, UnitAIManager unitAI, string name)
         {
             _childNodes = childNodes;
+            _unitAI = unitAI;
+            _name = name;
             _currentNodeIndex = 0;
         }
 
@@ -39,10 +45,14 @@ namespace CT6GAMAI.BehaviourTrees
         /// <returns>The evaluation state of the Sequence (RUNNING, SUCCESS, or FAILURE).</returns>
         public override BTNodeState Evaluate()
         {
+            _unitAI.UpdateDebugActiveSequenceUI(_name);
+
             while (_currentNodeIndex < _childNodes.Count)
             {
                 BTNode currentNode = _childNodes[_currentNodeIndex];
                 BTNodeState nodeState = currentNode.Evaluate();
+
+                _unitAI.UpdateDebugActiveActionStateUI(nodeState);
 
                 if (nodeState == BTNodeState.RUNNING)
                 {

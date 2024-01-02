@@ -26,6 +26,9 @@ namespace CT6GAMAI
 
         [Header("Debug UI Managers")]
         [SerializeField] private UI_DebugDesirabilityManager _debugDesirabilityManager;
+        [SerializeField] private UI_DebugBehaviourTree _debugBehaviourTree;
+        [SerializeField] private GameObject _debugButtons;
+        [SerializeField] private GameObject[] _uiDebugObjectsToDisableForPlayerTurn;
 
         [Header("General UI Elements")]
         [SerializeField] private Image _vignette;
@@ -39,6 +42,7 @@ namespace CT6GAMAI
         public UI_BattleForecastManager BattleForecastManager => _battleForecastManager;
         public UI_BattleSequenceManager BattleSequenceManager => _battleSequenceManager;
         public UI_DebugDesirabilityManager UI_DebugDesirabilityManager => _debugDesirabilityManager;
+        public UI_DebugBehaviourTree UI_DebugBehaviourTree => _debugBehaviourTree;
 
         private void Start()
         {
@@ -52,11 +56,19 @@ namespace CT6GAMAI
                 UpdateAllUIForActionItems();
                 UpdateAllUIForBattleForecast();
                 UpdateAllUIForBattle();
+                UpdateDebugUIForPhases();
             }
 
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 _actionItemsManager.HideActionItems();
+            }
+
+            if (Input.GetKeyDown(KeyCode.Tab))
+            {
+                _debugDesirabilityManager.gameObject.SetActive(!_debugDesirabilityManager.gameObject.activeSelf);
+                _debugBehaviourTree.gameObject.SetActive(!_debugBehaviourTree.gameObject.activeSelf);
+                _debugButtons.SetActive(!_debugButtons.activeSelf);
             }
         }
 
@@ -93,6 +105,14 @@ namespace CT6GAMAI
                 {
                     go.SetActive(false);
                 }
+            }
+        }
+
+        private void UpdateDebugUIForPhases()
+        {
+            foreach (GameObject go in _uiDebugObjectsToDisableForPlayerTurn)
+            {
+                go.SetActive(_gameManager.TurnManager.ActivePhase != Constants.Phases.PlayerPhase);
             }
         }
 
