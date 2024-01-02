@@ -15,6 +15,7 @@ namespace CT6GAMAI
         [SerializeField] private List<UnitManager> _activeUnits;
         [SerializeField] private List<UnitManager> _activePlayerUnits;
         [SerializeField] private List<UnitManager> _activeEnemyUnits;
+        [SerializeField] private List<UnitManager> _unplayedPlayerUnits;
 
         [SerializeField] private UnitManager _cursorUnit;
         [SerializeField] private UnitManager _activeUnit;
@@ -57,6 +58,11 @@ namespace CT6GAMAI
         /// </summary>
         public List<UnitManager> ActiveEnemyUnits => _activeEnemyUnits;
 
+        /// <summary>
+        /// Any unplayed player units in the current turn.
+        /// </summary>
+        public List<UnitManager> UnplayedPlayerUnits => _unplayedPlayerUnits;
+
         private void Update()
         {
             if (!_unitsInitalized)
@@ -67,6 +73,7 @@ namespace CT6GAMAI
             if (_unitsInitalized)
             {
                 StartCoroutine(CheckForAllDeadUnits());
+                CheckForUnplayedUnits();
             }
         }
 
@@ -79,6 +86,22 @@ namespace CT6GAMAI
                 yield return new WaitForSeconds(6);
 
                 SceneManager.LoadScene(currentSceneName);
+            }
+        }
+
+        private void CheckForUnplayedUnits()
+        {
+            _unplayedPlayerUnits.Clear();
+
+            foreach (var unit in ActivePlayerUnits)
+            {
+                if (!unit.HasActedThisTurn)
+                {
+                    if(!_unplayedPlayerUnits.Contains(unit))
+                    {
+                        _unplayedPlayerUnits.Add(unit);
+                    }                   
+                }
             }
         }
 
@@ -105,7 +128,7 @@ namespace CT6GAMAI
         public void UpdateAllUnits()
         {
             _activeEnemyUnits.Clear();
-            _activePlayerUnits.Clear();
+            _activePlayerUnits.Clear();          
 
             List<UnitManager> unitsToRemove = new List<UnitManager>();
 

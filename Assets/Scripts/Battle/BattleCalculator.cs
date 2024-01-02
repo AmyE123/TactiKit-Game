@@ -15,6 +15,11 @@ namespace CT6GAMAI
 
             int attackPower = attackStrength - defenseStrength;
 
+            if (attackPower <= 0)
+            {
+                attackPower = 0;
+            }
+
             return attackPower;
         }
 
@@ -24,6 +29,11 @@ namespace CT6GAMAI
             int defenseStrength = defender.UnitData.ResistanceBaseValue + CalculateTerrainDefenseBonus(defender);
 
             int attackPower = attackStrength - defenseStrength;
+
+            if (attackPower <= 0)
+            {
+                attackPower = 0;
+            }
 
             return attackPower;
         }

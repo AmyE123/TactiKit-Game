@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 405c8f4dbca7484448b2c4d31d9a7def, type: 3}
+  m_Name: E_Mage 2
+  m_EditorClassIdentifier: 
+  UnitName: Niles
+  UnitPortrait: {fileID: 21300000, guid: 1e52ba0829540514fbcce3036f33eedf, type: 3}
+  UnitTeam: 1
+  UnitClass: 4
+  EquippedWeapon: {fileID: 11400000, guid: 8616ce1abb68ba2469643f2ec20d87e5, type: 2}
+  ClassLevel: 2
+  HealthPointsBaseValue: 18
+  MovementBaseValue: 5
+  AttackBaseValue: 14
+  CriticalRateBaseValue: 4
+  HitRateBaseValue: 101
+  AvoidRateBaseValue: 18
+  StrengthBaseValue: 8
+  SpeedBaseValue: 11
+  MagicBaseValue: 3
+  LuckBaseValue: 4
+  SkillBaseValue: 6
+  DefenseBaseValue: 4
+  ResistanceBaseValue: 8
+  RatingValue: 44

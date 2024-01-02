@@ -1,5 +1,6 @@
 namespace CT6GAMAI.BehaviourTrees
 {
+    using UnityEngine;
     using static CT6GAMAI.Constants;
 
     /// <summary>
@@ -29,15 +30,13 @@ namespace CT6GAMAI.BehaviourTrees
         {
             _unitAI.UpdateDebugActiveActionUI(GetType().Name);
 
-            if (_unitAI.UnitManager.UnitDead)
-            {
-                return BTNodeState.SUCCESS;
-            }
-
             if (!_initiatedAttack)
             {
                 _unitAI.AttackTargetUnit();
                 _initiatedAttack = true;
+
+                Debug.Log("[AI BT]: Is in battle & initiated here");
+
                 return BTNodeState.RUNNING;
             }
 
@@ -45,13 +44,17 @@ namespace CT6GAMAI.BehaviourTrees
             {
                 if (_unitAI.UnitManager.IsInBattle)
                 {
-                    // If we are still in battle animations this will carry on running.
+                    if (_unitAI.UnitManager.UnitDead)
+                    {
+                        return BTNodeState.SUCCESS;
+                    }
+                    Debug.Log("[AI BT]: Is in battle & running here");
                     return BTNodeState.RUNNING;
                 }
                 else
                 {
-                    // Movement completed and unit is on the attack position.
-                    _initiatedAttack = false; // Reset for the next time this node is evaluated
+                    _initiatedAttack = false;
+                   
                     return BTNodeState.SUCCESS;
                 }
             }

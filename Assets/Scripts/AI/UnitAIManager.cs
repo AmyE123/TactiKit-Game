@@ -137,7 +137,7 @@ namespace CT6GAMAI
 
             GetVisiblePlayerUnits();
             GetVisibleUniqueTerrain();
-            //MoveUnitToRandomValidNodeWithinRange();
+
             _fortDesirability = AIDesirabilityCalculator.CalculateFortDesirability(this);
             _retreatDesirability = AIDesirabilityCalculator.CalculateRetreatDesirability(this);
             _attackDesirability = AIDesirabilityCalculator.CalculateAttackDesirability(this);
@@ -154,6 +154,11 @@ namespace CT6GAMAI
             {
                 yield return null; // Wait for the next frame
                 state = _topNode.Evaluate(); // Re-evaluate the tree
+
+                if (_unitManager.UnitDead)
+                {
+                    state = BTNodeState.SUCCESS;
+                }
             }
         }
 
@@ -569,6 +574,7 @@ namespace CT6GAMAI
                 {
                     if (unit.Unit != _targetUnit)
                     {
+                        Debug.Log("[AE] Getting next target unit. " + _targetUnit.name + " to " + unit.Unit.UnitData.name);
                         _targetUnit = unit.Unit;
                         return _targetUnit;
                     }

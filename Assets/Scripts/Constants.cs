@@ -136,7 +136,7 @@ namespace CT6GAMAI
         /// <summary>
         /// Enumerations representing different terrain types.
         /// </summary>
-        public enum Terrain { Plain, Forest, River, Fort, Unwalkable }
+        public enum Terrain { Plain, Forest, River, Fort, Unwalkable, Bridge }
 
         /// <summary>
         /// Enumerations representing the current state of the grid cursor in regards to unit actions.
@@ -240,6 +240,11 @@ namespace CT6GAMAI
         /// The Y value that the unit should go to when they're walking on river tiles
         /// </summary>
         public const float UNIT_Y_VALUE_RIVER = -0.2f;
+
+        /// <summary>
+        /// The Y value that the unit should go to when they're walking on river tiles
+        /// </summary>
+        public const float UNIT_Y_VALUE_BRIDGE = 0.25f;
 
         /// <summary>
         /// The Y value that the unit should go to when they're walking on land tiles

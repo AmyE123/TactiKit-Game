@@ -51,6 +51,10 @@ namespace CT6GAMAI.BehaviourTrees
                         _unitAI.StartMovingTo(_attackPosition, true);
                         _initiatedMovement = true;
                     }
+                    else
+                    {
+                        return BTNodeState.FAILURE;
+                    }
                 }
 
                 return BTNodeState.RUNNING;

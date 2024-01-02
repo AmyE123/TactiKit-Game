@@ -215,6 +215,10 @@ namespace CT6GAMAI
             {
                 _modelBaseObject.transform.DOLocalMoveY(UNIT_Y_VALUE_RIVER, UNIT_Y_ADJUSTMENT_SPEED);
             }
+            else if (endPoint.NodeManager.NodeData.TerrainType.TerrainType == Constants.Terrain.Bridge)
+            {
+                _modelBaseObject.transform.DOLocalMoveY(UNIT_Y_VALUE_BRIDGE, UNIT_Y_ADJUSTMENT_SPEED);
+            }
             else
             {
                 _modelBaseObject.transform.DOLocalMoveY(UNIT_Y_VALUE_LAND, UNIT_Y_ADJUSTMENT_SPEED);
