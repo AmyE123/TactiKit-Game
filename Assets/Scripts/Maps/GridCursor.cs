@@ -96,7 +96,7 @@ namespace CT6GAMAI
 
         private void UpdateTerrainTypeUI()
         {
-            _gameManager.UIManager.TileInfoManager.SetTerrainType(SelectedNode.NodeData.TerrainType);
+            _gameManager.UIManager.TileInfoManager.SetTerrainType(SelectedNode.NodeData);
         }
 
         private void UpdateSelectedNode()

@@ -10,17 +10,21 @@ namespace CT6GAMAI
         [SerializeField] private TMP_Text _movementValueText;
         [SerializeField] private TMP_Text _healthBuffValueText;
 
-        private TerrainData _previousTerrainData;
-        public TerrainData ActiveTerrainData;        
+        private NodeData _previousNodeData;
+        public NodeData ActiveNodeData;        
 
         private void RefreshTileInfoUI()
         {
-            if(_previousTerrainData != ActiveTerrainData)
-            {
-                _previousTerrainData = ActiveTerrainData;
-                _terrainValueText.text = ActiveTerrainData.TerrainType.ToString();
+            TerrainData activeTerrainData = ActiveNodeData.TerrainType;
 
-                if (ActiveTerrainData.TerrainType == Constants.Terrain.Unwalkable)
+            if(_previousNodeData != ActiveNodeData)
+            {
+                _previousNodeData = ActiveNodeData;
+                //_terrainValueText.text = ActiveTerrainData.TerrainType.ToString();
+
+                _terrainValueText.text = ActiveNodeData.name.ToString();
+
+                if (activeTerrainData.TerrainType == Constants.Terrain.Unwalkable)
                 {                    
                     _defenseValueText.text = "X";
                     _movementValueText.text = "X";
@@ -28,16 +32,16 @@ namespace CT6GAMAI
                 }
                 else
                 {
-                    _defenseValueText.text = ActiveTerrainData.DefenseBoost.ToString();
-                    _movementValueText.text = ActiveTerrainData.MovementCost.ToString();
-                    _healthBuffValueText.text = ActiveTerrainData.HealPercentageBoost.ToString() + "%";
+                    _defenseValueText.text = activeTerrainData.DefenseBoost.ToString();
+                    _movementValueText.text = activeTerrainData.MovementCost.ToString();
+                    _healthBuffValueText.text = activeTerrainData.HealPercentageBoost.ToString() + "%";
                 }
             }
         }
 
-        public void SetTerrainType(TerrainData data)
+        public void SetTerrainType(NodeData data)
         {
-            ActiveTerrainData = data;   
+            ActiveNodeData = data;   
             RefreshTileInfoUI();
         }
     }
