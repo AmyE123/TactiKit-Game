@@ -276,7 +276,6 @@ namespace CT6GAMAI
         private void EnableActions()
         {
             _canActThisTurn = true;
-            _hasActedThisTurn = false;
         }
 
         /// <summary>
