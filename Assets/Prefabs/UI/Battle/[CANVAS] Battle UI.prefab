@@ -279,6 +279,7 @@ MonoBehaviour:
   _battleSequenceSideManagers:
   - {fileID: 6603111825504784427}
   - {fileID: 8426063219812103650}
+  _battleManager: {fileID: 0}
 --- !u!1 &6660682745453010849
 GameObject:
   m_ObjectHideFlags: 0
@@ -1092,6 +1093,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5857426078450617182, guid: 74a7a36a7af656b4cb07cbb6fcf7b6df, type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8099924932743520651, guid: 74a7a36a7af656b4cb07cbb6fcf7b6df, type: 3}
+      propertyPath: m_Alpha
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8207867785525971488, guid: 74a7a36a7af656b4cb07cbb6fcf7b6df, type: 3}

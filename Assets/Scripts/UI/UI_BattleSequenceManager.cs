@@ -13,18 +13,23 @@ namespace CT6GAMAI
         /// <summary>
         /// Gets and populates battle data for the battle sequence UI for both units involved in the battle.
         /// </summary>
-        /// <param name="attacker">The attacking unit.</param>
-        /// <param name="defender">The defending unit.</param>
-        public void GetValuesForBattleSequenceUI(UnitManager attacker, UnitManager defender)
+        /// <param name="leftUnit">The left unit.</param>
+        /// <param name="rightUnit">The right unit.</param>
+        public void GetValuesForBattleSequenceUI(UnitManager leftUnit, UnitManager rightUnit)
         {           
-            PopulateBattleSequenceUIValues(0, attacker, _battleManager.AttackerAtk, _battleManager.AttackerDblAtk, _battleManager.AttackerHit, _battleManager.AttackerCrit);
-            PopulateBattleSequenceUIValues(1, defender, _battleManager.DefenderAtk, _battleManager.DefenderDblAtk, _battleManager.DefenderHit, _battleManager.DefenderCrit);            
+            PopulateBattleSequenceUIValues(0, leftUnit, _battleManager.AttackerAtk, _battleManager.AttackerHit, _battleManager.AttackerCrit);
+            PopulateBattleSequenceUIValues(1, rightUnit, _battleManager.DefenderAtk, _battleManager.DefenderHit, _battleManager.DefenderCrit);            
+        }
+
+        public void CriticalPopup(int sideIdx)
+        {
+            StartCoroutine(_battleSequenceSideManagers[sideIdx].ShowCritPopup());
         }
 
         /// <summary>
         /// Populates the battle sequence UI for a specific side with data from a unit.
         /// </summary>
-        public void PopulateBattleSequenceUIValues(int sideIdx, UnitManager unit, int attack, bool canDoubleAttack, int hitRate, int critRate)
+        public void PopulateBattleSequenceUIValues(int sideIdx, UnitManager unit, int attack, int hitRate, int critRate)
         {
             _battleSequenceSideManagers[sideIdx].PopulateBattleSequenceUIData(unit, attack, hitRate, critRate);
         }

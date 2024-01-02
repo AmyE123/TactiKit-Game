@@ -30,7 +30,7 @@ namespace CT6GAMAI
                 {
                     _defenseValueText.text = ActiveTerrainData.DefenseBoost.ToString();
                     _movementValueText.text = ActiveTerrainData.MovementCost.ToString();
-                    _healthBuffValueText.text = ActiveTerrainData.HealPercentageBoost.ToString();
+                    _healthBuffValueText.text = ActiveTerrainData.HealPercentageBoost.ToString() + "%";
                 }
             }
         }

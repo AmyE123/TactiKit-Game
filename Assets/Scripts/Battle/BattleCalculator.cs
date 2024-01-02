@@ -75,6 +75,23 @@ namespace CT6GAMAI
         }
 
         /// <summary>
+        /// Returns the units power amount. Used for Utility Theory.
+        /// </summary>
+        public static int CalculatePower(UnitManager unit)
+        {
+            return unit.UnitData.AttackBaseValue + unit.UnitData.EquippedWeapon.WeaponMight;
+        }
+
+        /// <summary>
+        /// Returns the units power amount with weapon triange factored in. Used for Utility Theory.
+        /// </summary>
+        public static int CalculatePower(UnitManager attacker, UnitManager defender)
+        {
+            int weaponFactor = CalculateWeaponTriangeFactor(attacker.UnitData, defender.UnitData);
+            return attacker.UnitData.AttackBaseValue + attacker.UnitData.EquippedWeapon.WeaponMight + weaponFactor;
+        }
+
+        /// <summary>
         /// Calculates the attack power of a unit against another unit.
         /// </summary>
         /// <param name="attacker">The attacking unit.</param>

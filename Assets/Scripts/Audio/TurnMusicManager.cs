@@ -45,15 +45,18 @@ namespace CT6GAMAI
         /// Resumes the last playing phase music. 
         /// Used for after playing other music events.
         /// </summary>
-        public void ResumeLastPhaseMusic()
+        public void ResumeLastPhaseMusic(Team deathTeam)
         {
-            if (_isPlayerMusic)
+            if (deathTeam != Team.Enemy)
             {
-                PlayPlayerPhaseMusic();
-            }
-            else
-            {
-                PlayEnemyPhaseMusic();
+                if (_isPlayerMusic)
+                {
+                    PlayPlayerPhaseMusic();
+                }
+                else
+                {
+                    PlayEnemyPhaseMusic();
+                }
             }
         }
 

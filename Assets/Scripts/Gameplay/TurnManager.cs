@@ -50,6 +50,13 @@ namespace CT6GAMAI
                         unit.ResetTurn();
                     }
                 }
+                else
+                {
+                    foreach (var unit in _gameManager.UnitsManager.ActiveEnemyUnits)
+                    {
+                        unit.ResetTurn();
+                    }
+                }
 
                 _isPhaseStarted = true;
             }
@@ -68,6 +75,15 @@ namespace CT6GAMAI
             }
 
             if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                if (ActivePhase == Phases.PlayerPhase)
+                {
+                    SwitchPhase();
+                    _isPhaseStarted = false;
+                }
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha0))
             {
                 SwitchPhase();
                 _isPhaseStarted = false;
@@ -90,7 +106,7 @@ namespace CT6GAMAI
         }
 
         private IEnumerator TransitionToNextPhase(Phases nextPhase, float delay)
-        {            
+        {
             UpdatePlayerInput(nextPhase);
 
             yield return new WaitForSeconds(delay);
@@ -111,12 +127,34 @@ namespace CT6GAMAI
             // Enable player input
             _gameManager.GridManager.GridCursor.SetPlayerInput(true);
             _turnMusicManager.PlayPlayerPhaseMusic();
+
+            StartPlayerTurn();
         }
 
         private void StartEnemyPhase()
         {
-            _gameManager.GridManager.GridCursor.MoveCursorTo(_gameManager.UnitsManager.ActiveEnemyUnits[0].StoodNode.Node);
+            _gameManager.AIManager.UpdateAIUnits();
+
             _turnMusicManager.PlayEnemyPhaseMusic();
+
+            _gameManager.AIManager.StartEnemyAI();
+        }
+
+        /// <summary>
+        /// Begins the player turn and applies terrain effects.
+        /// </summary>
+        public void StartPlayerTurn()
+        {
+            foreach (UnitManager unit in _gameManager.UnitsManager.ActivePlayerUnits)
+            {
+                unit.ApplyTerrainEffects();
+            }
+
+            if (_gameManager.UnitsManager.ActivePlayerUnits.Count > 0)
+            {
+                var firstPlayer = _gameManager.UnitsManager.ActivePlayerUnits[0];
+                _gameManager.GridManager.GridCursor.MoveCursorTo(firstPlayer.StoodNode.Node);
+            }
         }
 
         /// <summary>

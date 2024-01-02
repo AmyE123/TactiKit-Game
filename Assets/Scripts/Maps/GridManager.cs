@@ -72,7 +72,7 @@ namespace CT6GAMAI
 
                 if (unit != null && unit.IsAwaitingMoveConfirmation)
                 {
-                    if (Input.GetKeyDown(KeyCode.Escape))
+                    if (Input.GetKeyDown(KeyCode.Q))
                     {
                         if (_gameManager.UIManager.BattleForecastManager.AreBattleForecastsToggled)
                         {
@@ -86,7 +86,7 @@ namespace CT6GAMAI
 
                     if (_canSwitchToBattle && Input.GetKeyDown(KeyCode.Space))
                     {
-                        _gameManager.BattleManager.SwitchToBattle();
+                        _gameManager.BattleManager.SwitchToBattle(Team.Player);
                         _canSwitchToBattle = false;
                     }
                 }
@@ -232,6 +232,7 @@ namespace CT6GAMAI
                 var unit = _gameManager.UnitsManager.ActiveUnit;
                 if (_gameManager.GridManager.MovementPath.Count > 2)
                 {
+                    unit.ClearStoodUnit();
                     StartCoroutine(unit.MoveToEndPoint(1));
                 }
                 else

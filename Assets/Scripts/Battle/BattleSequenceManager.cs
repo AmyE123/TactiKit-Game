@@ -33,6 +33,8 @@ namespace CT6GAMAI
         private bool _isBattleEnding = false;
         private GameManager _gameManager;
 
+        public Team InitiatingTeam { get { return _initiatingTeam; } set { _initiatingTeam = value; } }
+
         private void Start()
         {
             InitializeValues();
@@ -211,7 +213,7 @@ namespace CT6GAMAI
                 defendingUnit.Animator.SetInteger(DEAD_ANIM_IDX_PARAM, Random.Range(1, DEAD_ANIM_IDX_COUNT));
                 defendingUnit.Animator.SetBool(DEAD_ANIM_PARAM, true);
 
-                StartCoroutine(DeathDelay(BATTLE_SEQUENCE_DEATH_DELAY));
+                StartCoroutine(DeathDelay(BATTLE_SEQUENCE_DEATH_DELAY, defendingUnit.UnitManagerRef.UnitData.UnitTeam));
             }
         }
 
@@ -277,6 +279,15 @@ namespace CT6GAMAI
 
             if (DoesUnitCrit(attackingUnit))
             {
+                if (attackingUnit.UnitSide == Side.Left)
+                {
+                    _gameManager.UIManager.BattleSequenceManager.CriticalPopup(0);
+                }
+                else
+                {
+                    _gameManager.UIManager.BattleSequenceManager.CriticalPopup(1);
+                }
+               
                 attackPower *= CRIT_HIT_MULTIPLIER;
             }
 
@@ -360,11 +371,11 @@ namespace CT6GAMAI
             ChangeBattleSequenceState(BattleSequenceStates.BattleEnd);
         }
 
-        private IEnumerator DeathDelay(float delaySeconds)
+        private IEnumerator DeathDelay(float delaySeconds, Team deathTeam)
         {
             yield return new WaitForSeconds(delaySeconds);
 
-            _gameManager.TurnManager.TurnMusicManager.ResumeLastPhaseMusic();
+            _gameManager.TurnManager.TurnMusicManager.ResumeLastPhaseMusic(deathTeam);
 
             ChangeBattleSequenceState(BattleSequenceStates.BattleEnd);
         }
@@ -413,15 +424,15 @@ namespace CT6GAMAI
         /// <summary>
         /// Starts a battle sequence between two units.
         /// </summary>
-        /// <param name="attacker">The attacker/initiator of the battle.</param>
-        /// <param name="defender">The defender/opponent of the battle.</param>
-        public void StartBattle(UnitManager attacker, UnitManager defender)
+        /// <param name="leftUnit">The unit on the left of the battlefield. (Typically player team)</param>
+        /// <param name="rightUnit">The unit on the right of the battlefield. (Typically enemy team)</param>
+        public void StartBattle(UnitManager leftUnit, UnitManager rightUnit, Team initiatingTeam)
         {
-            _initiatingTeam = attacker.UnitData.UnitTeam;
-            _gameManager.UIManager.BattleSequenceManager.GetValuesForBattleSequenceUI(attacker, defender);
+            _initiatingTeam = initiatingTeam;
+            _gameManager.UIManager.BattleSequenceManager.GetValuesForBattleSequenceUI(leftUnit, rightUnit);
 
-            _attackerUnit.SetUnitReferences(attacker.UnitStatsManager, attacker);
-            _defenderUnit.SetUnitReferences(defender.UnitStatsManager, defender);
+            _attackerUnit.SetUnitReferences(leftUnit.UnitStatsManager, leftUnit);
+            _defenderUnit.SetUnitReferences(rightUnit.UnitStatsManager, rightUnit);
 
             ProcessBattleState();
         }
