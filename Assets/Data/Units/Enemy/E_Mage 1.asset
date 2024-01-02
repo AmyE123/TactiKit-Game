@@ -22,7 +22,7 @@ MonoBehaviour:
   MovementBaseValue: 8
   AttackBaseValue: 22
   CriticalRateBaseValue: 2
-  HitRateBaseValue: 92
+  HitRateBaseValue: 96
   AvoidRateBaseValue: 21
   StrengthBaseValue: 14
   SpeedBaseValue: 12

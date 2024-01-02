@@ -128,6 +128,7 @@ namespace CT6GAMAI
             _gameManager.GridManager.GridCursor.SetPlayerInput(true);
             _turnMusicManager.PlayPlayerPhaseMusic();
 
+            RefreshMap();
             StartPlayerTurn();
         }
 
@@ -137,7 +138,16 @@ namespace CT6GAMAI
 
             _turnMusicManager.PlayEnemyPhaseMusic();
 
+            RefreshMap();
             _gameManager.AIManager.StartEnemyAI();
+        }
+
+        public void RefreshMap()
+        {
+            foreach (NodeManager node in _gameManager.GridManager.AllNodes)
+            {
+                node.UpdateStoodUnit();
+            }
         }
 
         /// <summary>

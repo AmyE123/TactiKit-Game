@@ -21,7 +21,7 @@ MonoBehaviour:
   HealthPointsBaseValue: 22
   MovementBaseValue: 9
   AttackBaseValue: 16
-  CriticalRateBaseValue: 30
+  CriticalRateBaseValue: 15
   HitRateBaseValue: 107
   AvoidRateBaseValue: 10
   StrengthBaseValue: 11

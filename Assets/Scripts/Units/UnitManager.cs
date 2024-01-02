@@ -321,10 +321,21 @@ namespace CT6GAMAI
 
             ClearStoodUnit();
             _stoodNode.ClearStoodUnit();
+
+            StartCoroutine(SetInactiveAfterDelay(4f));
+        }
+
+
+        /// <summary>
+        /// Coroutine to set the game object inactive after a delay.
+        /// </summary>
+        /// <param name="delay">Time in seconds to wait before setting inactive.</param>
+        private IEnumerator SetInactiveAfterDelay(float delay)
+        {
+            yield return new WaitForSeconds(delay);
             gameObject.SetActive(false);
             _gameManager.UnitsManager.UpdateAllUnits();
         }
-
         /// <summary>
         /// Finalizes the movement values of the unit after movement.
         /// </summary>

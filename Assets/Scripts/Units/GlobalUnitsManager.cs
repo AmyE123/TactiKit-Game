@@ -23,6 +23,8 @@ namespace CT6GAMAI
 
         private bool _unitsInitalized = false;
 
+        private GameManager _gameManager;
+
         /// <summary>
         /// Gets the list of all units in the game.
         /// </summary>
@@ -63,8 +65,13 @@ namespace CT6GAMAI
         /// </summary>
         public List<UnitManager> UnplayedPlayerUnits => _unplayedPlayerUnits;
 
-        private void Update()
+        private void Start()
         {
+            _gameManager = GameManager.Instance;
+        }
+
+        private void Update()
+        {            
             if (!_unitsInitalized)
             {
                 InitializeUnits();
@@ -74,6 +81,7 @@ namespace CT6GAMAI
             {
                 StartCoroutine(CheckForAllDeadUnits());
                 CheckForUnplayedUnits();
+                CheckForVictory();
             }
         }
 
@@ -160,6 +168,14 @@ namespace CT6GAMAI
             foreach (UnitManager unit in unitsToRemove)
             {
                 _activeUnits.Remove(unit);
+            }
+        }
+
+        public void CheckForVictory()
+        {
+            if (_activeEnemyUnits.Count <= 2 && _gameManager.TurnManager.ActivePhase != Constants.Phases.EnemyPhase)
+            {
+                _gameManager.TurnManager.TurnMusicManager.PlayVictoryMusic = true;
             }
         }
 

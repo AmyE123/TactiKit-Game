@@ -157,9 +157,10 @@ namespace CT6GAMAI
 
                 if (_unitManager.UnitDead)
                 {
+                    yield return new WaitForSeconds(3);
                     state = BTNodeState.SUCCESS;
                 }
-            }
+            }            
         }
 
         public bool IsOnNode(Node node)
