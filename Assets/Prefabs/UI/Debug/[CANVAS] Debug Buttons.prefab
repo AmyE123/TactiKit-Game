@@ -1502,7 +1502,7 @@ GameObject:
   - component: {fileID: 269751328815105224}
   - component: {fileID: 8638477797762443683}
   m_Layer: 0
-  m_Name: '[AREA] Key Esc'
+  m_Name: '[AREA] Key Q'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

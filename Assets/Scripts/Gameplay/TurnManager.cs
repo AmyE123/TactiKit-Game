@@ -52,7 +52,7 @@ namespace CT6GAMAI
                 }
                 else
                 {
-                    foreach(var unit in _gameManager.UnitsManager.ActiveEnemyUnits)
+                    foreach (var unit in _gameManager.UnitsManager.ActiveEnemyUnits)
                     {
                         unit.ResetTurn();
                     }
@@ -86,7 +86,7 @@ namespace CT6GAMAI
             if (Input.GetKeyDown(KeyCode.Alpha0))
             {
                 SwitchPhase();
-                _isPhaseStarted = false;               
+                _isPhaseStarted = false;
             }
         }
 
@@ -106,7 +106,7 @@ namespace CT6GAMAI
         }
 
         private IEnumerator TransitionToNextPhase(Phases nextPhase, float delay)
-        {            
+        {
             UpdatePlayerInput(nextPhase);
 
             yield return new WaitForSeconds(delay);
@@ -134,12 +134,15 @@ namespace CT6GAMAI
         private void StartEnemyPhase()
         {
             _gameManager.AIManager.UpdateAIUnits();
-            
+
             _turnMusicManager.PlayEnemyPhaseMusic();
 
             _gameManager.AIManager.StartEnemyAI();
         }
 
+        /// <summary>
+        /// Begins the player turn and applies terrain effects.
+        /// </summary>
         public void StartPlayerTurn()
         {
             foreach (UnitManager unit in _gameManager.UnitsManager.ActivePlayerUnits)
@@ -151,7 +154,7 @@ namespace CT6GAMAI
             {
                 var firstPlayer = _gameManager.UnitsManager.ActivePlayerUnits[0];
                 _gameManager.GridManager.GridCursor.MoveCursorTo(firstPlayer.StoodNode.Node);
-            }          
+            }
         }
 
         /// <summary>

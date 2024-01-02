@@ -58,7 +58,7 @@ namespace CT6GAMAI
         public List<UnitManager> ActiveEnemyUnits => _activeEnemyUnits;
 
         private void Update()
-        {            
+        {
             if (!_unitsInitalized)
             {
                 InitializeUnits();
@@ -76,7 +76,7 @@ namespace CT6GAMAI
             {
                 string currentSceneName = SceneManager.GetActiveScene().name;
 
-                yield return new WaitForSeconds(8);
+                yield return new WaitForSeconds(6);
 
                 SceneManager.LoadScene(currentSceneName);
             }
@@ -156,6 +156,10 @@ namespace CT6GAMAI
             return false;
         }
 
+        /// <summary>
+        /// Looks through all the units to check if any of them are currently in battle animations.
+        /// </summary>
+        /// <returns>True if any units are battling.</returns>
         public bool IsAnyUnitBattling()
         {
             foreach (UnitManager unit in _allUnits)

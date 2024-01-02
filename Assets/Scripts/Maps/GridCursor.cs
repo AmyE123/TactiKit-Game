@@ -156,7 +156,7 @@ namespace CT6GAMAI
         private void HandlePlayerUnitSelection()
         {
             if (SelectedNode.StoodUnit.UnitData.UnitTeam != Team.Enemy)
-            {                
+            {
                 _gameManager.UnitsManager.SetLastSelectedPlayerUnit(_gameManager.UnitsManager.ActiveUnit);
             }
 

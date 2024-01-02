@@ -62,6 +62,9 @@ namespace CT6GAMAI
             return (float)currentHealth / maxHealth;
         }
 
+        /// <summary>
+        /// Shows a critical popup when a unit gets a critical hit in battle
+        /// </summary>
         public IEnumerator ShowCritPopup()
         {
             _criticalCanvasGroup.alpha = 0;

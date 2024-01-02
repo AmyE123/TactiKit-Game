@@ -2,6 +2,9 @@ namespace CT6GAMAI
 {
     using UnityEngine;
 
+    /// <summary>
+    /// Represents the weighting for AI playstyles in the game.
+    /// </summary>
     [CreateAssetMenu(fileName = "PlaystyleWeighting", menuName = "ScriptableObjects/Units/PlaystyleWeighting", order = 2)]
     public class AIPlaystyleWeighting : ScriptableObject
     {

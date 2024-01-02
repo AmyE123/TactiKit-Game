@@ -306,7 +306,7 @@ namespace CT6GAMAI
                 }
             }
 
-            float closestDistance = Constants.MAX_NODE_COST;
+            float closestDistance = MAX_NODE_COST;
             
             foreach (VisibleTerrainDetails terrain in uniqueTerrain)
             {
