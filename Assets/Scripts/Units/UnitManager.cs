@@ -6,6 +6,7 @@ namespace CT6GAMAI
     using System.Collections.Generic;
     using System.Linq;
     using static CT6GAMAI.Constants;
+    using System.Net;
 
     /// <summary>
     /// Manager for the singular unit.
@@ -215,6 +216,10 @@ namespace CT6GAMAI
             {
                 _modelBaseObject.transform.DOLocalMoveY(UNIT_Y_VALUE_RIVER, UNIT_Y_ADJUSTMENT_SPEED);
             }
+            else if (endPoint.NodeManager.NodeData.TerrainType.TerrainType == Constants.Terrain.Bridge)
+            {
+                _modelBaseObject.transform.DOLocalMoveY(UNIT_Y_VALUE_BRIDGE, UNIT_Y_ADJUSTMENT_SPEED);
+            }
             else
             {
                 _modelBaseObject.transform.DOLocalMoveY(UNIT_Y_VALUE_LAND, UNIT_Y_ADJUSTMENT_SPEED);
@@ -317,10 +322,21 @@ namespace CT6GAMAI
 
             ClearStoodUnit();
             _stoodNode.ClearStoodUnit();
+
+            StartCoroutine(SetInactiveAfterDelay(4f));
+        }
+
+
+        /// <summary>
+        /// Coroutine to set the game object inactive after a delay.
+        /// </summary>
+        /// <param name="delay">Time in seconds to wait before setting inactive.</param>
+        private IEnumerator SetInactiveAfterDelay(float delay)
+        {
+            yield return new WaitForSeconds(delay);
             gameObject.SetActive(false);
             _gameManager.UnitsManager.UpdateAllUnits();
         }
-
         /// <summary>
         /// Finalizes the movement values of the unit after movement.
         /// </summary>
@@ -613,6 +629,11 @@ namespace CT6GAMAI
             var endPointPos = targetNode.UnitTransform.transform.position;
 
             transform.position = endPointPos;
+
+            var dir = (endPointPos - transform.position).normalized;
+            var lookRot = Quaternion.LookRotation(dir);
+
+            AdjustTransformValuesForNodeEndpoint(lookRot, targetNode);
 
             yield return new WaitForSeconds(MOVEMENT_DELAY_CANCEL);
         }

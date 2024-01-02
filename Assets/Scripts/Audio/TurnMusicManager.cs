@@ -13,7 +13,17 @@ namespace CT6GAMAI
         [SerializeField] private AudioClip _enemyPhaseMusic;
         [SerializeField] private AudioClip _playerPhaseMusic;
         [SerializeField] private AudioClip _deathMusic;
+        [SerializeField] private AudioClip _victoryMusic;
         [SerializeField] private bool _isPlayerMusic;
+        [SerializeField] private bool _playVictoryMusic = false;
+        [SerializeField] private bool _isPlayingVictoryMusic = false;
+
+        public bool PlayVictoryMusic { get { return _playVictoryMusic; } set { _playVictoryMusic = value; } }
+
+        public void Update()
+        {
+            CheckForVictoryMusic();
+        }
 
         /// <summary>
         /// Plays the player phase music
@@ -21,7 +31,14 @@ namespace CT6GAMAI
         public void PlayPlayerPhaseMusic()
         {
             _isPlayerMusic = true;
-            StartCoroutine(CrossfadeMusic(_playerPhaseMusic));
+            if (!_playVictoryMusic)
+            {
+                StartCoroutine(CrossfadeMusic(_playerPhaseMusic));
+            }
+            else
+            {
+                StartCoroutine(CrossfadeMusic(_victoryMusic));
+            }            
         }
 
         /// <summary>
@@ -39,6 +56,18 @@ namespace CT6GAMAI
         public void PlayDeathMusic()
         {
             StartCoroutine(CrossfadeMusic(_deathMusic));
+        }
+
+        /// <summary>
+        /// Check for the victory music
+        /// </summary>
+        public void CheckForVictoryMusic()
+        {
+            if (PlayVictoryMusic && !_isPlayingVictoryMusic)
+            {
+                _isPlayingVictoryMusic = true;
+                StartCoroutine(CrossfadeMusic(_victoryMusic));
+            }            
         }
 
         /// <summary>

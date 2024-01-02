@@ -115,6 +115,11 @@ namespace CT6GAMAI
             NodeInitialized = true;
         }
 
+        private void Update()
+        {
+            UpdateStoodUnit();
+        }
+
         private UnitManager DetectStoodUnit()
         {
             if (Physics.Raycast(transform.position, transform.up * 5, out unitHit, 1))
@@ -192,6 +197,14 @@ namespace CT6GAMAI
             {
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Update the stood unit every once in a while!
+        /// </summary>
+        public void UpdateStoodUnit()
+        {
+            StoodUnit = DetectStoodUnit();
         }
 
         /// <summary>

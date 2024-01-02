@@ -15,12 +15,15 @@ namespace CT6GAMAI
         [SerializeField] private List<UnitManager> _activeUnits;
         [SerializeField] private List<UnitManager> _activePlayerUnits;
         [SerializeField] private List<UnitManager> _activeEnemyUnits;
+        [SerializeField] private List<UnitManager> _unplayedPlayerUnits;
 
         [SerializeField] private UnitManager _cursorUnit;
         [SerializeField] private UnitManager _activeUnit;
         [SerializeField] private UnitManager _lastSelectedPlayerUnit;
 
         private bool _unitsInitalized = false;
+
+        private GameManager _gameManager;
 
         /// <summary>
         /// Gets the list of all units in the game.
@@ -57,8 +60,18 @@ namespace CT6GAMAI
         /// </summary>
         public List<UnitManager> ActiveEnemyUnits => _activeEnemyUnits;
 
-        private void Update()
+        /// <summary>
+        /// Any unplayed player units in the current turn.
+        /// </summary>
+        public List<UnitManager> UnplayedPlayerUnits => _unplayedPlayerUnits;
+
+        private void Start()
         {
+            _gameManager = GameManager.Instance;
+        }
+
+        private void Update()
+        {            
             if (!_unitsInitalized)
             {
                 InitializeUnits();
@@ -67,6 +80,8 @@ namespace CT6GAMAI
             if (_unitsInitalized)
             {
                 StartCoroutine(CheckForAllDeadUnits());
+                CheckForUnplayedUnits();
+                CheckForVictory();
             }
         }
 
@@ -79,6 +94,22 @@ namespace CT6GAMAI
                 yield return new WaitForSeconds(6);
 
                 SceneManager.LoadScene(currentSceneName);
+            }
+        }
+
+        private void CheckForUnplayedUnits()
+        {
+            _unplayedPlayerUnits.Clear();
+
+            foreach (var unit in ActivePlayerUnits)
+            {
+                if (!unit.HasActedThisTurn)
+                {
+                    if(!_unplayedPlayerUnits.Contains(unit))
+                    {
+                        _unplayedPlayerUnits.Add(unit);
+                    }                   
+                }
             }
         }
 
@@ -105,7 +136,7 @@ namespace CT6GAMAI
         public void UpdateAllUnits()
         {
             _activeEnemyUnits.Clear();
-            _activePlayerUnits.Clear();
+            _activePlayerUnits.Clear();          
 
             List<UnitManager> unitsToRemove = new List<UnitManager>();
 
@@ -137,6 +168,14 @@ namespace CT6GAMAI
             foreach (UnitManager unit in unitsToRemove)
             {
                 _activeUnits.Remove(unit);
+            }
+        }
+
+        public void CheckForVictory()
+        {
+            if (_activeEnemyUnits.Count <= 2 && _gameManager.TurnManager.ActivePhase != Constants.Phases.EnemyPhase)
+            {
+                _gameManager.TurnManager.TurnMusicManager.PlayVictoryMusic = true;
             }
         }
 

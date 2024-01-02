@@ -1,5 +1,6 @@
 namespace CT6GAMAI
 {
+    using System.Collections.Generic;
     using UnityEngine;
     using static CT6GAMAI.Constants;
 
@@ -14,6 +15,7 @@ namespace CT6GAMAI
         private AudioManager _audioManager;
         private UnitManager _lastSelectedUnit;
         private bool _pathing = false;
+        private int _playerSelectedIDX = 0;
 
         [Header("Cursor Configuration")]
         [SerializeField] private bool _enablePlayerInput;
@@ -94,7 +96,7 @@ namespace CT6GAMAI
 
         private void UpdateTerrainTypeUI()
         {
-            _gameManager.UIManager.TileInfoManager.SetTerrainType(SelectedNode.NodeData.TerrainType);
+            _gameManager.UIManager.TileInfoManager.SetTerrainType(SelectedNode.NodeData);
         }
 
         private void UpdateSelectedNode()
@@ -107,6 +109,18 @@ namespace CT6GAMAI
             if (SelectedNode == null || !SelectedNodeState.CursorStateManager.IsActiveSelection)
             {
                 UpdateActiveNodeSelection();
+            }
+
+            if (Input.GetKeyDown(KeyCode.E) && !_pathing && !UnitPressed)
+            {
+                _playerSelectedIDX++;
+
+                if (_playerSelectedIDX >= _gameManager.UnitsManager.UnplayedPlayerUnits.Count)
+                {
+                    _playerSelectedIDX = 0;
+                }
+
+                MoveCursorTo(_gameManager.UnitsManager.UnplayedPlayerUnits[_playerSelectedIDX].StoodNode.Node);
             }
         }
 
