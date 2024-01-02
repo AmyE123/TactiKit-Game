@@ -30,7 +30,7 @@ namespace CT6GAMAI.BehaviourTrees
         public override BTNodeState Evaluate()
         {
             _unitAI.UpdateDebugActiveActionUI(GetType().Name);
-            Debug.Log("[AI - BT]:" + _unitAI.name + "In MoveToFort Node");
+
             return _unitAI.MoveUnitTo(_unitAI.GetNearestFort(), false) ? BTNodeState.SUCCESS : BTNodeState.FAILURE;
         }
 

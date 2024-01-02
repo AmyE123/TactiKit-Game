@@ -72,7 +72,7 @@ namespace CT6GAMAI
 
                 if (unit != null && unit.IsAwaitingMoveConfirmation)
                 {
-                    if (Input.GetKeyDown(KeyCode.Escape))
+                    if (Input.GetKeyDown(KeyCode.Q))
                     {
                         if (_gameManager.UIManager.BattleForecastManager.AreBattleForecastsToggled)
                         {

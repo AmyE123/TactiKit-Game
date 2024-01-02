@@ -29,6 +29,11 @@ namespace CT6GAMAI.BehaviourTrees
         {
             _unitAI.UpdateDebugActiveActionUI(GetType().Name);
 
+            if (_unitAI.UnitManager.UnitDead)
+            {
+                return BTNodeState.SUCCESS;
+            }
+
             if (!_initiatedAttack)
             {
                 _unitAI.AttackTargetUnit();

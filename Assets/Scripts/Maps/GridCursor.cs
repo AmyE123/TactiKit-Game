@@ -156,7 +156,7 @@ namespace CT6GAMAI
         private void HandlePlayerUnitSelection()
         {
             if (SelectedNode.StoodUnit.UnitData.UnitTeam != Team.Enemy)
-            {
+            {                
                 _gameManager.UnitsManager.SetLastSelectedPlayerUnit(_gameManager.UnitsManager.ActiveUnit);
             }
 
@@ -304,7 +304,7 @@ namespace CT6GAMAI
         {
             bool hasUnitActedThisTurn = _gameManager.UnitsManager.ActiveUnit.HasActedThisTurn;
 
-            if (SelectedNode.StoodUnit != null && !hasUnitActedThisTurn)
+            if (SelectedNode.StoodUnit != null && !hasUnitActedThisTurn && SelectedNode.StoodUnit.UnitData.UnitTeam != Team.Enemy)
             {
                 UnitPressed = !UnitPressed;
 

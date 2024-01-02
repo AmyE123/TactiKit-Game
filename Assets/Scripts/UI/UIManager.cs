@@ -28,6 +28,7 @@ namespace CT6GAMAI
         [SerializeField] private UI_DebugDesirabilityManager _debugDesirabilityManager;
         [SerializeField] private UI_DebugBehaviourTree _debugBehaviourTree;
         [SerializeField] private GameObject _debugButtons;
+        [SerializeField] private GameObject _debugButtonsCanvas;
         [SerializeField] private GameObject[] _uiDebugObjectsToDisableForPlayerTurn;
 
         [Header("General UI Elements")]
@@ -59,7 +60,7 @@ namespace CT6GAMAI
                 UpdateDebugUIForPhases();
             }
 
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.Q))
             {
                 _actionItemsManager.HideActionItems();
             }
@@ -96,6 +97,7 @@ namespace CT6GAMAI
         private void UpdateAllUIForBattle()
         {
             _battleAnimationUI.SetActive(_gameManager.BattleManager.IsBattleActive);
+            _debugButtonsCanvas.SetActive(!_gameManager.BattleManager.IsBattleActive);
 
             if (_gameManager.BattleManager.IsBattleActive)
             {

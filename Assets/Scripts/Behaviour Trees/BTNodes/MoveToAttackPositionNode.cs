@@ -39,7 +39,7 @@ namespace CT6GAMAI.BehaviourTrees
                 if (_unitAI.CanMoveToTargetAttackSpot(_unitAI.TargetUnit))
                 {
                     _attackPosition = _unitAI.GetPlayerValidAttackSpot(_unitAI.TargetUnit);
-                    _unitAI.StartMovingTo(_attackPosition);
+                    _unitAI.StartMovingTo(_attackPosition, true);
                     _initiatedMovement = true;
                 }
                 else
@@ -48,7 +48,7 @@ namespace CT6GAMAI.BehaviourTrees
                     if (_unitAI.CanMoveToTargetAttackSpot(_unitAI.TargetUnit))
                     {
                         _attackPosition = _unitAI.GetPlayerValidAttackSpot(_unitAI.TargetUnit);
-                        _unitAI.StartMovingTo(_attackPosition);
+                        _unitAI.StartMovingTo(_attackPosition, true);
                         _initiatedMovement = true;
                     }
                 }

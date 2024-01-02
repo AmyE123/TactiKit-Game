@@ -81,6 +81,7 @@ namespace CT6GAMAI
             MoveToFortNode moveToFortNode = new MoveToFortNode(this);
             AttackTargetNode attackTargetNode = new AttackTargetNode(this);
             WaitNode waitNode = new WaitNode(this);
+            DefaultNode defaultNode = new DefaultNode(this);
 
             CheckAttackDesirabilityNode checkAttackDesirabilityNode = new CheckAttackDesirabilityNode(this);
             CheckFortDesirabilityNode checkFortDesirabilityNode = new CheckFortDesirabilityNode(this);
@@ -91,8 +92,9 @@ namespace CT6GAMAI
             Sequence attackSequence = new Sequence(new List<BTNode> { checkAttackDesirabilityNode, moveToAttackPositionNode, attackTargetNode }, this, "Attack Sequence");
             Sequence fortSequence = new Sequence(new List<BTNode> { checkFortDesirabilityNode, moveToFortNode }, this, "Fort Sequence");
             Sequence retreatSequence = new Sequence(new List<BTNode> { checkRetreatDesirabilityNode, moveToSafeSpaceNode }, this, "Retreat Sequence");
+            Sequence defaultSequence = new Sequence(new List<BTNode> { defaultNode }, this, "Default Sequence");
 
-            _topNode = new Selector(new List<BTNode> { retreatSequence, fortSequence, attackSequence, waitSequence });
+            _topNode = new Selector(new List<BTNode> { retreatSequence, fortSequence, attackSequence, waitSequence, defaultSequence });
         }
 
         private void Update() 
@@ -155,25 +157,6 @@ namespace CT6GAMAI
             }
         }
 
-        private void MoveUnitToNearestFort()
-        {
-            _unitManager.MoveUnitToNode(GetNearestFort());
-        }
-
-        private void RetreatUnit()
-        {
-            _unitManager.MoveUnitToNode(GetBestSafeSpot());
-        }
-
-        private void AttackClosestPlayer()
-        {
-            UnitManager nearestPlayer = GetNearestPlayer();
-            _unitManager.MoveUnitToNode(GetPlayerValidAttackSpot(nearestPlayer));
-
-            _gameManager.BattleManager.CalculateValuesForBattleForecast(_unitManager, nearestPlayer);
-            _gameManager.BattleManager.SwitchToBattle(Team.Enemy);
-        }
-
         public bool IsOnNode(Node node)
         {
             return _unitManager.StoodNode == node;
@@ -181,7 +164,7 @@ namespace CT6GAMAI
 
         public bool Wait()
         {
-            _unitManager.FinalizeMovementValues();
+            _unitManager.FinalizeMovementValues(true);
             return true;
         }
 
@@ -202,7 +185,7 @@ namespace CT6GAMAI
             {
                 int rand = UnityEngine.Random.Range(1, steppableNodes.Count);
                 Node randNode = steppableNodes[rand];
-                _unitManager.MoveUnitToNode(randNode);
+                _unitManager.MoveUnitToNode(randNode, false);
             }
         }
 
@@ -665,20 +648,20 @@ namespace CT6GAMAI
             return powerAdvantage;
         }
 
-        public bool MoveUnitTo(Node node)
+        public bool MoveUnitTo(Node node, bool isAttacking)
         {
-            return _unitManager.MoveUnitToNode(node);
+            return _unitManager.MoveUnitToNode(node, isAttacking);
         }
 
-        public bool MoveUnitTo(Node node, bool shouldFinalize)
+        public bool MoveUnitTo(Node node, bool shouldFinalize, bool isAttacking)
         {
-            return _unitManager.MoveUnitToNode(node, shouldFinalize, this);
+            return _unitManager.MoveUnitToNode(node, shouldFinalize, isAttacking, this);
         }
 
-        public void StartMovingTo(Node targetNode)
+        public void StartMovingTo(Node targetNode, bool isAttacking)
         {
             IsMoving = true;
-            _unitManager.MoveUnitToNode(targetNode, this);
+            _unitManager.MoveUnitToNode(targetNode, this, isAttacking);
         }
     }
 

@@ -213,7 +213,7 @@ namespace CT6GAMAI
                 defendingUnit.Animator.SetInteger(DEAD_ANIM_IDX_PARAM, Random.Range(1, DEAD_ANIM_IDX_COUNT));
                 defendingUnit.Animator.SetBool(DEAD_ANIM_PARAM, true);
 
-                StartCoroutine(DeathDelay(BATTLE_SEQUENCE_DEATH_DELAY));
+                StartCoroutine(DeathDelay(BATTLE_SEQUENCE_DEATH_DELAY, defendingUnit.UnitManagerRef.UnitData.UnitTeam));
             }
         }
 
@@ -279,6 +279,15 @@ namespace CT6GAMAI
 
             if (DoesUnitCrit(attackingUnit))
             {
+                if (attackingUnit.UnitSide == Side.Left)
+                {
+                    _gameManager.UIManager.BattleSequenceManager.CriticalPopup(0);
+                }
+                else
+                {
+                    _gameManager.UIManager.BattleSequenceManager.CriticalPopup(1);
+                }
+               
                 attackPower *= CRIT_HIT_MULTIPLIER;
             }
 
@@ -362,11 +371,11 @@ namespace CT6GAMAI
             ChangeBattleSequenceState(BattleSequenceStates.BattleEnd);
         }
 
-        private IEnumerator DeathDelay(float delaySeconds)
+        private IEnumerator DeathDelay(float delaySeconds, Team deathTeam)
         {
             yield return new WaitForSeconds(delaySeconds);
 
-            _gameManager.TurnManager.TurnMusicManager.ResumeLastPhaseMusic();
+            _gameManager.TurnManager.TurnMusicManager.ResumeLastPhaseMusic(deathTeam);
 
             ChangeBattleSequenceState(BattleSequenceStates.BattleEnd);
         }

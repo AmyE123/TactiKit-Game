@@ -29,6 +29,7 @@ namespace CT6GAMAI
         private GameManager _gameManager;
         private CameraManager _cameraManager;
         private bool _isBattleActive;
+        private Constants.Team _initiatingTeam;
 
         /// <summary>
         /// The attacking unit for the current battle stats.
@@ -122,6 +123,21 @@ namespace CT6GAMAI
 
             _leftUnit.IsInBattle = true;
             _rightUnit.IsInBattle = true;
+
+            _initiatingTeam = initiatingTeam;
+        }
+
+        public void HandleEndOfBattleUnit()
+        {
+            if (_initiatingTeam == Team.Player)
+            {
+                _leftUnit.FinalizeMovementValues();
+                _leftUnit.IsAwaitingMoveConfirmation = false;
+            }
+            else
+            {
+                _rightUnit.FinalizeMovementValues();
+            }
         }
 
         /// <summary>
@@ -135,19 +151,22 @@ namespace CT6GAMAI
             _leftUnit.IsInBattle = false;
             _rightUnit.IsInBattle = false;
 
-            UnitManager unit = _gameManager.UnitsManager.LastSelectedPlayerUnit;
+            HandleEndOfBattleUnit();
 
-            if (unit != null) 
-            {
-                bool isOnPlayerPhase = _gameManager.TurnManager.ActivePhase == Phases.PlayerPhase;
+            //UnitManager unit = _gameManager.UnitsManager.LastSelectedPlayerUnit;
 
-                if (!unit.UnitDead && isOnPlayerPhase)
-                {
-                    unit.FinalizeMovementValues();
-                }
+            //if (unit != null) 
+            //{
+            //    bool isOnPlayerPhase = _gameManager.TurnManager.ActivePhase == Phases.PlayerPhase;
 
-                unit.IsAwaitingMoveConfirmation = false;
-            }
+            //    if (!unit.UnitDead && isOnPlayerPhase)
+            //    {
+            //        Debug.Log("[AE]: " + unit.name + " Finalize here");
+            //        unit.FinalizeMovementValues();
+            //    }
+
+            //    unit.IsAwaitingMoveConfirmation = false;
+            //}
 
             _gameManager.UIManager.ActionItemsManager.HideActionItems();
             _gameManager.UIManager.BattleForecastManager.CancelBattleForecast();

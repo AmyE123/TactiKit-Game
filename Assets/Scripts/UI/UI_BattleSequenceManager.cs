@@ -21,6 +21,11 @@ namespace CT6GAMAI
             PopulateBattleSequenceUIValues(1, rightUnit, _battleManager.DefenderAtk, _battleManager.DefenderHit, _battleManager.DefenderCrit);            
         }
 
+        public void CriticalPopup(int sideIdx)
+        {
+            StartCoroutine(_battleSequenceSideManagers[sideIdx].ShowCritPopup());
+        }
+
         /// <summary>
         /// Populates the battle sequence UI for a specific side with data from a unit.
         /// </summary>

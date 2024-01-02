@@ -6,7 +6,6 @@ namespace CT6GAMAI
     using System.Collections.Generic;
     using System.Linq;
     using static CT6GAMAI.Constants;
-    using UnityEditor.Experimental.GraphView;
 
     /// <summary>
     /// Manager for the singular unit.
@@ -176,7 +175,7 @@ namespace CT6GAMAI
             }
             else
             {
-                Debug.LogWarning("[WARNING]: Cast hit nothing");
+                UnityEngine.Debug.LogWarning("[WARNING]: Cast hit nothing");
                 return null;
             }
         }
@@ -307,7 +306,11 @@ namespace CT6GAMAI
         /// </summary>
         public void Death()
         {
-            _turnManager.TurnMusicManager.PlayDeathMusic();
+            if (_unitData.UnitTeam == Team.Player)
+            {
+                _turnManager.TurnMusicManager.PlayDeathMusic();
+            }
+            
             ResetUnitState();
 
             _unitDead = true;
@@ -331,11 +334,9 @@ namespace CT6GAMAI
 
             if (shouldFinalizeTurn)
             {
-                Debug.Log("Finalizing Turn!");
                 FinalizeTurn();
             }
-
-        }
+        }      
 
         /// <summary>
         /// Cancels the units movement.
@@ -388,11 +389,29 @@ namespace CT6GAMAI
         /// Move the unit to a specific node if it's within range.
         /// </summary>
         /// <param name="targetNode">The node to move to.</param>
-        public bool MoveUnitToNode(Node targetNode)
+        public bool MoveUnitToNode(Node targetNode, bool isAttacking)
         {
             if (IsNodeWithinRange(targetNode))
             {
-                StartCoroutine(MoveToEndPoint(targetNode));
+                StartCoroutine(MoveToEndPoint(targetNode, isAttacking));
+                return true;
+            }
+            else
+            {
+                Debug.LogWarning("[AI]: Target node is out of range");                
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Move the unit to a specific node if it's within range.
+        /// </summary>
+        /// <param name="targetNode">The node to move to.</param>
+        public bool MoveUnitToNode(Node targetNode, UnitAIManager ai, bool isAttacking)
+        {
+            if (IsNodeWithinRange(targetNode))
+            {
+                StartCoroutine(MoveToEndPoint(targetNode, ai, isAttacking));
                 return true;
             }
             else
@@ -406,29 +425,11 @@ namespace CT6GAMAI
         /// Move the unit to a specific node if it's within range.
         /// </summary>
         /// <param name="targetNode">The node to move to.</param>
-        public bool MoveUnitToNode(Node targetNode, UnitAIManager ai)
+        public bool MoveUnitToNode(Node targetNode, bool shouldFinalize, bool isAttacking, UnitAIManager ai)
         {
             if (IsNodeWithinRange(targetNode))
             {
-                StartCoroutine(MoveToEndPoint(targetNode, ai));
-                return true;
-            }
-            else
-            {
-                Debug.LogWarning("[AI]: Target node is out of range");
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Move the unit to a specific node if it's within range.
-        /// </summary>
-        /// <param name="targetNode">The node to move to.</param>
-        public bool MoveUnitToNode(Node targetNode, bool shouldFinalize, UnitAIManager ai)
-        {
-            if (IsNodeWithinRange(targetNode))
-            {
-                StartCoroutine(MoveToEndPoint(targetNode, ai, shouldFinalize));
+                StartCoroutine(MoveToEndPoint(targetNode, ai, isAttacking, shouldFinalize));
                 return true;
             }
             else
@@ -453,7 +454,7 @@ namespace CT6GAMAI
         /// </summary>
         /// <param name="targetNode">The target node to move to.</param>
         /// <returns></returns>
-        private IEnumerator MoveToEndPoint(Node targetNode)
+        private IEnumerator MoveToEndPoint(Node targetNode, bool isAttacking)
         {
             _isMoving = true;
             _gridManager.CurrentState = CurrentState.Moving;
@@ -478,7 +479,11 @@ namespace CT6GAMAI
                     }
                 }
 
-                FinalizeMovementValues();
+                if (!isAttacking)
+                {
+                    FinalizeMovementValues();
+                }
+                
             }
             else
             {
@@ -491,7 +496,7 @@ namespace CT6GAMAI
         /// </summary>
         /// <param name="targetNode">The target node to move to.</param>
         /// <returns></returns>
-        private IEnumerator MoveToEndPoint(Node targetNode, UnitAIManager ai, bool shouldFinalize = true)
+        private IEnumerator MoveToEndPoint(Node targetNode, UnitAIManager ai, bool isAttacking, bool shouldFinalize = true)
         {
             _isMoving = true;
             _gridManager.CurrentState = CurrentState.Moving;
@@ -517,7 +522,7 @@ namespace CT6GAMAI
                 }
 
                 ai.IsMoving = false;
-                if (shouldFinalize)
+                if (shouldFinalize && !isAttacking)
                 {
                     FinalizeMovementValues();
                 }                
@@ -533,7 +538,7 @@ namespace CT6GAMAI
         /// </summary>
         /// <param name="targetNode">The target node to move to.</param>
         /// <returns></returns>
-        private IEnumerator MoveToEndPoint(Node targetNode, UnitAIManager ai)
+        private IEnumerator MoveToEndPoint(Node targetNode, UnitAIManager ai, bool isAttacking)
         {
             _isMoving = true;
             _gridManager.CurrentState = CurrentState.Moving;
@@ -558,8 +563,12 @@ namespace CT6GAMAI
                     }
                 }
 
-                FinalizeMovementValues();
                 ai.IsMoving = false;
+
+                if (!isAttacking)
+                {
+                    FinalizeMovementValues();
+                }                                
             }
             else
             {

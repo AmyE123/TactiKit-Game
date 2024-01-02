@@ -1,5 +1,7 @@
 namespace CT6GAMAI
 {
+    using DG.Tweening;
+    using System.Collections;
     using System.Text.RegularExpressions;
     using TMPro;
     using UnityEngine;
@@ -22,6 +24,8 @@ namespace CT6GAMAI
         [SerializeField] private TMP_Text _hitStatValueText;
         [SerializeField] private TMP_Text _critStatValueText;
         [SerializeField] private Image _healthBarFill;
+        [SerializeField] private RectTransform _criticalPopup;
+        [SerializeField] private CanvasGroup _criticalCanvasGroup;
 
         [Header("Unit Reference")]
         [SerializeField] private UnitManager _activeUnitManager;
@@ -44,7 +48,7 @@ namespace CT6GAMAI
 
             float healthFillAmount = CalculateHealthPercentage(unit.UnitStatsManager.HealthPoints, unit.UnitData.HealthPointsBaseValue);
 
-            _healthBarFill.fillAmount = healthFillAmount;
+            _healthBarFill.DOFillAmount(healthFillAmount, 0.1f).SetEase(Ease.Linear);
         }
 
         /// <summary>
@@ -56,6 +60,19 @@ namespace CT6GAMAI
         private float CalculateHealthPercentage(int currentHealth, int maxHealth)
         {
             return (float)currentHealth / maxHealth;
+        }
+
+        public IEnumerator ShowCritPopup()
+        {
+            _criticalCanvasGroup.alpha = 0;
+
+            _criticalCanvasGroup.DOFade(1, 0.5f);
+
+            _criticalPopup.DOPunchScale(new Vector3(0.5f, 0.5f, 0.5f), 0.5f, 10, 1);
+
+            yield return new WaitForSeconds(2);
+
+            _criticalCanvasGroup.DOFade(0, 0.5f);
         }
 
         /// <summary>

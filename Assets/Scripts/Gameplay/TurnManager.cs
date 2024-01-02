@@ -76,8 +76,17 @@ namespace CT6GAMAI
 
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
+                if (ActivePhase == Phases.PlayerPhase)
+                {
+                    SwitchPhase();
+                    _isPhaseStarted = false;
+                }
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha0))
+            {
                 SwitchPhase();
-                _isPhaseStarted = false;
+                _isPhaseStarted = false;               
             }
         }
 

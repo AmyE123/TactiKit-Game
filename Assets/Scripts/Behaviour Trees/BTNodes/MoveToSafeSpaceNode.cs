@@ -30,7 +30,7 @@ namespace CT6GAMAI.BehaviourTrees
         public override BTNodeState Evaluate()
         {
             _unitAI.UpdateDebugActiveActionUI(GetType().Name);
-            return _unitAI.MoveUnitTo(_unitAI.GetBestSafeSpot()) ? BTNodeState.SUCCESS : BTNodeState.FAILURE;
+            return _unitAI.MoveUnitTo(_unitAI.GetBestSafeSpot(), false) ? BTNodeState.SUCCESS : BTNodeState.FAILURE;
         }
 
     }

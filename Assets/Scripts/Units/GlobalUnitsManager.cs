@@ -1,8 +1,10 @@
 namespace CT6GAMAI
 {
+    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using UnityEngine;
+    using UnityEngine.SceneManagement;
 
     /// <summary>
     /// Manages all units in the game, handling their initialization and state.
@@ -28,8 +30,8 @@ namespace CT6GAMAI
         /// <summary>
         /// Gets the list of active units in the game.
         /// </summary>
-        public List<UnitManager> ActiveUnits => _activeUnits;  
-        
+        public List<UnitManager> ActiveUnits => _activeUnits;
+
         /// <summary>
         /// Gets the currently active/selected unit in the game.
         /// </summary>
@@ -56,10 +58,27 @@ namespace CT6GAMAI
         public List<UnitManager> ActiveEnemyUnits => _activeEnemyUnits;
 
         private void Update()
-        {           
+        {            
             if (!_unitsInitalized)
             {
-                InitializeUnits();                
+                InitializeUnits();
+            }
+
+            if (_unitsInitalized)
+            {
+                StartCoroutine(CheckForAllDeadUnits());
+            }
+        }
+
+        private IEnumerator CheckForAllDeadUnits()
+        {
+            if (_activePlayerUnits.Count <= 0 || _activeEnemyUnits.Count <= 0)
+            {
+                string currentSceneName = SceneManager.GetActiveScene().name;
+
+                yield return new WaitForSeconds(8);
+
+                SceneManager.LoadScene(currentSceneName);
             }
         }
 
@@ -137,13 +156,25 @@ namespace CT6GAMAI
             return false;
         }
 
+        public bool IsAnyUnitBattling()
+        {
+            foreach (UnitManager unit in _allUnits)
+            {
+                if (unit.IsInBattle)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         /// <summary>
         /// Setter for the current active unit.
         /// </summary>
         /// <param name="unit">The unit you want to set as active.</param>
         public void SetActiveUnit(UnitManager unit)
         {
-            _activeUnit = unit;           
+            _activeUnit = unit;
         }
 
         /// <summary>
