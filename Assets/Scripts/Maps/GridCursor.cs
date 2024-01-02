@@ -111,7 +111,7 @@ namespace CT6GAMAI
                 UpdateActiveNodeSelection();
             }
 
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.E) && !_pathing && !UnitPressed)
             {
                 _playerSelectedIDX++;
 
