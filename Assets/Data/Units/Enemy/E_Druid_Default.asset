@@ -16,12 +16,12 @@ MonoBehaviour:
   UnitPortrait: {fileID: 21300000, guid: 719099743fd8d8846aefa2f18cd2e900, type: 3}
   UnitTeam: 1
   UnitClass: 1
-  EquippedWeapon: {fileID: 11400000, guid: 58655411b6b878f4db30a0c0aff3c2f7, type: 2}
+  EquippedWeapon: {fileID: 11400000, guid: 7295dc0abbd902b489e54a0180ace594, type: 2}
   ClassLevel: 1
   HealthPointsBaseValue: 12
   MovementBaseValue: 3
-  AttackBaseValue: 8
-  CriticalRateBaseValue: 0
+  AttackBaseValue: 1
+  CriticalRateBaseValue: 1
   HitRateBaseValue: 85
   AvoidRateBaseValue: 13
   StrengthBaseValue: 1

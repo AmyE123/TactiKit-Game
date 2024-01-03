@@ -17,6 +17,7 @@ namespace CT6GAMAI
         [SerializeField] private bool _isPlayerMusic;
         [SerializeField] private bool _playVictoryMusic = false;
         [SerializeField] private bool _isPlayingVictoryMusic = false;
+        [SerializeField] private bool _forcePlayDeathMusic = false;
 
         public bool PlayVictoryMusic { get { return _playVictoryMusic; } set { _playVictoryMusic = value; } }
 
@@ -30,15 +31,14 @@ namespace CT6GAMAI
         /// </summary>
         public void PlayPlayerPhaseMusic()
         {
-            _isPlayerMusic = true;
-            if (!_playVictoryMusic)
+            if (!_forcePlayDeathMusic)
             {
-                StartCoroutine(CrossfadeMusic(_playerPhaseMusic));
-            }
-            else
-            {
-                StartCoroutine(CrossfadeMusic(_victoryMusic));
-            }            
+                _isPlayerMusic = true;
+                if (!_playVictoryMusic)
+                {
+                    StartCoroutine(CrossfadeMusic(_playerPhaseMusic));
+                }
+            }    
         }
 
         /// <summary>
@@ -46,16 +46,32 @@ namespace CT6GAMAI
         /// </summary>
         public void PlayEnemyPhaseMusic()
         {
-            _isPlayerMusic = false;
-            StartCoroutine(CrossfadeMusic(_enemyPhaseMusic));
+            if (!_forcePlayDeathMusic)
+            {
+                if (!_playVictoryMusic)
+                {
+                    _isPlayerMusic = false;
+                    StartCoroutine(CrossfadeMusic(_enemyPhaseMusic));
+                }
+            }
         }
 
         /// <summary>
         /// Plays the death music
         /// </summary>
-        public void PlayDeathMusic()
+        public void PlayDeathMusic(bool isEndGame = false)
         {
-            StartCoroutine(CrossfadeMusic(_deathMusic));
+            if (!_playVictoryMusic)
+            {
+                _forcePlayDeathMusic = isEndGame;
+                StartCoroutine(CrossfadeMusic(_deathMusic));
+            }
+
+            if (isEndGame)
+            {
+                _forcePlayDeathMusic = isEndGame;
+                StartCoroutine(CrossfadeMusic(_deathMusic));
+            }
         }
 
         /// <summary>
@@ -63,11 +79,14 @@ namespace CT6GAMAI
         /// </summary>
         public void CheckForVictoryMusic()
         {
-            if (PlayVictoryMusic && !_isPlayingVictoryMusic)
+            if (!_forcePlayDeathMusic)
             {
-                _isPlayingVictoryMusic = true;
-                StartCoroutine(CrossfadeMusic(_victoryMusic));
-            }            
+                if (PlayVictoryMusic && !_isPlayingVictoryMusic)
+                {
+                    _isPlayingVictoryMusic = true;
+                    StartCoroutine(CrossfadeMusic(_victoryMusic));
+                }
+            }     
         }
 
         /// <summary>
@@ -76,15 +95,18 @@ namespace CT6GAMAI
         /// </summary>
         public void ResumeLastPhaseMusic(Team deathTeam)
         {
-            if (deathTeam != Team.Enemy)
+            if (!_forcePlayDeathMusic)
             {
-                if (_isPlayerMusic)
+                if (deathTeam != Team.Enemy)
                 {
-                    PlayPlayerPhaseMusic();
-                }
-                else
-                {
-                    PlayEnemyPhaseMusic();
+                    if (_isPlayerMusic)
+                    {
+                        PlayPlayerPhaseMusic();
+                    }
+                    else
+                    {
+                        PlayEnemyPhaseMusic();
+                    }
                 }
             }
         }

@@ -1,6 +1,7 @@
 namespace CT6GAMAI
 {
     using UnityEngine;
+    using UnityEngine.SceneManagement;
 
     /// <summary>
     /// Manages the overall game state and interactions between game components.
@@ -65,9 +66,17 @@ namespace CT6GAMAI
         /// </summary>
         public static GameManager Instance;
 
+        public int PlayerDeaths;
+
         void Awake()
         {
             Instance = this;
+        }
+
+        public void ReloadScene()
+        {
+            Scene scene = SceneManager.GetActiveScene();
+            SceneManager.LoadScene(scene.name);
         }
     }
 }

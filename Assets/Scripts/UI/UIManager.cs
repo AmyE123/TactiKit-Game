@@ -1,6 +1,7 @@
 namespace CT6GAMAI
 {
     using DG.Tweening;
+    using TMPro;
     using UnityEngine;
     using UnityEngine.UI;
 
@@ -31,8 +32,15 @@ namespace CT6GAMAI
         [SerializeField] private GameObject _debugButtonsCanvas;
         [SerializeField] private GameObject[] _uiDebugObjectsToDisableForPlayerTurn;
 
+        [Header("End Game UI Elements")]
+        [SerializeField] private CanvasGroup _endGameScreen;
+        [SerializeField] private TMP_Text _winnerValue;
+        [SerializeField] private TMP_Text _deathsValue;
+        [SerializeField] private TMP_Text _turnsTakenValue;
+        private bool _hasShownEndScreen = false;
+
         [Header("General UI Elements")]
-        [SerializeField] private Image _vignette;
+        [SerializeField] private Image _vignette;       
 
         private GameManager _gameManager;
 
@@ -148,6 +156,28 @@ namespace CT6GAMAI
                         }
                     }
                 }
+            }
+        }
+
+        public void ShowEndGameScreen(Constants.Team winningTeam, int turnsTaken, int deaths)
+        {
+            if (!_hasShownEndScreen)
+            {
+                _gameManager.GridManager.GridCursor.SetPlayerInput(false);
+                
+                if(winningTeam == Constants.Team.Enemy)
+                {
+                    _gameManager.TurnManager.TurnMusicManager.PlayDeathMusic(true);
+                }
+
+                _endGameScreen.alpha = 0f;
+                _endGameScreen.DOFade(1, 1);
+
+                _winnerValue.text = winningTeam.ToString();
+                _turnsTakenValue.text = turnsTaken.ToString();
+                _deathsValue.text = deaths.ToString();
+
+                _hasShownEndScreen = true;
             }
         }
 

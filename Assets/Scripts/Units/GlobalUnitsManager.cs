@@ -26,6 +26,9 @@ namespace CT6GAMAI
 
         private GameManager _gameManager;
 
+        public bool AllPlayerUnitsDead = false;
+        public bool AllEnemyUnitsDead = false;
+
         /// <summary>
         /// Gets the list of all units in the game.
         /// </summary>
@@ -80,9 +83,14 @@ namespace CT6GAMAI
 
             if (_unitsInitalized)
             {
-                StartCoroutine(CheckForAllDeadUnits());
+                CheckForAllDeadUnits();
                 CheckForUnplayedUnits();
                 CheckForVictory();
+            }
+
+            if (_activeEnemyUnits.Count <= 0 || _activePlayerUnits.Count <= 0)
+            {
+                _gameManager.TurnManager.HasGameEnded = true;
             }
 
             // ---- Debug buttons ----
@@ -164,16 +172,24 @@ namespace CT6GAMAI
             }
         }
 
-        private IEnumerator CheckForAllDeadUnits()
+        private void CheckForAllDeadUnits()
         {
-            if (_activePlayerUnits.Count <= 0 || _activeEnemyUnits.Count <= 0)
+            Team winningTeam = Team.Player;
+
+            AllPlayerUnitsDead = _activePlayerUnits.Count <= 0;
+            AllEnemyUnitsDead = _activeEnemyUnits.Count <= 0;
+
+            if (AllPlayerUnitsDead)
             {
-                string currentSceneName = SceneManager.GetActiveScene().name;
-
-                yield return new WaitForSeconds(6);
-
-                SceneManager.LoadScene(currentSceneName);
+                winningTeam = Team.Enemy;                
+                _gameManager.UIManager.ShowEndGameScreen(winningTeam, _gameManager.TurnManager.TurnsTaken, _gameManager.PlayerDeaths);
             }
+
+            if (AllEnemyUnitsDead)
+            {
+                _gameManager.UIManager.ShowEndGameScreen(winningTeam, _gameManager.TurnManager.TurnsTaken, _gameManager.PlayerDeaths);
+            }
+            
         }
 
         private void CheckForUnplayedUnits()

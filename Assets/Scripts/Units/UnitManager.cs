@@ -115,7 +115,7 @@ namespace CT6GAMAI
         /// <summary>
         /// A bool indicating whether the unit has acted this turn.
         /// </summary>
-        public bool HasActedThisTurn => _hasActedThisTurn;
+        public bool HasActedThisTurn => _hasActedThisTurn;        
 
         private void Start()
         {
@@ -313,6 +313,7 @@ namespace CT6GAMAI
         {
             if (_unitData.UnitTeam == Team.Player)
             {
+                _gameManager.PlayerDeaths += 1;
                 _turnManager.TurnMusicManager.PlayDeathMusic();
             }
             

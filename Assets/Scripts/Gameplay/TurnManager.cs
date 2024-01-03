@@ -14,6 +14,7 @@ namespace CT6GAMAI
         [SerializeField] private Phases _activePhase;
         [SerializeField] private UI_PhaseManager _uiPhaseManager;
         [SerializeField] private TurnMusicManager _turnMusicManager;
+        [SerializeField] private int _turnsTaken;
 
         private GameManager _gameManager;
         private bool _isPhaseStarted = false;
@@ -32,6 +33,10 @@ namespace CT6GAMAI
         /// The music manager for turns
         /// </summary>
         public TurnMusicManager TurnMusicManager => _turnMusicManager;
+
+        public int TurnsTaken => _turnsTaken;
+
+        public bool HasGameEnded;
 
         private void Start()
         {
@@ -64,29 +69,32 @@ namespace CT6GAMAI
 
         private void Update()
         {
-            if (!_isPhaseStarted)
+            if (!HasGameEnded)
             {
-                StartPhase();
-            }
-            else if (CheckAllTurnsHaveBeenTaken(ActivePhase))
-            {
-                SwitchPhase();
-                _isPhaseStarted = false;
-            }
-
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                if (ActivePhase == Phases.PlayerPhase)
+                if (!_isPhaseStarted)
+                {
+                    StartPhase();
+                }
+                else if (CheckAllTurnsHaveBeenTaken(ActivePhase))
                 {
                     SwitchPhase();
                     _isPhaseStarted = false;
                 }
-            }
 
-            if (Input.GetKeyDown(KeyCode.Alpha0))
-            {
-                SwitchPhase();
-                _isPhaseStarted = false;
+                if (Input.GetKeyDown(KeyCode.Alpha1))
+                {
+                    if (ActivePhase == Phases.PlayerPhase)
+                    {
+                        SwitchPhase();
+                        _isPhaseStarted = false;
+                    }
+                }
+
+                if (Input.GetKeyDown(KeyCode.Alpha0))
+                {
+                    SwitchPhase();
+                    _isPhaseStarted = false;
+                }
             }
         }
 
@@ -124,6 +132,8 @@ namespace CT6GAMAI
 
         private void StartPlayerPhase()
         {
+            _turnsTaken += 1;
+
             // Enable player input
             _gameManager.GridManager.GridCursor.SetPlayerInput(true);
             _turnMusicManager.PlayPlayerPhaseMusic();
