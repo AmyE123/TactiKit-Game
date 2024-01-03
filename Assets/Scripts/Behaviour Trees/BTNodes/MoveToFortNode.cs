@@ -10,6 +10,7 @@ namespace CT6GAMAI.BehaviourTrees
     public class MoveToFortNode : BTNode
     {
         private UnitAIManager _unitAI;
+        private bool _initiatedMovement = false;
 
         /// <summary>
         /// Initializes the MoveToFortNode class with a reference to the AI manager.
@@ -31,7 +32,29 @@ namespace CT6GAMAI.BehaviourTrees
         {
             _unitAI.UpdateDebugActiveActionUI(GetType().Name);
 
-            return _unitAI.MoveUnitTo(_unitAI.GetNearestFort(), false) ? BTNodeState.SUCCESS : BTNodeState.FAILURE;
+            if (!_initiatedMovement)
+            {
+                bool canMoveToFort = _unitAI.StartMovingTo(_unitAI.GetNearestFort(), false);
+                if (canMoveToFort)
+                {
+                    _initiatedMovement = true;
+                    return BTNodeState.RUNNING;
+                }
+                else
+                {
+                    // The unit is most likely already on the fort, so you'd want them to wait anyway.
+                    return BTNodeState.FAILURE;
+                }
+            }
+            else if (_unitAI.IsMoving)
+            {
+                return BTNodeState.RUNNING;
+            }
+            else
+            {
+                _initiatedMovement = false;
+                return BTNodeState.SUCCESS;
+            }
         }
 
     }

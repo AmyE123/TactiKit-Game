@@ -738,10 +738,10 @@ namespace CT6GAMAI
             return _unitManager.MoveUnitToNode(node, shouldFinalize, isAttacking, this);
         }
 
-        public void StartMovingTo(Node targetNode, bool isAttacking)
+        public bool StartMovingTo(Node targetNode, bool isAttacking)
         {
             IsMoving = true;
-            _unitManager.MoveUnitToNode(targetNode, this, isAttacking);
+            return _unitManager.MoveUnitToNode(targetNode, this, isAttacking);
         }
     }
 

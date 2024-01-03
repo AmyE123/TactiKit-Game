@@ -433,7 +433,6 @@ namespace CT6GAMAI
             }
             else
             {
-                Debug.LogWarning("[AI]: Target node is out of range");
                 return false;
             }
         }
@@ -463,7 +462,7 @@ namespace CT6GAMAI
         /// <returns>True if the node is within range, false otherwise.</returns>
         private bool IsNodeWithinRange(Node node)
         {
-            return _movementRange.ReachableNodes.Contains(node);
+            return _movementRange.ReachableNodes.Contains(node);                        
         }
 
         /// <summary>
