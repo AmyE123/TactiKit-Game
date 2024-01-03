@@ -179,7 +179,7 @@ namespace CT6GAMAI
         /// <summary>
         /// What playstyle an AI is. Impacts desirability calculations.
         /// </summary>
-        public enum Playstyle { Aggressive, Normal, Easy };
+        public enum Playstyle { Aggressive, Normal, Easy, VeryEasy };
 
         /// <summary>
         /// The health states a unit can be in.

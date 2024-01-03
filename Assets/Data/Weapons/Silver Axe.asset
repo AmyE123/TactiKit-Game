@@ -9,8 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64ee23ab112615a438e7ca5001f6ffef, type: 3}
-  m_Name: Stone
+  m_Script: {fileID: 11500000, guid: e54c8797a474a2e44bab208ed2f0e805, type: 3}
+  m_Name: Silver Axe
   m_EditorClassIdentifier: 
-  Coordinates: {x: 0, y: 0, z: 0}
-  TerrainType: {fileID: 11400000, guid: 2571ae14a42a951409bf7887b64671c4, type: 2}
+  WeaponType: 2
+  WeaponName: Silver Axe
+  WeaponSprite: {fileID: 21300000, guid: 6e6a4c340f524be4fb89d60b98e166bb, type: 3}
+  WeaponMinRange: 1
+  WeaponMaxRange: 1
+  WeaponMight: 14

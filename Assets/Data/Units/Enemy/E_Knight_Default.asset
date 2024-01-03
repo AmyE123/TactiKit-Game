@@ -10,25 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 405c8f4dbca7484448b2c4d31d9a7def, type: 3}
-  m_Name: E_Knight 2
+  m_Name: E_Knight_Default
   m_EditorClassIdentifier: 
-  UnitName: Reina
+  UnitName: Knight
   UnitPortrait: {fileID: 21300000, guid: df4d1ca458445464d817fa2bede503f2, type: 3}
   UnitTeam: 1
   UnitClass: 0
-  EquippedWeapon: {fileID: 11400000, guid: e8e5a0438dd37d54a90696b3de6c7ebd, type: 2}
+  EquippedWeapon: {fileID: 11400000, guid: 1c845de0d1be0494a95630ad6b26379c, type: 2}
   ClassLevel: 1
-  HealthPointsBaseValue: 22
-  MovementBaseValue: 9
-  AttackBaseValue: 15
-  CriticalRateBaseValue: 14
-  HitRateBaseValue: 107
+  HealthPointsBaseValue: 10
+  MovementBaseValue: 3
+  AttackBaseValue: 10
+  CriticalRateBaseValue: 1
+  HitRateBaseValue: 90
   AvoidRateBaseValue: 10
-  StrengthBaseValue: 11
+  StrengthBaseValue: 10
   SpeedBaseValue: 3
   MagicBaseValue: 0
-  LuckBaseValue: 11
-  SkillBaseValue: 8
-  DefenseBaseValue: 11
-  ResistanceBaseValue: 7
+  LuckBaseValue: 10
+  SkillBaseValue: 5
+  DefenseBaseValue: 10
+  ResistanceBaseValue: 5
   RatingValue: 51

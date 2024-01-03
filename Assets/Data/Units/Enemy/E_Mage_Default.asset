@@ -10,25 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 405c8f4dbca7484448b2c4d31d9a7def, type: 3}
-  m_Name: E_Mage 3
+  m_Name: E_Mage_Default
   m_EditorClassIdentifier: 
-  UnitName: Micaiah
+  UnitName: Mage
   UnitPortrait: {fileID: 21300000, guid: 1e52ba0829540514fbcce3036f33eedf, type: 3}
   UnitTeam: 1
   UnitClass: 4
-  EquippedWeapon: {fileID: 11400000, guid: 7295dc0abbd902b489e54a0180ace594, type: 2}
-  ClassLevel: 2
-  HealthPointsBaseValue: 19
-  MovementBaseValue: 6
-  AttackBaseValue: 20
-  CriticalRateBaseValue: 5
-  HitRateBaseValue: 101
-  AvoidRateBaseValue: 18
+  EquippedWeapon: {fileID: 11400000, guid: 9ee39f18214f99440a29d046f27e7d45, type: 2}
+  ClassLevel: 1
+  HealthPointsBaseValue: 9
+  MovementBaseValue: 5
+  AttackBaseValue: 10
+  CriticalRateBaseValue: 4
+  HitRateBaseValue: 100
+  AvoidRateBaseValue: 12
   StrengthBaseValue: 10
-  SpeedBaseValue: 7
-  MagicBaseValue: 3
-  LuckBaseValue: 8
-  SkillBaseValue: 7
-  DefenseBaseValue: 4
-  ResistanceBaseValue: 8
-  RatingValue: 44
+  SpeedBaseValue: 5
+  MagicBaseValue: 8
+  LuckBaseValue: 5
+  SkillBaseValue: 13
+  DefenseBaseValue: 7
+  ResistanceBaseValue: 12
+  RatingValue: 64

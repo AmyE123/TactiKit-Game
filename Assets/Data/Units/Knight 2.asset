@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Knight 2
   m_EditorClassIdentifier: 
   UnitName: Takumi
-  UnitPortrait: {fileID: 21300000, guid: df4d1ca458445464d817fa2bede503f2, type: 3}
+  UnitPortrait: {fileID: 21300000, guid: 3af614da3fadf9a4898ab45f6bb6ecce, type: 3}
   UnitTeam: 0
   UnitClass: 0
   EquippedWeapon: {fileID: 11400000, guid: a8bc4e8f2517d9c4cbb738cd63bb0f8e, type: 2}

@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Knight 1
   m_EditorClassIdentifier: 
   UnitName: Keaton
-  UnitPortrait: {fileID: 21300000, guid: df4d1ca458445464d817fa2bede503f2, type: 3}
+  UnitPortrait: {fileID: 21300000, guid: 3af614da3fadf9a4898ab45f6bb6ecce, type: 3}
   UnitTeam: 0
   UnitClass: 0
-  EquippedWeapon: {fileID: 11400000, guid: 1c845de0d1be0494a95630ad6b26379c, type: 2}
+  EquippedWeapon: {fileID: 11400000, guid: e8e5a0438dd37d54a90696b3de6c7ebd, type: 2}
   ClassLevel: 3
   HealthPointsBaseValue: 24
   MovementBaseValue: 5

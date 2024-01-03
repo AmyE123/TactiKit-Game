@@ -9,8 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64ee23ab112615a438e7ca5001f6ffef, type: 3}
-  m_Name: Stone
+  m_Script: {fileID: 11500000, guid: f076a149fdffc0344b5e26b3aa9fe68d, type: 3}
+  m_Name: Very Easy
   m_EditorClassIdentifier: 
-  Coordinates: {x: 0, y: 0, z: 0}
-  TerrainType: {fileID: 11400000, guid: 2571ae14a42a951409bf7887b64671c4, type: 2}
+  Playstyle: 3
+  HealthWeight: 0.8
+  DistanceWeight: 0.1
+  PlayerDistanceWeight: 0.1
+  PowerDifferenceWeight: 0.9
+  EscapeWeight: 0.5
