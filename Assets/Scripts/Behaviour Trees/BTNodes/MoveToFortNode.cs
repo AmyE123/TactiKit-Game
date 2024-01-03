@@ -1,6 +1,5 @@
 namespace CT6GAMAI.BehaviourTrees
 {
-    using UnityEngine;
     using static CT6GAMAI.Constants;
 
     /// <summary>
@@ -35,6 +34,7 @@ namespace CT6GAMAI.BehaviourTrees
             if (!_initiatedMovement)
             {
                 bool canMoveToFort = _unitAI.StartMovingTo(_unitAI.GetNearestFort(), false);
+                
                 if (canMoveToFort)
                 {
                     _initiatedMovement = true;
