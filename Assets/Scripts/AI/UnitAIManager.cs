@@ -610,10 +610,25 @@ namespace CT6GAMAI
             List<Node> targetAttackSpots = new List<Node>();
             List<Node> validAttackSpots = new List<Node>();
 
-            targetAttackSpots.Add(target.StoodNode.NorthNode.Node);
-            targetAttackSpots.Add(target.StoodNode.EastNode.Node);
-            targetAttackSpots.Add(target.StoodNode.SouthNode.Node);
-            targetAttackSpots.Add(target.StoodNode.WestNode.Node);
+            if (target.StoodNode.NorthNode != null)
+            {
+                targetAttackSpots.Add(target.StoodNode.NorthNode.Node);
+            }
+
+            if (target.StoodNode.EastNode != null)
+            {
+                targetAttackSpots.Add(target.StoodNode.EastNode.Node);
+            }
+
+            if (target.StoodNode.SouthNode != null)
+            {
+                targetAttackSpots.Add(target.StoodNode.SouthNode.Node);
+            }
+
+            if (target.StoodNode.WestNode != null)
+            {
+                targetAttackSpots.Add(target.StoodNode.WestNode.Node);
+            }
 
             foreach (Node n in targetAttackSpots)
             {
@@ -647,10 +662,25 @@ namespace CT6GAMAI
             List<Node> attackSpots = new List<Node>();
             List<Node> validAttackSpots = new List<Node>();
 
-            attackSpots.Add(player.StoodNode.NorthNode.Node);
-            attackSpots.Add(player.StoodNode.EastNode.Node);
-            attackSpots.Add(player.StoodNode.SouthNode.Node);
-            attackSpots.Add(player.StoodNode.WestNode.Node);
+            if (player.StoodNode.NorthNode != null)
+            {
+                attackSpots.Add(player.StoodNode.NorthNode.Node);
+            }
+
+            if (player.StoodNode.EastNode != null)
+            {
+                attackSpots.Add(player.StoodNode.EastNode.Node);
+            }
+
+            if (player.StoodNode.SouthNode != null)
+            {
+                attackSpots.Add(player.StoodNode.SouthNode.Node);
+            }
+
+            if (player.StoodNode.WestNode != null)
+            {
+                attackSpots.Add(player.StoodNode.WestNode.Node);
+            }
 
             foreach (Node n in attackSpots)
             {
