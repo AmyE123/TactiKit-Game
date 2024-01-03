@@ -38,18 +38,22 @@ namespace CT6GAMAI.BehaviourTrees
             {
                 if (_unitAI.CanMoveToTargetAttackSpot(_unitAI.TargetUnit))
                 {
+                    _unitAI.NextTargetOverride = false;
                     _attackPosition = _unitAI.GetPlayerValidAttackSpot(_unitAI.TargetUnit);
                     _unitAI.StartMovingTo(_attackPosition, true);
                     _initiatedMovement = true;
                 }
                 else
                 {
-                    _unitAI.FindNextTarget();
-                    if (_unitAI.CanMoveToTargetAttackSpot(_unitAI.TargetUnit))
+                    var nextTarget = _unitAI.FindNextTarget();
+                    if(nextTarget != null)
                     {
-                        _attackPosition = _unitAI.GetPlayerValidAttackSpot(_unitAI.TargetUnit);
-                        _unitAI.StartMovingTo(_attackPosition, true);
-                        _initiatedMovement = true;
+                        if (_unitAI.CanMoveToTargetAttackSpot(nextTarget))
+                        {
+                            _attackPosition = _unitAI.GetPlayerValidAttackSpot(nextTarget);
+                            _unitAI.StartMovingTo(_attackPosition, true);
+                            _initiatedMovement = true;
+                        }
                     }
                     else
                     {

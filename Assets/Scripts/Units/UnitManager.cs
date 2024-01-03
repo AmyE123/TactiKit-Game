@@ -589,6 +589,13 @@ namespace CT6GAMAI
             else
             {
                 Debug.LogError("[AI]: Start & End node are causing issues.");
+
+                ai.IsMoving = false;
+
+                if (!isAttacking)
+                {
+                    FinalizeMovementValues();
+                }
             }
         }
 

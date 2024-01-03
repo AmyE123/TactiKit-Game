@@ -13,6 +13,7 @@ namespace CT6GAMAI
 
         [Header("AI Information")]
         [SerializeField] private UnitManager _targetUnit;
+        [SerializeField] private bool _nextTargetOverride = false;
         public bool IsMoving;
 
         [Header("Utility Theory Information")]
@@ -31,6 +32,8 @@ namespace CT6GAMAI
         private BTNode _topNode;
         private GameManager _gameManager;
         private UnitStatsManager _unitStatsManager;
+
+        public bool NextTargetOverride { get { return _nextTargetOverride; } set { _nextTargetOverride = value; } }
         
         public bool HasAttacked { get; set; } = false;
 
@@ -531,13 +534,17 @@ namespace CT6GAMAI
                 }
             }
 
-            if (isAnyUnitHurt)
+            if (!_nextTargetOverride)
             {
-                _targetUnit = GetNearestPlayer(hurtUnits);
-            }
-            else
-            {
-                _targetUnit = GetNearestPlayer();               
+
+                if (isAnyUnitHurt)
+                {
+                    _targetUnit = GetNearestPlayer(hurtUnits);
+                }
+                else
+                {
+                    _targetUnit = GetNearestPlayer();
+                }
             }
 
             return _targetUnit;
@@ -548,7 +555,7 @@ namespace CT6GAMAI
             List<VisibleUnitDetails> allUnits = GetVisiblePlayerUnits();
             UnitManager closestUnit = null;
 
-            float closestDistance = Constants.MAX_NODE_COST;
+            float closestDistance = MAX_NODE_COST;
 
             foreach (VisibleUnitDetails unit in allUnits)
             {
@@ -565,7 +572,7 @@ namespace CT6GAMAI
         {
             UnitManager closestUnit = null;
 
-            float closestDistance = Constants.MAX_NODE_COST;
+            float closestDistance = MAX_NODE_COST;
 
             foreach (VisibleUnitDetails unit in units)
             {
@@ -587,6 +594,7 @@ namespace CT6GAMAI
                     if (unit.Unit != _targetUnit)
                     {
                         Debug.Log("[AE] Getting next target unit. " + _targetUnit.name + " to " + unit.Unit.UnitData.name);
+                        _nextTargetOverride = true;
                         _targetUnit = unit.Unit;
                         return _targetUnit;
                     }
@@ -599,21 +607,33 @@ namespace CT6GAMAI
         public bool CanMoveToTargetAttackSpot(UnitManager target)
         {
             List<Node> movementRange = _unitManager.MovementRange.ReachableNodes;
-            List<Node> attackSpots = new List<Node>();
+            List<Node> targetAttackSpots = new List<Node>();
             List<Node> validAttackSpots = new List<Node>();
 
-            attackSpots.Add(target.StoodNode.NorthNode.Node);
-            attackSpots.Add(target.StoodNode.EastNode.Node);
-            attackSpots.Add(target.StoodNode.SouthNode.Node);
-            attackSpots.Add(target.StoodNode.WestNode.Node);
+            targetAttackSpots.Add(target.StoodNode.NorthNode.Node);
+            targetAttackSpots.Add(target.StoodNode.EastNode.Node);
+            targetAttackSpots.Add(target.StoodNode.SouthNode.Node);
+            targetAttackSpots.Add(target.StoodNode.WestNode.Node);
 
-            foreach (Node n in attackSpots)
+            foreach (Node n in targetAttackSpots)
             {
+                if (n == _unitManager.StoodNode.Node)
+                {
+                    validAttackSpots.Add(n);
+                }
+
                 if (movementRange.Contains(n))
                 {
                     if (n.NodeManager.StoodUnit == null)
                     {
                         validAttackSpots.Add(n);
+                    }
+                    else
+                    {
+                        if (n.NodeManager.StoodUnit == this)
+                        {
+                            validAttackSpots.Add(n);
+                        }
                     }
                 }
             }
@@ -634,16 +654,28 @@ namespace CT6GAMAI
 
             foreach (Node n in attackSpots)
             {
+                if (n == _unitManager.StoodNode.Node)
+                {
+                    return n;
+                }
+
                 if (movementRange.Contains(n))
                 {
                     if (n.NodeManager.StoodUnit == null)
                     {
                         validAttackSpots.Add(n);
-                    }                    
+                    }
+                    else
+                    {
+                        if (n.NodeManager.StoodUnit == this)
+                        {
+                            return n;
+                        }
+                    }
                 }
             }
 
-            return validAttackSpots[UnityEngine.Random.Range(0, validAttackSpots.Count)];  
+            return validAttackSpots[UnityEngine.Random.Range(0, validAttackSpots.Count)];
         }
 
         public bool ArePlayersVisible()
