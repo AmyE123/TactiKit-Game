@@ -103,6 +103,17 @@ namespace CT6GAMAI
             GetBestUnitToAttack();
         }
 
+        public void ChangePlaystyle(Playstyle newPlaystyle)
+        {
+            foreach (AIPlaystyleWeighting playstyle in _gameManager.AIManager.Playstyles)
+            {
+                if (playstyle.Playstyle == newPlaystyle)
+                {
+                    _playstyle = playstyle;
+                }
+            }           
+        }
+
         public IEnumerator BeginEnemyAI()
         {            
             _gameManager.GridManager.GridCursor.MoveCursorTo(_unitManager.StoodNode.Node);           

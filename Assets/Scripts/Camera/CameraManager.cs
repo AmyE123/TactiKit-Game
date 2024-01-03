@@ -114,6 +114,7 @@ namespace CT6GAMAI
             if (newCamera == _battleCamera)
             {
                 _cameraState = CameraStates.Battle;
+                _isMapCamZoomedOut = false;
             }
         }
     }

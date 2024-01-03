@@ -65,8 +65,6 @@ namespace CT6GAMAI
             _gameManager = GameManager.Instance;
             _gridManager = _gameManager.GridManager;
             _audioManager = _gameManager.AudioManager;
-
-            SelectedNode.NodeState.CursorStateManager.SetDefaultSelected();
         }
 
         private void Update()
@@ -104,6 +102,7 @@ namespace CT6GAMAI
             if (SelectedNodeState == null)
             {
                 SelectedNodeState = SelectedNode.NodeState;
+                SelectedNodeState.CursorStateManager.SetDefaultSelected();
             }
 
             if (SelectedNode == null || !SelectedNodeState.CursorStateManager.IsActiveSelection)

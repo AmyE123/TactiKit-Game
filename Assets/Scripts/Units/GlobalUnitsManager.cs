@@ -5,6 +5,7 @@ namespace CT6GAMAI
     using System.Linq;
     using UnityEngine;
     using UnityEngine.SceneManagement;
+    using static CT6GAMAI.Constants;
 
     /// <summary>
     /// Manages all units in the game, handling their initialization and state.
@@ -82,6 +83,84 @@ namespace CT6GAMAI
                 StartCoroutine(CheckForAllDeadUnits());
                 CheckForUnplayedUnits();
                 CheckForVictory();
+            }
+
+            // ---- Debug buttons ----
+
+            // All enemy units to 1 hp
+            if (Input.GetKeyDown(KeyCode.K))
+            {
+                foreach (UnitManager unit in _activeEnemyUnits)
+                {
+                    unit.UnitStatsManager.SetHealthPoints(1);
+                }
+            }
+
+            // All player units to 1 hp
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                foreach (UnitManager unit in _activePlayerUnits)
+                {
+                    unit.UnitStatsManager.SetHealthPoints(1);
+                }
+            }
+
+            // All enemy units to max hp
+            if (Input.GetKeyDown(KeyCode.H))
+            {
+                foreach (UnitManager unit in _activeEnemyUnits)
+                {
+                    unit.UnitStatsManager.SetHealthPoints(unit.UnitData.HealthPointsBaseValue);
+                }
+            }
+
+            // All player units to max hp
+            if (Input.GetKeyDown(KeyCode.J))
+            {
+                foreach (UnitManager unit in _activePlayerUnits)
+                {
+                    unit.UnitStatsManager.SetHealthPoints(unit.UnitData.HealthPointsBaseValue);
+                }
+            }
+
+            // All enemy units change to 'Very Easy' playstyle
+            if (Input.GetKeyDown(KeyCode.U))
+            {
+                foreach (UnitManager unit in _activeEnemyUnits)
+                {
+                    var ai = unit.GetComponent<UnitAIManager>();
+                    ai.ChangePlaystyle(Playstyle.VeryEasy);
+                }
+            }
+
+            // All enemy units change to 'Easy' playstyle
+            if (Input.GetKeyDown(KeyCode.I))
+            {
+                foreach (UnitManager unit in _activeEnemyUnits)
+                {
+                    var ai = unit.GetComponent<UnitAIManager>();
+                    ai.ChangePlaystyle(Playstyle.Easy);
+                }
+            }
+
+            // All enemy units change to 'Normal' playstyle
+            if (Input.GetKeyDown(KeyCode.O))
+            {
+                foreach (UnitManager unit in _activeEnemyUnits)
+                {
+                    var ai = unit.GetComponent<UnitAIManager>();
+                    ai.ChangePlaystyle(Playstyle.Normal);
+                }
+            }
+
+            // All enemy units change to 'Aggressive' playstyle
+            if (Input.GetKeyDown(KeyCode.P))
+            {
+                foreach (UnitManager unit in _activeEnemyUnits)
+                {
+                    var ai = unit.GetComponent<UnitAIManager>();
+                    ai.ChangePlaystyle(Playstyle.Aggressive);
+                }
             }
         }
 

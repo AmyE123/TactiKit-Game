@@ -82,6 +82,20 @@ namespace CT6GAMAI
         }
 
         /// <summary>
+        /// Sets the health points of the unit to a specific value and checks the unit's health state.
+        /// </summary>
+        /// <param name="value">The value the HP should be set to.</param>
+        /// <returns>The updated health points after adjustment.</returns>
+        public int SetHealthPoints(int value)
+        {
+            // Add the value to current health points and clamp it within the valid range
+            _healthPoints = Mathf.Clamp(value, 0, _unitBaseData.HealthPointsBaseValue);
+            CheckHealthState();
+
+            return _healthPoints;
+        }
+
+        /// <summary>
         /// Checks and returns the current health state of the unit.
         /// </summary>
         /// <returns>The current health state of the unit.</returns>

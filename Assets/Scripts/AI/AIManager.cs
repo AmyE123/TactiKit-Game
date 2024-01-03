@@ -11,12 +11,18 @@ namespace CT6GAMAI
     {
         private GameManager _gameManager;
 
-        [SerializeField] List<UnitAIManager> _aiUnits;
+        [SerializeField] private List<UnitAIManager> _aiUnits;
+        [SerializeField] private AIPlaystyleWeighting[] _playstyles;
 
         /// <summary>
         /// A list of all AI controlled units.
         /// </summary>
         public List<UnitAIManager> AIUnits => _aiUnits;
+
+        /// <summary>
+        /// All avaliable AI playstyles
+        /// </summary>
+        public AIPlaystyleWeighting[] Playstyles => _playstyles;
 
         private void Start()
         {
