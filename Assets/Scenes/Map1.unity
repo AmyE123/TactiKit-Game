@@ -1900,6 +1900,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2994121501322752863, guid: f5cc78635a9a5c348aeac0b3f5a00d19, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1427844808}
+    - target: {fileID: 2994121501322752863, guid: f5cc78635a9a5c348aeac0b3f5a00d19, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ReloadScene
+      objectReference: {fileID: 0}
     - target: {fileID: 5491611350953575835, guid: f5cc78635a9a5c348aeac0b3f5a00d19, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -2550,7 +2558,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 546501078}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.0000000056954326, y: 0.9436283, z: -0.33100694, w: 0.00000001623643}
+  m_LocalRotation: {x: -0.0000000056954317, y: 0.9436283, z: -0.33100694, w: -0.000000016236426}
   m_LocalPosition: {x: 0, y: 8, z: 18.14}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
