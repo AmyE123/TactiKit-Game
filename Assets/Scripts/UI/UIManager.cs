@@ -167,19 +167,16 @@ namespace CT6GAMAI
 
         public void OpenReadme()
         {
-            Debug.Log("README CLICKED");
-            Application.OpenURL("https://docs.google.com/document/d/11yKWmuq2m0dBO-t5ifokrDjzV_0JWcDBVbJg-Y-UfMI/edit?usp=sharing");
+            Application.OpenURL("https://drive.google.com/file/d/1UGDVvXONAe6eHo37OrbpG-ojSrOogAlq/view?usp=sharing");
         }
 
         public void OpenManual()
         {
-            Debug.Log("MANUAL CLICKED");
             Application.OpenURL("https://drive.google.com/file/d/1z1bJ49V8wUJKr4DHuYiz5JNzLbxgiwyN/view?usp=sharing");
         }
 
         public void ClosePopup()
         {
-            Debug.Log("CLOSE CLICKED");
             _popupTransform.DOAnchorPosY(-800, 2).SetEase(Ease.OutBounce);
             _popupScreen.DOFade(0, 3);
             StartCoroutine(SetPopupInactive());
