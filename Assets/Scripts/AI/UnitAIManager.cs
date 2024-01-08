@@ -593,7 +593,6 @@ namespace CT6GAMAI
                 {
                     if (unit.Unit != _targetUnit)
                     {
-                        Debug.Log("[AE] Getting next target unit. " + _targetUnit.name + " to " + unit.Unit.UnitData.name);
                         _nextTargetOverride = true;
                         _targetUnit = unit.Unit;
                         return _targetUnit;

@@ -204,8 +204,6 @@ namespace CT6GAMAI
         /// </summary>
         public void SwitchPhase()
         {
-            Debug.Log("Switching Phases");
-
             Phases nextPhase = ActivePhase == Phases.PlayerPhase ? Phases.EnemyPhase : Phases.PlayerPhase;
 
             _uiPhaseManager.DisplayPhaseUI(nextPhase);

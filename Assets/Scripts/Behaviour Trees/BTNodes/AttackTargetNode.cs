@@ -35,8 +35,6 @@ namespace CT6GAMAI.BehaviourTrees
                 _unitAI.AttackTargetUnit();
                 _initiatedAttack = true;
 
-                Debug.Log("[AI BT]: Is in battle & initiated here");
-
                 return BTNodeState.RUNNING;
             }
 
@@ -48,7 +46,7 @@ namespace CT6GAMAI.BehaviourTrees
                     {
                         return BTNodeState.SUCCESS;
                     }
-                    Debug.Log("[AI BT]: Is in battle & running here");
+
                     return BTNodeState.RUNNING;
                 }
                 else
