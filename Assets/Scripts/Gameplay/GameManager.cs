@@ -66,6 +66,9 @@ namespace CT6GAMAI
         /// </summary>
         public static GameManager Instance;
 
+        /// <summary>
+        /// The number of player deaths in the game. Used for the end screen.
+        /// </summary>
         public int PlayerDeaths;
 
         void Awake()
@@ -73,6 +76,9 @@ namespace CT6GAMAI
             Instance = this;
         }
 
+        /// <summary>
+        /// Reloading of the scene for when the game reloads.
+        /// </summary>
         public void ReloadScene()
         {
             Scene scene = SceneManager.GetActiveScene();

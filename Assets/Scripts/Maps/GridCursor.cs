@@ -10,13 +10,6 @@ namespace CT6GAMAI
     /// </summary>
     public class GridCursor : MonoBehaviour
     {
-        private GameManager _gameManager;
-        private GridManager _gridManager;
-        private AudioManager _audioManager;
-        private UnitManager _lastSelectedUnit;
-        private bool _pathing = false;
-        private int _playerSelectedIDX = 0;
-
         [Header("Cursor Configuration")]
         [SerializeField] private bool _enablePlayerInput;
 
@@ -55,16 +48,16 @@ namespace CT6GAMAI
 
         #endregion // Public Getters
 
+        private GameManager _gameManager;
+        private GridManager _gridManager;
+        private AudioManager _audioManager;
+        private UnitManager _lastSelectedUnit;
+        private bool _pathing = false;
+        private int _playerSelectedIDX = 0;
+
         private void Start()
         {
             InitializeValues();
-        }
-
-        private void InitializeValues()
-        {
-            _gameManager = GameManager.Instance;
-            _gridManager = _gameManager.GridManager;
-            _audioManager = _gameManager.AudioManager;
         }
 
         private void Update()
@@ -84,6 +77,13 @@ namespace CT6GAMAI
                 ResetHighlightedNodes();
                 HandleNodeUnitInteraction();
             }
+        }
+
+        private void InitializeValues()
+        {
+            _gameManager = GameManager.Instance;
+            _gridManager = _gameManager.GridManager;
+            _audioManager = _gameManager.AudioManager;
         }
 
         private void UpdateUnitReferences()

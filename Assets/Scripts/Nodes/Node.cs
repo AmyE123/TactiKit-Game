@@ -19,48 +19,50 @@ namespace CT6GAMAI
         // TODO: Make this update with the terrain data
         public int Cost = 1;
 
-        // The distance used for Dijkstra's algorithm
+        /// <summary>
+        /// The distance used for Dijkstra's algorithm
+        /// </summary>
         public int Distance { get; set; }
 
-        // Whether the node has been visited
+        /// <summary>
+        /// Whether the node has been visited
+        /// </summary>
         public bool Visited = false;
 
-        // Whether the node is walkable
+        /// <summary>
+        /// Whether the node is walkable
+        /// </summary>
         public bool Walkable;
 
-        // A list of adjacent nodes (neighbors)
+        /// <summary>
+        /// A list of adjacent nodes (neighbors)
+        /// </summary>
         public List<Node> Neighbors;
 
-        // For movement algorithm, store the predecessor
+        /// <summary>
+        /// For movement algorithm, store the predecessor
+        /// </summary>
         public Node Predecessor { get; set; }
 
+        /// <summary>
+        /// A unit transform on the node
+        /// </summary>
         public Transform UnitTransform;
 
         #endregion // Public Variables
 
         #region Public Getters
 
+        /// <summary>
+        /// A getter for the NodeManager for this node.
+        /// </summary>
         public NodeManager NodeManager => _manager;
 
         #endregion // Public Getters
 
-        public Node(int cost)
-        {
-            Cost = cost;
-            Visited = false;
-            Distance = int.MaxValue;
-            Neighbors = new List<Node>();
-        }
-
         public void AddNeighbor(Node neighbor)
         {
             Neighbors.Add(neighbor);
-        }
-
-        public void ResetNode()
-        {
-            Visited = false;
-            Distance = int.MaxValue;
         }
     }
 }

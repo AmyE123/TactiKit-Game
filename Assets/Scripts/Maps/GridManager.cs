@@ -15,12 +15,12 @@ namespace CT6GAMAI
         [SerializeField] private List<NodeManager> _allNodes;
         [SerializeField] private List<NodeManager> _occupiedNodes;
         [SerializeField] private List<Node> _movementPath;
+        [SerializeField] private bool _canSwitchToBattle = false;
 
         private UnitManager _activeUnit;
         private GameManager _gameManager;
         private bool _cursorWithinRange;
         private bool _gridInitialized = false;
-        [SerializeField] private bool _canSwitchToBattle = false;
 
         /// <summary>
         /// The current state of the grid cursor in regards to unit actions.
@@ -36,11 +36,6 @@ namespace CT6GAMAI
         /// Gets the list of all nodes in the grid.
         /// </summary>
         public List<NodeManager> AllNodes => _allNodes;
-
-        /// <summary>
-        /// Gets the list of currently occupied nodes.
-        /// </summary>
-        public List<NodeManager> OccupiedNodes => _occupiedNodes;
 
         /// <summary>
         /// Gets the movement path of the currently selected unit.

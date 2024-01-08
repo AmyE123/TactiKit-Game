@@ -46,7 +46,7 @@ namespace CT6GAMAI
             if (Input.GetKeyDown(KeyCode.Z))
             {
                 ToggleMapCameraZoom();
-            }          
+            }
         }
 
         private void ToggleMapCameraZoom()
@@ -55,7 +55,7 @@ namespace CT6GAMAI
             {
                 if (_isMapCamZoomedOut)
                 {
-                    SwitchCamera(_mapCameras[0]);                  
+                    SwitchCamera(_mapCameras[0]);
                 }
                 else
                 {
@@ -82,7 +82,7 @@ namespace CT6GAMAI
                 {
                     paniniProjection.distance.value = value;
                 }).SetEase(Ease.InOutSine);
-            }            
+            }
         }
 
         private void SetActiveCamera(CinemachineVirtualCamera newCamera)

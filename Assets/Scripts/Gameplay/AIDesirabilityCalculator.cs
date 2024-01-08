@@ -8,6 +8,20 @@ namespace CT6GAMAI
     public class AIDesirabilityCalculator : MonoBehaviour
     {
         /// <summary>
+        /// A normalizing calculator function.
+        /// </summary>
+        /// <returns>A normalized value</returns>
+        private static float Normalize(float value, float minValue, float maxValue)
+        {
+            if (minValue == maxValue)
+            {
+                return 0;
+            }
+
+            return (value - minValue) / (maxValue - minValue);
+        }
+
+        /// <summary>
         /// Calculates the desirability for finding a fort based on the units current health and distance to the nearest fort.
         /// </summary>
         /// <returns>A desirability from 0 to 100. 100 is a very high desirability and 0 is a very low desirability.</returns>
@@ -158,28 +172,22 @@ namespace CT6GAMAI
             return finalDesirability;
         }
 
+        /// <summary>
+        /// Calculates the desirability for waiting
+        /// </summary>
+        /// <returns>A desirability of 0 or 100. 100 is a very high desirability and 0 is a very low desirability.</returns>
         public static int CalculateWaitDesirability(UnitAIManager unit)
         {
             bool hasTakenAnyDamage = unit.UnitCurrentHealth < unit.UnitStatsManager.UnitBaseData.HealthPointsBaseValue;
 
             if (hasTakenAnyDamage && CalculateFortDesirability(unit) > 0)
-            { 
+            {
                 return 0;
             }
             else
             {
                 return unit.ArePlayersVisible() ? 0 : 100;
-            }            
-        }
-
-        public static float Normalize(float value, float minValue, float maxValue)
-        {
-            if (minValue == maxValue)
-            {
-                return 0;
             }
-
-            return (value - minValue) / (maxValue - minValue);
         }
     }
 }

@@ -34,37 +34,20 @@ namespace CT6GAMAI
         /// </summary>
         public TurnMusicManager TurnMusicManager => _turnMusicManager;
 
+        /// <summary>
+        /// The amount of turns which have currently been taken. Used for endgame screen.
+        /// </summary>
         public int TurnsTaken => _turnsTaken;
 
+        /// <summary>
+        /// A boolean for checking whether the game has finished.
+        /// </summary>
         public bool HasGameEnded;
 
         private void Start()
         {
             _gameManager = GameManager.Instance;
             SetPhase(Phases.PlayerPhase);
-        }
-
-        private void StartPhase()
-        {
-            if (!_isPhaseStarted)
-            {
-                if (ActivePhase == Phases.PlayerPhase)
-                {
-                    foreach (var unit in _gameManager.UnitsManager.ActivePlayerUnits)
-                    {
-                        unit.ResetTurn();
-                    }
-                }
-                else
-                {
-                    foreach (var unit in _gameManager.UnitsManager.ActiveEnemyUnits)
-                    {
-                        unit.ResetTurn();
-                    }
-                }
-
-                _isPhaseStarted = true;
-            }
         }
 
         private void Update()
@@ -98,6 +81,38 @@ namespace CT6GAMAI
             }
         }
 
+        private IEnumerator TransitionToNextPhase(Phases nextPhase, float delay)
+        {
+            UpdatePlayerInput(nextPhase);
+
+            yield return new WaitForSeconds(delay);
+
+            SetPhase(nextPhase);
+        }
+
+        private void StartPhase()
+        {
+            if (!_isPhaseStarted)
+            {
+                if (ActivePhase == Phases.PlayerPhase)
+                {
+                    foreach (var unit in _gameManager.UnitsManager.ActivePlayerUnits)
+                    {
+                        unit.ResetTurn();
+                    }
+                }
+                else
+                {
+                    foreach (var unit in _gameManager.UnitsManager.ActiveEnemyUnits)
+                    {
+                        unit.ResetTurn();
+                    }
+                }
+
+                _isPhaseStarted = true;
+            }
+        }
+
         private bool CheckAllTurnsHaveBeenTaken(Phases turn)
         {
             List<UnitManager> units = turn == Phases.PlayerPhase ? _gameManager.UnitsManager.ActivePlayerUnits : _gameManager.UnitsManager.ActiveEnemyUnits;
@@ -111,15 +126,6 @@ namespace CT6GAMAI
             }
 
             return true;
-        }
-
-        private IEnumerator TransitionToNextPhase(Phases nextPhase, float delay)
-        {
-            UpdatePlayerInput(nextPhase);
-
-            yield return new WaitForSeconds(delay);
-
-            SetPhase(nextPhase);
         }
 
         private void UpdatePlayerInput(Phases nextPhase)
@@ -152,6 +158,9 @@ namespace CT6GAMAI
             _gameManager.AIManager.StartEnemyAI();
         }
 
+        /// <summary>
+        /// Refreshes the map when a new phase starts to update all stood nodes.
+        /// </summary>
         public void RefreshMap()
         {
             foreach (NodeManager node in _gameManager.GridManager.AllNodes)
