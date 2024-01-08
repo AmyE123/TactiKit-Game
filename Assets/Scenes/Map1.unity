@@ -2466,6 +2466,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &382771257 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 806299049256768379, guid: f5cc78635a9a5c348aeac0b3f5a00d19, type: 3}
+  m_PrefabInstance: {fileID: 382771252}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &383321259 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8962421903240822751, guid: a0c0f1763841bc94fb008a4ce9e226f9, type: 3}
@@ -10917,7 +10922,7 @@ MonoBehaviour:
   _uiDebugObjectsToDisableForPlayerTurn:
   - {fileID: 1988709358}
   - {fileID: 3502376111506109932}
-  _endGameGO: {fileID: 0}
+  _endGameGO: {fileID: 382771257}
   _endGameScreen: {fileID: 382771253}
   _winnerValue: {fileID: 382771256}
   _deathsValue: {fileID: 382771254}
