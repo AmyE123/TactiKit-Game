@@ -3,6 +3,7 @@ namespace CT6GAMAI.BehaviourTrees
     using System.Collections.Generic;
     using static CT6GAMAI.Constants;
 
+    // -- START -- The following code snippet was adapted from GameDevChef, 2021 (https://youtu.be/F-3nxJ2ANXg?si=YNF0_0i24xuX5wRh)
     /// <summary>
     /// Represents a Selector node in a behaviour tree.
     /// A selector evaluates child nodes one after the other. 
@@ -53,4 +54,5 @@ namespace CT6GAMAI.BehaviourTrees
             return _btNodeState;
         }
     }
+    // -- END -- The following code snippet was adapted from GameDevChef, 2021 (https://youtu.be/F-3nxJ2ANXg?si=YNF0_0i24xuX5wRh)
 }

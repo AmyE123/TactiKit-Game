@@ -230,15 +230,6 @@ namespace CT6GAMAI
         }
 
         /// <summary>
-        /// Calculates the movement range for the inputted unit.
-        /// </summary>
-        /// <param name="unit">The unit whose range you'd like to calculate.</param>
-        public void CalculateUnitMovementRange(UnitManager unit)
-        {
-            unit.MovementRange.CalculateMovementRange(unit);
-        }
-
-        /// <summary>
         /// Clears the stood unit.
         /// </summary>
         public void ClearStoodUnit()

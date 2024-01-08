@@ -11,12 +11,18 @@ namespace CT6GAMAI
 
         private NodeCursorManager _manager;
 
+        /// <summary>
+        /// The cursor manager for this cursor
+        /// </summary>
         public NodeCursorManager Manager
         {
             get { return _manager; }
             set { _manager = value; }
         }
 
+        /// <summary>
+        /// Constructor for the NodeCursorFSM
+        /// </summary>
         public NodeCursorFSM()
         {
             _currentState = NodeCursorState.NoSelection;

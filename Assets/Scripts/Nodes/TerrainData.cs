@@ -2,6 +2,9 @@ namespace CT6GAMAI
 {
     using UnityEngine;
 
+    /// <summary>
+    /// A scriptable object containing all information needed for a terrain.
+    /// </summary>
     [CreateAssetMenu(fileName = "TerrainData", menuName = "ScriptableObjects/Terrain/TerrainData", order = 1)]
     public class TerrainData : ScriptableObject
     {

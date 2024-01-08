@@ -58,7 +58,6 @@ namespace CT6GAMAI
         /// </summary>
         public NodeVisualData[] CursorVisualDatas;
 
-
         #region Public Getters
 
         /// <summary>
@@ -98,9 +97,6 @@ namespace CT6GAMAI
 
         #endregion // Hidden In Inspector
 
-        Sequence mySequence;
-        private bool wasPlayerSelected;
-
         private void Start()
         {
             cursorFSM = new NodeCursorFSM();
@@ -110,7 +106,7 @@ namespace CT6GAMAI
 
             State = GetComponent<NodeState>();
 
-            RefreshCursor();         
+            RefreshCursor();
         }
 
         private void Awake()

@@ -12,24 +12,21 @@ namespace CT6GAMAI
 
         private NodeVisualManager _manager;
 
+        /// <summary>
+        /// The visual manager for the node
+        /// </summary>
         public NodeVisualManager Manager
         {
             get { return _manager; }
             set { _manager = value; }
         }
 
+        /// <summary>
+        /// A constructor for the NodeVisualFSM
+        /// </summary>
         public NodeVisualFSM()
         {
             _currentState = NodeVisualState.Default;
-        }
-
-        /// <summary>
-        /// Gets the current state of the node visual.
-        /// </summary>
-        /// <returns>The current state of the node visual.</returns>
-        public NodeVisualState GetState()
-        {
-            return _currentState;
         }
 
         /// <summary>

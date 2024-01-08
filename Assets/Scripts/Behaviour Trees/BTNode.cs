@@ -2,6 +2,7 @@ namespace CT6GAMAI.BehaviourTrees
 {
     using static CT6GAMAI.Constants;
 
+    // -- START -- The following code snippet was adapted from GameDevChef, 2021 (https://youtu.be/F-3nxJ2ANXg?si=YNF0_0i24xuX5wRh)
     /// <summary>
     /// This represents a single node in a behaviour tree.
     /// </summary>
@@ -24,4 +25,5 @@ namespace CT6GAMAI.BehaviourTrees
         /// <returns>The state after evaluation.</returns>
         public abstract BTNodeState Evaluate();
     }
+    // -- END -- The following code snippet was adapted from GameDevChef, 2021 (https://youtu.be/F-3nxJ2ANXg?si=YNF0_0i24xuX5wRh)
 }

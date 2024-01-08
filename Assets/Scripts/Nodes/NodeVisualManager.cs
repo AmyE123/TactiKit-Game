@@ -60,6 +60,9 @@ namespace CT6GAMAI
         /// </summary>
         public bool IsPath => _isPath;
 
+        /// <summary>
+        /// A bool indicating whether the visual is in a disabled state.
+        /// </summary>
         public bool IsDisabled => _isDisabled;
 
         #endregion // Public Getters
@@ -135,25 +138,6 @@ namespace CT6GAMAI
                     break;
                 case NodeVisualColorState.Green:
                     visualFSM.ChangeState(NodeVisualState.SelectedGreen);
-                    break;
-            }
-        }
-
-        public void SetEnemyRange(NodeVisualEnemyColorState color)
-        {
-            _isActive = true;
-            _isDefault = false;
-            _isHovered = false;
-            _isPressed = true;
-            _isPath = false;
-
-            switch (color)
-            {
-                case NodeVisualEnemyColorState.SingularEnemy:
-                    visualFSM.ChangeState(NodeVisualState.AllEnemyRange);
-                    break;
-                case NodeVisualEnemyColorState.AllEnemy:
-                    visualFSM.ChangeState(NodeVisualState.SingularEnemyRange);
                     break;
             }
         }
