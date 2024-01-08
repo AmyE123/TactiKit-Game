@@ -1,6 +1,7 @@
 namespace CT6GAMAI
 {
     using DG.Tweening;
+    using System.Collections;
     using TMPro;
     using UnityEngine;
     using UnityEngine.UI;
@@ -33,11 +34,16 @@ namespace CT6GAMAI
         [SerializeField] private GameObject[] _uiDebugObjectsToDisableForPlayerTurn;
 
         [Header("End Game UI Elements")]
+        [SerializeField] private GameObject _endGameGO;
         [SerializeField] private CanvasGroup _endGameScreen;
         [SerializeField] private TMP_Text _winnerValue;
         [SerializeField] private TMP_Text _deathsValue;
         [SerializeField] private TMP_Text _turnsTakenValue;
         private bool _hasShownEndScreen = false;
+
+        [Header("Popup UI Elements")]
+        [SerializeField] private CanvasGroup _popupScreen;
+        [SerializeField] private RectTransform _popupTransform;
 
         [Header("General UI Elements")]
         [SerializeField] private Image _vignette;       
@@ -159,10 +165,38 @@ namespace CT6GAMAI
             }
         }
 
+        public void OpenReadme()
+        {
+            Debug.Log("README CLICKED");
+            Application.OpenURL("https://docs.google.com/document/d/11yKWmuq2m0dBO-t5ifokrDjzV_0JWcDBVbJg-Y-UfMI/edit?usp=sharing");
+        }
+
+        public void OpenManual()
+        {
+            Debug.Log("MANUAL CLICKED");
+            Application.OpenURL("https://drive.google.com/file/d/1z1bJ49V8wUJKr4DHuYiz5JNzLbxgiwyN/view?usp=sharing");
+        }
+
+        public void ClosePopup()
+        {
+            Debug.Log("CLOSE CLICKED");
+            _popupTransform.DOAnchorPosY(-800, 2).SetEase(Ease.OutBounce);
+            _popupScreen.DOFade(0, 3);
+            StartCoroutine(SetPopupInactive());
+        }
+
+        IEnumerator SetPopupInactive()
+        {
+            yield return new WaitForSeconds(5);
+            _popupScreen.gameObject.SetActive(false);
+        }
+
         public void ShowEndGameScreen(Constants.Team winningTeam, int turnsTaken, int deaths)
         {
             if (!_hasShownEndScreen)
             {
+                _endGameGO.SetActive(true);
+                _endGameScreen.interactable = true;
                 _gameManager.GridManager.GridCursor.SetPlayerInput(false);
                 
                 if(winningTeam == Constants.Team.Enemy)
