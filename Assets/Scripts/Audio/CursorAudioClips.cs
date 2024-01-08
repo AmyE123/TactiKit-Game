@@ -2,6 +2,9 @@ namespace CT6GAMAI
 {
     using UnityEngine;
 
+    /// <summary>
+    /// A scriptable object of all cursor audio clips
+    /// </summary>
     [CreateAssetMenu(fileName = "CursorAudioClips", menuName = "ScriptableObjects/Audio/CursorSFX", order = 1)]
     public class CursorAudioClips : ScriptableObject
     {

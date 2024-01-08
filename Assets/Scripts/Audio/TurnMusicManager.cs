@@ -19,6 +19,9 @@ namespace CT6GAMAI
         [SerializeField] private bool _isPlayingVictoryMusic = false;
         [SerializeField] private bool _forcePlayDeathMusic = false;
 
+        /// <summary>
+        /// A boolean for playing victory music
+        /// </summary>
         public bool PlayVictoryMusic { get { return _playVictoryMusic; } set { _playVictoryMusic = value; } }
 
         public void Update()

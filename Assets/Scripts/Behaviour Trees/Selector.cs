@@ -34,7 +34,7 @@ namespace CT6GAMAI.BehaviourTrees
         {
             foreach (BTNode node in _childNodes)
             {
-                switch (node.Evaluate()) 
+                switch (node.Evaluate())
                 {
                     case BTNodeState.RUNNING:
                         _btNodeState = BTNodeState.RUNNING;
@@ -53,5 +53,4 @@ namespace CT6GAMAI.BehaviourTrees
             return _btNodeState;
         }
     }
-
 }

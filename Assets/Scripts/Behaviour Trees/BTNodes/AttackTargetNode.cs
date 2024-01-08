@@ -52,7 +52,7 @@ namespace CT6GAMAI.BehaviourTrees
                 else
                 {
                     _initiatedAttack = false;
-                   
+
                     return BTNodeState.SUCCESS;
                 }
             }

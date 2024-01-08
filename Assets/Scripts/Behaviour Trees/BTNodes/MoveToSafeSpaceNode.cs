@@ -51,7 +51,7 @@ namespace CT6GAMAI.BehaviourTrees
                 return BTNodeState.RUNNING;
             }
             else
-            { 
+            {
                 _initiatedMovement = false;
                 return BTNodeState.SUCCESS;
             }
@@ -59,7 +59,5 @@ namespace CT6GAMAI.BehaviourTrees
 
             //return _unitAI.MoveUnitTo(_unitAI.GetBestSafeSpot(), false) ? BTNodeState.SUCCESS : BTNodeState.FAILURE;
         }
-
     }
-
 }

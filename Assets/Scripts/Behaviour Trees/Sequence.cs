@@ -74,6 +74,6 @@ namespace CT6GAMAI.BehaviourTrees
             _currentNodeIndex = 0; // Reset for the next evaluation.
             _btNodeState = BTNodeState.SUCCESS;
             return _btNodeState;
-        }    
+        }
     }
 }

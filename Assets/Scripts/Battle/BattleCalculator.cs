@@ -155,17 +155,6 @@ namespace CT6GAMAI
         }
 
         /// <summary>
-        /// Calculates the avoid rate of a unit.
-        /// </summary>
-        /// <param name="unit">The unit for which to calculate the avoid rate.</param>
-        /// <returns>The calculated avoid rate.</returns>
-        public static int CalculateAvoidRate(UnitData unit)
-        {
-            // TODO: Implement other calculations for other stats. This isn't currently used.
-            return (unit.SpeedBaseValue * AVOID_SPEED_MULTIPLIER) + unit.LuckBaseValue;
-        }
-
-        /// <summary>
         /// Calculates the remaining health points of a unit after an attack for the forecast UI.
         /// </summary>
         /// <param name="unit">The unit to calculate the remaining health for.</param>

@@ -33,6 +33,9 @@ namespace CT6GAMAI
         private bool _isBattleEnding = false;
         private GameManager _gameManager;
 
+        /// <summary>
+        /// The initiating team for the battle
+        /// </summary>
         public Team InitiatingTeam { get { return _initiatingTeam; } set { _initiatingTeam = value; } }
 
         private void Start()
@@ -287,7 +290,7 @@ namespace CT6GAMAI
                 {
                     _gameManager.UIManager.BattleSequenceManager.CriticalPopup(1);
                 }
-               
+
                 attackPower *= CRIT_HIT_MULTIPLIER;
             }
 

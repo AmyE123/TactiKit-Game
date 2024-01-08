@@ -34,7 +34,7 @@ namespace CT6GAMAI.BehaviourTrees
             if (!_initiatedMovement)
             {
                 bool canMoveToFort = _unitAI.StartMovingTo(_unitAI.GetNearestFort(), false);
-                
+
                 if (canMoveToFort)
                 {
                     _initiatedMovement = true;
@@ -56,7 +56,5 @@ namespace CT6GAMAI.BehaviourTrees
                 return BTNodeState.SUCCESS;
             }
         }
-
     }
-
 }

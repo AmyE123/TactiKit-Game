@@ -28,7 +28,7 @@ namespace CT6GAMAI.BehaviourTrees
         /// </returns>
         public override BTNodeState Evaluate()
         {
-            switch (_node.Evaluate()) 
+            switch (_node.Evaluate())
             {
                 case BTNodeState.RUNNING:
                     _btNodeState = BTNodeState.RUNNING;

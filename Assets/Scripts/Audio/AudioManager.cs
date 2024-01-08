@@ -11,12 +11,6 @@ namespace CT6GAMAI
         [SerializeField] private CursorAudioClips _cursorAudioClips;
 
         /// <summary>
-        /// The cursor's audio clips.
-        /// This contains various sound effects related to cursor interactions.
-        /// </summary>
-        public CursorAudioClips CursorAudioClips => _cursorAudioClips;
-
-        /// <summary>
         /// Plays a cursor sound effect based on the unit selection state.
         /// </summary>
         /// <param name="isUnitPressed">Indicates whether a unit is currently selected.</param>

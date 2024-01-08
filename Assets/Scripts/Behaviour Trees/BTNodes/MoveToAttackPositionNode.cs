@@ -46,7 +46,7 @@ namespace CT6GAMAI.BehaviourTrees
                 else
                 {
                     var nextTarget = _unitAI.FindNextTarget();
-                    if(nextTarget != null)
+                    if (nextTarget != null)
                     {
                         if (_unitAI.CanMoveToTargetAttackSpot(nextTarget))
                         {

@@ -29,12 +29,7 @@ namespace CT6GAMAI
         private GameManager _gameManager;
         private CameraManager _cameraManager;
         private bool _isBattleActive;
-        private Constants.Team _initiatingTeam;
-
-        /// <summary>
-        /// The attacking unit for the current battle stats.
-        /// </summary>
-        public UnitManager AttackerUnit => _attackingUnit;
+        private Team _initiatingTeam;
 
         /// <summary>
         /// The attack amount from the attacker for the current battle stats.
@@ -60,11 +55,6 @@ namespace CT6GAMAI
         /// The remaining HP of the attacker for the current battle stats.
         /// </summary>
         public int AttackerRemainingHP => _attackerRemainingHP;
-
-        /// <summary>
-        /// The defending unit for the current battle stats.
-        /// </summary>
-        public UnitManager DefenderUnit => _defendingUnit;
 
         /// <summary>
         /// The attack amount from the defender for the current battle stats.
