@@ -268,7 +268,7 @@ namespace CT6GAMAI
 
         public void CheckForVictory()
         {
-            if (_activeEnemyUnits.Count <= 2 && _gameManager.TurnManager.ActivePhase != Constants.Phases.EnemyPhase)
+            if (_activeEnemyUnits.Count <= 3 && _gameManager.TurnManager.ActivePhase != Phases.EnemyPhase)
             {
                 _gameManager.TurnManager.TurnMusicManager.PlayVictoryMusic = true;
             }

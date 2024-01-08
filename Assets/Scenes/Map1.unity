@@ -3083,7 +3083,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 546501078}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.0000000056954317, y: 0.9436283, z: -0.33100694, w: -0.000000016236426}
+  m_LocalRotation: {x: 0.0000000056954326, y: 0.9436283, z: -0.33100694, w: 0.00000001623643}
   m_LocalPosition: {x: 0, y: 8, z: 18.14}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -6400,7 +6400,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1223340195}
   serializedVersion: 2
-  m_LocalRotation: {x: 2.0641513e-15, y: 0.9436283, z: -0.33100694, w: 1.5760844e-15}
+  m_LocalRotation: {x: -0.0000000098647766, y: 0.9436284, z: -0.33100694, w: -0.000000028122319}
   m_LocalPosition: {x: 0, y: -11, z: -23.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -7581,8 +7581,8 @@ MonoBehaviour:
   _activePlayerUnits: []
   _activeEnemyUnits: []
   _unplayedPlayerUnits: []
-  _cursorUnit: {fileID: 2082227955}
-  _activeUnit: {fileID: 2082227955}
+  _cursorUnit: {fileID: 0}
+  _activeUnit: {fileID: 0}
   _lastSelectedPlayerUnit: {fileID: 0}
   AllPlayerUnitsDead: 0
   AllEnemyUnitsDead: 0
@@ -10191,7 +10191,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Please read the 'README' and the 'Manual' before playing.
+  m_text: 'Please read the below before playing.
+
+    Have fun! :)'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 052fbabd0ef97af40a0ea8920c0c5fc1, type: 2}
   m_sharedMaterial: {fileID: 7086440776496546648, guid: 052fbabd0ef97af40a0ea8920c0c5fc1, type: 2}
@@ -10218,7 +10220,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30.95
+  m_fontSize: 34.15
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -10504,17 +10506,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6a40c64957c296f4684535e3fd329216, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2082227955 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6320873617587096030, guid: 91a91b20b6197f247b2c18400977a2a4, type: 3}
-  m_PrefabInstance: {fileID: 329596583987511193}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c865c71ef37885846aa2fc4ff31c4e19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &2082995990 stripped

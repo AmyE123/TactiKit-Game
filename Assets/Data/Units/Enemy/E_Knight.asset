@@ -18,7 +18,7 @@ MonoBehaviour:
   UnitClass: 0
   EquippedWeapon: {fileID: 11400000, guid: a8bc4e8f2517d9c4cbb738cd63bb0f8e, type: 2}
   ClassLevel: 1
-  HealthPointsBaseValue: 24
+  HealthPointsBaseValue: 50
   MovementBaseValue: 7
   AttackBaseValue: 18
   CriticalRateBaseValue: 5
