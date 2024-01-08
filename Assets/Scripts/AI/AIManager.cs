@@ -15,11 +15,6 @@ namespace CT6GAMAI
         [SerializeField] private AIPlaystyleWeighting[] _playstyles;
 
         /// <summary>
-        /// A list of all AI controlled units.
-        /// </summary>
-        public List<UnitAIManager> AIUnits => _aiUnits;
-
-        /// <summary>
         /// All avaliable AI playstyles
         /// </summary>
         public AIPlaystyleWeighting[] Playstyles => _playstyles;
@@ -47,7 +42,7 @@ namespace CT6GAMAI
             foreach (UnitManager unit in activeEnemyAI)
             {
                 unit.ApplyTerrainEffects();
-            }                
+            }
 
             StartCoroutine(HandleAIUnitTurns());
         }
@@ -61,7 +56,7 @@ namespace CT6GAMAI
             List<UnitManager> activeEnemyAI = _gameManager.UnitsManager.ActiveEnemyUnits;
 
             foreach (UnitManager unit in activeEnemyAI)
-            {                
+            {
                 UnitAIManager UnitAI = unit.GetComponent<UnitAIManager>();
                 if (UnitAI != null)
                 {
@@ -70,7 +65,7 @@ namespace CT6GAMAI
                 else
                 {
                     Debug.LogWarning("[AI]: Unit hasn't got AI component added");
-                }               
+                }
             }
         }
     }
