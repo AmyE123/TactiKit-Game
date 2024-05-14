@@ -205,6 +205,7 @@ namespace CT6GAMAI
         public void UpdateStoodUnit()
         {
             StoodUnit = DetectStoodUnit();
+            Node.IsOccupied = StoodUnit != null;
         }
 
         /// <summary>
