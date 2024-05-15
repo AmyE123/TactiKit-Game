@@ -629,6 +629,16 @@ namespace CT6GAMAI
         }
 
         /// <summary>
+        /// Get the node at the end point.
+        /// </summary>
+        /// <param name="modificationAmount">A value to take away from the end of the movement path. </param>
+        /// <returns></returns>
+        public Node GetEndPoint(int modificationAmount = 0)
+        {
+            return _gridManager.MovementPath[(_gridManager.MovementPath.Count - 1) - modificationAmount];
+        }
+
+        /// <summary>
         /// Move the unit instantly to an end point. Used for when cancelling movement.
         /// </summary>
         public IEnumerator MoveBackToPoint(Node targetNode)

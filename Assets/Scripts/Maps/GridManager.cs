@@ -74,9 +74,7 @@ namespace CT6GAMAI
                             _gameManager.UIManager.BattleForecastManager.CancelBattleForecast();
                         }
 
-                        unit.CancelMove();
-                        unit.IsAwaitingMoveConfirmation = false;
-                        _canSwitchToBattle = false;
+                        CancelUnitMove(unit);
                     }
 
                     if (_canSwitchToBattle && Input.GetKeyDown(KeyCode.Space))
@@ -91,6 +89,13 @@ namespace CT6GAMAI
             {
                 StartCoroutine(IdleDelay());
             }
+        }
+
+        private void CancelUnitMove(UnitManager unit)
+        {
+            unit.CancelMove();
+            unit.IsAwaitingMoveConfirmation = false;
+            _canSwitchToBattle = false;
         }
 
         IEnumerator IdleDelay()
@@ -172,7 +177,7 @@ namespace CT6GAMAI
             if (_gameManager.UnitsManager.ActiveUnit.StoodNode != null)
             {
                 Node startNode = _gameManager.UnitsManager.ActiveUnit.StoodNode.Node;
-                Node targetNode = _gridCursor.SelectedNode.Node;
+                Node targetNode = _gridCursor.SelectedNode.Node; 
 
                 if (!_cursorWithinRange)
                 {
@@ -198,16 +203,54 @@ namespace CT6GAMAI
         private void ProcessUnitMovement(Node targetNode)
         {
             var validPath = _movementPath.Count > 1 && CanMoveToNode(targetNode);
+            var attackingEnemy = isNodeOccupiedByEnemy(targetNode);
             _gameManager.AudioManager.PlaySelectPathSound(validPath);
 
-            if (validPath)
+            var a = _movementPath.Count > 1;
+            //Debug.Log("MovementPath Cost = " + _movementPath.Count + " Is movementpath > 1 " + a.ToString());
+
+            //Debug.Log("Can move to node " + CanMoveToNode(targetNode) + " Is attacking enemy " + attackingEnemy.ToString());
+
+            if (attackingEnemy)
             {
-                PerformValidPathMovement();
+                if (CanMoveToNode(_activeUnit.GetEndPoint(1)))
+                {
+                    Debug.Log("Attacking valid enemy");
+                    Attack(targetNode);
+                }
+                else
+                {
+                    Debug.Log("Attacking invalid enemy");
+                    CancelUnitMove(_activeUnit);
+                }
             }
             else
             {
-                HandleInvalidPath(targetNode);
+                if (validPath)
+                {
+                    Debug.Log("Moving to valid path");
+                    PerformValidPathMovement();
+                }
             }
+
+            //if (!CanMoveToNode(targetNode) && !attackingEnemy)
+            //{
+            //    if (!attackingEnemy)
+            //    {
+            //        // Can't 
+            //    }
+
+            //    CancelUnitMove(_activeUnit);
+            //}
+
+            //else if (validPath && !attackingEnemy)
+            //{
+            //    PerformValidPathMovement();
+            //}
+            //else
+            //{
+            //    HandleInvalidPath(targetNode);
+            //}
         }
 
         private void PerformValidPathMovement()
@@ -236,9 +279,35 @@ namespace CT6GAMAI
                     _gameManager.GridManager.CurrentState = CurrentState.ConfirmingMove;
                 }
 
+                Debug.Log("HERE");
+
                 _gameManager.UIManager.BattleForecastManager.SpawnBattleForecast(_activeUnit, targetNode.NodeManager.StoodUnit);
                 StartCoroutine(BattleTransition());
             }
+
+            Debug.Log("HERE2");
+        }
+
+        private void Attack(Node targetNode)
+        {
+            CurrentState = CurrentState.ConfirmingMove;
+            _activeUnit.IsAwaitingMoveConfirmation = true;
+            var unit = _gameManager.UnitsManager.ActiveUnit;
+            if (_gameManager.GridManager.MovementPath.Count > 2)
+            {
+                unit.ClearStoodUnit();
+                StartCoroutine(unit.MoveToEndPoint(1));
+            }
+            else
+            {
+                _activeUnit.IsAwaitingMoveConfirmation = true;
+                _gameManager.GridManager.CurrentState = CurrentState.ConfirmingMove;
+            }
+
+            Debug.Log("HERE");
+
+            _gameManager.UIManager.BattleForecastManager.SpawnBattleForecast(_activeUnit, targetNode.NodeManager.StoodUnit);
+            StartCoroutine(BattleTransition());
         }
 
         /// <summary>
@@ -251,7 +320,7 @@ namespace CT6GAMAI
         {
             // Checks if the node is occupied by a unit other than the last selected one.
             var currentUnitOnNode = GetOccupyingUnitFromNode(node);
-            var nodeOccupiedByOtherUnit = currentUnitOnNode != null && currentUnitOnNode != _gameManager.UnitsManager.ActiveUnit;
+            var nodeOccupiedByOtherUnit = node.IsOccupied && currentUnitOnNode != _gameManager.UnitsManager.ActiveUnit;
 
             bool canMoveToNode = !nodeOccupiedByOtherUnit;
 

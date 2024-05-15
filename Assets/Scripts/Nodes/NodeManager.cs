@@ -239,6 +239,11 @@ namespace CT6GAMAI
                 HighlightListNodes(unit.MovementRange.AttackNodes, isPressed, NodeVisualColorState.Red);
             }
 
+            else if (Input.GetKey(KeyCode.Keypad4))
+            {
+                HighlightListNodes(unit.MovementRange.TrueReachableNodes, isPressed, NodeVisualColorState.Blue);
+            }
+
             else
             {
                 HighlightListNodes(unit.MovementRange.ReachableNodes, isPressed, NodeVisualColorState.Blue);

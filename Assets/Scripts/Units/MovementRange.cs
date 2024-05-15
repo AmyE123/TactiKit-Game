@@ -14,7 +14,8 @@ namespace CT6GAMAI
         [SerializeField] private List<Node> _validStandNodes = new List<Node>();
         [SerializeField] private List<Node> _interactiveNodes = new List<Node>();
         [SerializeField] private List<Node> _attackNodes = new List<Node>();
-
+        [SerializeField] private List<Node> _trueReachableNodes = new List<Node>();
+        
         private GameManager _gameManager;
         private Node _unitStoodNode;
 
@@ -42,6 +43,8 @@ namespace CT6GAMAI
         public List<Node> InteractiveNodes => _interactiveNodes;
 
         public List<Node> AttackNodes => _attackNodes;
+
+        public List<Node> TrueReachableNodes => _trueReachableNodes;
 
         private void Start()
         {
@@ -168,6 +171,7 @@ namespace CT6GAMAI
             PopulateStandNodes();
             PopulateInteractiveNodes();
             PopulateAttackNodes();
+            PopulateTrueReachableNodes();
 
             ResetNodeStates();
 
@@ -240,6 +244,20 @@ namespace CT6GAMAI
             }
         }
 
+        private void PopulateTrueReachableNodes()
+        {
+            foreach (Node node in _reachableNodes)
+            {
+                if (_attackNodes.Contains(node))
+                {
+                    if (!_trueReachableNodes.Contains(node))
+                    {
+                        _trueReachableNodes.Add(node);
+                    }
+                }
+            }
+        }
+
         public List<Node> ReconstructPath(Node start, Node target)
         {
             List<Node> path = new List<Node>();
@@ -276,6 +294,7 @@ namespace CT6GAMAI
             _validStandNodes.Clear();
             _interactiveNodes.Clear();
             _attackNodes.Clear();
+            _trueReachableNodes.Clear();
         }
     }
 }
