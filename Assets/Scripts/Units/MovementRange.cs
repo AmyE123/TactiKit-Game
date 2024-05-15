@@ -11,8 +11,12 @@ namespace CT6GAMAI
         [SerializeField] private GridManager _gridManager;
         [SerializeField] private List<Node> _reachableNodes = new List<Node>();
         [SerializeField] private List<Node> _rangeNodes = new List<Node>();
+        [SerializeField] private List<Node> _validStandNodes = new List<Node>();
+        [SerializeField] private List<Node> _interactiveNodes = new List<Node>();
+        [SerializeField] private List<Node> _attackNodes = new List<Node>();
 
         private GameManager _gameManager;
+        private Node _unitStoodNode;
 
         /// <summary>
         /// A list of nodes which the unit can reach.
@@ -24,6 +28,20 @@ namespace CT6GAMAI
         /// A list of nodes within the units range for their weapon.
         /// </summary>
         public List<Node> RangeNodes => _rangeNodes;
+
+        /// <summary>
+        /// A list of the valid stand positions.
+        /// This list is populated by taking all reachable nodes and taking out all occupied nodes.
+        /// </summary>
+        public List<Node> ValidStandNodes => _validStandNodes;
+
+        /// <summary>
+        /// A list of all the interactive nodes.
+        /// This list is populated by taking all the valid stand nodes and additionally adding in .. todo
+        /// </summary>
+        public List<Node> InteractiveNodes => _interactiveNodes;
+
+        public List<Node> AttackNodes => _attackNodes;
 
         private void Start()
         {
@@ -52,24 +70,6 @@ namespace CT6GAMAI
             if (!_rangeNodes.Contains(node))
             {
                 _rangeNodes.Add(node);
-            }
-        }
-
-        private bool IsNodeOccupiedByOtherUnit(Node node)
-        {
-            var stoodUnit = node.NodeManager.StoodUnit;
-
-            if (stoodUnit == null)
-            {
-                return false;
-            }
-            else
-            {
-                if (stoodUnit == _gameManager.UnitsManager.ActiveUnit)
-                {
-                    return false;
-                }
-                return true;
             }
         }
 
@@ -121,10 +121,10 @@ namespace CT6GAMAI
         /// <returns>A list of nodes representing the reachable area.</returns>
         public List<Node> CalculateMovementRange(UnitManager unit)
         {
-            var startingNode = unit.StoodNode.Node;
+            _unitStoodNode = unit.StoodNode.Node;
             var movementPoints = unit.UnitData.MovementBaseValue;
 
-            return CalculateMovementRange(startingNode, movementPoints, unit.UnitData.EquippedWeapon.WeaponMaxRange);
+            return CalculateMovementRange(_unitStoodNode, movementPoints, unit.UnitData.EquippedWeapon.WeaponMaxRange);
         }
 
         /// <summary>
@@ -204,22 +204,85 @@ namespace CT6GAMAI
                 current.Visited = true;
 
                 // If the current node is within movement points, add to reachable nodes
-                if (current.Distance <= movementPoints)
-                {
-                    AddNodeToReachable(current);
-                }
-
-                if (current.Distance <= weaponRange)
-                {
-                    AddNodeToRange(current);
-                }
+                CalculateReachableNodes(current, movementPoints);
+                CalculateRangeNodes(current, weaponRange);
 
                 EnqueueNeighbours(current, queue);
             }
 
+            PopulateStandNodes();
+            PopulateInteractiveNodes();
+            PopulateAttackNodes();
+
             ResetNodeStates();
 
             return _reachableNodes;
+        }
+
+        private void CalculateReachableNodes(Node current, int movementPoints)
+        {
+            if (current.Distance <= movementPoints)
+            {
+                AddNodeToReachable(current);
+            }
+        }
+
+        private void CalculateRangeNodes(Node current, int weaponRange)
+        {
+            if (current.Distance <= weaponRange)
+            {
+                AddNodeToRange(current);
+            }
+        }
+
+        private void PopulateStandNodes()
+        {
+            foreach (Node node in _reachableNodes)
+            {
+                if (!node.IsOccupied)
+                {
+                    if (!_validStandNodes.Contains(node))
+                    {
+                        _validStandNodes.Add(node);
+                    }                   
+                }
+            }
+        }
+
+        private void PopulateInteractiveNodes()
+        {
+            foreach (Node node in _reachableNodes)
+            {
+                if (node.IsOccupied)
+                {
+                    if (!_interactiveNodes.Contains(node))
+                    {
+                        _interactiveNodes.Add(node);
+                    }
+                }
+            }
+        }
+
+        private void PopulateAttackNodes()
+        {
+            foreach (Node node in _validStandNodes)
+            {
+                foreach (Node neighbour in node.Neighbors)
+                {
+                    if (!_attackNodes.Contains(neighbour))
+                    {
+                        _attackNodes.Add(neighbour);
+                    }
+                }
+            }
+
+            foreach (Node neighbour in _unitStoodNode.Neighbors)
+            {
+                if (!_attackNodes.Contains(neighbour))
+                {
+                    _attackNodes.Add(neighbour);
+                }
+            }
         }
 
         public List<Node> ReconstructPath(Node start, Node target)
@@ -253,8 +316,11 @@ namespace CT6GAMAI
         /// </summary>
         public void ResetNodes()
         {
-            _reachableNodes.Clear();
+            _reachableNodes.Clear();            
             _rangeNodes.Clear();
+            _validStandNodes.Clear();
+            _interactiveNodes.Clear();
+            _attackNodes.Clear();
         }
     }
 }
