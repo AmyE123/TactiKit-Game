@@ -133,51 +133,6 @@ namespace CT6GAMAI
         /// <param name="startingNode">The starting node.</param>
         /// <param name="movementPoints">The maximum movement points of the unit.</param>
         /// <returns>A list of nodes representing the reachable area.</returns>
-        public List<Node> CalculateMovementRange(Node startingNode, int movementPoints)
-        {
-            InitializeNodes();
-
-            // Initialize the starting node's distance to 0
-            startingNode.Distance = 0;
-
-            // Priority queue to select the node with the smallest distance
-            var queue = new PriorityQueue<Node>();
-            queue.Enqueue(startingNode, startingNode.Distance);
-
-            AddNodeToReachable(startingNode);
-
-            while (!queue.IsEmpty())
-            {
-                // Get the node with the smallest distance
-                Node current = queue.Dequeue();
-
-                if (current.Visited)
-                {
-                    continue;
-                }
-
-                current.Visited = true;
-
-                // If the current node is within movement points, add to reachable nodes
-                if (current.Distance <= movementPoints)
-                {
-                    AddNodeToReachable(current);
-                }
-
-                EnqueueNeighbours(current, queue);
-            }
-
-            ResetNodeStates();
-
-            return _reachableNodes;
-        }
-
-        /// <summary>
-        /// Calculates the movement range of a unit using Dijkstra's Algorithm.
-        /// </summary>
-        /// <param name="startingNode">The starting node.</param>
-        /// <param name="movementPoints">The maximum movement points of the unit.</param>
-        /// <returns>A list of nodes representing the reachable area.</returns>
         public List<Node> CalculateMovementRange(Node startingNode, int movementPoints, int weaponRange)
         {
             InitializeNodes();
