@@ -332,6 +332,7 @@ namespace CT6GAMAI
             if (UnitPressed)
             {
                 _gameManager.UnitsManager.ActiveUnit.IsSelected = true;
+                _gridManager.CurrentState = CurrentState.Selected;
                 SelectedNodeState.VisualStateManager.SetPressed(NodeVisualColorState.Blue);
 
                 foreach (Node n in _lastSelectedUnit.MovementRange.ReachableNodes)
