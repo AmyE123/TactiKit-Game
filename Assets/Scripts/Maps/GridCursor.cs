@@ -332,9 +332,10 @@ namespace CT6GAMAI
             if (UnitPressed)
             {
                 _gameManager.UnitsManager.ActiveUnit.IsSelected = true;
+                _gridManager.CurrentState = CurrentState.Selected;
                 SelectedNodeState.VisualStateManager.SetPressed(NodeVisualColorState.Blue);
 
-                foreach (Node n in _lastSelectedUnit.MovementRange.ReachableNodes)
+                foreach (Node n in _lastSelectedUnit.MovementRange.TrueReachableNodes)
                 {
                     n.NodeManager.NodeState.VisualStateManager.SetPressed(NodeVisualColorState.Blue);
                 }
@@ -345,7 +346,7 @@ namespace CT6GAMAI
                 _gameManager.UnitsManager.ActiveUnit.IsSelected = false;
                 SelectedNodeState.VisualStateManager.SetHovered(NodeVisualColorState.Blue);
 
-                foreach (Node n in _lastSelectedUnit.MovementRange.ReachableNodes)
+                foreach (Node n in _lastSelectedUnit.MovementRange.TrueReachableNodes)
                 {
                     n.NodeManager.NodeState.VisualStateManager.SetHovered(NodeVisualColorState.Blue);
                 }

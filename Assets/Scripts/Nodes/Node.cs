@@ -30,9 +30,9 @@ namespace CT6GAMAI
         public bool Visited = false;
 
         /// <summary>
-        /// Whether the node is walkable
+        /// Whether the node is occupied
         /// </summary>
-        public bool Walkable;
+        public bool IsOccupied;
 
         /// <summary>
         /// A list of adjacent nodes (neighbors)

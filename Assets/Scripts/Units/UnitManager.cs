@@ -462,7 +462,7 @@ namespace CT6GAMAI
         /// <returns>True if the node is within range, false otherwise.</returns>
         private bool IsNodeWithinRange(Node node)
         {
-            return _movementRange.ReachableNodes.Contains(node);                        
+            return _movementRange.TrueReachableNodes.Contains(node);                        
         }
 
         /// <summary>
@@ -626,6 +626,16 @@ namespace CT6GAMAI
                     _gridManager.CurrentState = CurrentState.ConfirmingMove;
                 }
             }
+        }
+
+        /// <summary>
+        /// Get the node at the end point.
+        /// </summary>
+        /// <param name="modificationAmount">A value to take away from the end of the movement path. </param>
+        /// <returns></returns>
+        public Node GetEndPoint(int modificationAmount = 0)
+        {
+            return _gridManager.MovementPath[(_gridManager.MovementPath.Count - 1) - modificationAmount];
         }
 
         /// <summary>

@@ -141,7 +141,7 @@ namespace CT6GAMAI
         /// <summary>
         /// Enumerations representing the current state of the grid cursor in regards to unit actions.
         /// </summary>
-        public enum CurrentState { Idle, Moving, ActionSelected, ConfirmingMove };
+        public enum CurrentState { Idle, Selected, Moving, ActionSelected, ConfirmingMove };
 
         /// <summary>
         /// Constant string for the tag string used on nodes.

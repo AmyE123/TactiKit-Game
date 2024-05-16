@@ -1,5 +1,6 @@
 namespace CT6GAMAI
 {
+    using System.Collections.Generic;
     using UnityEngine;
     using static CT6GAMAI.Constants;
 
@@ -205,6 +206,7 @@ namespace CT6GAMAI
         public void UpdateStoodUnit()
         {
             StoodUnit = DetectStoodUnit();
+            Node.IsOccupied = StoodUnit != null;
         }
 
         /// <summary>
@@ -216,15 +218,50 @@ namespace CT6GAMAI
         {
             unit.MovementRange.CalculateMovementRange(unit);
 
-            for (int i = 0; i < unit.MovementRange.ReachableNodes.Count; i++)
+
+            if (Input.GetKey(KeyCode.Keypad0))
+            {
+                HighlightListNodes(unit.MovementRange.ReachableNodes, isPressed, NodeVisualColorState.Blue);
+            }
+
+            else if (Input.GetKey(KeyCode.Keypad1))
+            {
+                HighlightListNodes(unit.MovementRange.InteractiveNodes, isPressed, NodeVisualColorState.Red);
+            }
+
+            else if(Input.GetKey(KeyCode.Keypad2))
+            {
+                HighlightListNodes(unit.MovementRange.ValidStandNodes, isPressed, NodeVisualColorState.Green);
+            }
+
+            else if(Input.GetKey(KeyCode.Keypad3))
+            {
+                HighlightListNodes(unit.MovementRange.AttackNodes, isPressed, NodeVisualColorState.Red);
+            }
+
+            else if (Input.GetKey(KeyCode.Keypad4))
+            {
+                HighlightListNodes(unit.MovementRange.TrueReachableNodes, isPressed, NodeVisualColorState.Blue);
+            }
+
+            else
+            {
+                HighlightListNodes(unit.MovementRange.TrueReachableNodes, isPressed, NodeVisualColorState.Blue);
+            }
+
+        }
+
+        private void HighlightListNodes(List<Node> nodes, bool isPressed, NodeVisualColorState nodeVisualColorState)
+        {
+            for (int i = 0; i < nodes.Count; i++)
             {
                 if (isPressed)
                 {
-                    unit.MovementRange.ReachableNodes[i].NodeManager.NodeState.VisualStateManager.SetPressed(NodeVisualColorState.Blue);
+                    nodes[i].NodeManager.NodeState.VisualStateManager.SetPressed(nodeVisualColorState);
                 }
                 else
                 {
-                    unit.MovementRange.ReachableNodes[i].NodeManager.NodeState.VisualStateManager.SetHovered(NodeVisualColorState.Blue);
+                    nodes[i].NodeManager.NodeState.VisualStateManager.SetHovered(nodeVisualColorState);
                 }
             }
         }
