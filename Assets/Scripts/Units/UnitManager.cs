@@ -462,7 +462,7 @@ namespace CT6GAMAI
         /// <returns>True if the node is within range, false otherwise.</returns>
         private bool IsNodeWithinRange(Node node)
         {
-            return _movementRange.ReachableNodes.Contains(node);                        
+            return _movementRange.TrueReachableNodes.Contains(node);                        
         }
 
         /// <summary>

@@ -246,7 +246,7 @@ namespace CT6GAMAI
 
             else
             {
-                HighlightListNodes(unit.MovementRange.ReachableNodes, isPressed, NodeVisualColorState.Blue);
+                HighlightListNodes(unit.MovementRange.TrueReachableNodes, isPressed, NodeVisualColorState.Blue);
             }
 
         }

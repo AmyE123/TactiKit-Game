@@ -165,7 +165,7 @@ namespace CT6GAMAI
         {
             foreach (Node n in _movementPath)
             {
-                if (_activeUnit.MovementRange.ReachableNodes.Contains(n))
+                if (_activeUnit.MovementRange.TrueReachableNodes.Contains(n))
                 {
                     n.NodeManager.NodeState.VisualStateManager.SetPath();
                 }
@@ -358,9 +358,9 @@ namespace CT6GAMAI
         /// </summary>
         public void UpdateCursorRange()
         {
-            foreach (Node n in _activeUnit.MovementRange.ReachableNodes)
+            foreach (Node n in _activeUnit.MovementRange.TrueReachableNodes)
             {
-                _cursorWithinRange = _activeUnit.MovementRange.ReachableNodes.Contains(_gridCursor.SelectedNode.Node);
+                _cursorWithinRange = _activeUnit.MovementRange.TrueReachableNodes.Contains(_gridCursor.SelectedNode.Node);
                 n.NodeManager.NodeState.VisualStateManager.SetPressed(NodeVisualColorState.Blue);
             }
         }

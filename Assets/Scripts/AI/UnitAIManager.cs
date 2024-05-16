@@ -146,7 +146,7 @@ namespace CT6GAMAI
 
         private List<VisibleUnitDetails> GetVisiblePlayerUnits()
         {
-            var range = _unitManager.MovementRange.ReachableNodes;
+            var range = _unitManager.MovementRange.TrueReachableNodes;
             _visibleUnitsDetails.Clear();
 
             foreach (Node node in range)
@@ -166,7 +166,7 @@ namespace CT6GAMAI
 
         private List<VisibleTerrainDetails> GetVisibleUniqueTerrain()
         {
-            var range = _unitManager.MovementRange.ReachableNodes;
+            var range = _unitManager.MovementRange.TrueReachableNodes;
             _visibleUniqueTerrainDetails.Clear();
 
             foreach (Node node in range)
@@ -365,7 +365,7 @@ namespace CT6GAMAI
         public float GetDistanceToBestSafeSpot()
         {
             GetVisiblePlayerUnits();
-            List<Node> movementRange = _unitManager.MovementRange.ReachableNodes;
+            List<Node> movementRange = _unitManager.MovementRange.TrueReachableNodes;
             float maxMinDistanceToPlayer = 0;
             Node furthestNode = null;
 
@@ -400,7 +400,7 @@ namespace CT6GAMAI
         public Node GetBestSafeSpot()
         {
             GetVisiblePlayerUnits();
-            List<Node> movementRange = _unitManager.MovementRange.ReachableNodes;
+            List<Node> movementRange = _unitManager.MovementRange.TrueReachableNodes;
             float maxMinDistanceToPlayer = 0;
             Node furthestNode = null;
 
@@ -633,7 +633,7 @@ namespace CT6GAMAI
         /// <returns>True if the unit can move to an attack spot, otherwise false.</returns>
         public bool CanMoveToTargetAttackSpot(UnitManager target)
         {
-            List<Node> movementRange = _unitManager.MovementRange.ReachableNodes;
+            List<Node> movementRange = _unitManager.MovementRange.TrueReachableNodes;
             List<Node> targetAttackSpots = new List<Node>();
             List<Node> validAttackSpots = new List<Node>();
 
@@ -690,7 +690,7 @@ namespace CT6GAMAI
         /// <returns>The node representing a valid attack spot for the player.</returns>
         public Node GetPlayerValidAttackSpot(UnitManager player)
         {
-            List<Node> movementRange = _unitManager.MovementRange.ReachableNodes;
+            List<Node> movementRange = _unitManager.MovementRange.TrueReachableNodes;
             List<Node> attackSpots = new List<Node>();
             List<Node> validAttackSpots = new List<Node>();
 
