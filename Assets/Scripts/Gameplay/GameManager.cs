@@ -71,6 +71,13 @@ namespace CT6GAMAI
         /// </summary>
         public int PlayerDeaths;
 
+        void Start()
+        {
+#if UNITY_STANDALONE
+            Screen.SetResolution(1280, 800, true);
+#endif
+        }
+
         void Awake()
         {
             Instance = this;
