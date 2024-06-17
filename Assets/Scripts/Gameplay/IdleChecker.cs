@@ -8,10 +8,13 @@ namespace CT6GAMAI
         public float idleTime = 600f;
         private float idleTimer = 0f;
 
+        [SerializeField]
+        private GameManager gameManager;
+
         void Update()
         {
             // Check for any input
-            if (Input.anyKeyDown || Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0)
+            if (Input.anyKeyDown || Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0 || gameManager.TurnManager.ActivePhase == Constants.Phases.EnemyPhase)
             {
                 // Reset the timer on any input
                 idleTimer = 0f;
